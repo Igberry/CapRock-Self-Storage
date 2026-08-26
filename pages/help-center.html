@@ -1,0 +1,224 @@
+<!-- ================================================================
+     CapRock Self Storage — Help Center page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /help-center
+
+     PLACEHOLDER: category descriptions are generic starting copy,
+     no specific fees, hours, or policy numbers are stated since
+     those weren't provided, swap in CapRock's real policies before
+     launch. Category links go to "#" for now, no individual help
+     articles exist yet.
+     ================================================================ -->
+<div class="crss-help">
+  <div class="crss-help-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span aria-current="page">Help Center</span>
+    </nav>
+
+    <h1 class="crss-help-title">Help Center</h1>
+    <p class="crss-help-subtitle">Find answers to common questions, or reach out directly if you need more help.</p>
+
+    <div class="crss-help-search">
+      <svg class="crss-help-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" id="crss-help-search-input" placeholder="Search help topics" aria-label="Search help topics">
+    </div>
+
+    <div class="crss-help-grid" id="crss-help-grid">
+      <a href="#" class="crss-help-card" data-keywords="payment billing autopay statement card">
+        <h3>Payment &amp; Billing</h3>
+        <p>Questions about your monthly statement, autopay, or updating your payment method.</p>
+      </a>
+      <a href="#" class="crss-help-card" data-keywords="move in checklist lease start">
+        <h3>Move-In Process</h3>
+        <p>What to expect on move-in day and how to get started with your new unit.</p>
+      </a>
+      <a href="#" class="crss-help-card" data-keywords="access gate hours security code">
+        <h3>Access &amp; Security</h3>
+        <p>How to access your unit and what security features are in place at your location.</p>
+      </a>
+      <a href="#" class="crss-help-card" data-keywords="insurance protection plan coverage">
+        <h3>Insurance &amp; Protection</h3>
+        <p>Understanding coverage options for the belongings in your unit.</p>
+      </a>
+      <a href="#" class="crss-help-card" data-keywords="move out vacate notice">
+        <h3>Move-Out Process</h3>
+        <p>How to give notice and what to do when you're ready to move out.</p>
+      </a>
+      <a href="#" class="crss-help-card" data-keywords="packing tips moving supplies">
+        <h3>Packing &amp; Moving Tips</h3>
+        <p>Practical advice for packing, loading, and organizing your unit.</p>
+      </a>
+    </div>
+
+    <p class="crss-help-empty" id="crss-help-empty">No topics match that search. Try a different word, or contact us below.</p>
+
+    <div class="crss-help-cta">
+      <p>Can't find what you're looking for?</p>
+      <a href="/contact-us" class="crss-help-cta-btn">Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-help {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+  .crss-help, .crss-help *, .crss-help *::before, .crss-help *::after {
+    box-sizing: border-box;
+  }
+  .crss-help h1, .crss-help h3, .crss-help p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-help a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-help :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-help-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-help-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-help-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe);
+    margin-bottom: 28px;
+  }
+  .crss-help-search {
+    position: relative;
+    max-width: 420px;
+    margin-bottom: 32px;
+  }
+  .crss-help-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--crss-taupe);
+  }
+  .crss-help-search input {
+    width: 100%;
+    padding: 13px 16px 13px 42px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--crss-charcoal);
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 8px;
+  }
+  .crss-help-search input:focus {
+    border-color: var(--crss-terracotta);
+  }
+  .crss-help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  .crss-help-card {
+    display: block;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .crss-help-card:hover {
+    box-shadow: 0 12px 24px rgba(41,39,36,0.10);
+    transform: translateY(-2px);
+  }
+  .crss-help-card h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--crss-terracotta);
+  }
+  .crss-help-card p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--crss-charcoal);
+  }
+  .crss-help-empty {
+    display: none;
+    text-align: center;
+    font-size: 14px;
+    color: var(--crss-taupe);
+    padding: 30px 0;
+  }
+  .crss-help-cta {
+    margin-top: 44px;
+    padding: 28px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .crss-help-cta p {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .crss-help-cta-btn {
+    display: inline-block;
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 26px;
+    border-radius: 6px;
+  }
+  .crss-help-cta-btn:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  @media (max-width: 560px) {
+    .crss-help-inner { padding: 28px 16px 60px; }
+  }
+</style>
+
+<script>
+  (function () {
+    var grid = document.getElementById('crss-help-grid');
+    var input = document.getElementById('crss-help-search-input');
+    var empty = document.getElementById('crss-help-empty');
+    if (!grid || !input) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.crss-help-card'));
+
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var visibleCount = 0;
+      cards.forEach(function (card) {
+        var text = (card.textContent + ' ' + (card.getAttribute('data-keywords') || '')).toLowerCase();
+        var match = text.indexOf(q) !== -1;
+        card.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+      empty.style.display = visibleCount ? 'none' : 'block';
+    });
+  })();
+</script>

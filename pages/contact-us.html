@@ -1,0 +1,217 @@
+<!-- ================================================================
+     CapRock Self Storage — Contact Us page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /contact-us
+
+     IMPORTANT: the form below is styled but not wired to send
+     anywhere, custom code has no backend to submit to. In GHL, swap
+     this for GHL's native Forms element instead (drag it in below
+     the intro text and delete the <form> block here). GHL's native
+     forms connect straight to the CRM automatically, a raw HTML
+     form does not.
+
+     PLACEHOLDER: general phone/email are dummy values, same as the
+     header and Lubbock page.
+     ================================================================ -->
+<div class="crss-contact">
+  <div class="crss-contact-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Contact Us</span>
+    </nav>
+
+    <h1 class="crss-contact-title">Contact Us</h1>
+    <p class="crss-contact-subtitle">Have a general question? Send us a message. For questions about a specific unit or move-in, find your nearest location instead.</p>
+
+    <div class="crss-contact-grid">
+      <div class="crss-contact-info">
+        <div class="crss-contact-info-row">
+          <span class="crss-contact-label">Phone</span>
+          <a href="tel:18060000000">(806) 000-0000</a>
+        </div>
+        <div class="crss-contact-info-row">
+          <span class="crss-contact-label">Email</span>
+          <a href="mailto:info@caprockselfstorage.com">info@caprockselfstorage.com</a>
+        </div>
+        <a href="/find-storage" class="crss-contact-location-link">Looking for a specific location? →</a>
+      </div>
+
+      <!-- REPLACE with GHL's native Forms element before launch -->
+      <form class="crss-contact-form" id="crss-contact-form">
+        <label>Name<input type="text" name="name" required></label>
+        <label>Email<input type="email" name="email" required></label>
+        <label>Phone<input type="tel" name="phone"></label>
+        <label>Message<textarea name="message" rows="4" required></textarea></label>
+        <button type="submit" class="crss-contact-submit">Send Message</button>
+        <p class="crss-contact-confirm" id="crss-contact-confirm">Thanks, we'll be in touch soon.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-contact {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+  .crss-contact, .crss-contact *, .crss-contact *::before, .crss-contact *::after {
+    box-sizing: border-box;
+  }
+  .crss-contact h1, .crss-contact p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-contact a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-contact :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-contact-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-contact-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-contact-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe);
+    max-width: 560px;
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+  .crss-contact-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .crss-contact-info {
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .crss-contact-info-row {
+    margin-bottom: 16px;
+  }
+  .crss-contact-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--crss-taupe);
+    margin-bottom: 4px;
+  }
+  .crss-contact-info-row a {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--crss-terracotta);
+  }
+  .crss-contact-location-link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--crss-terracotta);
+    margin-top: 4px;
+  }
+  .crss-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .crss-contact-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--crss-taupe);
+  }
+  .crss-contact-form input, .crss-contact-form textarea {
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+    border: 1px solid var(--crss-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    resize: vertical;
+  }
+  .crss-contact-form input:focus, .crss-contact-form textarea:focus {
+    border-color: var(--crss-terracotta);
+    outline: none;
+  }
+  .crss-contact-submit {
+    align-self: flex-start;
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 26px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .crss-contact-submit:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  .crss-contact-confirm {
+    display: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--crss-terracotta);
+  }
+  .crss-contact-confirm.is-visible {
+    display: block;
+  }
+  @media (max-width: 720px) {
+    .crss-contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-contact-inner { padding: 28px 16px 60px; }
+  }
+</style>
+
+<script>
+  /* Placeholder-only submit handler, just confirms visually.
+     Delete this whole form and use GHL's native Forms element for
+     real submissions. */
+  (function () {
+    var form = document.getElementById('crss-contact-form');
+    var confirm = document.getElementById('crss-contact-confirm');
+    if (!form || !confirm) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      confirm.classList.add('is-visible');
+      form.reset();
+    });
+  })();
+</script>

@@ -11,12 +11,25 @@ GHL sub-account: 14Forty CRM.
 
 ```
 global-sections/
-  header.html        Site-wide header/nav. Save as a GHL Global Section.
+  header.html                     Site-wide header/nav. Save as a GHL Global Section.
 pages/
-  find-storage.html               Location directory / search page.
-  size-guide.html                 Unit size reference page.
+  find-storage.html               Location directory / search page.        /find-storage
+  size-guide.html                 Unit size reference page.                /size-guide
+  help-center.html                Help topic hub with search.              /help-center
+  storage-calculator.html         Interactive size recommender.            /storage-calculator
+  storage-tips.html               Packing / storage advice list.           /storage-tips
+  vehicle-storage.html            Vehicle storage landing page.            /vehicle-storage
+  student-storage.html            Student storage landing page.            /student-storage
+  military-storage.html           Military storage landing page.           /military-storage
+  about-caprock.html              Company about page (has open placeholder).  /about-caprock
+  careers.html                    Careers page, empty-state openings.      /careers
+  contact-us.html                 Contact page with a form (see note below). /contact-us
   lubbock-5839-49th-street.html   The Lubbock location page body (sub-nav + info card + section stubs).
 ```
+
+The path column is a suggestion, matches the links already wired up in
+`header.html`. Set each page's actual path in GHL to match, or update the
+header's links if different paths are used.
 
 ## How this fits together in GHL
 
@@ -46,25 +59,33 @@ pages/
 
 ## Still open / placeholders
 
-Search each file for the word `PLACEHOLDER` for the exact spots. As of
-this commit:
+Search each file for the word `PLACEHOLDER` for the exact spots.
 
-- Real phone number (currently a dummy number in the header and the
-  Lubbock page's info card)
+- Real phone number (dummy number used across the header, Lubbock page,
+  and contact page)
 - Real logo (currently a styled text wordmark)
+- Real email address on the contact page
 - Office address note on the Lubbock page
-- Facility photo (both the Lubbock info card and the Find Storage card)
+- Facility photo (Lubbock info card and Find Storage card)
 - Fonts: Fraunces + Work Sans is a starting pairing, swap for CapRock's
   real brand fonts once chosen
 - Google Map embed works without a key for now, swap in a Maps Embed
   API key for production
-- Reviews section, Noke Smart Access FAQ, Unit Features, City
-  Information, and the live Units/pricing list are all still stubs on
-  the Lubbock page, the last one is waiting on the WebSelfStorage API
-  key
+- **Contact form**: `contact-us.html` has a styled `<form>` that only
+  shows a confirmation message, it doesn't submit anywhere. Replace it
+  with GHL's native Forms element before launch, that's what actually
+  wires submissions into the CRM.
+- About CapRock's "Our Story" section is a marked placeholder, no real
+  company history was available to write from
+- Careers has no real openings or "why work here" copy yet
+- Vehicle/Student/Military storage pages avoid stating specific
+  discounts or exact parking types since those weren't confirmed
 - `find-storage.html` hardcodes locations in a small JS array near the
   bottom of the file, move that to a real data source once there are
   more than a handful of facilities
+- On the Lubbock page: Reviews section, Noke Smart Access FAQ, Unit
+  Features, City Information, and the live Units/pricing list are all
+  still stubs, the last one is waiting on the WebSelfStorage API key
 
 ## Reference
 

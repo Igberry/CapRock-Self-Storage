@@ -1,0 +1,204 @@
+<!-- ================================================================
+     CapRock Self Storage — Storage Calculator page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /storage-calculator
+
+     Simple, real interaction: pick what you're storing, get a
+     recommended size. Sizes match the same 9 sizes used on the
+     Size Guide page, keep the two in sync if sizes ever change.
+     ================================================================ -->
+<div class="crss-calc">
+  <div class="crss-calc-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Calculator</span>
+    </nav>
+
+    <h1 class="crss-calc-title">Storage Size Calculator</h1>
+    <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
+
+    <div class="crss-calc-options" id="crss-calc-options">
+      <button type="button" class="crss-calc-option" data-size="5 &times; 5" data-sqft="25 sq ft" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
+      <button type="button" class="crss-calc-option" data-size="5 &times; 10" data-sqft="50 sq ft" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 10" data-sqft="100 sq ft" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 15" data-sqft="150 sq ft" data-detail="A two to three bedroom home">2&ndash;3 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 20" data-sqft="200 sq ft" data-detail="A three to four bedroom home, or a vehicle plus household items">3&ndash;4 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 30" data-sqft="300 sq ft" data-detail="A large home's full contents, or business inventory">Large home<br><span>or business</span></button>
+    </div>
+
+    <div class="crss-calc-result" id="crss-calc-result">
+      <p class="crss-calc-result-label">Recommended size</p>
+      <p class="crss-calc-result-size" id="crss-calc-result-size"></p>
+      <p class="crss-calc-result-detail" id="crss-calc-result-detail"></p>
+      <div class="crss-calc-result-actions">
+        <a href="/find-storage" class="crss-calc-btn-primary">Find a Location</a>
+        <a href="/size-guide" class="crss-calc-btn-secondary">Compare All Sizes</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-calc {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+  .crss-calc, .crss-calc *, .crss-calc *::before, .crss-calc *::after {
+    box-sizing: border-box;
+  }
+  .crss-calc h1, .crss-calc p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-calc a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-calc :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-calc-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-calc-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-calc-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe);
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+  .crss-calc-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .crss-calc-option {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--crss-charcoal);
+    background: var(--crss-white);
+    border: 2px solid var(--crss-border);
+    border-radius: 10px;
+    padding: 20px 12px;
+    cursor: pointer;
+    line-height: 1.5;
+  }
+  .crss-calc-option span {
+    display: block;
+    font-weight: 400;
+    color: var(--crss-taupe);
+    font-size: 13px;
+  }
+  .crss-calc-option:hover {
+    border-color: var(--crss-terracotta);
+  }
+  .crss-calc-option.is-selected {
+    border-color: var(--crss-terracotta);
+    background: var(--crss-cream);
+  }
+  .crss-calc-result {
+    display: none;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+  }
+  .crss-calc-result.is-visible {
+    display: block;
+  }
+  .crss-calc-result-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--crss-taupe);
+    margin-bottom: 8px;
+  }
+  .crss-calc-result-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--crss-terracotta);
+    margin-bottom: 6px;
+  }
+  .crss-calc-result-detail {
+    font-size: 14px;
+    color: var(--crss-charcoal);
+    margin-bottom: 22px;
+  }
+  .crss-calc-result-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .crss-calc-btn-primary, .crss-calc-btn-secondary {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 24px;
+    border-radius: 6px;
+  }
+  .crss-calc-btn-primary {
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+  }
+  .crss-calc-btn-primary:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  .crss-calc-btn-secondary {
+    background: transparent;
+    color: var(--crss-terracotta);
+    border: 1px solid var(--crss-terracotta);
+  }
+  @media (max-width: 560px) {
+    .crss-calc-inner { padding: 28px 16px 60px; }
+  }
+</style>
+
+<script>
+  (function () {
+    var options = document.getElementById('crss-calc-options');
+    var result = document.getElementById('crss-calc-result');
+    var resultSize = document.getElementById('crss-calc-result-size');
+    var resultDetail = document.getElementById('crss-calc-result-detail');
+    if (!options || !result) return;
+
+    options.querySelectorAll('.crss-calc-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        options.querySelectorAll('.crss-calc-option').forEach(function (b) {
+          b.classList.remove('is-selected');
+        });
+        btn.classList.add('is-selected');
+        resultSize.innerHTML = btn.getAttribute('data-size') + ' <span style="font-size:16px;font-weight:600;color:var(--crss-taupe);">(' + btn.getAttribute('data-sqft') + ')</span>';
+        resultDetail.textContent = btn.getAttribute('data-detail') + '.';
+        result.classList.add('is-visible');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  })();
+</script>

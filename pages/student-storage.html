@@ -1,0 +1,139 @@
+<!-- ================================================================
+     CapRock Self Storage — Student Storage page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /student-storage
+
+     PLACEHOLDER: no specific student discount is stated since none
+     was confirmed, copy stays general until that's decided.
+     ================================================================ -->
+<div class="crss-audience">
+  <div class="crss-audience-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Student Storage</span>
+    </nav>
+
+    <h1 class="crss-audience-title">Student Storage</h1>
+    <p class="crss-audience-subtitle">Store your dorm or apartment items over summer break, or between semesters, without hauling everything home.</p>
+
+    <div class="crss-audience-blocks">
+      <div class="crss-audience-block">
+        <h2>Skip the trip home and back</h2>
+        <p>Moving a dorm room's worth of belongings home for a few months, then back again in the fall, is a lot of effort for a short break. A nearby storage unit lets you pack up and pick up on your own schedule.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Right-sized for a dorm or shared apartment</h2>
+        <p>A small unit is usually enough for a dorm room's furniture and boxes. Check the <a href="/size-guide" style="color:var(--crss-terracotta); font-weight:600;">Size Guide</a> for a side-by-side comparison.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Month-to-month, no long lease</h2>
+        <p>Rent for exactly as long as you need, whether that's a summer break or a full semester abroad.</p>
+      </div>
+    </div>
+
+    <div class="crss-audience-cta">
+      <p>Find student storage near campus.</p>
+      <a href="/find-storage" class="crss-audience-cta-btn">Find Your Nearest Location</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-audience {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+  .crss-audience, .crss-audience *, .crss-audience *::before, .crss-audience *::after {
+    box-sizing: border-box;
+  }
+  .crss-audience h1, .crss-audience h2, .crss-audience p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-audience a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-audience :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-audience-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-audience-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-audience-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe);
+    margin-bottom: 32px;
+  }
+  .crss-audience-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-bottom: 40px;
+  }
+  .crss-audience-block {
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .crss-audience-block h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--crss-terracotta);
+  }
+  .crss-audience-block p {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .crss-audience-cta {
+    padding: 28px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .crss-audience-cta p {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .crss-audience-cta-btn {
+    display: inline-block;
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 26px;
+    border-radius: 6px;
+  }
+  .crss-audience-cta-btn:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  @media (max-width: 560px) {
+    .crss-audience-inner { padding: 28px 16px 60px; }
+  }
+</style>

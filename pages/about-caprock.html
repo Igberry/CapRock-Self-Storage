@@ -1,0 +1,160 @@
+<!-- ================================================================
+     CapRock Self Storage — About CapRock page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /about-caprock
+
+     PLACEHOLDER: no real company history, founding story, or team
+     info was provided, so "Our Story" is left as a clearly marked
+     prompt rather than invented. The "What to Expect" block reuses
+     the facility standards already established in this project
+     (gated access, video surveillance, month-to-month leases),
+     not new claims.
+     ================================================================ -->
+<div class="crss-about">
+  <div class="crss-about-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">About CapRock</span>
+    </nav>
+
+    <h1 class="crss-about-title">About CapRock Self Storage</h1>
+
+    <div class="crss-about-block crss-about-placeholder">
+      <h2>Our Story</h2>
+      <p>[PLACEHOLDER — add CapRock's founding story, mission, and what makes the company different. This section is intentionally left blank rather than filled with invented history.]</p>
+    </div>
+
+    <div class="crss-about-block">
+      <h2>What You Can Expect</h2>
+      <ul class="crss-about-list">
+        <li>Gated access for controlled entry</li>
+        <li>Video surveillance throughout the property</li>
+        <li>Clean, well-maintained buildings</li>
+        <li>Month-to-month leases, no long-term commitment</li>
+      </ul>
+    </div>
+
+    <div class="crss-about-cta">
+      <p>Find a CapRock location near you.</p>
+      <a href="/find-storage" class="crss-about-cta-btn">Find a Location</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-about {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+  .crss-about, .crss-about *, .crss-about *::before, .crss-about *::after {
+    box-sizing: border-box;
+  }
+  .crss-about h1, .crss-about h2, .crss-about p, .crss-about ul {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-about a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-about :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-about-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-about-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 32px;
+  }
+  .crss-about-block {
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 22px;
+  }
+  .crss-about-placeholder {
+    border: 1px dashed var(--crss-taupe);
+    background: transparent;
+  }
+  .crss-about-block h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--crss-terracotta);
+  }
+  .crss-about-block p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-taupe);
+  }
+  .crss-about-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .crss-about-list li {
+    font-size: 14.5px;
+    line-height: 1.5;
+    padding-left: 22px;
+    position: relative;
+  }
+  .crss-about-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--crss-terracotta);
+  }
+  .crss-about-cta {
+    margin-top: 18px;
+    padding: 28px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .crss-about-cta p {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .crss-about-cta-btn {
+    display: inline-block;
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 26px;
+    border-radius: 6px;
+  }
+  .crss-about-cta-btn:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  @media (max-width: 560px) {
+    .crss-about-inner { padding: 28px 16px 60px; }
+  }
+</style>

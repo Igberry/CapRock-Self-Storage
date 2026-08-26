@@ -1,0 +1,136 @@
+<!-- ================================================================
+     CapRock Self Storage — Careers page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /careers
+
+     PLACEHOLDER: no real job openings or "why work here" content
+     was provided. The openings section defaults to an empty state,
+     swap in a real job board or GHL form once there's something to
+     list.
+     ================================================================ -->
+<div class="crss-careers">
+  <div class="crss-careers-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Careers</span>
+    </nav>
+
+    <h1 class="crss-careers-title">Careers at CapRock</h1>
+    <p class="crss-careers-subtitle">[PLACEHOLDER — add a short "why work here" intro once available.]</p>
+
+    <div class="crss-careers-block">
+      <h2>Current Openings</h2>
+      <div class="crss-careers-empty">
+        <p>No open positions right now. Check back soon, or reach out below and we'll keep your information on file.</p>
+      </div>
+    </div>
+
+    <div class="crss-careers-cta">
+      <p>Interested in future openings?</p>
+      <a href="/contact-us" class="crss-careers-cta-btn">Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-careers {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+  .crss-careers, .crss-careers *, .crss-careers *::before, .crss-careers *::after {
+    box-sizing: border-box;
+  }
+  .crss-careers h1, .crss-careers h2, .crss-careers p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-careers a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-careers :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-careers-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-careers-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-careers-subtitle {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--crss-taupe);
+    margin-bottom: 32px;
+  }
+  .crss-careers-block {
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 22px;
+  }
+  .crss-careers-block h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--crss-terracotta);
+  }
+  .crss-careers-empty {
+    padding: 20px;
+    border: 1px dashed var(--crss-taupe);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .crss-careers-empty p {
+    font-size: 14px;
+    color: var(--crss-taupe);
+    line-height: 1.5;
+  }
+  .crss-careers-cta {
+    padding: 28px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .crss-careers-cta p {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .crss-careers-cta-btn {
+    display: inline-block;
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 26px;
+    border-radius: 6px;
+  }
+  .crss-careers-cta-btn:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  @media (max-width: 560px) {
+    .crss-careers-inner { padding: 28px 16px 60px; }
+  }
+</style>
