@@ -52,13 +52,14 @@
 <style>
   .crss-contact {
     font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
     color: var(--crss-charcoal, #292724);
-    background: var(--crss-cream, #F1E3CC);
+    background: var(--crss-bone, #FAF7F1);
   }
   .crss-contact, .crss-contact *, .crss-contact *::before, .crss-contact *::after {
     box-sizing: border-box;
   }
-  .crss-contact h1, .crss-contact p {
+  .crss-contact :where(h1, p) {
     margin: 0;
     padding: 0;
   }
@@ -68,135 +69,229 @@
   }
   .crss-contact :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
-    outline-offset: 2px;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   .crss-contact-inner {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
-    padding: 40px 24px 80px;
+    padding: 64px 32px 104px;
   }
+
+  /* ============ BREADCRUMB ============ */
   .crss-breadcrumb {
     display: flex;
-    gap: 8px;
-    font-size: 13px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--crss-taupe, #7F6C5D);
-    margin-bottom: 24px;
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
   }
   .crss-breadcrumb a:hover {
     color: var(--crss-terracotta, #A44A23);
   }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
   .crss-contact-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(28px, 4vw, 38px);
-    margin-bottom: 10px;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-contact-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
   }
   .crss-contact-subtitle {
-    font-size: 16px;
-    color: var(--crss-taupe, #7F6C5D);
-    max-width: 560px;
-    line-height: 1.5;
-    margin-bottom: 32px;
+    font-size: 18px;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 60ch;
+    line-height: 1.65;
+    margin-bottom: 48px;
   }
+
+  /* ============ LAYOUT ============ */
   .crss-contact-grid {
     display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 32px;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
     align-items: start;
   }
+
+  /* ---- Direct contact details ---- */
   .crss-contact-info {
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
-    border-radius: 12px;
-    padding: 20px;
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 28px 26px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
   }
   .crss-contact-info-row {
-    margin-bottom: 16px;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
   }
   .crss-contact-label {
     display: block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .06em;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--crss-taupe, #7F6C5D);
-    margin-bottom: 4px;
+    margin-bottom: 7px;
   }
   .crss-contact-info-row a {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--crss-charcoal, #292724);
+    word-break: break-word;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(164, 74, 35, 0.32);
+    transition: color .22s ease, text-decoration-color .22s ease;
+  }
+  .crss-contact-info-row a:hover {
     color: var(--crss-terracotta, #A44A23);
+    text-decoration-color: var(--crss-terracotta, #A44A23);
   }
   .crss-contact-location-link {
-    display: inline-block;
-    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
     font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    line-height: 1.5;
     color: var(--crss-terracotta, #A44A23);
-    margin-top: 4px;
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
   }
+  .crss-contact-location-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
+  }
+
+  /* ---- Form (placeholder markup, swap for GHL's native Forms element) ---- */
   .crss-contact-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
-    border-radius: 12px;
-    padding: 24px;
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 34px 36px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
   }
   .crss-contact-form label {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    font-size: 13px;
+    gap: 8px;
+    font-size: 10.5px;
     font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: var(--crss-taupe, #7F6C5D);
   }
   .crss-contact-form input, .crss-contact-form textarea {
     font-family: inherit;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.5;
     color: var(--crss-charcoal, #292724);
-    background: var(--crss-cream, #F1E3CC);
-    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
-    border-radius: 8px;
-    padding: 10px 12px;
+    background: var(--crss-bone, #FAF7F1);
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    border-radius: 5px;
+    padding: 13px 14px;
     resize: vertical;
+    transition: border-color .24s ease, box-shadow .24s ease, background .24s ease;
   }
   .crss-contact-form input:focus, .crss-contact-form textarea:focus {
+    background: var(--crss-white, #FFFFFF);
     border-color: var(--crss-terracotta, #A44A23);
+    box-shadow: 0 0 0 3px rgba(164, 74, 35, 0.12);
     outline: none;
   }
   .crss-contact-submit {
     align-self: flex-start;
+    margin-top: 4px;
     background: var(--crss-terracotta, #A44A23);
     color: var(--crss-white, #FFFFFF);
     font-family: inherit;
     font-weight: 600;
-    font-size: 14px;
-    padding: 12px 26px;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 34px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.12);
+    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
   }
   .crss-contact-submit:hover {
     background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(164, 74, 35, 0.6);
   }
   .crss-contact-confirm {
     display: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--crss-terracotta, #A44A23);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-sand, #EFE7DA);
+    border-left: 2px solid var(--crss-terracotta, #A44A23);
+    border-radius: 0 4px 4px 0;
+    padding: 16px 18px;
   }
   .crss-contact-confirm.is-visible {
     display: block;
   }
+
   @media (max-width: 720px) {
     .crss-contact-grid {
       grid-template-columns: 1fr;
     }
   }
   @media (max-width: 560px) {
-    .crss-contact-inner { padding: 28px 16px 60px; }
+    .crss-contact-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-contact-form {
+      padding: 26px 24px;
+    }
+    .crss-contact-submit {
+      align-self: stretch;
+      text-align: center;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-contact *, .crss-contact *::before, .crss-contact *::after {
+      transition: none !important;
+    }
+    .crss-contact-submit:hover, .crss-contact-location-link:hover {
+      transform: none;
+    }
   }
 </style>
 

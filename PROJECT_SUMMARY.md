@@ -38,9 +38,15 @@ so:
   on its own, without `header.html` present. This was fixed after an
   early version shipped without fallbacks and rendered unstyled when
   previewed standalone, keep this pattern for any new page.
-- Class names are prefixed `crss-` (CapRock Self Storage) throughout,
-  specifically to avoid colliding with whatever else GHL's page builder
-  puts on the page. Keep that prefix on anything new.
+$1- The per-page margin/padding reset is written as
+  `.crss-x :where(h1, h2, p) { margin: 0 }`, **not**
+  `.crss-x h1, .crss-x p { ... }`. This matters: the plain form scores
+  (0,1,1) on specificity, which beats a utility class like
+  `.crss-x-title` at (0,1,0) regardless of source order, so every
+  `margin-bottom` set on a bare class was silently dead and the pages
+  rendered cramped. `:where()` contributes zero specificity, so the
+  reset drops to (0,1,0) and the later utility rules win on order, as
+  intended. Keep the `:where()` form on any new page.
 
 If continuing this in Claude Code and adding a build step, bundler, or
 shared stylesheet, that's fine for local development, but the **shippable
@@ -76,7 +82,9 @@ README.md                         Setup instructions, brand colors, placeholder 
 PROJECT_SUMMARY.md                 This file
 global-sections/
   header.html                      Site-wide header/nav + shared :root tokens. → GHL Global Section
+  footer.html                      Site-wide footer + scroll-to-top. → a SECOND GHL Global Section
 pages/                              One file per page, paste into a Custom Code element
+  home.html                         /                     Home. Hero + search, trust strip, facility cards (x2), 3 steps, long-form copy, features, testimonials
   find-storage.html                 /find-storage        Location directory, client-side search over a hardcoded JS array (1 location so far)
   size-guide.html                   /size-guide           9 standard unit sizes (2x5 through 10x30) with scaled visual diagrams
   help-center.html                  /help-center          Help topic hub, 6 categories, client-side search, links to nowhere yet (no articles built)
@@ -104,6 +112,9 @@ preview/
    (`LOCATIONS`) near the bottom of the file. Fine for one facility,
    move to a real data source (Supabase, or a GHL custom object) once
    there are more than a handful.
+   **This array now exists in two files**: `find-storage.html` and
+   `home.html`. They must be kept in sync by hand until both read from
+   a real data source. Adding a facility means editing both.
 3. **Nav paths are assumed, not confirmed in GHL.** `header.html`'s
    links (and the breadcrumbs in every page) point to the paths in the
    table above. If pages get different paths when actually created in
@@ -124,7 +135,7 @@ preview/
 - Real email address on `contact-us.html`
 - Office address note on the Lubbock page
 - Facility photo (Lubbock info card and the Find Storage card both use
-  a placeholder gradient box)
+  a placeholder textured panel)
 - Fonts: **Fraunces** (headings) + **Work Sans** (body) is a starting
   pairing chosen for this build, loaded via Google Fonts `@import` in
   `header.html`. Swap for CapRock's real brand fonts once chosen.
@@ -135,16 +146,78 @@ preview/
   copy: intentionally left as marked placeholders, no real facts were
   available to write from, don't invent specifics here
 
+On the home page and the footer specifically:
+
+- Hero promotional line. The SROA reference runs "UP TO 50% OFF" there.
+  Nothing is claimed until CapRock confirms a real offer.
+- Hero background photography
+- Trust badges: three placeholder circles. Only real, earned
+  accreditations belong here. The BBB / Shopper Approved /
+  Reputation.com badges in the SROA spec are that company's own
+  accreditations and third-party trademarks, they must not be
+  reproduced for CapRock.
+- Testimonials: four empty scaffold cards. The SROA spec supplies four
+  real, named reviews. Attributing those to CapRock would be a
+  fabricated review, so the layout is built and the content waits on a
+  real review source. Star ratings and review counts on the facility
+  cards are left out for the same reason.
+- Social profile URLs in the footer, or delete that column
+- Footer legal disclaimer, and the Terms of Service / Privacy Policy
+  pages it links to
+
 ## Brand colors ("Option 4, Southwest Contemporary")
+
+Core palette, unchanged. Note that cream is now an *accent* (CTA
+headlines, hover tints), not the page background, see the surface
+tokens below.
 
 | Token | Hex | Use |
 |---|---|---|
-| `--crss-cream` | `#F1E3CC` | Backgrounds, sections |
-| `--crss-terracotta` | `#A44A23` | Buttons, highlights, icons |
+| `--crss-cream` | `#F1E3CC` | Accent: CTA headline text, hover tints |
+| `--crss-terracotta` | `#A44A23` | Buttons, rules, active states, icons |
 | `--crss-terracotta-dark` | `#863B1A` | Hover state for terracotta |
-| `--crss-taupe` | `#7F6C5D` | Secondary accents, muted text |
-| `--crss-charcoal` | `#292724` | Text, footer, navigation |
-| `--crss-white` | `#FFFFFF` | Contrast, cards |
+| `--crss-taupe` | `#7F6C5D` | Micro-labels, eyebrows, placeholder art |
+| `--crss-charcoal` | `#292724` | Headings, sub-nav bar, CTA panels |
+| `--crss-white` | `#FFFFFF` | Cards, header |
+
+### Surface + ink tokens (added in the styling pass)
+
+| Token | Hex | Use |
+|---|---|---|
+| `--crss-bone` | `#FAF7F1` | The page field, every page background |
+| `--crss-sand` | `#EFE7DA` | Inset panels: empty states, stubs, office note |
+| `--crss-ink-soft` | `#5F564C` | Body prose. 7.2:1 on white, where taupe is 5.0:1 |
+| `--crss-rule` | `rgba(41,39,36,0.09)` | Hairline borders on cards and dividers |
+| `--crss-border` | `rgba(41,39,36,0.12)` | Slightly stronger border, form inputs |
+
+## Visual system (the styling pass)
+
+The layout, DOM, and copy of every page are unchanged; only the
+`<style>` blocks were rewritten, so this is safe to re-paste over the
+existing GHL Custom Code elements without redoing any page structure.
+
+The direction is editorial / classic-modern:
+
+- **Type.** Fraunces is now loaded as a true variable font with
+  `font-optical-sizing: auto`, so large headings use the display cut
+  rather than a scaled-up text cut. Headings dropped from weight 600 to
+  **500** and grew to `clamp(36px, 5.2vw, 52px)` with `-0.02em`
+  tracking. Body copy is 16px at 1.7 line-height in `--crss-ink-soft`.
+- **Micro-type.** Breadcrumbs, labels, buttons, and sub-nav tabs are
+  uppercase at 10.5–12px with 0.11–0.18em letter-spacing.
+- **The rule.** Every page title draws a 54×2px terracotta rule beneath
+  itself via `::after`, so no markup was needed for it.
+- **Cards.** 6px radius (was 12px), hairline border, near-flat at rest,
+  lifting 3px with a soft shadow on hover.
+- **CTA panels.** The closing CTA on each page is now a charcoal panel
+  with a radial terracotta wash. The terracotta button carries a 1px
+  cream ring so it separates from the dark ground.
+- **Motion.** 0.26–0.3s `cubic-bezier(.4,0,.2,1)` throughout, and every
+  page now has a `prefers-reduced-motion` block that disables it.
+
+Two things stayed deliberately plain: the About "Our Story" block and
+the Lubbock section stubs keep their dashed borders, because they are
+genuinely unfinished and should not read as approved content.
 
 ## Suggested next steps
 

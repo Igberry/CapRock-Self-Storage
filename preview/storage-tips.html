@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Preview: Storage Tips</title>
+<style>
+  /* Preview-only reset. In GHL the page builder supplies this. */
+  html, body { margin: 0; padding: 0; }
+  body { background: #FAF7F1; }
+</style>
 </head>
 <body>
 <!-- ================================================================
@@ -107,22 +112,42 @@
 </header>
 
 <style>
-  /* Fonts: placeholder pairing, swap for CapRock's real brand fonts */
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+  /* Fonts: placeholder pairing, swap for CapRock's real brand fonts.
+     Fraunces is loaded as a variable font (optical size + italic) so
+     large display headings get the true display cut, not a scaled-up
+     text cut. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Work+Sans:ital,wght@0,300..700;1,400..600&display=swap');
 
-  /* Shared brand tokens. These live here because the header loads
-     on every page first, other pages' Custom Code blocks reuse
-     these same variables instead of redeclaring them. */
+  /* ================================================================
+     SHARED BRAND TOKENS
+     These live here because the header loads on every page first;
+     other pages' Custom Code blocks reuse these same variables
+     instead of redeclaring them. Every page still repeats a literal
+     fallback in its own var() calls so it renders correctly when
+     opened standalone, without this file present.
+     ================================================================ */
   :root {
+    /* Core brand */
     --crss-cream: #F1E3CC;
     --crss-terracotta: #A44A23;
     --crss-terracotta-dark: #863B1A;
     --crss-taupe: #7F6C5D;
     --crss-charcoal: #292724;
     --crss-white: #FFFFFF;
+
+    /* Extended surfaces + ink.
+       bone     = the page field (cream is now an accent, not the whole page)
+       sand     = inset / secondary surface
+       ink-soft = body prose; 7.2:1 on white, where taupe is 5.0:1 */
+    --crss-bone: #FAF7F1;
+    --crss-sand: #EFE7DA;
+    --crss-ink-soft: #5F564C;
     --crss-border: rgba(41, 39, 36, 0.12);
-    --crss-header-h: 76px;
-    --crss-subnav-h: 52px;
+    --crss-rule: rgba(41, 39, 36, 0.09);
+
+    /* Live sticky heights, re-published by JS at runtime */
+    --crss-header-h: 88px;  /* 84px inner + 3px top rule + 1px hairline */
+    --crss-subnav-h: 50px;
   }
 
   .crss-header, .crss-header *, .crss-header *::before, .crss-header *::after {
@@ -141,28 +166,34 @@
   }
   .crss-header :focus-visible {
     outline: 2px solid var(--crss-terracotta);
-    outline-offset: 2px;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
+  /* ============ MASTHEAD ============ */
   .crss-header {
     position: sticky;
     top: 0;
     z-index: 40;
     font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
     color: var(--crss-charcoal);
     background: var(--crss-white);
-    border-bottom: 1px solid var(--crss-border);
-    border-top: 4px solid var(--crss-terracotta);
+    border-top: 3px solid var(--crss-terracotta);
+    border-bottom: 1px solid var(--crss-rule);
+    box-shadow: 0 8px 24px -20px rgba(41, 39, 36, 0.55);
   }
   .crss-header-inner {
     max-width: 1280px;
     margin: 0 auto;
-    height: var(--crss-header-h);
-    padding: 0 24px;
+    height: 84px; /* fixed, NOT var(--crss-header-h): JS publishes the measured total (incl. borders) into that variable, reading it back here would grow the header on every resize */
+    padding: 0 32px;
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 36px;
   }
+
+  /* ---- Wordmark ---- */
   .crss-logo {
     display: flex;
     flex-direction: column;
@@ -171,65 +202,131 @@
   }
   .crss-logo-mark {
     font-family: 'Fraunces', Georgia, serif;
-    font-weight: 700;
-    font-size: 24px;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 27px;
+    letter-spacing: -0.015em;
     color: var(--crss-terracotta);
   }
   .crss-logo-sub {
-    font-size: 10px;
-    letter-spacing: 0.14em;
+    font-size: 9.5px;
+    letter-spacing: 0.26em;
     font-weight: 600;
+    text-transform: uppercase;
     color: var(--crss-taupe);
-    margin-top: 2px;
+    margin-top: 5px;
   }
+
+  /* ---- Primary nav: hairline underline on hover, not a filled pill ---- */
   .crss-nav {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
     flex: 1;
   }
   .crss-nav-link {
-    padding: 10px 14px;
-    font-size: 15px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 14px;
     font-weight: 500;
-    border-radius: 6px;
+    letter-spacing: 0.005em;
+    color: var(--crss-ink-soft);
     white-space: nowrap;
+    transition: color .22s ease;
   }
-  .crss-nav-link:hover {
-    background: var(--crss-cream);
-    color: var(--crss-terracotta);
+  .crss-nav-link::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 4px;
+    height: 1.5px;
+    background: var(--crss-terracotta);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-nav-link:hover,
+  .crss-dropdown:hover > .crss-nav-link,
+  .crss-dropdown-trigger[aria-expanded="true"] {
+    color: var(--crss-charcoal);
+  }
+  .crss-nav-link:hover::after,
+  .crss-dropdown:hover > .crss-nav-link::after,
+  .crss-dropdown-trigger[aria-expanded="true"]::after {
+    transform: scaleX(1);
   }
   .crss-caret {
-    font-size: 11px;
-    margin-left: 2px;
+    font-size: 9px;
+    margin-left: 5px;
+    color: var(--crss-taupe);
+    transition: transform .25s ease;
   }
+  .crss-dropdown:hover .crss-caret,
+  .crss-dropdown-trigger[aria-expanded="true"] .crss-caret {
+    transform: translateY(1px);
+  }
+
+  /* ---- Dropdowns ---- */
   .crss-dropdown {
     position: relative;
   }
   .crss-dropdown-menu {
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + 10px);
     left: 0;
-    min-width: 200px;
+    min-width: 216px;
     background: var(--crss-white);
-    border: 1px solid var(--crss-border);
-    border-radius: 8px;
-    box-shadow: 0 12px 24px rgba(41,39,36,0.12);
-    padding: 8px;
+    border: 1px solid var(--crss-rule);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 18px 40px -16px rgba(41, 39, 36, 0.30);
+    padding: 6px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-6px);
-    transition: opacity .15s ease, transform .15s ease, visibility .15s;
+    transform: translateY(-8px);
+    transition: opacity .22s ease, transform .22s cubic-bezier(.4, 0, .2, 1), visibility .22s;
+  }
+  /* Invisible bridge, so the pointer can cross the gap between the
+     trigger and the menu without the menu closing underneath it. */
+  .crss-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -12px;
+    height: 12px;
   }
   .crss-dropdown-menu a {
+    position: relative;
     display: block;
-    padding: 9px 12px;
-    font-size: 14px;
-    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--crss-ink-soft);
+    border-radius: 4px;
+    transition: color .2s ease, background .2s ease, padding-left .22s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-dropdown-menu a::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    width: 2px;
+    height: 0;
+    background: var(--crss-terracotta);
+    border-radius: 1px;
+    transform: translateY(-50%);
+    transition: height .22s cubic-bezier(.4, 0, .2, 1);
   }
   .crss-dropdown-menu a:hover {
-    background: var(--crss-cream);
-    color: var(--crss-terracotta);
+    background: var(--crss-bone);
+    color: var(--crss-charcoal);
+    padding-left: 18px;
+  }
+  .crss-dropdown-menu a:hover::before {
+    height: 15px;
   }
   .crss-dropdown:hover .crss-dropdown-menu,
   .crss-dropdown-trigger[aria-expanded="true"] + .crss-dropdown-menu {
@@ -237,83 +334,134 @@
     visibility: visible;
     transform: translateY(0);
   }
+
+  /* ---- Utility actions ---- */
   .crss-header-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 22px;
     flex-shrink: 0;
   }
   .crss-phone, .crss-account-link {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    font-weight: 600;
+    gap: 7px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--crss-ink-soft);
+    transition: color .22s ease;
+  }
+  .crss-phone:hover, .crss-account-link:hover {
+    color: var(--crss-terracotta);
   }
   .crss-icon {
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
+    color: var(--crss-taupe);
+    transition: color .22s ease;
+  }
+  .crss-phone:hover .crss-icon, .crss-account-link:hover .crss-icon {
+    color: var(--crss-terracotta);
   }
   .crss-paybill-btn {
     background: var(--crss-terracotta);
     color: var(--crss-white);
     font-weight: 600;
-    font-size: 14px;
-    padding: 11px 20px;
-    border-radius: 6px;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 22px;
+    border-radius: 4px;
     white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.10);
+    transition: background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1), box-shadow .24s ease;
   }
   .crss-paybill-btn:hover {
     background: var(--crss-terracotta-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px -4px rgba(164, 74, 35, 0.5);
   }
+
+  /* ---- Mobile toggle: animates into an X via .is-open ---- */
   .crss-mobile-toggle {
     display: none;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
   }
   .crss-mobile-toggle span {
     display: block;
-    height: 2px;
+    height: 1.5px;
     background: var(--crss-charcoal);
     border-radius: 2px;
+    transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .2s ease;
   }
+  .crss-header.is-open .crss-mobile-toggle span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .crss-header.is-open .crss-mobile-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+  .crss-header.is-open .crss-mobile-toggle span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  /* ---- Mobile panel ---- */
   .crss-mobile-panel {
     display: none;
     flex-direction: column;
-    padding: 8px 24px 20px;
-    border-top: 1px solid var(--crss-border);
+    padding: 6px 32px 26px;
+    background: var(--crss-bone);
+    border-top: 1px solid var(--crss-rule);
   }
   .crss-mobile-link {
-    padding: 12px 4px;
+    padding: 15px 2px;
     font-size: 15px;
     font-weight: 500;
-    border-bottom: 1px solid var(--crss-border);
+    color: var(--crss-charcoal);
+    border-bottom: 1px solid var(--crss-rule);
+    transition: color .2s ease;
+  }
+  .crss-mobile-link:hover {
+    color: var(--crss-terracotta);
   }
   .crss-mobile-accordion-trigger {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 4px;
+    padding: 15px 2px;
     font-size: 15px;
     font-weight: 500;
-    border-bottom: 1px solid var(--crss-border);
+    color: var(--crss-charcoal);
+    border-bottom: 1px solid var(--crss-rule);
     text-align: left;
+  }
+  .crss-mobile-accordion-trigger[aria-expanded="true"] {
+    color: var(--crss-terracotta);
+  }
+  .crss-mobile-accordion-trigger[aria-expanded="true"] .crss-caret {
+    transform: rotate(180deg);
   }
   .crss-mobile-accordion-panel {
     display: none;
     flex-direction: column;
-    padding: 4px 4px 8px 16px;
+    padding: 6px 2px 10px 18px;
+    border-left: 1px solid var(--crss-border);
+    margin: 8px 0 8px 2px;
   }
   .crss-mobile-accordion-panel.is-open {
     display: flex;
   }
   .crss-mobile-accordion-panel a {
-    padding: 8px 0;
+    padding: 9px 0;
     font-size: 14px;
-    color: var(--crss-taupe);
+    color: var(--crss-ink-soft);
+    transition: color .2s ease;
+  }
+  .crss-mobile-accordion-panel a:hover {
+    color: var(--crss-terracotta);
   }
 
   @media (max-width: 960px) {
@@ -330,12 +478,21 @@
   }
   @media (max-width: 560px) {
     .crss-header-inner {
-      padding: 0 16px;
+      padding: 0 20px;
+    }
+    .crss-mobile-panel {
+      padding: 6px 20px 24px;
+    }
+    .crss-logo-mark {
+      font-size: 24px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .crss-dropdown-menu {
-      transition: none;
+    .crss-header *, .crss-header *::before, .crss-header *::after {
+      transition: none !important;
+    }
+    .crss-paybill-btn:hover {
+      transform: none;
     }
   }
 </style>
@@ -428,13 +585,14 @@
 <style>
   .crss-tips {
     font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
     color: var(--crss-charcoal, #292724);
-    background: var(--crss-cream, #F1E3CC);
+    background: var(--crss-bone, #FAF7F1);
   }
   .crss-tips, .crss-tips *, .crss-tips *::before, .crss-tips *::after {
     box-sizing: border-box;
   }
-  .crss-tips h1, .crss-tips h3, .crss-tips p {
+  .crss-tips :where(h1, h3, p) {
     margin: 0;
     padding: 0;
   }
@@ -444,93 +602,571 @@
   }
   .crss-tips :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
-    outline-offset: 2px;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   .crss-tips-inner {
-    max-width: 800px;
+    max-width: 820px;
     margin: 0 auto;
-    padding: 40px 24px 80px;
+    padding: 64px 32px 104px;
   }
+
+  /* ============ BREADCRUMB ============ */
   .crss-breadcrumb {
     display: flex;
-    gap: 8px;
-    font-size: 13px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--crss-taupe, #7F6C5D);
-    margin-bottom: 24px;
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
   }
   .crss-breadcrumb a:hover {
     color: var(--crss-terracotta, #A44A23);
   }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
   .crss-tips-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(28px, 4vw, 38px);
-    margin-bottom: 10px;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-tips-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
   }
   .crss-tips-subtitle {
-    font-size: 16px;
-    color: var(--crss-taupe, #7F6C5D);
-    margin-bottom: 32px;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 58ch;
+    margin-bottom: 48px;
   }
+
+  /* ============ NUMBERED LIST ============ */
+  /* The list is pulled slightly wider than the text column so the row
+     hover tint has breathing room around the copy. The bleed lives on
+     the list, not on each row, so the top rule and every row rule stay
+     flush with one another. */
   .crss-tips-list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    margin: 0 -16px 0 -12px;
+    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
   }
   .crss-tip {
     display: flex;
-    gap: 18px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    gap: 28px;
+    padding: 30px 16px 30px 12px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 4px;
+    transition: background .28s ease;
+  }
+  .crss-tip:hover {
+    background: rgba(241, 227, 204, 0.42);
   }
   .crss-tip-num {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--crss-terracotta, #A44A23);
+    font-optical-sizing: auto;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: rgba(164, 74, 35, 0.42);
     flex-shrink: 0;
-    width: 34px;
+    width: 48px;
+    transition: color .28s ease;
+  }
+  .crss-tip:hover .crss-tip-num {
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-tip h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 4px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.012em;
+    margin-bottom: 8px;
+    color: var(--crss-charcoal, #292724);
   }
   .crss-tip p {
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--crss-taupe, #7F6C5D);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
   }
+
+  /* ============ CLOSING CTA ============ */
   .crss-tips-cta {
-    margin-top: 40px;
-    padding: 28px;
-    background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
-    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 72px;
+    padding: 54px 40px;
+    background: var(--crss-charcoal, #292724);
+    border-radius: 6px;
     text-align: center;
   }
+  .crss-tips-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(164, 74, 35, 0.30), transparent 62%);
+    pointer-events: none;
+  }
   .crss-tips-cta p {
-    font-size: 16px;
+    position: relative;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: clamp(21px, 2.6vw, 27px);
     font-weight: 500;
-    margin-bottom: 14px;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--crss-cream, #F1E3CC);
+    margin-bottom: 26px;
   }
   .crss-tips-cta-btn {
+    position: relative;
     display: inline-block;
     background: var(--crss-terracotta, #A44A23);
     color: var(--crss-white, #FFFFFF);
     font-weight: 600;
-    font-size: 14px;
-    padding: 13px 26px;
-    border-radius: 6px;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 34px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
   }
   .crss-tips-cta-btn:hover {
     background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
   }
+
   @media (max-width: 560px) {
-    .crss-tips-inner { padding: 28px 16px 60px; }
+    .crss-tips-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-tips-list {
+      margin: 0 -12px 0 -10px;
+    }
+    .crss-tip {
+      gap: 18px;
+      padding: 24px 12px 24px 10px;
+    }
+    .crss-tip-num {
+      width: 38px;
+      font-size: 23px;
+    }
+    .crss-tips-cta {
+      padding: 42px 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-tips *, .crss-tips *::before, .crss-tips *::after {
+      transition: none !important;
+    }
+    .crss-tips-cta-btn:hover {
+      transform: none;
+    }
   }
 </style>
+
+<!-- ================================================================
+     CapRock Self Storage — Global Footer
+     Save this as a SECOND GHL Global Section (alongside the header)
+     and add it to the bottom of every page. It is not part of any one
+     page's Custom Code block, otherwise it would only ever show up on
+     that single page.
+
+     Structure follows the SROA footer spec (divider bar, four link
+     columns, locations, legal, copyright, scroll-to-top), rendered in
+     CapRock's brand system. Link columns list only pages that actually
+     exist in this project.
+
+     Deliberately NOT carried over from the SROA spec:
+     - "Storage Experts", "Wine Storage", "Blog", "INO Armor®" — INO
+       Armor® is SROA's registered trademark and the rest are pages
+       CapRock does not have.
+     - "Investor Relations", "Commercial Spaces", "Social Responsibility"
+     - The Operational States list (32 states) and Featured Cities list.
+       CapRock has one facility. A single Locations row is used instead
+       and grows as facilities are added.
+     - SROA's fine-print legal disclaimer, which describes their offers,
+       fees and lease terms, not CapRock's.
+
+     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     - Real phone number and email (shared with header + contact page)
+     - Real social profile URLs, or delete the Follow Us column
+     - Legal disclaimer text, reviewed by whoever handles CapRock's terms
+     - Terms of Service and Privacy Policy pages
+     ================================================================ -->
+<footer class="crss-footer">
+  <div class="crss-footer-bar" aria-hidden="true"></div>
+
+  <div class="crss-footer-inner">
+    <div class="crss-footer-cols">
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Storage Tools</h2>
+        <ul>
+          <li><a href="/storage-calculator">Storage Calculator</a></li>
+          <li><a href="/storage-tips">Storage Tips</a></li>
+          <li><a href="/vehicle-storage">Vehicle Storage</a></li>
+          <li><a href="/student-storage">Student Storage</a></li>
+          <li><a href="/military-storage">Military Storage</a></li>
+          <li><a href="/size-guide">Size Guide</a></li>
+          <li><a href="/help-center">Help Center</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">About CapRock</h2>
+        <ul>
+          <li><a href="/about-caprock">About CapRock</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/contact-us">Contact Us</a></li>
+          <li><a href="/find-storage">Find Storage</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Reach Out</h2>
+        <ul>
+          <!-- PLACEHOLDER phone, same dummy number as the header -->
+          <li>
+            <a href="tel:18060000000" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>(806) 000-0000</span>
+            </a>
+          </li>
+          <!-- PLACEHOLDER email, same as the contact page -->
+          <li>
+            <a href="mailto:info@caprockselfstorage.com" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 7l8.5 6 8.5-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>Email us</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Follow Us</h2>
+        <!-- PLACEHOLDER: real profile URLs, or delete this column -->
+        <div class="crss-footer-social">
+          <a href="#" aria-label="CapRock Self Storage on Facebook">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 8.5h2.2V5.6c-.4-.05-1.4-.15-2.6-.15-2.6 0-4.3 1.6-4.3 4.5v2.3H7.3v3.2h2.5v8.05h3.3V15.45h2.5l.4-3.2h-2.9v-2c0-.95.25-1.75 1.4-1.75z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Instagram">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on X">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l7.6 9.9L4.4 20M20 4l-7.3 8M9.8 12.6L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Pinterest">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.3 20l1.9-7.2M9.6 10.6c0-1.7 1.2-3 3-3 1.7 0 2.8 1.1 2.8 2.8 0 2-1 3.6-2.5 3.6-.8 0-1.4-.7-1.2-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="crss-footer-locations">
+      <h2 class="crss-footer-head">Locations</h2>
+      <!-- Grows as facilities are added. One per city. -->
+      <p><a href="/find-storage/texas/lubbock/5839-49th-street">Lubbock, TX</a></p>
+    </div>
+
+    <div class="crss-footer-legal">
+      <!-- PLACEHOLDER: real disclaimer text. Rates, fees, offer terms and
+           lease proration all need to come from whoever handles CapRock's
+           terms. Nothing is stated here until then. -->
+      <p class="crss-footer-disclaimer">[PLACEHOLDER &mdash; legal disclaimer. Rates, availability, fees and lease terms go here once CapRock&rsquo;s actual terms are confirmed.]</p>
+
+      <div class="crss-footer-baseline">
+        <p>&copy; <span id="crss-footer-year">2026</span> CapRock Self Storage. All rights reserved.</p>
+        <p class="crss-footer-legal-links">
+          <!-- PLACEHOLDER destinations, neither page exists yet -->
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button type="button" class="crss-totop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<style>
+  .crss-footer, .crss-footer *, .crss-footer *::before, .crss-footer *::after {
+    box-sizing: border-box;
+  }
+  .crss-footer :where(h2, p, ul) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-footer ul {
+    list-style: none;
+  }
+  .crss-footer a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-footer :focus-visible, .crss-totop:focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-footer {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  /* Divider bar between page content and the footer */
+  .crss-footer-bar {
+    height: 3px;
+    background: var(--crss-terracotta, #A44A23);
+  }
+  .crss-footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 32px 44px;
+  }
+
+  /* ============ LINK COLUMNS ============ */
+  .crss-footer-cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    padding-bottom: 44px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-footer-head {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 18px;
+  }
+  .crss-footer-col li + li {
+    margin-top: 11px;
+  }
+  .crss-footer-col a {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    transition: color .22s ease;
+  }
+  .crss-footer-col a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-footer-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .crss-footer-contact svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--crss-taupe, #7F6C5D);
+    transition: color .22s ease;
+  }
+  .crss-footer-contact:hover svg {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ---- Social ---- */
+  .crss-footer-social {
+    display: flex;
+    gap: 10px;
+  }
+  .crss-footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    color: var(--crss-taupe, #7F6C5D);
+    transition: color .24s ease, border-color .24s ease, background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-footer-social svg {
+    width: 18px;
+    height: 18px;
+  }
+  .crss-footer-social a:hover {
+    color: var(--crss-white, #FFFFFF);
+    background: var(--crss-terracotta, #A44A23);
+    border-color: var(--crss-terracotta, #A44A23);
+    transform: translateY(-2px);
+  }
+
+  /* ============ LOCATIONS ============ */
+  .crss-footer-locations {
+    padding: 34px 0;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-footer-locations p {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.9;
+  }
+  .crss-footer-locations a {
+    transition: color .22s ease;
+  }
+  .crss-footer-locations a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ LEGAL ============ */
+  .crss-footer-legal {
+    padding-top: 30px;
+  }
+  .crss-footer-disclaimer {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 26px;
+  }
+  .crss-footer-baseline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-footer-legal-links {
+    display: flex;
+    gap: 22px;
+  }
+  .crss-footer-legal-links a {
+    transition: color .22s ease;
+  }
+  .crss-footer-legal-links a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ SCROLL TO TOP ============ */
+  .crss-totop {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 45;
+    width: 46px;
+    height: 46px;
+    border: none;
+    border-radius: 50%;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(41, 39, 36, 0.2), 0 14px 30px -12px rgba(164, 74, 35, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity .28s ease, transform .28s cubic-bezier(.4, 0, .2, 1), visibility .28s, background .24s ease;
+  }
+  .crss-totop svg {
+    width: 20px;
+    height: 20px;
+  }
+  .crss-totop.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .crss-totop:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+  }
+
+  @media (max-width: 900px) {
+    .crss-footer-cols {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 36px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-footer-inner {
+      padding: 56px 20px 36px;
+    }
+    .crss-footer-cols {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .crss-footer-baseline {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .crss-totop {
+      right: 16px;
+      bottom: 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-footer *, .crss-totop {
+      transition: none !important;
+    }
+    .crss-footer-social a:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    /* ---- Copyright year, so this never goes stale ---- */
+    var year = document.getElementById('crss-footer-year');
+    if (year) year.textContent = new Date().getFullYear();
+
+    /* ---- Scroll-to-top ---- */
+    var btn = document.querySelector('.crss-totop');
+    if (!btn) return;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function toggle() {
+      btn.classList.toggle('is-visible', window.pageYOffset > 520);
+    }
+    toggle();
+    window.addEventListener('scroll', toggle, { passive: true });
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  })();
+</script>
 
 </body>
 </html>

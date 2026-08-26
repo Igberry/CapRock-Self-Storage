@@ -90,7 +90,7 @@
   .crss-location, .crss-location *, .crss-location *::before, .crss-location *::after {
     box-sizing: border-box;
   }
-  .crss-location h1, .crss-location h2, .crss-location p {
+  .crss-location :where(h1, h2, p) {
     margin: 0;
     padding: 0;
   }
@@ -100,40 +100,52 @@
   }
   .crss-location :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
-    outline-offset: 2px;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   .crss-location {
     font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
     color: var(--crss-charcoal, #292724);
-    background: var(--crss-cream, #F1E3CC);
+    background: var(--crss-bone, #FAF7F1);
   }
 
   /* ============ STICKY SUB-NAV ============ */
   .crss-subnav {
     position: sticky;
-    top: var(--crss-header-h, 76px);
+    top: var(--crss-header-h, 88px);
     z-index: 30;
     background: var(--crss-charcoal, #292724);
+    box-shadow: 0 10px 26px -22px rgba(41, 39, 36, 0.9);
   }
   .crss-subnav-inner {
     max-width: 1280px;
     margin: 0 auto;
     display: flex;
-    gap: 4px;
-    padding: 0 24px;
+    gap: 2px;
+    padding: 0 32px;
     overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .crss-subnav-inner::-webkit-scrollbar {
+    display: none;
   }
   .crss-subnav-link {
+    position: relative;
     flex-shrink: 0;
-    padding: 15px 18px;
-    font-size: 14px;
+    padding: 18px 20px;
+    font-size: 11.5px;
     font-weight: 600;
-    color: rgba(255,255,255,0.72);
-    border-bottom: 3px solid transparent;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(241, 227, 204, 0.62);
+    border-bottom: 2px solid transparent;
+    transition: color .24s ease, border-color .24s ease;
   }
   .crss-subnav-link:hover {
-    color: var(--crss-white, #FFFFFF);
+    color: var(--crss-cream, #F1E3CC);
   }
   .crss-subnav-link.is-active {
     color: var(--crss-white, #FFFFFF);
@@ -144,110 +156,161 @@
   .crss-shell {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 32px 24px 80px;
+    padding: 44px 32px 104px;
     display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 32px;
+    grid-template-columns: 348px 1fr;
+    gap: 40px;
     align-items: start;
   }
+
+  /* ---- Facility info card ---- */
   .crss-info-card {
     position: sticky;
-    top: calc(var(--crss-header-h, 76px) + var(--crss-subnav-h, 52px) + 24px);
+    top: calc(var(--crss-header-h, 88px) + var(--crss-subnav-h, 50px) + 28px);
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
-    border-radius: 12px;
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
     overflow: hidden;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04), 0 18px 40px -26px rgba(41, 39, 36, 0.4);
   }
+  /* Placeholder facility image: a woven tone rather than a flat gradient,
+     so the empty state still reads as a designed surface. Replace once
+     real photography lands. */
   .crss-info-photo {
-    height: 180px;
-    background: linear-gradient(135deg, var(--crss-taupe, #7F6C5D), var(--crss-charcoal, #292724));
-    color: var(--crss-white, #FFFFFF);
+    height: 196px;
+    background-color: var(--crss-taupe, #7F6C5D);
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+                      linear-gradient(150deg, rgba(241, 227, 204, 0.16), rgba(41, 39, 36, 0.85));
+    color: var(--crss-cream, #F1E3CC);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    line-height: 1.8;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
   .crss-info-body {
-    padding: 20px;
+    padding: 26px 26px 28px;
   }
   .crss-info-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 19px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-optical-sizing: auto;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    margin-bottom: 12px;
+    color: var(--crss-charcoal, #292724);
   }
   .crss-info-address {
-    font-size: 14px;
-    color: var(--crss-taupe, #7F6C5D);
-    line-height: 1.5;
-    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.6;
+    margin-bottom: 14px;
   }
   .crss-info-phone {
     display: inline-block;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
     color: var(--crss-terracotta, #A44A23);
-    margin-bottom: 14px;
+    margin-bottom: 20px;
+    transition: color .22s ease;
+  }
+  .crss-info-phone:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
   }
   .crss-info-office-note {
-    font-size: 12.5px;
-    color: var(--crss-taupe, #7F6C5D);
-    line-height: 1.5;
-    padding-top: 12px;
-    border-top: 1px solid var(--crss-border, rgba(41,39,36,0.12));
-    margin-bottom: 12px;
+    font-size: 13.5px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.6;
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
   }
   .crss-info-details-link {
-    display: inline-block;
-    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
     font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
     color: var(--crss-terracotta, #A44A23);
-    margin-bottom: 16px;
+    margin-bottom: 22px;
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
+  }
+  .crss-info-details-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
   }
   .crss-info-map {
-    border-radius: 8px;
+    border-radius: 4px;
     overflow: hidden;
-    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
   }
   .crss-info-map iframe {
     display: block;
     width: 100%;
-    height: 160px;
+    height: 184px;
     border: 0;
+    filter: saturate(0.82) contrast(0.97);
+    transition: filter .34s ease;
   }
+  .crss-info-map:hover iframe {
+    filter: none;
+  }
+
+  /* ---- Main column ---- */
   .crss-main {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 28px;
     min-width: 0;
   }
   .crss-section {
-    scroll-margin-top: calc(var(--crss-header-h, 76px) + var(--crss-subnav-h, 52px) + 16px);
+    scroll-margin-top: calc(var(--crss-header-h, 88px) + var(--crss-subnav-h, 50px) + 20px);
   }
+  /* These five sections are still unbuilt. The dashed edge is deliberate:
+     it keeps them reading as scaffolding, not as finished content. */
   .crss-section-stub {
-    background: var(--crss-white, #FFFFFF);
-    border: 1px dashed var(--crss-taupe, #7F6C5D);
-    border-radius: 12px;
-    padding: 28px;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 6px;
+    padding: 40px 40px 42px;
   }
   .crss-section-stub h2 {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-optical-sizing: auto;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-section-stub h2::after {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 16px 0 14px;
   }
   .crss-stub-note {
-    font-size: 14px;
-    color: var(--crss-taupe, #7F6C5D);
-    line-height: 1.5;
+    font-size: 15.5px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.68;
+    max-width: 62ch;
   }
 
   @media (max-width: 960px) {
     .crss-shell {
       grid-template-columns: 1fr;
+      gap: 28px;
     }
     .crss-info-card {
       position: static;
@@ -255,7 +318,24 @@
   }
   @media (max-width: 560px) {
     .crss-shell {
-      padding: 24px 16px 60px;
+      padding: 32px 20px 72px;
+    }
+    .crss-subnav-inner {
+      padding: 0 20px;
+    }
+    .crss-subnav-link {
+      padding: 16px 14px;
+    }
+    .crss-section-stub {
+      padding: 28px 24px 30px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-location *, .crss-location *::before, .crss-location *::after {
+      transition: none !important;
+    }
+    .crss-info-details-link:hover {
+      transform: none;
     }
   }
 </style>
