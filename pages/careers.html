@@ -35,8 +35,8 @@
 <style>
   .crss-careers {
     font-family: 'Work Sans', Arial, sans-serif;
-    color: var(--crss-charcoal);
-    background: var(--crss-cream);
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
   }
   .crss-careers, .crss-careers *, .crss-careers *::before, .crss-careers *::after {
     box-sizing: border-box;
@@ -50,7 +50,7 @@
     color: inherit;
   }
   .crss-careers :focus-visible {
-    outline: 2px solid var(--crss-terracotta);
+    outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 2px;
   }
 
@@ -63,11 +63,11 @@
     display: flex;
     gap: 8px;
     font-size: 13px;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     margin-bottom: 24px;
   }
   .crss-breadcrumb a:hover {
-    color: var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-careers-title {
     font-family: 'Fraunces', Georgia, serif;
@@ -78,12 +78,12 @@
   .crss-careers-subtitle {
     font-size: 15px;
     font-style: italic;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     margin-bottom: 32px;
   }
   .crss-careers-block {
-    background: var(--crss-white);
-    border: 1px solid var(--crss-border);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 22px;
@@ -93,23 +93,23 @@
     font-size: 19px;
     font-weight: 600;
     margin-bottom: 14px;
-    color: var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-careers-empty {
     padding: 20px;
-    border: 1px dashed var(--crss-taupe);
+    border: 1px dashed var(--crss-taupe, #7F6C5D);
     border-radius: 8px;
     text-align: center;
   }
   .crss-careers-empty p {
     font-size: 14px;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     line-height: 1.5;
   }
   .crss-careers-cta {
     padding: 28px;
-    background: var(--crss-white);
-    border: 1px solid var(--crss-border);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
     border-radius: 12px;
     text-align: center;
   }
@@ -120,15 +120,15 @@
   }
   .crss-careers-cta-btn {
     display: inline-block;
-    background: var(--crss-terracotta);
-    color: var(--crss-white);
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
     font-weight: 600;
     font-size: 14px;
     padding: 13px 26px;
     border-radius: 6px;
   }
   .crss-careers-cta-btn:hover {
-    background: var(--crss-terracotta-dark);
+    background: var(--crss-terracotta-dark, #863B1A);
   }
   @media (max-width: 560px) {
     .crss-careers-inner { padding: 28px 16px 60px; }

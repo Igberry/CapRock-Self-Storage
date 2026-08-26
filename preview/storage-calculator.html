@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview: Storage Calculator</title>
+</head>
+<body>
+<!-- ================================================================
+     CapRock Self Storage — Global Header
+     Save this as a GHL Global Section so every page shares it.
+     It owns the shared brand colors, fonts, and the live sticky
+     header height that other pages' Custom Code blocks read from
+     (via the --crss-header-h variable on the document root).
+
+     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     - Real logo (currently a text wordmark)
+     - Real phone number (used in 3 spots: header, mobile panel)
+     - Fonts: Fraunces + Work Sans is a starting pairing, swap for
+       CapRock's real brand fonts once chosen
+     ================================================================ -->
+<header class="crss-header">
+  <div class="crss-header-inner">
+
+    <a href="/" class="crss-logo" aria-label="CapRock Self Storage home">
+      <span class="crss-logo-mark">CapRock</span>
+      <span class="crss-logo-sub">SELF STORAGE</span>
+    </a>
+
+    <nav class="crss-nav" aria-label="Primary">
+      <a href="/find-storage" class="crss-nav-link">Find Storage</a>
+      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
+      <a href="/help-center" class="crss-nav-link">Help Center</a>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/storage-calculator">Storage Calculator</a>
+          <a href="/storage-tips">Storage Tips</a>
+          <a href="/vehicle-storage">Vehicle Storage</a>
+          <a href="/student-storage">Student Storage</a>
+          <a href="/military-storage">Military Storage</a>
+        </div>
+      </div>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          About Us <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/about-caprock">About CapRock</a>
+          <a href="/careers">Careers</a>
+          <a href="/contact-us">Contact Us</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="crss-header-actions">
+      <!-- PLACEHOLDER phone number -->
+      <a href="tel:18060000000" class="crss-phone">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>(806) 000-0000</span>
+      </a>
+      <a href="#" class="crss-account-link">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>My Account</span>
+      </a>
+      <a href="#" class="crss-paybill-btn">Pay Your Bill</a>
+    </div>
+
+    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div class="crss-mobile-panel">
+    <a href="/find-storage" class="crss-mobile-link">Find Storage</a>
+    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
+    <a href="/help-center" class="crss-mobile-link">Help Center</a>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/storage-calculator">Storage Calculator</a>
+      <a href="/storage-tips">Storage Tips</a>
+      <a href="/vehicle-storage">Vehicle Storage</a>
+      <a href="/student-storage">Student Storage</a>
+      <a href="/military-storage">Military Storage</a>
+    </div>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      About Us <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/about-caprock">About CapRock</a>
+      <a href="/careers">Careers</a>
+      <a href="/contact-us">Contact Us</a>
+    </div>
+
+    <a href="tel:18060000000" class="crss-mobile-link">(806) 000-0000</a>
+    <a href="#" class="crss-mobile-link">My Account</a>
+  </div>
+</header>
+
+<style>
+  /* Fonts: placeholder pairing, swap for CapRock's real brand fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+  /* Shared brand tokens. These live here because the header loads
+     on every page first, other pages' Custom Code blocks reuse
+     these same variables instead of redeclaring them. */
+  :root {
+    --crss-cream: #F1E3CC;
+    --crss-terracotta: #A44A23;
+    --crss-terracotta-dark: #863B1A;
+    --crss-taupe: #7F6C5D;
+    --crss-charcoal: #292724;
+    --crss-white: #FFFFFF;
+    --crss-border: rgba(41, 39, 36, 0.12);
+    --crss-header-h: 76px;
+    --crss-subnav-h: 52px;
+  }
+
+  .crss-header, .crss-header *, .crss-header *::before, .crss-header *::after {
+    box-sizing: border-box;
+  }
+  .crss-header a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-header button {
+    font: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+  }
+  .crss-header :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-white);
+    border-bottom: 1px solid var(--crss-border);
+    border-top: 4px solid var(--crss-terracotta);
+  }
+  .crss-header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: var(--crss-header-h);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .crss-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .crss-logo-mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--crss-terracotta);
+  }
+  .crss-logo-sub {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--crss-taupe);
+    margin-top: 2px;
+  }
+  .crss-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  .crss-nav-link {
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .crss-nav-link:hover {
+    background: var(--crss-cream);
+    color: var(--crss-terracotta);
+  }
+  .crss-caret {
+    font-size: 11px;
+    margin-left: 2px;
+  }
+  .crss-dropdown {
+    position: relative;
+  }
+  .crss-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 200px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 8px;
+    box-shadow: 0 12px 24px rgba(41,39,36,0.12);
+    padding: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity .15s ease, transform .15s ease, visibility .15s;
+  }
+  .crss-dropdown-menu a {
+    display: block;
+    padding: 9px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  .crss-dropdown-menu a:hover {
+    background: var(--crss-cream);
+    color: var(--crss-terracotta);
+  }
+  .crss-dropdown:hover .crss-dropdown-menu,
+  .crss-dropdown-trigger[aria-expanded="true"] + .crss-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .crss-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .crss-phone, .crss-account-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .crss-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .crss-paybill-btn {
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .crss-paybill-btn:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  .crss-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+  }
+  .crss-mobile-toggle span {
+    display: block;
+    height: 2px;
+    background: var(--crss-charcoal);
+    border-radius: 2px;
+  }
+  .crss-mobile-panel {
+    display: none;
+    flex-direction: column;
+    padding: 8px 24px 20px;
+    border-top: 1px solid var(--crss-border);
+  }
+  .crss-mobile-link {
+    padding: 12px 4px;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--crss-border);
+  }
+  .crss-mobile-accordion-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 4px;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--crss-border);
+    text-align: left;
+  }
+  .crss-mobile-accordion-panel {
+    display: none;
+    flex-direction: column;
+    padding: 4px 4px 8px 16px;
+  }
+  .crss-mobile-accordion-panel.is-open {
+    display: flex;
+  }
+  .crss-mobile-accordion-panel a {
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--crss-taupe);
+  }
+
+  @media (max-width: 960px) {
+    .crss-nav, .crss-header-actions {
+      display: none;
+    }
+    .crss-mobile-toggle {
+      display: flex;
+      margin-left: auto;
+    }
+    .crss-header.is-open .crss-mobile-panel {
+      display: flex;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-header-inner {
+      padding: 0 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-dropdown-menu {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var header = document.querySelector('.crss-header');
+    if (!header) return;
+    var mobileToggle = header.querySelector('.crss-mobile-toggle');
+
+    /* ---- Mobile menu toggle ---- */
+    mobileToggle.addEventListener('click', function () {
+      var isOpen = header.classList.toggle('is-open');
+      mobileToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    /* ---- Mobile accordions (Storage Tools / About Us) ---- */
+    header.querySelectorAll('.crss-mobile-accordion-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panel = btn.nextElementSibling;
+        var isOpen = panel.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+
+    /* ---- Desktop dropdowns (click, keyboard-friendly; hover handled in CSS) ---- */
+    header.querySelectorAll('.crss-dropdown-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = btn.getAttribute('aria-expanded') === 'true';
+        header.querySelectorAll('.crss-dropdown-trigger').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+        btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.crss-dropdown')) {
+        header.querySelectorAll('.crss-dropdown-trigger').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    /* ---- Publish the real header height so any other page's
+       Custom Code block can position itself against it via
+       var(--crss-header-h) ---- */
+    function syncHeaderHeight() {
+      document.documentElement.style.setProperty('--crss-header-h', header.offsetHeight + 'px');
+    }
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
+  })();
+</script>
+
+<!-- ================================================================
+     CapRock Self Storage — Storage Calculator page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /storage-calculator
+
+     Simple, real interaction: pick what you're storing, get a
+     recommended size. Sizes match the same 9 sizes used on the
+     Size Guide page, keep the two in sync if sizes ever change.
+     ================================================================ -->
+<div class="crss-calc">
+  <div class="crss-calc-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Calculator</span>
+    </nav>
+
+    <h1 class="crss-calc-title">Storage Size Calculator</h1>
+    <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
+
+    <div class="crss-calc-options" id="crss-calc-options">
+      <button type="button" class="crss-calc-option" data-size="5 &times; 5" data-sqft="25 sq ft" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
+      <button type="button" class="crss-calc-option" data-size="5 &times; 10" data-sqft="50 sq ft" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 10" data-sqft="100 sq ft" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 15" data-sqft="150 sq ft" data-detail="A two to three bedroom home">2&ndash;3 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 20" data-sqft="200 sq ft" data-detail="A three to four bedroom home, or a vehicle plus household items">3&ndash;4 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 30" data-sqft="300 sq ft" data-detail="A large home's full contents, or business inventory">Large home<br><span>or business</span></button>
+    </div>
+
+    <div class="crss-calc-result" id="crss-calc-result">
+      <p class="crss-calc-result-label">Recommended size</p>
+      <p class="crss-calc-result-size" id="crss-calc-result-size"></p>
+      <p class="crss-calc-result-detail" id="crss-calc-result-detail"></p>
+      <div class="crss-calc-result-actions">
+        <a href="/find-storage" class="crss-calc-btn-primary">Find a Location</a>
+        <a href="/size-guide" class="crss-calc-btn-secondary">Compare All Sizes</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-calc {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
+  }
+  .crss-calc, .crss-calc *, .crss-calc *::before, .crss-calc *::after {
+    box-sizing: border-box;
+  }
+  .crss-calc h1, .crss-calc p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-calc a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-calc :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 2px;
+  }
+
+  .crss-calc-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-calc-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-calc-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe, #7F6C5D);
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+  .crss-calc-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .crss-calc-option {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-white, #FFFFFF);
+    border: 2px solid var(--crss-border, rgba(41,39,36,0.12));
+    border-radius: 10px;
+    padding: 20px 12px;
+    cursor: pointer;
+    line-height: 1.5;
+  }
+  .crss-calc-option span {
+    display: block;
+    font-weight: 400;
+    color: var(--crss-taupe, #7F6C5D);
+    font-size: 13px;
+  }
+  .crss-calc-option:hover {
+    border-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-calc-option.is-selected {
+    border-color: var(--crss-terracotta, #A44A23);
+    background: var(--crss-cream, #F1E3CC);
+  }
+  .crss-calc-result {
+    display: none;
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+  }
+  .crss-calc-result.is-visible {
+    display: block;
+  }
+  .crss-calc-result-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 8px;
+  }
+  .crss-calc-result-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 6px;
+  }
+  .crss-calc-result-detail {
+    font-size: 14px;
+    color: var(--crss-charcoal, #292724);
+    margin-bottom: 22px;
+  }
+  .crss-calc-result-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .crss-calc-btn-primary, .crss-calc-btn-secondary {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 24px;
+    border-radius: 6px;
+  }
+  .crss-calc-btn-primary {
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+  }
+  .crss-calc-btn-primary:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+  }
+  .crss-calc-btn-secondary {
+    background: transparent;
+    color: var(--crss-terracotta, #A44A23);
+    border: 1px solid var(--crss-terracotta, #A44A23);
+  }
+  @media (max-width: 560px) {
+    .crss-calc-inner { padding: 28px 16px 60px; }
+  }
+</style>
+
+<script>
+  (function () {
+    var options = document.getElementById('crss-calc-options');
+    var result = document.getElementById('crss-calc-result');
+    var resultSize = document.getElementById('crss-calc-result-size');
+    var resultDetail = document.getElementById('crss-calc-result-detail');
+    if (!options || !result) return;
+
+    options.querySelectorAll('.crss-calc-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        options.querySelectorAll('.crss-calc-option').forEach(function (b) {
+          b.classList.remove('is-selected');
+        });
+        btn.classList.add('is-selected');
+        resultSize.innerHTML = btn.getAttribute('data-size') + ' <span style="font-size:16px;font-weight:600;color:var(--crss-taupe, #7F6C5D);">(' + btn.getAttribute('data-sqft') + ')</span>';
+        resultDetail.textContent = btn.getAttribute('data-detail') + '.';
+        result.classList.add('is-visible');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview: Find Storage</title>
+</head>
+<body>
+<!-- ================================================================
+     CapRock Self Storage — Global Header
+     Save this as a GHL Global Section so every page shares it.
+     It owns the shared brand colors, fonts, and the live sticky
+     header height that other pages' Custom Code blocks read from
+     (via the --crss-header-h variable on the document root).
+
+     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     - Real logo (currently a text wordmark)
+     - Real phone number (used in 3 spots: header, mobile panel)
+     - Fonts: Fraunces + Work Sans is a starting pairing, swap for
+       CapRock's real brand fonts once chosen
+     ================================================================ -->
+<header class="crss-header">
+  <div class="crss-header-inner">
+
+    <a href="/" class="crss-logo" aria-label="CapRock Self Storage home">
+      <span class="crss-logo-mark">CapRock</span>
+      <span class="crss-logo-sub">SELF STORAGE</span>
+    </a>
+
+    <nav class="crss-nav" aria-label="Primary">
+      <a href="/find-storage" class="crss-nav-link">Find Storage</a>
+      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
+      <a href="/help-center" class="crss-nav-link">Help Center</a>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/storage-calculator">Storage Calculator</a>
+          <a href="/storage-tips">Storage Tips</a>
+          <a href="/vehicle-storage">Vehicle Storage</a>
+          <a href="/student-storage">Student Storage</a>
+          <a href="/military-storage">Military Storage</a>
+        </div>
+      </div>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          About Us <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/about-caprock">About CapRock</a>
+          <a href="/careers">Careers</a>
+          <a href="/contact-us">Contact Us</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="crss-header-actions">
+      <!-- PLACEHOLDER phone number -->
+      <a href="tel:18060000000" class="crss-phone">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>(806) 000-0000</span>
+      </a>
+      <a href="#" class="crss-account-link">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>My Account</span>
+      </a>
+      <a href="#" class="crss-paybill-btn">Pay Your Bill</a>
+    </div>
+
+    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div class="crss-mobile-panel">
+    <a href="/find-storage" class="crss-mobile-link">Find Storage</a>
+    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
+    <a href="/help-center" class="crss-mobile-link">Help Center</a>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/storage-calculator">Storage Calculator</a>
+      <a href="/storage-tips">Storage Tips</a>
+      <a href="/vehicle-storage">Vehicle Storage</a>
+      <a href="/student-storage">Student Storage</a>
+      <a href="/military-storage">Military Storage</a>
+    </div>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      About Us <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/about-caprock">About CapRock</a>
+      <a href="/careers">Careers</a>
+      <a href="/contact-us">Contact Us</a>
+    </div>
+
+    <a href="tel:18060000000" class="crss-mobile-link">(806) 000-0000</a>
+    <a href="#" class="crss-mobile-link">My Account</a>
+  </div>
+</header>
+
+<style>
+  /* Fonts: placeholder pairing, swap for CapRock's real brand fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+  /* Shared brand tokens. These live here because the header loads
+     on every page first, other pages' Custom Code blocks reuse
+     these same variables instead of redeclaring them. */
+  :root {
+    --crss-cream: #F1E3CC;
+    --crss-terracotta: #A44A23;
+    --crss-terracotta-dark: #863B1A;
+    --crss-taupe: #7F6C5D;
+    --crss-charcoal: #292724;
+    --crss-white: #FFFFFF;
+    --crss-border: rgba(41, 39, 36, 0.12);
+    --crss-header-h: 76px;
+    --crss-subnav-h: 52px;
+  }
+
+  .crss-header, .crss-header *, .crss-header *::before, .crss-header *::after {
+    box-sizing: border-box;
+  }
+  .crss-header a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-header button {
+    font: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+  }
+  .crss-header :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-white);
+    border-bottom: 1px solid var(--crss-border);
+    border-top: 4px solid var(--crss-terracotta);
+  }
+  .crss-header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: var(--crss-header-h);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .crss-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .crss-logo-mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--crss-terracotta);
+  }
+  .crss-logo-sub {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--crss-taupe);
+    margin-top: 2px;
+  }
+  .crss-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  .crss-nav-link {
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .crss-nav-link:hover {
+    background: var(--crss-cream);
+    color: var(--crss-terracotta);
+  }
+  .crss-caret {
+    font-size: 11px;
+    margin-left: 2px;
+  }
+  .crss-dropdown {
+    position: relative;
+  }
+  .crss-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 200px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 8px;
+    box-shadow: 0 12px 24px rgba(41,39,36,0.12);
+    padding: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity .15s ease, transform .15s ease, visibility .15s;
+  }
+  .crss-dropdown-menu a {
+    display: block;
+    padding: 9px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  .crss-dropdown-menu a:hover {
+    background: var(--crss-cream);
+    color: var(--crss-terracotta);
+  }
+  .crss-dropdown:hover .crss-dropdown-menu,
+  .crss-dropdown-trigger[aria-expanded="true"] + .crss-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .crss-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .crss-phone, .crss-account-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .crss-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .crss-paybill-btn {
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .crss-paybill-btn:hover {
+    background: var(--crss-terracotta-dark);
+  }
+  .crss-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+  }
+  .crss-mobile-toggle span {
+    display: block;
+    height: 2px;
+    background: var(--crss-charcoal);
+    border-radius: 2px;
+  }
+  .crss-mobile-panel {
+    display: none;
+    flex-direction: column;
+    padding: 8px 24px 20px;
+    border-top: 1px solid var(--crss-border);
+  }
+  .crss-mobile-link {
+    padding: 12px 4px;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--crss-border);
+  }
+  .crss-mobile-accordion-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 4px;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--crss-border);
+    text-align: left;
+  }
+  .crss-mobile-accordion-panel {
+    display: none;
+    flex-direction: column;
+    padding: 4px 4px 8px 16px;
+  }
+  .crss-mobile-accordion-panel.is-open {
+    display: flex;
+  }
+  .crss-mobile-accordion-panel a {
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--crss-taupe);
+  }
+
+  @media (max-width: 960px) {
+    .crss-nav, .crss-header-actions {
+      display: none;
+    }
+    .crss-mobile-toggle {
+      display: flex;
+      margin-left: auto;
+    }
+    .crss-header.is-open .crss-mobile-panel {
+      display: flex;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-header-inner {
+      padding: 0 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-dropdown-menu {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var header = document.querySelector('.crss-header');
+    if (!header) return;
+    var mobileToggle = header.querySelector('.crss-mobile-toggle');
+
+    /* ---- Mobile menu toggle ---- */
+    mobileToggle.addEventListener('click', function () {
+      var isOpen = header.classList.toggle('is-open');
+      mobileToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    /* ---- Mobile accordions (Storage Tools / About Us) ---- */
+    header.querySelectorAll('.crss-mobile-accordion-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panel = btn.nextElementSibling;
+        var isOpen = panel.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+
+    /* ---- Desktop dropdowns (click, keyboard-friendly; hover handled in CSS) ---- */
+    header.querySelectorAll('.crss-dropdown-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = btn.getAttribute('aria-expanded') === 'true';
+        header.querySelectorAll('.crss-dropdown-trigger').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+        btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.crss-dropdown')) {
+        header.querySelectorAll('.crss-dropdown-trigger').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    /* ---- Publish the real header height so any other page's
+       Custom Code block can position itself against it via
+       var(--crss-header-h) ---- */
+    function syncHeaderHeight() {
+      document.documentElement.style.setProperty('--crss-header-h', header.offsetHeight + 'px');
+    }
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
+  })();
+</script>
+
+<!-- ================================================================
+     CapRock Self Storage — Find Storage (location directory) page
+     Body content only. Assumes the header Global Section (with the
+     Fraunces/Work Sans font import and the shared :root brand
+     variables) is already placed above this on the page.
+
+     HOW TO USE IN GHL
+     Create a new page named "Find Storage", path /find-storage.
+     Add the header Global Section, then a Custom Code element below
+     it, and paste this whole block in.
+
+     PLACEHOLDER: only one location exists right now (Lubbock). To
+     add a facility, add one object to the LOCATIONS array near the
+     bottom. Once there are more than a handful, this should move to
+     a real data source (Supabase, or a GHL custom object) instead
+     of hand-editing this array each time, ping Claude when ready to
+     make that change.
+     ================================================================ -->
+<div class="crss-findstorage">
+  <div class="crss-findstorage-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span aria-current="page">Find Storage</span>
+    </nav>
+
+    <h1 class="crss-fs-title">Find a CapRock Self Storage Location</h1>
+    <p class="crss-fs-subtitle">Search by city, state, or zip to find the CapRock facility nearest you.</p>
+
+    <div class="crss-fs-search">
+      <svg class="crss-fs-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" id="crss-fs-search-input" placeholder="Search by city, state, or zip" aria-label="Search locations">
+    </div>
+
+    <div class="crss-fs-grid" id="crss-fs-grid"></div>
+
+    <p class="crss-fs-empty" id="crss-fs-empty">No locations match that search yet. More CapRock locations are on the way.</p>
+  </div>
+</div>
+
+<style>
+  .crss-findstorage {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
+  }
+  .crss-findstorage, .crss-findstorage *, .crss-findstorage *::before, .crss-findstorage *::after {
+    box-sizing: border-box;
+  }
+  .crss-findstorage h1, .crss-findstorage h3, .crss-findstorage p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-findstorage a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-findstorage :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 2px;
+  }
+
+  .crss-findstorage-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-fs-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-fs-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 28px;
+  }
+  .crss-fs-search {
+    position: relative;
+    max-width: 420px;
+    margin-bottom: 32px;
+  }
+  .crss-fs-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-fs-search input {
+    width: 100%;
+    padding: 13px 16px 13px 42px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-white, #fff);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    border-radius: 8px;
+  }
+  .crss-fs-search input:focus {
+    border-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-fs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .crss-loc-card {
+    display: block;
+    background: var(--crss-white, #fff);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .crss-loc-card:hover {
+    box-shadow: 0 12px 24px rgba(41,39,36,0.10);
+    transform: translateY(-2px);
+  }
+  .crss-loc-photo {
+    height: 140px;
+    background: linear-gradient(135deg, var(--crss-taupe, #7F6C5D), var(--crss-charcoal, #292724));
+    color: var(--crss-white, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+  }
+  .crss-loc-body {
+    padding: 16px;
+  }
+  .crss-loc-body h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .crss-loc-body p {
+    font-size: 13.5px;
+    color: var(--crss-taupe, #7F6C5D);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .crss-loc-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-fs-empty {
+    display: none;
+    text-align: center;
+    font-size: 14px;
+    color: var(--crss-taupe, #7F6C5D);
+    padding: 40px 0;
+  }
+  @media (max-width: 560px) {
+    .crss-findstorage-inner {
+      padding: 28px 16px 60px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    // PLACEHOLDER data. Add one object per facility as new locations
+    // launch. Move this to a real data source once the list grows
+    // past a handful of locations.
+    var LOCATIONS = [
+      {
+        name: 'Lubbock, 5839 49th St.',
+        city: 'Lubbock',
+        state: 'TX',
+        address: '5839 49th Street, Lubbock, TX 79424',
+        url: '/find-storage/texas/lubbock/5839-49th-street' // PLACEHOLDER, match to the real GHL path once set
+      }
+    ];
+
+    var grid = document.getElementById('crss-fs-grid');
+    var empty = document.getElementById('crss-fs-empty');
+    var input = document.getElementById('crss-fs-search-input');
+    if (!grid || !input) return;
+
+    function renderCards(list) {
+      grid.innerHTML = list.map(function (loc) {
+        return '<a class="crss-loc-card" href="' + loc.url + '">' +
+          '<div class="crss-loc-photo"><span>Facility Photo<br>PLACEHOLDER</span></div>' +
+          '<div class="crss-loc-body">' +
+            '<h3>' + loc.name + '</h3>' +
+            '<p>' + loc.address + '</p>' +
+            '<span class="crss-loc-link">View Location &rarr;</span>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+      empty.style.display = list.length ? 'none' : 'block';
+    }
+
+    renderCards(LOCATIONS);
+
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var filtered = LOCATIONS.filter(function (loc) {
+        return (loc.city + ' ' + loc.state + ' ' + loc.address).toLowerCase().indexOf(q) !== -1;
+      });
+      renderCards(filtered);
+    });
+  })();
+</script>
+
+</body>
+</html>

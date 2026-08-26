@@ -44,8 +44,8 @@
 <style>
   .crss-about {
     font-family: 'Work Sans', Arial, sans-serif;
-    color: var(--crss-charcoal);
-    background: var(--crss-cream);
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
   }
   .crss-about, .crss-about *, .crss-about *::before, .crss-about *::after {
     box-sizing: border-box;
@@ -59,7 +59,7 @@
     color: inherit;
   }
   .crss-about :focus-visible {
-    outline: 2px solid var(--crss-terracotta);
+    outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 2px;
   }
 
@@ -72,11 +72,11 @@
     display: flex;
     gap: 8px;
     font-size: 13px;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     margin-bottom: 24px;
   }
   .crss-breadcrumb a:hover {
-    color: var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-about-title {
     font-family: 'Fraunces', Georgia, serif;
@@ -85,14 +85,14 @@
     margin-bottom: 32px;
   }
   .crss-about-block {
-    background: var(--crss-white);
-    border: 1px solid var(--crss-border);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 22px;
   }
   .crss-about-placeholder {
-    border: 1px dashed var(--crss-taupe);
+    border: 1px dashed var(--crss-taupe, #7F6C5D);
     background: transparent;
   }
   .crss-about-block h2 {
@@ -100,12 +100,12 @@
     font-size: 19px;
     font-weight: 600;
     margin-bottom: 10px;
-    color: var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-about-block p {
     font-size: 14.5px;
     line-height: 1.6;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
   }
   .crss-about-list {
     list-style: none;
@@ -127,13 +127,13 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--crss-terracotta);
+    background: var(--crss-terracotta, #A44A23);
   }
   .crss-about-cta {
     margin-top: 18px;
     padding: 28px;
-    background: var(--crss-white);
-    border: 1px solid var(--crss-border);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
     border-radius: 12px;
     text-align: center;
   }
@@ -144,15 +144,15 @@
   }
   .crss-about-cta-btn {
     display: inline-block;
-    background: var(--crss-terracotta);
-    color: var(--crss-white);
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
     font-weight: 600;
     font-size: 14px;
     padding: 13px 26px;
     border-radius: 6px;
   }
   .crss-about-cta-btn:hover {
-    background: var(--crss-terracotta-dark);
+    background: var(--crss-terracotta-dark, #863B1A);
   }
   @media (max-width: 560px) {
     .crss-about-inner { padding: 28px 16px 60px; }

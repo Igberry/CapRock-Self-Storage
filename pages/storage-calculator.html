@@ -41,8 +41,8 @@
 <style>
   .crss-calc {
     font-family: 'Work Sans', Arial, sans-serif;
-    color: var(--crss-charcoal);
-    background: var(--crss-cream);
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
   }
   .crss-calc, .crss-calc *, .crss-calc *::before, .crss-calc *::after {
     box-sizing: border-box;
@@ -56,7 +56,7 @@
     color: inherit;
   }
   .crss-calc :focus-visible {
-    outline: 2px solid var(--crss-terracotta);
+    outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 2px;
   }
 
@@ -69,11 +69,11 @@
     display: flex;
     gap: 8px;
     font-size: 13px;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     margin-bottom: 24px;
   }
   .crss-breadcrumb a:hover {
-    color: var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-calc-title {
     font-family: 'Fraunces', Georgia, serif;
@@ -83,7 +83,7 @@
   }
   .crss-calc-subtitle {
     font-size: 16px;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     max-width: 560px;
     margin-bottom: 32px;
   }
@@ -98,9 +98,9 @@
     font-size: 14px;
     font-weight: 600;
     text-align: center;
-    color: var(--crss-charcoal);
-    background: var(--crss-white);
-    border: 2px solid var(--crss-border);
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-white, #FFFFFF);
+    border: 2px solid var(--crss-border, rgba(41,39,36,0.12));
     border-radius: 10px;
     padding: 20px 12px;
     cursor: pointer;
@@ -109,20 +109,20 @@
   .crss-calc-option span {
     display: block;
     font-weight: 400;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     font-size: 13px;
   }
   .crss-calc-option:hover {
-    border-color: var(--crss-terracotta);
+    border-color: var(--crss-terracotta, #A44A23);
   }
   .crss-calc-option.is-selected {
-    border-color: var(--crss-terracotta);
-    background: var(--crss-cream);
+    border-color: var(--crss-terracotta, #A44A23);
+    background: var(--crss-cream, #F1E3CC);
   }
   .crss-calc-result {
     display: none;
-    background: var(--crss-white);
-    border: 1px solid var(--crss-border);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
     border-radius: 12px;
     padding: 32px;
     text-align: center;
@@ -135,19 +135,19 @@
     font-weight: 600;
     letter-spacing: .04em;
     text-transform: uppercase;
-    color: var(--crss-taupe);
+    color: var(--crss-taupe, #7F6C5D);
     margin-bottom: 8px;
   }
   .crss-calc-result-size {
     font-family: 'Fraunces', Georgia, serif;
     font-size: 40px;
     font-weight: 600;
-    color: var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
     margin-bottom: 6px;
   }
   .crss-calc-result-detail {
     font-size: 14px;
-    color: var(--crss-charcoal);
+    color: var(--crss-charcoal, #292724);
     margin-bottom: 22px;
   }
   .crss-calc-result-actions {
@@ -164,16 +164,16 @@
     border-radius: 6px;
   }
   .crss-calc-btn-primary {
-    background: var(--crss-terracotta);
-    color: var(--crss-white);
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
   }
   .crss-calc-btn-primary:hover {
-    background: var(--crss-terracotta-dark);
+    background: var(--crss-terracotta-dark, #863B1A);
   }
   .crss-calc-btn-secondary {
     background: transparent;
-    color: var(--crss-terracotta);
-    border: 1px solid var(--crss-terracotta);
+    color: var(--crss-terracotta, #A44A23);
+    border: 1px solid var(--crss-terracotta, #A44A23);
   }
   @media (max-width: 560px) {
     .crss-calc-inner { padding: 28px 16px 60px; }
@@ -194,7 +194,7 @@
           b.classList.remove('is-selected');
         });
         btn.classList.add('is-selected');
-        resultSize.innerHTML = btn.getAttribute('data-size') + ' <span style="font-size:16px;font-weight:600;color:var(--crss-taupe);">(' + btn.getAttribute('data-sqft') + ')</span>';
+        resultSize.innerHTML = btn.getAttribute('data-size') + ' <span style="font-size:16px;font-weight:600;color:var(--crss-taupe, #7F6C5D);">(' + btn.getAttribute('data-sqft') + ')</span>';
         resultDetail.textContent = btn.getAttribute('data-detail') + '.';
         result.classList.add('is-visible');
         result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
