@@ -153,11 +153,11 @@
   .crss-header, .crss-header *, .crss-header *::before, .crss-header *::after {
     box-sizing: border-box;
   }
-  .crss-header a {
+  .crss-header :where(a) {
     text-decoration: none;
     color: inherit;
   }
-  .crss-header button {
+  .crss-header :where(button) {
     font: inherit;
     background: none;
     border: none;
@@ -680,7 +680,7 @@
     margin: 0;
     padding: 0;
   }
-  .crss-location a {
+  .crss-location :where(a) {
     text-decoration: none;
     color: inherit;
   }
@@ -1138,7 +1138,7 @@
   .crss-footer ul {
     list-style: none;
   }
-  .crss-footer a {
+  .crss-footer :where(a) {
     text-decoration: none;
     color: inherit;
   }
@@ -1382,5 +1382,61 @@
   })();
 </script>
 
+<script>
+/* ================================================================
+   PREVIEW-ONLY navigation shim. Not part of any GHL page.
+
+   The source files link to real site paths ("/size-guide"), which is
+   correct for GHL but means nothing to a static dev server, so Live
+   Server answers "Cannot GET /size-guide". This maps those paths onto
+   the flat preview/*.html files at click time.
+
+   Handled in the capture phase so it also catches links the page
+   builds with JS (the facility cards) and beats the hero search's own
+   submit handler.
+   ================================================================ */
+(function () {
+  var MAP = {
+    '/': 'home.html',
+    '/find-storage': 'find-storage.html',
+    '/size-guide': 'size-guide.html',
+    '/help-center': 'help-center.html',
+    '/storage-calculator': 'storage-calculator.html',
+    '/storage-tips': 'storage-tips.html',
+    '/vehicle-storage': 'vehicle-storage.html',
+    '/student-storage': 'student-storage.html',
+    '/military-storage': 'military-storage.html',
+    '/about-caprock': 'about-caprock.html',
+    '/careers': 'careers.html',
+    '/contact-us': 'contact-us.html',
+    '/find-storage/texas/lubbock/5839-49th-street': 'lubbock-5839-49th-street.html'
+  };
+
+  function resolve(href) {
+    if (!href) return null;
+    var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
+    if (path === '') path = '/';
+    return MAP[path] || null;
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
+    if (!a) return;
+    var file = resolve(a.getAttribute('href'));
+    if (!file) return;
+    e.preventDefault();
+    window.location.href = file;
+  }, true);
+
+  /* The hero search sets window.location itself, so intercept before it. */
+  document.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'crss-hero-search') {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = 'find-storage.html';
+    }
+  }, true);
+})();
+</script>
 </body>
 </html>

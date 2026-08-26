@@ -38,15 +38,29 @@ so:
   on its own, without `header.html` present. This was fixed after an
   early version shipped without fallbacks and rendered unstyled when
   previewed standalone, keep this pattern for any new page.
-$1- The per-page margin/padding reset is written as
-  `.crss-x :where(h1, h2, p) { margin: 0 }`, **not**
-  `.crss-x h1, .crss-x p { ... }`. This matters: the plain form scores
-  (0,1,1) on specificity, which beats a utility class like
-  `.crss-x-title` at (0,1,0) regardless of source order, so every
-  `margin-bottom` set on a bare class was silently dead and the pages
-  rendered cramped. `:where()` contributes zero specificity, so the
-  reset drops to (0,1,0) and the later utility rules win on order, as
-  intended. Keep the `:where()` form on any new page.
+$1- **Every wrapper-level reset is written inside `:where()`**, and must
+  stay that way:
+
+  ```css
+  .crss-x :where(h1, h2, p) { margin: 0; padding: 0 }
+  .crss-x :where(a)         { text-decoration: none; color: inherit }
+  ```
+
+  Written plainly as `.crss-x h1` or `.crss-x a`, a reset scores
+  (0,1,1), which beats a utility class like `.crss-x-title` or
+  `.crss-x-cta-btn` at (0,1,0) **regardless of source order**. This bit
+  the project twice:
+
+  1. Every `margin-bottom` set on a bare class was dead, so titles,
+     ledes and section headings rendered with no spacing at all.
+  2. Every anchor-based button inherited the surrounding text colour
+     instead of white, so terracotta buttons rendered with charcoal
+     text at roughly 2.5:1 contrast.
+
+  `:where()` contributes zero specificity, so the reset drops to
+  (0,1,0) and the component rules below it win on order, as intended.
+  The check script fails the build if either reset loses its
+  `:where()`.
 
 If continuing this in Claude Code and adding a build step, bundler, or
 shared stylesheet, that's fine for local development, but the **shippable
