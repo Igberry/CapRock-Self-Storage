@@ -1,0 +1,306 @@
+<!-- ================================================================
+     CapRock Self Storage — Location Page: 5839 49th Street, Lubbock
+     Paste this on the location page, below the header Global
+     Section. Does not include the header, that lives in
+     global-sections/header.html and is shared across every page.
+     Reads the shared brand variables and the live header height
+     from that Global Section rather than redeclaring them.
+
+     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     - Office address note text
+     - Facility photo in the info card
+     - Google Map embed works without a key for now; swap in a Maps
+       Embed API key for production
+     - The five section stubs (Units, Features, Reviews, Storage
+       Faqs, City Information) are empty containers, ready for the
+       next build steps
+     ================================================================ -->
+<div class="crss-location">
+
+  <!-- ============ STICKY SUB-NAV ============ -->
+  <nav class="crss-subnav" aria-label="Page sections">
+    <div class="crss-subnav-inner">
+      <a href="#units" class="crss-subnav-link is-active" data-target="units">Units</a>
+      <a href="#features" class="crss-subnav-link" data-target="features">Features</a>
+      <a href="#reviews" class="crss-subnav-link" data-target="reviews">Reviews</a>
+      <a href="#faqs" class="crss-subnav-link" data-target="faqs">Storage Faqs</a>
+      <a href="#city-info" class="crss-subnav-link" data-target="city-info">City Information</a>
+    </div>
+  </nav>
+
+  <!-- ============ SHELL: INFO CARD + MAIN CONTENT ============ -->
+  <div class="crss-shell">
+
+    <aside class="crss-info-card">
+      <div class="crss-info-photo">
+        <span>Facility Photo<br>PLACEHOLDER</span>
+      </div>
+      <div class="crss-info-body">
+        <h1 class="crss-info-title">Lubbock, 5839 49th St.</h1>
+        <p class="crss-info-address">5839 49th Street<br>Lubbock, TX 79424</p>
+        <a href="tel:18060000000" class="crss-info-phone">(806) 000-0000</a>
+        <p class="crss-info-office-note">
+          The office for this location is at:<br>
+          [Office address — PLACEHOLDER, confirm with CapRock]
+        </p>
+        <a href="#" class="crss-info-details-link">View Location Details →</a>
+
+        <div class="crss-info-map">
+          <!-- Works without an API key; swap in a Maps Embed API key for production -->
+          <iframe
+            src="https://www.google.com/maps?q=5839+49th+Street,+Lubbock,+TX+79424&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Map to 5839 49th Street, Lubbock, TX">
+          </iframe>
+        </div>
+      </div>
+    </aside>
+
+    <main class="crss-main">
+      <section id="units" class="crss-section crss-section-stub">
+        <h2>Units</h2>
+        <p class="crss-stub-note">Promo banner, size filter pills, and the live unit/price list build here once the WebSelfStorage API key is connected.</p>
+      </section>
+
+      <section id="features" class="crss-section crss-section-stub">
+        <h2>Features</h2>
+        <p class="crss-stub-note">6-icon expandable grid (Unit Features, Access, Security, Extras, Parking, Promotions) plus the SEO content block build here.</p>
+      </section>
+
+      <section id="reviews" class="crss-section crss-section-stub">
+        <h2>Reviews</h2>
+        <p class="crss-stub-note">Placeholder for now. Real reviews connect once the data source is decided.</p>
+      </section>
+
+      <section id="faqs" class="crss-section crss-section-stub">
+        <h2>Storage Faqs</h2>
+        <p class="crss-stub-note">General FAQ group builds here now. Noke Smart Access FAQ waits on confirming this facility's lock system.</p>
+      </section>
+
+      <section id="city-info" class="crss-section crss-section-stub">
+        <h2>City Information</h2>
+        <p class="crss-stub-note">Lubbock local SEO content block (about the city, things to do, employment, neighborhoods, schools, housing, military bases) builds here.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<style>
+  .crss-location, .crss-location *, .crss-location *::before, .crss-location *::after {
+    box-sizing: border-box;
+  }
+  .crss-location h1, .crss-location h2, .crss-location p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-location a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-location :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 2px;
+  }
+
+  .crss-location {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal);
+    background: var(--crss-cream);
+  }
+
+  /* ============ STICKY SUB-NAV ============ */
+  .crss-subnav {
+    position: sticky;
+    top: var(--crss-header-h);
+    z-index: 30;
+    background: var(--crss-charcoal);
+  }
+  .crss-subnav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+    padding: 0 24px;
+    overflow-x: auto;
+  }
+  .crss-subnav-link {
+    flex-shrink: 0;
+    padding: 15px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.72);
+    border-bottom: 3px solid transparent;
+  }
+  .crss-subnav-link:hover {
+    color: var(--crss-white);
+  }
+  .crss-subnav-link.is-active {
+    color: var(--crss-white);
+    border-bottom-color: var(--crss-terracotta);
+  }
+
+  /* ============ SHELL ============ */
+  .crss-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .crss-info-card {
+    position: sticky;
+    top: calc(var(--crss-header-h) + var(--crss-subnav-h) + 24px);
+    background: var(--crss-white);
+    border: 1px solid var(--crss-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .crss-info-photo {
+    height: 180px;
+    background: linear-gradient(135deg, var(--crss-taupe), var(--crss-charcoal));
+    color: var(--crss-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .crss-info-body {
+    padding: 20px;
+  }
+  .crss-info-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .crss-info-address {
+    font-size: 14px;
+    color: var(--crss-taupe);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .crss-info-phone {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--crss-terracotta);
+    margin-bottom: 14px;
+  }
+  .crss-info-office-note {
+    font-size: 12.5px;
+    color: var(--crss-taupe);
+    line-height: 1.5;
+    padding-top: 12px;
+    border-top: 1px solid var(--crss-border);
+    margin-bottom: 12px;
+  }
+  .crss-info-details-link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--crss-terracotta);
+    margin-bottom: 16px;
+  }
+  .crss-info-map {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--crss-border);
+  }
+  .crss-info-map iframe {
+    display: block;
+    width: 100%;
+    height: 160px;
+    border: 0;
+  }
+  .crss-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+  .crss-section {
+    scroll-margin-top: calc(var(--crss-header-h) + var(--crss-subnav-h) + 16px);
+  }
+  .crss-section-stub {
+    background: var(--crss-white);
+    border: 1px dashed var(--crss-taupe);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .crss-section-stub h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .crss-stub-note {
+    font-size: 14px;
+    color: var(--crss-taupe);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 960px) {
+    .crss-shell {
+      grid-template-columns: 1fr;
+    }
+    .crss-info-card {
+      position: static;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-shell {
+      padding: 24px 16px 60px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var loc = document.querySelector('.crss-location');
+    var header = document.querySelector('.crss-header'); // lives in the header Global Section elsewhere on this page
+    if (!loc || !header) return;
+    var subnav = loc.querySelector('.crss-subnav');
+
+    /* ---- Publish this block's own sticky height so CSS can use it ---- */
+    function syncSubnavHeight() {
+      document.documentElement.style.setProperty('--crss-subnav-h', subnav.offsetHeight + 'px');
+      subnav.style.top = header.offsetHeight + 'px';
+    }
+    syncSubnavHeight();
+    window.addEventListener('resize', syncSubnavHeight);
+
+    /* ---- Smooth scroll to anchors, offset for the sticky header + subnav ---- */
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    loc.querySelectorAll('.crss-subnav-link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var targetId = link.getAttribute('data-target');
+        var target = document.getElementById(targetId);
+        if (!target) return;
+        e.preventDefault();
+        var offset = header.offsetHeight + subnav.offsetHeight + 16;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+    });
+
+    /* ---- Highlight the active sub-nav tab as sections scroll into view ---- */
+    var sections = loc.querySelectorAll('.crss-section');
+    var links = loc.querySelectorAll('.crss-subnav-link');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('is-active'); });
+          var match = loc.querySelector('.crss-subnav-link[data-target="' + entry.target.id + '"]');
+          if (match) match.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-' + (header.offsetHeight + subnav.offsetHeight + 20) + 'px 0px -60% 0px', threshold: 0 });
+    sections.forEach(function (s) { observer.observe(s); });
+  })();
+</script>

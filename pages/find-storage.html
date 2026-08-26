@@ -1,0 +1,222 @@
+<!-- ================================================================
+     CapRock Self Storage — Find Storage (location directory) page
+     Body content only. Assumes the header Global Section (with the
+     Fraunces/Work Sans font import and the shared :root brand
+     variables) is already placed above this on the page.
+
+     HOW TO USE IN GHL
+     Create a new page named "Find Storage", path /find-storage.
+     Add the header Global Section, then a Custom Code element below
+     it, and paste this whole block in.
+
+     PLACEHOLDER: only one location exists right now (Lubbock). To
+     add a facility, add one object to the LOCATIONS array near the
+     bottom. Once there are more than a handful, this should move to
+     a real data source (Supabase, or a GHL custom object) instead
+     of hand-editing this array each time, ping Claude when ready to
+     make that change.
+     ================================================================ -->
+<div class="crss-findstorage">
+  <div class="crss-findstorage-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><span aria-current="page">Find Storage</span>
+    </nav>
+
+    <h1 class="crss-fs-title">Find a CapRock Self Storage Location</h1>
+    <p class="crss-fs-subtitle">Search by city, state, or zip to find the CapRock facility nearest you.</p>
+
+    <div class="crss-fs-search">
+      <svg class="crss-fs-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" id="crss-fs-search-input" placeholder="Search by city, state, or zip" aria-label="Search locations">
+    </div>
+
+    <div class="crss-fs-grid" id="crss-fs-grid"></div>
+
+    <p class="crss-fs-empty" id="crss-fs-empty">No locations match that search yet. More CapRock locations are on the way.</p>
+  </div>
+</div>
+
+<style>
+  .crss-findstorage {
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
+  }
+  .crss-findstorage, .crss-findstorage *, .crss-findstorage *::before, .crss-findstorage *::after {
+    box-sizing: border-box;
+  }
+  .crss-findstorage h1, .crss-findstorage h3, .crss-findstorage p {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-findstorage a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-findstorage :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 2px;
+  }
+
+  .crss-findstorage-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .crss-breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 24px;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-fs-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 38px);
+    margin-bottom: 10px;
+  }
+  .crss-fs-subtitle {
+    font-size: 16px;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 28px;
+  }
+  .crss-fs-search {
+    position: relative;
+    max-width: 420px;
+    margin-bottom: 32px;
+  }
+  .crss-fs-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-fs-search input {
+    width: 100%;
+    padding: 13px 16px 13px 42px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-white, #fff);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    border-radius: 8px;
+  }
+  .crss-fs-search input:focus {
+    border-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-fs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .crss-loc-card {
+    display: block;
+    background: var(--crss-white, #fff);
+    border: 1px solid var(--crss-border, rgba(41,39,36,0.12));
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .crss-loc-card:hover {
+    box-shadow: 0 12px 24px rgba(41,39,36,0.10);
+    transform: translateY(-2px);
+  }
+  .crss-loc-photo {
+    height: 140px;
+    background: linear-gradient(135deg, var(--crss-taupe, #7F6C5D), var(--crss-charcoal, #292724));
+    color: var(--crss-white, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+  }
+  .crss-loc-body {
+    padding: 16px;
+  }
+  .crss-loc-body h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .crss-loc-body p {
+    font-size: 13.5px;
+    color: var(--crss-taupe, #7F6C5D);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .crss-loc-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-fs-empty {
+    display: none;
+    text-align: center;
+    font-size: 14px;
+    color: var(--crss-taupe, #7F6C5D);
+    padding: 40px 0;
+  }
+  @media (max-width: 560px) {
+    .crss-findstorage-inner {
+      padding: 28px 16px 60px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    // PLACEHOLDER data. Add one object per facility as new locations
+    // launch. Move this to a real data source once the list grows
+    // past a handful of locations.
+    var LOCATIONS = [
+      {
+        name: 'Lubbock, 5839 49th St.',
+        city: 'Lubbock',
+        state: 'TX',
+        address: '5839 49th Street, Lubbock, TX 79424',
+        url: '/find-storage/texas/lubbock/5839-49th-street' // PLACEHOLDER, match to the real GHL path once set
+      }
+    ];
+
+    var grid = document.getElementById('crss-fs-grid');
+    var empty = document.getElementById('crss-fs-empty');
+    var input = document.getElementById('crss-fs-search-input');
+    if (!grid || !input) return;
+
+    function renderCards(list) {
+      grid.innerHTML = list.map(function (loc) {
+        return '<a class="crss-loc-card" href="' + loc.url + '">' +
+          '<div class="crss-loc-photo"><span>Facility Photo<br>PLACEHOLDER</span></div>' +
+          '<div class="crss-loc-body">' +
+            '<h3>' + loc.name + '</h3>' +
+            '<p>' + loc.address + '</p>' +
+            '<span class="crss-loc-link">View Location &rarr;</span>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+      empty.style.display = list.length ? 'none' : 'block';
+    }
+
+    renderCards(LOCATIONS);
+
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var filtered = LOCATIONS.filter(function (loc) {
+        return (loc.city + ' ' + loc.state + ' ' + loc.address).toLowerCase().indexOf(q) !== -1;
+      });
+      renderCards(filtered);
+    });
+  })();
+</script>
