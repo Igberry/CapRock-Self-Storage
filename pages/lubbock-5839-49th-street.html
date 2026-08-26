@@ -316,6 +316,35 @@
       position: static;
     }
   }
+  @media (max-width: 768px) {
+    .crss-shell {
+      padding: 36px 26px 80px;
+    }
+    .crss-subnav-inner {
+      padding: 0 26px;
+    }
+    .crss-section-stub {
+      padding: 32px 28px 34px;
+    }
+  }
+  /* Below this the five tabs no longer fit, so the row scrolls. The
+     fade is the only cue that there is more to the right, the
+     scrollbar itself is hidden. */
+  @media (max-width: 720px) {
+    .crss-subnav {
+      position: sticky;
+    }
+    .crss-subnav::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 46px;
+      background: linear-gradient(90deg, rgba(41, 39, 36, 0), var(--crss-charcoal, #292724));
+      pointer-events: none;
+    }
+  }
   @media (max-width: 560px) {
     .crss-shell {
       padding: 32px 20px 72px;

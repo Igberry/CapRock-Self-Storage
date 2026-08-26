@@ -219,6 +219,41 @@ Two things stayed deliberately plain: the About "Our Story" block and
 the Lubbock section stubs keep their dashed borders, because they are
 genuinely unfinished and should not read as approved content.
 
+## Responsive tiers
+
+Breakpoints, widest first. **They must stay in descending order inside
+each file**: two `max-width` queries that both match at a given width
+are equal on specificity, so the later one wins. A wider breakpoint
+written after a narrower one silently overrides it.
+
+| Width | What changes |
+|---|---|
+| `1280` | Header only. Nav spacing tightens and My Account goes icon-only. |
+| `1180` | Header folds into the hamburger. |
+| `1080` | Home hero search: the text field takes its own row. |
+| `960` | Lubbock: sidebar stops being sticky and drops below the content. |
+| `900` | Home: steps and testimonials go single column. Footer: 4 columns to 2. |
+| `768` | **Tablet tier on every page.** Section padding `64/32/104` drops to `48/26/80`, card interiors tighten, home sections drop from 96px to 72px. |
+| `720` | Contact: the info/form grid stacks. Lubbock: sub-nav gains a scroll fade. |
+| `700` | Home hero search: everything stacks full width. |
+| `560` | Phone tier. Padding to `44/20/72`, remaining grids to one column. |
+
+Before this pass, most pages had **only** the 560px rule and went
+straight from desktop rhythm to phone rhythm, with nothing in between.
+
+Two things worth keeping in mind:
+
+- The header needs roughly 1200px to lay out the wordmark, five nav
+  items and three utility items at desktop spacing. The nav links are
+  `white-space: nowrap` with no shrink floor, so they collide rather
+  than reflow. That is why the hamburger now takes over at 1180 rather
+  than 960, and why nothing in the utility row is hidden at a width
+  where the mobile panel is not yet available to carry it.
+- The Lubbock sub-nav scrolls sideways below ~700px by design. Its
+  scrollbar is hidden, so the right-edge fade is the only affordance
+  telling people there is more to the right. Do not remove one without
+  the other.
+
 ## Suggested next steps
 
 1. Verify the fix in "Why the code looks the way it does" actually

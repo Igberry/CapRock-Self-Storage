@@ -68,7 +68,7 @@
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         <span>(806) 000-0000</span>
       </a>
-      <a href="#" class="crss-account-link">
+      <a href="#" class="crss-account-link" aria-label="My Account">
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         <span>My Account</span>
       </a>
@@ -464,7 +464,35 @@
     color: var(--crss-terracotta);
   }
 
-  @media (max-width: 960px) {
+  /* The full nav + utility row needs roughly 1200px at its desktop
+     rhythm. Rather than let nowrap links collide on the way down,
+     tighten spacing first and drop the My Account label (still
+     reachable in the mobile panel and the footer). */
+  @media (max-width: 1280px) {
+    .crss-header-inner {
+      gap: 20px;
+      padding: 0 24px;
+    }
+    .crss-nav-link {
+      padding: 10px 11px;
+      font-size: 13.5px;
+    }
+    .crss-nav-link::after {
+      left: 11px;
+      right: 11px;
+    }
+    .crss-header-actions {
+      gap: 14px;
+    }
+    /* icon only: the label is the widest item in this row */
+    .crss-account-link span {
+      display: none;
+    }
+    .crss-paybill-btn {
+      padding: 12px 18px;
+    }
+  }
+  @media (max-width: 1180px) {
     .crss-nav, .crss-header-actions {
       display: none;
     }
@@ -474,6 +502,15 @@
     }
     .crss-header.is-open .crss-mobile-panel {
       display: flex;
+    }
+  }
+  @media (max-width: 768px) {
+    .crss-header-inner {
+      height: 76px;
+      padding: 0 24px;
+    }
+    .crss-mobile-panel {
+      padding: 6px 24px 24px;
     }
   }
   @media (max-width: 560px) {
@@ -1500,20 +1537,23 @@
   }
 
   /* ============ RESPONSIVE ============ */
-  @media (max-width: 900px) {
+  /* Hero search collapses in two stages. All four controls in one row
+     squeezes the selects until labels like "Medium (10x10 to 10x15)"
+     truncate, so the text field takes its own row first, and only at
+     phone width does everything stack. */
+  @media (max-width: 1080px) {
     .crss-hero-search {
       flex-wrap: wrap;
     }
-    .crss-hero-field {
+    .crss-hero-field-text {
       flex: 1 1 100%;
+      border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
     }
-    .crss-hero-field + .crss-hero-field {
+    .crss-hero-field-text + .crss-hero-field {
       border-left: none;
-      border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
     }
-    .crss-hero-submit {
-      flex: 1 1 100%;
-    }
+  }
+  @media (max-width: 900px) {
     .crss-steps-grid {
       grid-template-columns: 1fr;
       gap: 44px;
@@ -1525,6 +1565,43 @@
       grid-template-columns: 1fr;
     }
   }
+  @media (max-width: 768px) {
+    .crss-home-inner {
+      padding: 72px 26px;
+    }
+    .crss-hero-inner {
+      padding: 88px 26px 88px;
+    }
+    .crss-trust-photo {
+      min-height: 260px;
+      padding: 52px 26px;
+    }
+    .crss-trust-copy {
+      padding: 60px 26px 72px;
+    }
+    .crss-feat {
+      padding: 28px 26px 30px;
+    }
+    .crss-quote {
+      padding: 34px 28px 30px;
+    }
+  }
+  @media (max-width: 700px) {
+    .crss-hero-field {
+      flex: 1 1 100%;
+    }
+    .crss-hero-field + .crss-hero-field {
+      border-left: none;
+      border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    }
+    .crss-hero-field-text {
+      border-bottom: none;
+    }
+    .crss-hero-submit {
+      flex: 1 1 100%;
+    }
+  }
+
   @media (max-width: 560px) {
     .crss-home-inner {
       padding: 64px 20px;
@@ -1951,6 +2028,15 @@
     .crss-footer-cols {
       grid-template-columns: repeat(2, 1fr);
       gap: 36px;
+    }
+  }
+  @media (max-width: 768px) {
+    .crss-footer-inner {
+      padding: 60px 24px 40px;
+    }
+    .crss-footer-cols {
+      gap: 32px;
+      padding-bottom: 36px;
     }
   }
   @media (max-width: 560px) {

@@ -181,7 +181,9 @@
   /* ============ SIZE CARDS ============ */
   .crss-sg-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    /* 260px, not 248px: the 10x30 diagram is a fixed 180px box and a
+       248px column leaves only ~176px of drawing area, clipping it. */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 22px;
   }
   .crss-size-card {
@@ -307,6 +309,11 @@
     box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
   }
 
+  @media (max-width: 768px) {
+    .crss-sizeguide-inner {
+      padding: 48px 26px 80px;
+    }
+  }
   @media (max-width: 560px) {
     .crss-sizeguide-inner {
       padding: 44px 20px 72px;
