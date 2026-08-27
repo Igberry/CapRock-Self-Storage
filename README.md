@@ -80,8 +80,9 @@ Search each file for the word `PLACEHOLDER` for the exact spots.
 - Facility photo (Lubbock info card and Find Storage card, currently a textured placeholder panel)
 - Fonts: Fraunces + Work Sans is a starting pairing, swap for CapRock's
   real brand fonts once chosen
-- Google Map embed works without a key for now, swap in a Maps Embed
-  API key for production
+- ~~Google Map embed key~~ done: the Lubbock map uses the Maps Embed
+  API. The key is public by design (it ships in page source); it is the
+  HTTP referrer restriction in Google Cloud that protects it.
 - **Contact form**: `contact-us.html` has a styled `<form>` that only
   shows a confirmation message, it doesn't submit anywhere. Replace it
   with GHL's native Forms element before launch, that's what actually
@@ -94,9 +95,12 @@ Search each file for the word `PLACEHOLDER` for the exact spots.
 - `find-storage.html` hardcodes locations in a small JS array near the
   bottom of the file, move that to a real data source once there are
   more than a handful of facilities
-- On the Lubbock page: Reviews section, Noke Smart Access FAQ, Unit
-  Features, City Information, and the live Units/pricing list are all
-  still stubs, the last one is waiting on the WebSelfStorage API key
+- On the Lubbock page, Features, Storage Faqs and City Information are
+  built. Still open: the Reviews section (needs a data source), and the
+  live Units/pricing list (waiting on the WebSelfStorage API key, which
+  needs a server-side proxy, it cannot sit in GHL Custom Code). The
+  built sections list their own unconfirmed items on the page: hours,
+  lock policy, payments, insurance, Noke locks, supplies, promotions.
 
 ## Reference
 

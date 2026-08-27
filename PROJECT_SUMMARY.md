@@ -133,13 +133,23 @@ preview/
    links (and the breadcrumbs in every page) point to the paths in the
    table above. If pages get different paths when actually created in
    GHL, update the links to match.
-4. The Lubbock page's five sections (Units, Features, Reviews, Storage
-   Faqs, City Information) are still stub containers with placeholder
-   text, not built out. Units specifically is blocked on the
-   WebSelfStorage API key (affiliate access request was sent, response
-   still pending as of this build). Storage Faqs' "Noke Smart Access"
-   sub-section needs confirming whether this facility actually uses
-   Noke locks before writing it.
+4. The Lubbock page: **Features, Storage Faqs and City Information are
+   built**. Two sections remain stubs, for different reasons:
+   - **Units** is blocked on the WebSelfStorage API key, which had not
+     been activated as of this writing. That key must never go into GHL
+     Custom Code, which is client-side and readable via View Source; it
+     needs a server-side proxy (Vercel function or Supabase Edge
+     Function) holding the key in an environment variable.
+   - **Reviews** is waiting on a data-source decision. Nothing is
+     invented there, for the same reason the home page testimonials are
+     empty scaffolding.
+
+   Within the built sections, several things are deliberately listed as
+   unconfirmed rather than answered: gate and office hours, lock policy,
+   payment methods, insurance requirements, whether the property uses
+   Noke smart locks, on-site supplies, and any promotion. Wrong answers
+   about hours or locks send someone to a locked gate, so they stay
+   open until CapRock confirms.
 
 ## Placeholders needing real data (search each file for `PLACEHOLDER`)
 
@@ -153,9 +163,12 @@ preview/
 - Fonts: **Fraunces** (headings) + **Work Sans** (body) is a starting
   pairing chosen for this build, loaded via Google Fonts `@import` in
   `header.html`. Swap for CapRock's real brand fonts once chosen.
-- Google Map embed on the Lubbock page works without an API key for
-  now (`?output=embed` URL pattern), swap in a proper Maps Embed API
-  key for production
+- ~~Google Map embed key~~ done: the Lubbock map now calls the official
+  Maps Embed API (`/maps/embed/v1/place`) instead of the undocumented
+  `?output=embed` pattern. The key is public by design, it ships in the
+  page source; the HTTP referrer restriction in Google Cloud is what
+  protects it. The "Maps Embed API" must stay enabled on that Cloud
+  project or the iframe renders an error instead of a map.
 - About CapRock's company story, Careers openings and "why work here"
   copy: intentionally left as marked placeholders, no real facts were
   available to write from, don't invent specifics here
@@ -276,11 +289,13 @@ Two things worth keeping in mind:
 2. Fill in the confirmed placeholders (phone, logo, fonts) once CapRock
    provides them, they're used in multiple files each, search and
    replace carefully.
-3. Build out the Lubbock page's 5 stub sections, in this order: Unit
-   Features (no dependency), Storage Faqs General group (no
-   dependency), City Information (no dependency, content pattern
-   already modeled on the SROA reference for Lubbock), Reviews (needs a
-   data source decision), Units (blocked on the WebSelfStorage API key).
+3. ~~Build out the Lubbock stub sections~~ Features, Storage Faqs and
+   City Information are done. What is left there:
+   - Get CapRock's real answers to the open questions listed in the
+     Storage Faqs panel, and to the three empty Feature groups.
+   - Decide a Reviews data source.
+   - Stand up the WebSelfStorage proxy once the key is activated, then
+     build the Units section against it.
 4. Once more than one facility exists, revisit `find-storage.html`'s
    hardcoded array and the Lubbock page's naming pattern
    (`lubbock-5839-49th-street.html`) as the template for additional
