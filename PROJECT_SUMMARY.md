@@ -163,12 +163,32 @@ preview/
 - Fonts: **Fraunces** (headings) + **Work Sans** (body) is a starting
   pairing chosen for this build, loaded via Google Fonts `@import` in
   `header.html`. Swap for CapRock's real brand fonts once chosen.
-- ~~Google Map embed key~~ done: the Lubbock map now calls the official
-  Maps Embed API (`/maps/embed/v1/place`) instead of the undocumented
+- ~~Google Map embed key~~ done: the Lubbock map calls the official Maps
+  Embed API (`/maps/embed/v1/place`) instead of the undocumented
   `?output=embed` pattern. The key is public by design, it ships in the
   page source; the HTTP referrer restriction in Google Cloud is what
-  protects it. The "Maps Embed API" must stay enabled on that Cloud
-  project or the iframe renders an error instead of a map.
+  protects it.
+
+  **Two things to check in Google Cloud before launch.** The key is
+  shared with CapRock's other websites, so it already works *there*, but
+  that does not carry over on its own:
+
+  1. **Add the CapRock domain to the key's HTTP referrer allowlist.**
+     The allowlist is per domain. A key working on other sites means
+     those domains are listed, not this one. Add the live domain and
+     whatever domain GHL serves from while building (often
+     `*.msgsndr.com`). Symptom if missed: "This IP, site or mobile
+     application is not authorized to use this API key."
+  2. **Confirm Maps Embed API is on the key's allowed-APIs list.** The
+     other sites use the Maps *JavaScript* API (`maps/api/js`), which is
+     a different API. If the key is restricted to JS + Places, the
+     iframe fails even from an allowed domain. The referrer check fires
+     first, so this can stay hidden until the domain is allowed.
+
+  Local previews sidestep both: the preview build rewrites the map to
+  the keyless form, so localhost never needs to be on the allowlist.
+  Adding localhost to a production key is worth avoiding, referrers are
+  spoofable and it widens who can bill the account.
 - About CapRock's company story, Careers openings and "why work here"
   copy: intentionally left as marked placeholders, no real facts were
   available to write from, don't invent specifics here
