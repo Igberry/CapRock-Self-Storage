@@ -27,7 +27,7 @@
 <header class="crss-header">
   <div class="crss-header-inner">
 
-    <a href="/" class="crss-logo" aria-label="CapRock Self Storage home">
+    <a href="/caprock-self-service" class="crss-logo" aria-label="CapRock Self Storage home">
       <span class="crss-logo-mark">CapRock</span>
       <span class="crss-logo-sub">SELF STORAGE</span>
     </a>
@@ -468,6 +468,29 @@
      rhythm. Rather than let nowrap links collide on the way down,
      tighten spacing first and drop the My Account label (still
      reachable in the mobile panel and the footer). */
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-header {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
   @media (max-width: 1280px) {
     .crss-header-inner {
       gap: 20px;
@@ -536,6 +559,20 @@
 
 <script>
   (function () {
+    /* ---- Safety net: ensure a viewport meta tag exists ----
+       Without <meta name="viewport" content="width=device-width">, a
+       phone lays the page out at roughly 980 CSS pixels and scales it
+       down. Media queries then evaluate against 980px, so the mobile
+       breakpoints never fire and the page renders as a shrunken desktop
+       with no hamburger. Hosts normally inject this tag; this only acts
+       if it is genuinely absent, and is a no-op otherwise. */
+    if (!document.querySelector('meta[name="viewport"]')) {
+      var vp = document.createElement('meta');
+      vp.name = 'viewport';
+      vp.content = 'width=device-width, initial-scale=1';
+      document.head.appendChild(vp);
+    }
+
     var header = document.querySelector('.crss-header');
     if (!header) return;
     var mobileToggle = header.querySelector('.crss-mobile-toggle');
@@ -598,7 +635,7 @@
   <div class="crss-careers-inner">
 
     <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Careers</span>
+      <a href="/caprock-self-service">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Careers</span>
     </nav>
 
     <h1 class="crss-careers-title">Careers at CapRock</h1>
@@ -784,6 +821,29 @@
     box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
   }
 
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-careers {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
   @media (max-width: 768px) {
     .crss-careers-inner {
       padding: 48px 26px 80px;
@@ -917,8 +977,9 @@
 
     <div class="crss-footer-locations">
       <h2 class="crss-footer-head">Locations</h2>
-      <!-- Grows as facilities are added. One per city. -->
-      <p><a href="/find-storage/texas/lubbock/5839-49th-street">Lubbock, TX</a></p>
+      <!-- Grows as facilities are added, one per city. Nothing is
+           listed while CapRock has no confirmed location. -->
+      <p class="crss-footer-locations-empty">Locations coming soon</p>
     </div>
 
     <div class="crss-footer-legal">
@@ -1061,6 +1122,10 @@
     color: var(--crss-ink-soft, #5F564C);
     line-height: 1.9;
   }
+  .crss-footer-locations-empty {
+    font-style: italic;
+    color: var(--crss-taupe, #7F6C5D);
+  }
   .crss-footer-locations a {
     transition: color .22s ease;
   }
@@ -1131,6 +1196,29 @@
   }
   .crss-totop:hover {
     background: var(--crss-terracotta-dark, #863B1A);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-footer {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
   }
 
   @media (max-width: 900px) {
@@ -1214,6 +1302,7 @@
 (function () {
   var MAP = {
     '/': 'home.html',
+    '/caprock-self-service': 'home.html',
     '/find-storage': 'find-storage.html',
     '/size-guide': 'size-guide.html',
     '/help-center': 'help-center.html',

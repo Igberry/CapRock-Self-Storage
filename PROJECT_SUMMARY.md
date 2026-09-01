@@ -13,10 +13,22 @@ the layout of a competitor's location page:
 https://www.sroa.com/find-storage/texas/lubbock/5839-49th-street
 (Storage Rentals of America, same physical facility).
 
-The facility being launched first: **5839 49th Street, Lubbock, TX
-79424**. That address is real, pulled directly from the reference site.
-Everything else facility-specific (phone, office address, photo) is a
-placeholder, see below.
+> **CORRECTION, and a launch blocker.** An earlier version of this file
+> said the first facility was 5839 49th Street, Lubbock, TX 79424. That
+> is wrong. **CapRock has not confirmed any facility.** That address was
+> copied from the SROA reference page and belongs to *their* Lubbock
+> property, not CapRock's.
+>
+> The address is currently presented across the site as though it were
+> CapRock's: a location page, cards on the home and Find Storage pages,
+> a footer Locations entry, a live Google Map, an H1 reading "Simple,
+> secure self storage in Lubbock", and a City Information block about
+> Lubbock. Roughly 50 rendered references across four files.
+>
+> **Nothing may be published until this is resolved.** Publishing it
+> would advertise a competitor's premises as CapRock's and send
+> customers to the wrong gate. See "Known issues" for the full list of
+> what has to change once a real facility is confirmed.
 
 ## Why the code looks the way it does (read this before refactoring)
 
@@ -38,7 +50,10 @@ so:
   on its own, without `header.html` present. This was fixed after an
   early version shipped without fallbacks and rendered unstyled when
   previewed standalone, keep this pattern for any new page.
-$1- **Every wrapper-level reset is written inside `:where()`**, and must
+- Class names are prefixed `crss-` (CapRock Self Storage) throughout,
+  specifically to avoid colliding with whatever else GHL's page builder
+  puts on the page. Keep that prefix on anything new.
+- **Every wrapper-level reset is written inside `:where()`**, and must
   stay that way:
 
   ```css
@@ -116,6 +131,22 @@ preview/
 ```
 
 ## Known issues / things to fix or finish
+
+0. **LAUNCH BLOCKER: the only facility on the site is not CapRock's.**
+   5839 49th Street, Lubbock, TX 79424 came from the SROA reference
+   page and is that company's property. CapRock has confirmed no
+   facility. Everything below has to be replaced once a real address
+   exists, and none of it may go live before then:
+   - `pages/lubbock-5839-49th-street.html` — the whole page, including
+     the Maps embed and the Lubbock City Information block
+   - `pages/find-storage.html` — the `LOCATIONS` array
+   - `pages/home.html` — the `LOCATIONS` array, and the H1 "Simple,
+     secure self storage in Lubbock"
+   - `global-sections/footer.html` — the Locations entry
+
+   The city is not a find-and-replace: City Information is genuinely
+   about Lubbock, and the H1 names it. If the real facility is
+   elsewhere, both need rewriting from scratch.
 
 1. **Contact form doesn't submit anywhere.** `pages/contact-us.html` has
    a `<form>` with a JS handler that only shows a confirmation message

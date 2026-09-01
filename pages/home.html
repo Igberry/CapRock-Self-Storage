@@ -44,7 +44,10 @@
            here. Nothing is stated until CapRock confirms a real offer. -->
       <p class="crss-hero-eyebrow">[PLACEHOLDER &mdash; promotional offer]</p>
 
-      <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
+      <!-- No city is named: CapRock has not confirmed a location. Put
+           the city back in once there is a real facility, it is worth
+           real local search traffic. -->
+      <h1 class="crss-hero-title">Simple, secure self storage.</h1>
       <p class="crss-hero-sub">
         Gated access, video surveillance, and month-to-month leases.
         Nine unit sizes, from a 2&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30 drive-up space.
@@ -955,6 +958,29 @@
      squeezes the selects until labels like "Medium (10x10 to 10x15)"
      truncate, so the text field takes its own row first, and only at
      phone width does everything stack. */
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-home {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
   @media (max-width: 1080px) {
     .crss-hero-search {
       flex-wrap: wrap;
@@ -1070,12 +1096,15 @@
        ================================================================ */
     var LOCATIONS = [
       {
-        name: 'Lubbock, 5839 49th St.',
-        city: 'Lubbock',
-        state: 'TX',
-        address: '5839 49th Street, Lubbock, TX 79424',
-        phone: '(806) 000-0000',          // PLACEHOLDER, same dummy number as the header
-        url: '/find-storage/texas/lubbock/5839-49th-street' // PLACEHOLDER, match to the real GHL path once set
+        name: '[Facility — not yet confirmed]',
+        city: '',
+        state: '',
+        address: '[Address to be confirmed]',
+        phone: '[Phone to be confirmed]',
+        // No GHL page exists for a location yet, and the old path carried
+        // the competitor's address. Point this at the real slug once a
+        // facility is confirmed and its page is created.
+        url: '#'
       }
     ];
 

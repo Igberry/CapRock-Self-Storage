@@ -27,7 +27,7 @@
 <header class="crss-header">
   <div class="crss-header-inner">
 
-    <a href="/" class="crss-logo" aria-label="CapRock Self Storage home">
+    <a href="/caprock-self-service" class="crss-logo" aria-label="CapRock Self Storage home">
       <span class="crss-logo-mark">CapRock</span>
       <span class="crss-logo-sub">SELF STORAGE</span>
     </a>
@@ -468,6 +468,29 @@
      rhythm. Rather than let nowrap links collide on the way down,
      tighten spacing first and drop the My Account label (still
      reachable in the mobile panel and the footer). */
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-header {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
   @media (max-width: 1280px) {
     .crss-header-inner {
       gap: 20px;
@@ -536,6 +559,20 @@
 
 <script>
   (function () {
+    /* ---- Safety net: ensure a viewport meta tag exists ----
+       Without <meta name="viewport" content="width=device-width">, a
+       phone lays the page out at roughly 980 CSS pixels and scales it
+       down. Media queries then evaluate against 980px, so the mobile
+       breakpoints never fire and the page renders as a shrunken desktop
+       with no hamburger. Hosts normally inject this tag; this only acts
+       if it is genuinely absent, and is a no-op otherwise. */
+    if (!document.querySelector('meta[name="viewport"]')) {
+      var vp = document.createElement('meta');
+      vp.name = 'viewport';
+      vp.content = 'width=device-width, initial-scale=1';
+      document.head.appendChild(vp);
+    }
+
     var header = document.querySelector('.crss-header');
     if (!header) return;
     var mobileToggle = header.querySelector('.crss-mobile-toggle');
@@ -585,22 +622,62 @@
 </script>
 
 <!-- ================================================================
-     CapRock Self Storage — Location Page: 5839 49th Street, Lubbock
-     Paste this on the location page, below the header Global
-     Section. Does not include the header, that lives in
-     global-sections/header.html and is shared across every page.
-     Reads the shared brand variables and the live header height
-     from that Global Section rather than redeclaring them.
+     CapRock Self Storage — LOCATION PAGE
+     Live page: 5839 49th Street, Lubbock, TX 79424
 
-     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     THIS FILE IS THE TEMPLATE FOR EVERY LOCATION PAGE.
+     There is no separate template file on purpose: a copy would drift
+     out of step with the page that is actually live. Clone this one.
+
+     ----------------------------------------------------------------
+     CLONING THIS PAGE FOR A NEW FACILITY
+     ----------------------------------------------------------------
+     Every value that differs per location is tagged inline with
+     "LOC:". Search the file for LOC: and you will hit all of them, in
+     document order. Nothing else in the file is location-specific:
+     the sub-nav, Features, Storage Faqs, the CSS and the JS are all
+     generic and should be copied unchanged.
+
+     The nine values to change:
+
+       LOC: title        card heading, "City, Street" form
+       LOC: address      street on line 1, "City, ST ZIP" on line 2
+       LOC: phone        BOTH the tel: href and the visible number
+       LOC: office-note  where the office for this property is
+       LOC: details-url  the "View Location Details" destination
+       LOC: map-query    the address in the Maps Embed URL
+       LOC: map-title    the iframe title, for screen readers
+       LOC: features     any facility-specific feature copy
+       LOC: city-info    the whole City Information section, rewritten
+                         for the new city. Do not reuse Lubbock's.
+
+     Then in GHL: create the page, set its slug, and add the new
+     facility to the locations data so it appears in the card grids
+     (see "Where location data lives" in README.md).
+
+     ----------------------------------------------------------------
+     STILL OPEN ON THIS PAGE
+     ----------------------------------------------------------------
      - Office address note text
      - Facility photo in the info card
-     - (done) Google Map now uses the Maps Embed API with a real key
-     - The five section stubs (Units, Features, Reviews, Storage
-       Faqs, City Information) are empty containers, ready for the
-       next build steps
+     - Units section: blocked on the WebSelfStorage API key, which
+       needs a server-side proxy, it cannot sit in Custom Code
+     - Reviews section: waiting on a data-source decision
+     - The open questions listed in the Storage Faqs panel
      ================================================================ -->
 <div class="crss-location">
+
+  <!-- ============ UNCONFIRMED-FACILITY NOTICE ============
+       Visible on purpose. The address this page was built around came
+       from the SROA reference site and is that company's property, not
+       CapRock's. Delete this whole block once a real facility is
+       confirmed and its details are filled in. -->
+  <div class="crss-unconfirmed" role="note">
+    <p><strong>Placeholder facility &mdash; not for publication.</strong>
+    CapRock has not confirmed a location yet. The name, address, phone,
+    map and city content on this page are scaffolding so the template
+    can be reviewed. They are not real CapRock details.</p>
+  </div>
 
   <!-- ============ STICKY SUB-NAV ============ -->
   <nav class="crss-subnav" aria-label="Page sections">
@@ -621,27 +698,39 @@
         <span>Facility Photo<br>PLACEHOLDER</span>
       </div>
       <div class="crss-info-body">
-        <h1 class="crss-info-title">Lubbock, 5839 49th St.</h1>
-        <p class="crss-info-address">5839 49th Street<br>Lubbock, TX 79424</p>
-        <a href="tel:18060000000" class="crss-info-phone">(806) 000-0000</a>
+        <!-- LOC: title -->
+        <h1 class="crss-info-title">[Facility name &mdash; not yet confirmed]</h1>
+        <!-- LOC: address -->
+        <p class="crss-info-address">[Street address &mdash; not yet confirmed]<br>[City, ST ZIP]</p>
+        <!-- LOC: phone — change the tel: href AND the visible number -->
+        <span class="crss-info-phone">[Phone &mdash; not yet confirmed]</span>
+        <!-- LOC: office-note -->
         <p class="crss-info-office-note">
           The office for this location is at:<br>
           [Office address — PLACEHOLDER, confirm with CapRock]
         </p>
+        <!-- LOC: details-url -->
         <a href="#" class="crss-info-details-link">View Location Details →</a>
 
         <div class="crss-info-map">
-          <!-- Maps Embed API. This key is public by design: it ships in
-               the page source of every visitor. What protects it is the
-               HTTP referrer restriction on the key in Google Cloud, not
-               secrecy, so keep that restriction in place. Requires the
-               "Maps Embed API" to be enabled on the same Cloud project. -->
+          <!-- LOC: map-query / map-title
+               The live iframe is parked below until a real address
+               exists. The Maps Embed key is kept so it is not lost: it
+               is public by design and protected by the HTTP referrer
+               restriction in Google Cloud, not by secrecy. Restore the
+               iframe, put the confirmed address after &q=, and delete
+               the placeholder panel.
+
           <iframe
-            src="https://www.google.com/maps?q=5839+49th+Street,+Lubbock,+TX+79424&output=embed"
+            src="https://www.google.com/maps?q=REPLACE_WITH_CONFIRMED_ADDRESS&output=embed"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Map to 5839 49th Street, Lubbock, TX">
+            title="Map to [confirmed address]">
           </iframe>
+          -->
+          <div class="crss-info-map-placeholder">
+            <span>Map &mdash; awaiting confirmed address</span>
+          </div>
         </div>
       </div>
     </aside>
@@ -657,6 +746,8 @@
            sizes from size-guide.html, and the "options vary by location"
            phrasing from vehicle-storage.html. The three groups with no
            confirmed facts stay explicitly empty rather than guessing. -->
+      <!-- LOC: features — the six groups below are generic. Only
+           change them if a property genuinely differs. -->
       <section id="features" class="crss-section crss-panel">
         <h2>Features</h2>
         <p class="crss-panel-lede">What this property offers today. Anything not listed here has not been confirmed for this location yet, so ask the office rather than assuming.</p>
@@ -824,15 +915,22 @@
            scratch. These are widely documented facts about Lubbock rather
            than claims about CapRock. Worth a read-through by someone who
            actually knows the city before launch. -->
+      <!-- LOC: city-info — REWRITE ENTIRELY for a new city.
+           Do not reuse Lubbock's copy anywhere else. -->
       <section id="city-info" class="crss-section crss-panel">
         <h2>City Information</h2>
 
+        <p class="crss-city-warning">This section is written for Lubbock,
+        Texas, because that is the city the reference page covers. If
+        CapRock&rsquo;s first facility is somewhere else, every paragraph
+        below has to be rewritten for the real city &mdash; none of it
+        transfers.</p>
         <div class="crss-city">
           <h3>About Lubbock</h3>
           <p>Lubbock is the largest city on the South Plains of West Texas and the seat of Lubbock County. It is known as the Hub City because it functions as the commercial, medical and educational centre for a wide stretch of surrounding farmland, pulling in far more people than its own population of roughly a quarter of a million would suggest.</p>
 
           <h3>Getting around</h3>
-          <p>Interstate 27 runs north to south through the city, Loop 289 rings it, and US&nbsp;84, the Marsha Sharp Freeway, carries traffic out to the west. This facility sits on 49th Street in south-central Lubbock, inside Loop 289, which keeps it a short drive from most of the city rather than out past the edge of it.</p>
+          <p>Interstate 27 runs north to south through the city, Loop 289 rings it, and US&nbsp;84, the Marsha Sharp Freeway, carries traffic out to the west.</p>
 
           <h3>Work and study</h3>
           <p>Texas Tech University and the Texas Tech University Health Sciences Center anchor both the local economy and the city's character, and the student population turns over enough each year to keep storage in steady demand. Lubbock Christian University and a Lubbock campus of South Plains College add to that. On the healthcare side, Covenant Health and University Medical Center are among the largest employers in the region.</p>
@@ -1361,6 +1459,78 @@
     margin-top: 14px;
   }
 
+  /* ---- Unconfirmed-facility notice ----
+     Deliberately loud. Every other unconfirmed thing on this site is
+     visibly marked; the facility address was the one item that read as
+     fact, and it is the highest-stakes one to get wrong. */
+  .crss-unconfirmed {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px 32px 0;
+  }
+  .crss-unconfirmed p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
+    border: 1px dashed var(--crss-terracotta, #A44A23);
+    border-left: 3px solid var(--crss-terracotta, #A44A23);
+    border-radius: 4px;
+    padding: 16px 20px;
+  }
+  .crss-unconfirmed strong {
+    font-weight: 600;
+  }
+  .crss-info-map-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 184px;
+    text-align: center;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-city-warning {
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--crss-taupe, #7F6C5D);
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-location {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
   @media (max-width: 960px) {
     .crss-shell {
       grid-template-columns: 1fr;
@@ -1371,6 +1541,9 @@
     }
   }
   @media (max-width: 768px) {
+    .crss-unconfirmed {
+      padding: 16px 26px 0;
+    }
     .crss-shell {
       padding: 36px 26px 80px;
     }
@@ -1406,6 +1579,9 @@
     }
   }
   @media (max-width: 560px) {
+    .crss-unconfirmed {
+      padding: 14px 20px 0;
+    }
     .crss-shell {
       padding: 32px 20px 72px;
     }
@@ -1598,8 +1774,9 @@
 
     <div class="crss-footer-locations">
       <h2 class="crss-footer-head">Locations</h2>
-      <!-- Grows as facilities are added. One per city. -->
-      <p><a href="/find-storage/texas/lubbock/5839-49th-street">Lubbock, TX</a></p>
+      <!-- Grows as facilities are added, one per city. Nothing is
+           listed while CapRock has no confirmed location. -->
+      <p class="crss-footer-locations-empty">Locations coming soon</p>
     </div>
 
     <div class="crss-footer-legal">
@@ -1742,6 +1919,10 @@
     color: var(--crss-ink-soft, #5F564C);
     line-height: 1.9;
   }
+  .crss-footer-locations-empty {
+    font-style: italic;
+    color: var(--crss-taupe, #7F6C5D);
+  }
   .crss-footer-locations a {
     transition: color .22s ease;
   }
@@ -1812,6 +1993,29 @@
   }
   .crss-totop:hover {
     background: var(--crss-terracotta-dark, #863B1A);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-footer {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
   }
 
   @media (max-width: 900px) {
@@ -1895,6 +2099,7 @@
 (function () {
   var MAP = {
     '/': 'home.html',
+    '/caprock-self-service': 'home.html',
     '/find-storage': 'find-storage.html',
     '/size-guide': 'size-guide.html',
     '/help-center': 'help-center.html',
