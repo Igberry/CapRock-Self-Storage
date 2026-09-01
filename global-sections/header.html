@@ -6,7 +6,13 @@
      (via the --crss-header-h variable on the document root).
 
      PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
-     - Real logo (currently a text wordmark)
+     - Logo: the artwork is the wordmark now, the text version is gone.
+       A CSS window crops the full lockup to end after SELF-STORAGE,
+       dropping the tagline, which is unreadable at header size (see
+       .crss-logo). Favicon is set in GHL settings. Worth asking the
+       designer for a horizontal SVG lockup without the tagline: it
+       would replace the crop with a plain height:100% image and stay
+       sharp on retina, where a 58px raster is working hard.
      - Real phone number (used in 3 spots: header, mobile panel)
      - Fonts: Fraunces + Work Sans is a starting pairing, swap for
        CapRock's real brand fonts once chosen
@@ -14,9 +20,26 @@
 <header class="crss-header">
   <div class="crss-header-inner">
 
-    <a href="/caprock-self-service" class="crss-logo" aria-label="CapRock Self Storage home">
-      <span class="crss-logo-mark">CapRock</span>
-      <span class="crss-logo-sub">SELF STORAGE</span>
+    <!-- The artwork is now the whole wordmark; the text version is gone.
+
+         The asset is the full lockup (1774x887) in five bands: mark,
+         CAPROCK, SELF-STORAGE, a divider rule, then the tagline. The
+         link is a fixed window and the image inside is oversized and
+         offset so the crop ENDS AFTER SELF-STORAGE.
+
+         The tagline is dropped deliberately. It is 39px of the 887px
+         artwork, so at header height it renders about 3px tall and
+         reads as a smudge rather than words. The divider goes with it,
+         since a rule with nothing beneath it looks like a mistake.
+         Band positions were measured off the alpha channel, not
+         guessed: the kept region is x=83 y=12 1614x759.
+
+         alt carries the brand name rather than sitting empty, so if the
+         image ever fails the header still says who this is. That is
+         also why the link no longer needs its own aria-label, which
+         would double up with the alt. -->
+    <a href="/caprock-self-service" class="crss-logo">
+      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
     </a>
 
     <nav class="crss-nav" aria-label="Primary">
@@ -180,28 +203,23 @@
     gap: 36px;
   }
 
-  /* ---- Wordmark ---- */
+  /* ---- Wordmark ----
+     The link itself is the window. Sized so the kept region lands 58px
+     tall: scale = 58/759, so the full 1774px artwork renders at 136px
+     and the 1614x759 crop becomes 123x58 at offset -6,-1. */
   .crss-logo {
-    display: flex;
-    flex-direction: column;
-    line-height: 1;
+    display: block;
+    width: 123px;
+    height: 58px;
+    overflow: hidden;
     flex-shrink: 0;
   }
-  .crss-logo-mark {
-    font-family: 'Fraunces', Georgia, serif;
-    font-optical-sizing: auto;
-    font-weight: 600;
-    font-size: 27px;
-    letter-spacing: -0.015em;
-    color: var(--crss-terracotta);
-  }
-  .crss-logo-sub {
-    font-size: 9.5px;
-    letter-spacing: 0.26em;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--crss-taupe);
-    margin-top: 5px;
+  .crss-logo img {
+    display: block;
+    width: 136px;
+    height: auto;
+    max-width: none;   /* GHL sets img{max-width:100%}, which would break the crop */
+    margin: -1px 0 0 -6px;
   }
 
   /* ---- Primary nav: hairline underline on hover, not a filled pill ---- */
@@ -515,6 +533,15 @@
     }
   }
   @media (max-width: 768px) {
+    /* 50px lockup: scale = 50/759 */
+    .crss-logo {
+      width: 106px;
+      height: 50px;
+    }
+    .crss-logo img {
+      width: 117px;
+      margin: -1px 0 0 -5px;
+    }
     .crss-header-inner {
       height: 76px;
       padding: 0 24px;
@@ -530,8 +557,14 @@
     .crss-mobile-panel {
       padding: 6px 20px 24px;
     }
-    .crss-logo-mark {
-      font-size: 24px;
+    /* 44px lockup: scale = 44/759 */
+    .crss-logo {
+      width: 94px;
+      height: 44px;
+    }
+    .crss-logo img {
+      width: 103px;
+      margin: -1px 0 0 -5px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -605,5 +638,111 @@
     }
     syncHeaderHeight();
     window.addEventListener('resize', syncHeaderHeight);
+  })();
+</script>
+
+<!-- ================================================================
+     TEMPORARY: GHL preview router.
+
+     DELETE THIS WHOLE <script> BLOCK ONCE THE DOMAIN IS LIVE.
+
+     Every internal link in this build is root-relative ("/size-guide"),
+     which is correct: on a real domain it resolves against the site
+     root and needs no maintenance. But GHL's preview does not serve
+     pages by slug at all. Each page is an opaque id:
+
+         https://sites.leadconnectorhq.com/preview/cW98h0TtU2henZQksFdg
+
+     so "/size-guide" points at the host root and 404s. There is no
+     prefix to derive, so the ids have to be mapped explicitly.
+
+     This runs ONLY on sites.leadconnectorhq.com. On the real domain the
+     host check fails, the script does nothing, and the root-relative
+     links work natively. Nothing has to be undone at launch beyond
+     deleting this block.
+
+     If a page is recreated in GHL its preview id changes and the entry
+     here goes stale. That is another reason this is temporary.
+     ================================================================ -->
+<script>
+  (function () {
+    if (window.location.hostname !== 'sites.leadconnectorhq.com') return;
+
+    var BASE = 'https://sites.leadconnectorhq.com/preview/';
+    var Q = '?notrack=true';
+
+    var IDS = {
+      '/': 'aVhwRw4YFh95ayIWlGGh',
+      '/caprock-self-service': 'aVhwRw4YFh95ayIWlGGh',
+      '/find-storage': '3pwccyzRU4U9rplOb4TJ',
+      '/size-guide': 'cW98h0TtU2henZQksFdg',
+      '/help-center': 'ZkTYd1bMoDXNxPoqigls',
+      '/storage-calculator': 'JxaBnIAg0qVPOacQxks9',
+      '/storage-tips': 'xUmYQkBhKqzT53km4Yss',
+      '/vehicle-storage': 'RAuHToTUsnKaeEa9kLVC',
+      '/student-storage': 'cmSOtz4CAKY6svZfc9PZ',
+      '/military-storage': 'F2V7skG0KFxRZQYjKvAJ',
+      '/about-caprock': 'NQ9ulH7SQbeuLcIUN7Bb',
+      '/careers': 'D9i2P7wYpWQ5LngEjrsp',
+      '/contact-us': 'sOCAozOJOj5F2JB64RY7'
+    };
+
+    function resolve(href) {
+      if (!href) return null;
+      var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
+      if (path === '') path = '/';
+      var id = IDS[path];
+      return id ? BASE + id + Q : null;
+    }
+
+    /* Capture phase, so this also catches links the page builds with JS
+       (the facility cards) and runs before the hero search's own
+       submit handler sets window.location itself. */
+    /* An internal link with no entry in IDS must not fall through: the
+       browser would go to sites.leadconnectorhq.com/<slug> and 404,
+       which during a review looks like the site is broken rather than
+       like the page simply has not been built. Hold the visitor where
+       they are and say which page is missing. */
+    var toast, hideTimer;
+    function notice(path) {
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.setAttribute('style',
+          'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);' +
+          'z-index:9999;max-width:min(92vw,470px);padding:14px 18px;' +
+          'border-radius:6px;background:#292724;color:#F1E3CC;text-align:center;' +
+          'font:500 14px/1.5 "Work Sans",Arial,sans-serif;' +
+          'box-shadow:0 12px 32px -10px rgba(0,0,0,.6);' +
+          'opacity:0;transition:opacity .2s ease;pointer-events:none;');
+        document.body.appendChild(toast);
+      }
+      toast.textContent = 'Preview only — no GHL page exists yet for ' + path;
+      toast.style.opacity = '1';
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () { toast.style.opacity = '0'; }, 2800);
+    }
+
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
+      if (!a) return;
+      var href = a.getAttribute('href');
+      var url = resolve(href);
+      e.preventDefault();
+      if (url) {
+        window.location.href = url;
+      } else {
+        notice(href);
+      }
+    }, true);
+
+    document.addEventListener('submit', function (e) {
+      if (e.target && e.target.id === 'crss-hero-search') {
+        var url = resolve('/find-storage');
+        if (!url) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = url;
+      }
+    }, true);
   })();
 </script>
