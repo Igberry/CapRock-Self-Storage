@@ -697,7 +697,8 @@
       '/military-storage': 'F2V7skG0KFxRZQYjKvAJ',
       '/about-caprock': 'NQ9ulH7SQbeuLcIUN7Bb',
       '/careers': 'D9i2P7wYpWQ5LngEjrsp',
-      '/contact-us': 'sOCAozOJOj5F2JB64RY7'
+      '/contact-us': 'sOCAozOJOj5F2JB64RY7',
+      '/lubbock-2213-n-quaker': 'z9SAHTIBX5pdxckMhdcA'
     };
 
     function resolve(href) {
@@ -941,25 +942,18 @@
     border-color: rgba(164, 74, 35, 0.28);
     box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 22px 44px -16px rgba(41, 39, 36, 0.30);
   }
-  /* Placeholder facility image: a woven tone rather than a flat gradient,
-     so the empty state still reads as a designed surface. Replace the
-     whole block once real photography lands. */
+  /* Facility photo.
+     The photo is 2073x758, far wider than these panels, so cover crops
+     it hard. The vertical anchor keeps the building band in frame
+     rather than centring on empty sky or tarmac. */
   .crss-loc-photo {
     position: relative;
     height: 172px;
     background-color: var(--crss-taupe, #7F6C5D);
-    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
-                      linear-gradient(150deg, rgba(241, 227, 204, 0.16), rgba(41, 39, 36, 0.85));
-    color: var(--crss-cream, #F1E3CC);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.8;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
+    background-size: cover;
+    background-position: center 56%;
+    background-repeat: no-repeat;
   }
   .crss-loc-body {
     padding: 24px 24px 26px;
@@ -1070,14 +1064,11 @@
     // 'Where location data lives' in README.md.
     var LOCATIONS = [
       {
-        name: '[Facility — not yet confirmed]',
-        city: '',
-        state: '',
-        address: '[Address to be confirmed]',
-        // No GHL page exists for a location yet, and the old path carried
-        // the competitor's address. Point this at the real slug once a
-        // facility is confirmed and its page is created.
-        url: '#'
+        name: 'Lubbock, 2213 N Quaker',
+        city: 'Lubbock',
+        state: 'TX',
+        address: '2213 N Quaker, Lubbock, TX',
+        url: '/lubbock-2213-n-quaker'
       }
     ];
 
@@ -1089,7 +1080,7 @@
     function renderCards(list) {
       grid.innerHTML = list.map(function (loc) {
         return '<a class="crss-loc-card" href="' + loc.url + '">' +
-          '<div class="crss-loc-photo"><span>Facility Photo<br>PLACEHOLDER</span></div>' +
+          '<div class="crss-loc-photo"></div>' +
           '<div class="crss-loc-body">' +
             '<h3>' + loc.name + '</h3>' +
             '<p>' + loc.address + '</p>' +
@@ -1213,9 +1204,8 @@
 
     <div class="crss-footer-locations">
       <h2 class="crss-footer-head">Locations</h2>
-      <!-- Grows as facilities are added, one per city. Nothing is
-           listed while CapRock has no confirmed location. -->
-      <p class="crss-footer-locations-empty">Locations coming soon</p>
+      <!-- Grows as facilities are added, one per city. -->
+      <p><a href="/lubbock-2213-n-quaker">Lubbock, TX</a></p>
     </div>
 
     <div class="crss-footer-legal">
@@ -1550,7 +1540,7 @@
     '/about-caprock': 'about-caprock.html',
     '/careers': 'careers.html',
     '/contact-us': 'contact-us.html',
-    '/find-storage/texas/lubbock/5839-49th-street': 'lubbock-5839-49th-street.html'
+    '/lubbock-2213-n-quaker': 'lubbock-2213-n-quaker.html'
   };
 
   function resolve(href) {

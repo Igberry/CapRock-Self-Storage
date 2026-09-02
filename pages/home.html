@@ -45,10 +45,7 @@
            here. Nothing is stated until CapRock confirms a real offer. -->
       <p class="crss-hero-eyebrow">[PLACEHOLDER &mdash; promotional offer]</p>
 
-      <!-- No city is named: CapRock has not confirmed a location. Put
-           the city back in once there is a real facility, it is worth
-           real local search traffic. -->
-      <h1 class="crss-hero-title">Simple, secure self storage.</h1>
+      <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
       <p class="crss-hero-sub">
         Gated access, video surveillance, and month-to-month leases.
         Nine unit sizes, from a 2&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30 drive-up space.
@@ -87,7 +84,6 @@
   <!-- ============ TRUST STRIP ============ -->
   <section class="crss-trust">
     <div class="crss-trust-photo">
-      <span class="crss-trust-photo-note">Facility Photo &mdash; PLACEHOLDER</span>
       <div class="crss-trust-badges">
         <!-- PLACEHOLDER: real, earned accreditations only. Do not drop in
              the BBB / Shopper Approved / Reputation.com badges from the
@@ -534,6 +530,9 @@
   .crss-trust {
     background: var(--crss-white, #FFFFFF);
   }
+  /* Facility photo band. The badges sit on top of it, so the scrim is
+     doing legibility work here too, not just tone: without it the
+     cream badge text would sit on bright sky. */
   .crss-trust-photo {
     position: relative;
     min-height: 300px;
@@ -542,8 +541,12 @@
     justify-content: center;
     padding: 56px 32px;
     background-color: var(--crss-taupe, #7F6C5D);
-    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
-                      linear-gradient(150deg, rgba(241, 227, 204, 0.18), rgba(41, 39, 36, 0.88));
+    background-image:
+      linear-gradient(rgba(41, 39, 36, 0.62), rgba(41, 39, 36, 0.62)),
+      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
+    background-size: cover;
+    background-position: center 56%;
+    background-repeat: no-repeat;
   }
   .crss-trust-photo-note {
     position: absolute;
@@ -622,21 +625,16 @@
     border-color: rgba(164, 74, 35, 0.28);
     box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 22px 44px -16px rgba(41, 39, 36, 0.30);
   }
+  /* Facility photo. The photo is 2073x758, far wider than this panel,
+     so cover crops it hard. The vertical anchor keeps the building band
+     in frame rather than centring on sky or tarmac. */
   .crss-fac-photo {
     height: 178px;
     background-color: var(--crss-taupe, #7F6C5D);
-    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
-                      linear-gradient(150deg, rgba(241, 227, 204, 0.16), rgba(41, 39, 36, 0.85));
-    color: var(--crss-cream, #F1E3CC);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.8;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
+    background-size: cover;
+    background-position: center 56%;
+    background-repeat: no-repeat;
   }
   .crss-fac-body {
     padding: 24px 24px 26px;
@@ -1120,15 +1118,12 @@
        ================================================================ */
     var LOCATIONS = [
       {
-        name: '[Facility — not yet confirmed]',
-        city: '',
-        state: '',
-        address: '[Address to be confirmed]',
-        phone: '[Phone to be confirmed]',
-        // No GHL page exists for a location yet, and the old path carried
-        // the competitor's address. Point this at the real slug once a
-        // facility is confirmed and its page is created.
-        url: '#'
+        name: 'Lubbock, 2213 N Quaker',
+        city: 'Lubbock',
+        state: 'TX',
+        address: '2213 N Quaker, Lubbock, TX',
+        phone: '[Phone — still needed]',   // PLACEHOLDER, shared with the header
+        url: '/lubbock-2213-n-quaker'
       }
     ];
 
@@ -1137,7 +1132,7 @@
 
     function cardHTML(loc) {
       return '<a class="crss-fac-card" href="' + loc.url + '">' +
-        '<div class="crss-fac-photo"><span>Facility Photo<br>PLACEHOLDER</span></div>' +
+        '<div class="crss-fac-photo"></div>' +
         '<div class="crss-fac-body">' +
           '<h3>' + loc.name + '</h3>' +
           '<p class="crss-fac-row">' + PIN + '<span>' + loc.address + '</span></p>' +

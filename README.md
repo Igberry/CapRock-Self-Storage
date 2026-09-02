@@ -26,7 +26,7 @@ pages/
   about-caprock.html              Company about page (has open placeholder).  /about-caprock
   careers.html                    Careers page, empty-state openings.      /careers
   contact-us.html                 Contact page with a form (see note below). /contact-us
-  lubbock-5839-49th-street.html   The Lubbock location page body (sub-nav + info card + section stubs).
+  lubbock-2213-n-quaker.html      The Lubbock location page. Also the TEMPLATE for new locations, search it for "LOC:".
 ```
 
 The path column is a suggestion, matches the links already wired up in
@@ -118,16 +118,13 @@ links already use**:
 | `about-caprock` | `pages/about-caprock.html` |
 | `careers` | `pages/careers.html` |
 | `contact-us` | `pages/contact-us.html` |
-| `find-storage/texas/lubbock/5839-49th-street` | `pages/lubbock-5839-49th-street.html` |
+| `lubbock-2213-n-quaker` | `pages/lubbock-2213-n-quaker.html` |
 
-**The last row is the one to check first.** It is a nested path, copied
-from the SROA reference URL. If GHL will not accept slashes in a page
-slug, use a flat one such as `lubbock-5839-49th-street` and update the
-three places that reference it:
-
-- `pages/find-storage.html` — the `url` in the `LOCATIONS` array
-- `pages/home.html` — the `url` in its `LOCATIONS` array
-- `global-sections/footer.html` — the Locations link
+The location page uses a flat slug, not the nested path the SROA
+reference uses, because GHL does not accept slashes in a page slug. It
+is referenced from three places that must stay in step: the `LOCATIONS`
+array in `find-storage.html`, the same array in `home.html`, and the
+Locations link in `global-sections/footer.html`.
 
 ### Full-width bands vs GHL's centred row
 
@@ -175,7 +172,7 @@ Sixteen `href="#"` links need real destinations or removal before launch:
   Privacy Policy.
 - **`help-center.html` (6)** — the six topic cards. No help articles
   exist yet.
-- **`lubbock-5839-49th-street.html` (1)** — "View Location Details".
+- **`lubbock-2213-n-quaker.html` (1)** — "View Location Details".
 
 ## Brand colors ("Option 4, Southwest Contemporary")
 
@@ -236,11 +233,12 @@ Search each file for the word `PLACEHOLDER` for the exact spots.
 
 ## Reference
 
-**The Lubbock address in this repo is NOT CapRock's facility.**
-5839 49th Street, Lubbock, TX 79424 was taken from the SROA reference
-page and is that company's property. CapRock has confirmed no facility
-yet. It stands in as scaffolding so the location-page template and the
-card grids have something to render. **Do not publish any page carrying
-it** — see the launch blocker in PROJECT_SUMMARY.md.
+Facility: **CapRock Self-Storage, 2213 N Quaker, Lubbock, TX**
+(ZIP still to confirm).
+
+Note: this repo was originally built around 5839 49th Street, Lubbock,
+an address taken from the SROA reference page that turned out to be
+*their* property. It has been fully replaced. Check whose building an
+address belongs to before using one from a competitor page.
 
 Layout reference: https://www.sroa.com/find-storage/texas/lubbock/5839-49th-street

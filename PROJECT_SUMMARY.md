@@ -13,22 +13,15 @@ the layout of a competitor's location page:
 https://www.sroa.com/find-storage/texas/lubbock/5839-49th-street
 (Storage Rentals of America, same physical facility).
 
-> **CORRECTION, and a launch blocker.** An earlier version of this file
-> said the first facility was 5839 49th Street, Lubbock, TX 79424. That
-> is wrong. **CapRock has not confirmed any facility.** That address was
-> copied from the SROA reference page and belongs to *their* Lubbock
-> property, not CapRock's.
->
-> The address is currently presented across the site as though it were
-> CapRock's: a location page, cards on the home and Find Storage pages,
-> a footer Locations entry, a live Google Map, an H1 reading "Simple,
-> secure self storage in Lubbock", and a City Information block about
-> Lubbock. Roughly 50 rendered references across four files.
->
-> **Nothing may be published until this is resolved.** Publishing it
-> would advertise a competitor's premises as CapRock's and send
-> customers to the wrong gate. See "Known issues" for the full list of
-> what has to change once a real facility is confirmed.
+The facility: **CapRock Self-Storage, 2213 N Quaker, Lubbock, TX**.
+
+> **History worth knowing.** Until this address was confirmed, the site
+> was built around 5839 49th Street, Lubbock — an address copied from
+> the SROA reference page, which is *their* property, not CapRock's. It
+> reached a location page, both card grids, the footer and a live map
+> before anyone noticed. It has all been replaced. If a second facility
+> is ever added from a competitor's page again, check whose building it
+> actually is first.
 
 ## Why the code looks the way it does (read this before refactoring)
 
@@ -125,28 +118,22 @@ pages/                              One file per page, paste into a Custom Code 
   about-caprock.html                /about-caprock        "Our Story" is an explicit placeholder, no real company history was available
   careers.html                      /careers              Empty-state "no openings" section, no real openings provided
   contact-us.html                   /contact-us           Has a styled but non-functional <form>, see "Known issues" below
-  lubbock-5839-49th-street.html     (location page)        Sub-nav (Units/Features/Reviews/Storage Faqs/City Information anchors) + info card + 5 section stubs
+  lubbock-2213-n-quaker.html        (location page)        Sub-nav (Units/Features/Reviews/Storage Faqs/City Information anchors) + info card + 5 section stubs
 preview/
   *.html                            Complete standalone HTML documents (header + page body concatenated) for opening directly in a browser. Not for GHL, dev use only.
 ```
 
 ## Known issues / things to fix or finish
 
-0. **LAUNCH BLOCKER: the only facility on the site is not CapRock's.**
-   5839 49th Street, Lubbock, TX 79424 came from the SROA reference
-   page and is that company's property. CapRock has confirmed no
-   facility. Everything below has to be replaced once a real address
-   exists, and none of it may go live before then:
-   - `pages/lubbock-5839-49th-street.html` — the whole page, including
-     the Maps embed and the Lubbock City Information block
-   - `pages/find-storage.html` — the `LOCATIONS` array
-   - `pages/home.html` — the `LOCATIONS` array, and the H1 "Simple,
-     secure self storage in Lubbock"
-   - `global-sections/footer.html` — the Locations entry
-
-   The city is not a find-and-replace: City Information is genuinely
-   about Lubbock, and the H1 names it. If the real facility is
-   elsewhere, both need rewriting from scratch.
+0. **Still not publishable, but no longer for want of a facility.**
+   2213 N Quaker is confirmed and in place. What is left on the
+   location page:
+   - the **phone number** is still the shared dummy, across the header,
+     footer, contact page and this page. A live page with a wrong
+     number is worse than no page.
+   - the **ZIP code** for the street address
+   - the **office address note**
+   - the **facility photo** in the info card
 
 1. **Contact form doesn't submit anywhere.** `pages/contact-us.html` has
    a `<form>` with a JS handler that only shows a confirmation message
@@ -349,5 +336,5 @@ Two things worth keeping in mind:
      build the Units section against it.
 4. Once more than one facility exists, revisit `find-storage.html`'s
    hardcoded array and the Lubbock page's naming pattern
-   (`lubbock-5839-49th-street.html`) as the template for additional
+   (`lubbock-2213-n-quaker.html`) as the template for additional
    location pages.
