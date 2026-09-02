@@ -18,7 +18,8 @@
 
      PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
      - Hero promo line: no offer is claimed until CapRock confirms one
-     - Hero background photography
+     - (done) Hero photography is in. Still worth swapping the 2.1MB
+       PNG for a resized JPEG, see the note on .crss-hero-media.
      - Trust badges: real accreditations only. The SROA spec's BBB /
        Shopper Approved / Reputation.com badges are third-party marks
        belonging to SROA's own accreditations, they are NOT CapRock's
@@ -368,9 +369,23 @@
     background: var(--crss-charcoal, #292724);
     overflow: hidden;
   }
-  /* PLACEHOLDER art. A woven, lit surface stands in for real lifestyle
-     photography, so the hero reads as designed rather than unfinished.
-     Swap the background-image for the real photo when it lands. */
+  /* Hero photography.
+
+     The dark scrim is structural, not decoration. The headline is white
+     and the sub is cream, over a bright sky and a pale building: with
+     the photo bare, that text sits at roughly 1.2:1 and is unreadable.
+     The gradient is weighted left because the text is left-aligned, and
+     stays lighter on the right so the building still reads. Measured on
+     the sky, the darkest end puts white at about 13:1 and the lightest
+     end at about 6:1.
+
+     background-position holds the building band in frame as the photo
+     crops on narrow screens; cover would otherwise centre on empty sky.
+
+     PERFORMANCE, worth fixing: this is a 2.1MB PNG. A photograph should
+     be a JPEG, and nothing on the page displays it wider than about
+     1600px. Re-encoded at 1600px quality 82 it is 143KB, a 93% saving.
+     Swap this URL once that version is uploaded. */
   .crss-hero-media {
     position: absolute;
     top: 0;
@@ -379,10 +394,19 @@
     left: 0;
     z-index: -1;
     background-color: var(--crss-charcoal, #292724);
-    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 11px),
-                      radial-gradient(120% 130% at 78% 12%, rgba(164, 74, 35, 0.55), transparent 58%),
-                      linear-gradient(155deg, rgba(127, 108, 93, 0.55), rgba(41, 39, 36, 0.97));
+    background-image:
+      linear-gradient(100deg,
+        rgba(41, 39, 36, 0.94) 0%,
+        rgba(41, 39, 36, 0.86) 34%,
+        rgba(41, 39, 36, 0.60) 68%,
+        rgba(41, 39, 36, 0.48) 100%),
+      radial-gradient(90% 130% at 90% 8%, rgba(164, 74, 35, 0.30), transparent 62%),
+      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
+    background-size: cover;
+    background-position: center 58%;
+    background-repeat: no-repeat;
   }
+
   .crss-hero-inner {
     max-width: 1240px;
     margin: 0 auto;
