@@ -1,0 +1,251 @@
+<!-- ================================================================
+     CapRock Self Storage — Contact Us page
+     Body content only. Header Global Section above, footer below.
+     Path: /contact-us
+
+     THE FORM IS NOT IN THIS FILE, AND SHOULD NOT BE.
+
+     A raw <form> in Custom Code has nowhere to submit to: there is no
+     backend behind a GHL page, so anything typed into it is lost. Only
+     GHL's native Forms element writes into the CRM.
+
+     GHL cannot nest one of its elements inside a Custom Code block, so
+     the page is assembled from two pieces in the builder:
+
+       1. this block, as a Custom Code element
+       2. a native Forms element placed directly BELOW it
+
+     The contact details below sit as a horizontal band precisely so
+     they read as an introduction to the form that follows, rather than
+     as a column beside it.
+
+     To make the native form match the rest of the site, set these in
+     GHL's form styling panel:
+
+       font              Work Sans
+       label             11px, weight 600, letter-spacing 0.18em,
+                         UPPERCASE, colour #7F6C5D
+       input text        15px, colour #292724
+       input background  #FAF7F1
+       input border      1px #292724 at 12% opacity, radius 5px
+       focus border      #A44A23
+       button            background #A44A23, text #FFFFFF, 12px,
+                         weight 600, letter-spacing 0.11em, UPPERCASE,
+                         radius 4px, padding 16px 34px
+       button hover      #863B1A
+
+     PLACEHOLDER: phone and email are still dummy values, shared with
+     the header and footer.
+     ================================================================ -->
+<div class="crss-contact">
+  <div class="crss-contact-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Contact Us</span>
+    </nav>
+
+    <h1 class="crss-contact-title">Contact Us</h1>
+    <p class="crss-contact-subtitle">Have a general question? Send us a message. For questions about a specific unit or move-in, find your nearest location instead.</p>
+
+    <div class="crss-contact-info">
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Phone</span>
+        <a href="tel:18060000000">(806) 000-0000</a>
+      </div>
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Email</span>
+        <a href="mailto:info@caprockselfstorage.com">info@caprockselfstorage.com</a>
+      </div>
+      <a href="/find-storage" class="crss-contact-location-link">Looking for a specific location? &rarr;</a>
+    </div>
+
+    <!-- The GHL native Forms element goes here, directly below this
+         Custom Code block. It is not part of this file: only GHL's own
+         form element reaches the CRM. -->
+  </div>
+</div>
+
+<style>
+  .crss-contact {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-contact, .crss-contact *, .crss-contact *::before, .crss-contact *::after {
+    box-sizing: border-box;
+  }
+  .crss-contact :where(h1, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-contact :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-contact :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-contact-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-contact-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-contact-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
+  }
+  .crss-contact-subtitle {
+    font-size: 18px;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 60ch;
+    line-height: 1.65;
+    margin-bottom: 48px;
+  }
+
+  /* ============ CONTACT DETAILS ============
+     A horizontal band, not a sidebar. The form is a separate GHL
+     element below this block rather than a column beside it, so these
+     details read as an introduction to it. */
+  .crss-contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 40px;
+    align-items: flex-start;
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+  }
+  .crss-contact-info-row {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  .crss-contact-label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 7px;
+  }
+  .crss-contact-info-row a {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--crss-charcoal, #292724);
+    word-break: break-word;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(164, 74, 35, 0.32);
+    transition: color .22s ease, text-decoration-color .22s ease;
+  }
+  .crss-contact-info-row a:hover {
+    color: var(--crss-terracotta, #A44A23);
+    text-decoration-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-contact-location-link {
+    flex: 1 1 100%;
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: var(--crss-terracotta, #A44A23);
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
+  }
+  .crss-contact-location-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
+  }
+
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-contact {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-contact-inner {
+      padding: 48px 26px 80px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-contact-inner {
+      padding: 44px 20px 72px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-contact *, .crss-contact *::before, .crss-contact *::after {
+      transition: none !important;
+    }
+    .crss-contact-location-link:hover {
+      transform: none;
+    }
+  }
+</style>

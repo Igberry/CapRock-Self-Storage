@@ -1,0 +1,18 @@
+# Only the serverless function belongs on Vercel.
+#
+# This repo is GHL page source: the HTML in pages/ and global-sections/
+# is meant to be pasted into Custom Code elements, and preview/ is a
+# local dev convenience carrying dev-only shims. Without this file a
+# deploy would publish all of it at a public vercel.app URL, including
+# placeholder content and the preview navigation rewrites.
+#
+# Everything except api/ is excluded, so the deployment is the proxy
+# and nothing else.
+
+pages/
+global-sections/
+preview/
+*.md
+*.png
+*.jpg
+*.jpeg

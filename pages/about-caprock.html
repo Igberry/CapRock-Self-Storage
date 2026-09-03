@@ -1,0 +1,276 @@
+<!-- ================================================================
+     CapRock Self Storage — About CapRock page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /about-caprock
+
+     PLACEHOLDER: no real company history, founding story, or team
+     info was provided, so "Our Story" is left as a clearly marked
+     prompt rather than invented. The "What to Expect" block reuses
+     the facility standards already established in this project
+     (gated access, video surveillance, month-to-month leases),
+     not new claims.
+     ================================================================ -->
+<div class="crss-about">
+  <div class="crss-about-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">About CapRock</span>
+    </nav>
+
+    <h1 class="crss-about-title">About CapRock Self Storage</h1>
+
+    <div class="crss-about-block crss-about-placeholder">
+      <h2>Our Story</h2>
+      <p>[PLACEHOLDER — add CapRock's founding story, mission, and what makes the company different. This section is intentionally left blank rather than filled with invented history.]</p>
+    </div>
+
+    <div class="crss-about-block">
+      <h2>What You Can Expect</h2>
+      <ul class="crss-about-list">
+        <li>Gated access for controlled entry</li>
+        <li>Video surveillance throughout the property</li>
+        <li>Clean, well-maintained buildings</li>
+        <li>Month-to-month leases, no long-term commitment</li>
+      </ul>
+    </div>
+
+    <div class="crss-about-cta">
+      <p>Find a CapRock location near you.</p>
+      <a href="/find-storage" class="crss-about-cta-btn">Find a Location</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-about {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-about, .crss-about *, .crss-about *::before, .crss-about *::after {
+    box-sizing: border-box;
+  }
+  .crss-about :where(h1, h2, p, ul) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-about :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-about :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-about-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-about-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+    margin-bottom: 0;
+  }
+  .crss-about-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 44px;
+  }
+
+  /* ============ CONTENT BLOCKS ============ */
+  .crss-about-block {
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 34px 36px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+  }
+  /* Deliberately unfinished: stays visibly marked as a placeholder
+     so nobody mistakes it for real, approved company copy. */
+  .crss-about-placeholder {
+    border: 1px dashed rgba(127, 108, 93, 0.55);
+    background: var(--crss-sand, #EFE7DA);
+    box-shadow: none;
+  }
+  .crss-about-placeholder p {
+    font-style: italic;
+  }
+  .crss-about-block h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+    margin-bottom: 14px;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-about-block p {
+    font-size: 16px;
+    line-height: 1.72;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+
+  /* ============ FEATURE LIST ============ */
+  .crss-about-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .crss-about-list li {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    padding: 14px 0;
+    position: relative;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-about-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .crss-about-list li:first-child {
+    padding-top: 0;
+  }
+
+  /* ============ CLOSING CTA ============ */
+  .crss-about-cta {
+    position: relative;
+    overflow: hidden;
+    margin-top: 52px;
+    padding: 54px 40px;
+    background: var(--crss-charcoal, #292724);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .crss-about-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(164, 74, 35, 0.30), transparent 62%);
+    pointer-events: none;
+  }
+  .crss-about-cta p {
+    position: relative;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: clamp(21px, 2.6vw, 27px);
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--crss-cream, #F1E3CC);
+    margin-bottom: 26px;
+  }
+  .crss-about-cta-btn {
+    position: relative;
+    display: inline-block;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 34px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
+  }
+  .crss-about-cta-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-about {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-about-inner {
+      padding: 48px 26px 80px;
+    }
+    .crss-about-block {
+      padding: 28px 26px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-about-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-about-block {
+      padding: 26px 24px;
+    }
+    .crss-about-cta {
+      padding: 42px 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-about *, .crss-about *::before, .crss-about *::after {
+      transition: none !important;
+    }
+    .crss-about-cta-btn:hover {
+      transform: none;
+    }
+  }
+</style>

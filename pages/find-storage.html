@@ -1,0 +1,341 @@
+<!-- ================================================================
+     CapRock Self Storage — Find Storage (location directory) page
+     Body content only. Assumes the header Global Section (with the
+     Fraunces/Work Sans font import and the shared :root brand
+     variables) is already placed above this on the page.
+
+     HOW TO USE IN GHL
+     Create a new page named "Find Storage", path /find-storage.
+     Add the header Global Section, then a Custom Code element below
+     it, and paste this whole block in.
+
+     PLACEHOLDER: only one location exists right now (Lubbock). To
+     add a facility, add one object to the LOCATIONS array near the
+     bottom. Once there are more than a handful, this should move to
+     a real data source (Supabase, or a GHL custom object) instead
+     of hand-editing this array each time, ping Claude when ready to
+     make that change.
+     ================================================================ -->
+<div class="crss-findstorage">
+  <div class="crss-findstorage-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span aria-current="page">Find Storage</span>
+    </nav>
+
+    <h1 class="crss-fs-title">Find a CapRock Self Storage Location</h1>
+    <p class="crss-fs-subtitle">Search by city, state, or zip to find the CapRock facility nearest you.</p>
+
+    <div class="crss-fs-search">
+      <svg class="crss-fs-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" id="crss-fs-search-input" placeholder="Search by city, state, or zip" aria-label="Search locations">
+    </div>
+
+    <div class="crss-fs-grid" id="crss-fs-grid"></div>
+
+    <p class="crss-fs-empty" id="crss-fs-empty">No locations match that search yet. More CapRock locations are on the way.</p>
+  </div>
+</div>
+
+<style>
+  .crss-findstorage {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-findstorage, .crss-findstorage *, .crss-findstorage *::before, .crss-findstorage *::after {
+    box-sizing: border-box;
+  }
+  .crss-findstorage :where(h1, h3, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-findstorage :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-findstorage :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-findstorage-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-fs-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    max-width: 20ch;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-fs-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
+  }
+  .crss-fs-subtitle {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 58ch;
+    margin-bottom: 36px;
+  }
+
+  /* ============ SEARCH ============ */
+  .crss-fs-search {
+    position: relative;
+    max-width: 460px;
+    margin-bottom: 44px;
+  }
+  .crss-fs-search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--crss-taupe, #7F6C5D);
+    pointer-events: none;
+    transition: color .22s ease;
+  }
+  .crss-fs-search input {
+    width: 100%;
+    padding: 16px 18px 16px 50px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+    transition: border-color .24s ease, box-shadow .24s ease;
+  }
+  .crss-fs-search input::placeholder {
+    color: var(--crss-taupe, #7F6C5D);
+    opacity: .85;
+  }
+  .crss-fs-search input:focus {
+    outline: none;
+    border-color: var(--crss-terracotta, #A44A23);
+    box-shadow: 0 0 0 3px rgba(164, 74, 35, 0.12);
+  }
+  .crss-fs-search:focus-within .crss-fs-search-icon {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ LOCATION CARDS ============ */
+  .crss-fs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .crss-loc-card {
+    display: block;
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .crss-loc-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(164, 74, 35, 0.28);
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 22px 44px -16px rgba(41, 39, 36, 0.30);
+  }
+  /* Facility photo.
+     The photo is 2073x758, far wider than these panels, so cover crops
+     it hard. The vertical anchor keeps the building band in frame
+     rather than centring on empty sky or tarmac. */
+  .crss-loc-photo {
+    position: relative;
+    height: 172px;
+    background-color: var(--crss-taupe, #7F6C5D);
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
+    background-size: cover;
+    background-position: center 56%;
+    background-repeat: no-repeat;
+  }
+  .crss-loc-body {
+    padding: 24px 24px 26px;
+  }
+  .crss-loc-body h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+    margin-bottom: 10px;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-loc-body p {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  .crss-loc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1), color .22s ease;
+  }
+  .crss-loc-card:hover .crss-loc-link {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(4px);
+  }
+
+  /* ============ EMPTY STATE ============ */
+  .crss-fs-empty {
+    display: none;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 6px;
+    padding: 56px 28px;
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-findstorage {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-findstorage-inner {
+      padding: 48px 26px 80px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-findstorage-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-fs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-findstorage *, .crss-findstorage *::before, .crss-findstorage *::after {
+      transition: none !important;
+    }
+    .crss-loc-card:hover {
+      transform: none;
+    }
+    .crss-loc-card:hover .crss-loc-link {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    // PLACEHOLDER data. Add one object per facility as new locations launch.
+    //
+    // KEEP IN SYNC with the LOCATIONS array in home.html, which renders
+    // the same cards in its two 'Find nearby storage facilities' bands.
+    // Adding or editing a facility means changing BOTH files, plus the
+    // Locations link in global-sections/footer.html.
+    //
+    // This is the duplication that a real data source removes. See
+    // 'Where location data lives' in README.md.
+    var LOCATIONS = [
+      {
+        name: 'Lubbock, 2213 N Quaker',
+        city: 'Lubbock',
+        state: 'TX',
+        address: '2213 N Quaker, Lubbock, TX',
+        url: '/lubbock-2213-n-quaker'
+      }
+    ];
+
+    var grid = document.getElementById('crss-fs-grid');
+    var empty = document.getElementById('crss-fs-empty');
+    var input = document.getElementById('crss-fs-search-input');
+    if (!grid || !input) return;
+
+    function renderCards(list) {
+      grid.innerHTML = list.map(function (loc) {
+        return '<a class="crss-loc-card" href="' + loc.url + '">' +
+          '<div class="crss-loc-photo"></div>' +
+          '<div class="crss-loc-body">' +
+            '<h3>' + loc.name + '</h3>' +
+            '<p>' + loc.address + '</p>' +
+            '<span class="crss-loc-link">View Location &rarr;</span>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+      empty.style.display = list.length ? 'none' : 'block';
+    }
+
+    renderCards(LOCATIONS);
+
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var filtered = LOCATIONS.filter(function (loc) {
+        return (loc.city + ' ' + loc.state + ' ' + loc.address).toLowerCase().indexOf(q) !== -1;
+      });
+      renderCards(filtered);
+    });
+  })();
+</script>

@@ -1,0 +1,1362 @@
+<!-- ================================================================
+     CapRock Self Storage — LOCATION PAGE
+     Live page: CapRock Self-Storage, 2213 N Quaker, Lubbock, TX
+
+     THIS FILE IS THE TEMPLATE FOR EVERY LOCATION PAGE.
+     There is no separate template file on purpose: a copy would drift
+     out of step with the page that is actually live. Clone this one.
+
+     ----------------------------------------------------------------
+     CLONING THIS PAGE FOR A NEW FACILITY
+     ----------------------------------------------------------------
+     Every value that differs per location is tagged inline with
+     "LOC:". Search the file for LOC: and you will hit all of them, in
+     document order. Nothing else in the file is location-specific:
+     the sub-nav, Features, Storage Faqs, the CSS and the JS are all
+     generic and should be copied unchanged.
+
+     The nine values to change:
+
+       LOC: title        card heading, "City, Street" form
+       LOC: address      street on line 1, "City, ST ZIP" on line 2
+       LOC: phone        BOTH the tel: href and the visible number
+       LOC: office-note  where the office for this property is
+       LOC: details-url  the "View Location Details" destination
+       LOC: map-query    the address in the Maps Embed URL
+       LOC: map-title    the iframe title, for screen readers
+       LOC: features     any facility-specific feature copy
+       LOC: city-info    the whole City Information section, rewritten
+                         for the new city. Do not reuse Lubbock's.
+
+     Then in GHL: create the page, set its slug, and add the new
+     facility to the locations data so it appears in the card grids
+     (see "Where location data lives" in README.md).
+
+     ----------------------------------------------------------------
+     STILL OPEN ON THIS PAGE
+     ----------------------------------------------------------------
+     - Real phone number (still the shared dummy)
+     - ZIP code for the street address
+     - Office address note text
+     - Facility photo in the info card
+     - Units section: blocked on the WebSelfStorage API key, which
+       needs a server-side proxy, it cannot sit in Custom Code
+     - Reviews section: waiting on a data-source decision
+     - The open questions listed in the Storage Faqs panel
+     ================================================================ -->
+<div class="crss-location">
+
+  <!-- ============ PRE-LAUNCH NOTICE ============
+       The facility is confirmed now, so the address, map and city
+       content below are real. What is still a placeholder is the phone
+       number, which is a dummy. Delete this block once the real number
+       is in and the remaining items below are filled. -->
+  <div class="crss-unconfirmed" role="note">
+    <p><strong>Not ready to publish.</strong> The address and map are
+    confirmed, but the phone number is still a placeholder, and the ZIP
+    code, office note and facility photo are outstanding. A live page
+    with a wrong phone number is worse than no page.</p>
+  </div>
+
+  <!-- ============ STICKY SUB-NAV ============ -->
+  <nav class="crss-subnav" aria-label="Page sections">
+    <div class="crss-subnav-inner">
+      <a href="#units" class="crss-subnav-link is-active" data-target="units">Units</a>
+      <a href="#features" class="crss-subnav-link" data-target="features">Features</a>
+      <a href="#reviews" class="crss-subnav-link" data-target="reviews">Reviews</a>
+      <a href="#faqs" class="crss-subnav-link" data-target="faqs">Storage Faqs</a>
+      <a href="#city-info" class="crss-subnav-link" data-target="city-info">City Information</a>
+    </div>
+  </nav>
+
+  <!-- ============ SHELL: INFO CARD + MAIN CONTENT ============ -->
+  <div class="crss-shell">
+
+    <aside class="crss-info-card">
+      <div class="crss-info-photo">
+      </div>
+      <div class="crss-info-body">
+        <!-- LOC: title -->
+        <h1 class="crss-info-title">Lubbock, 2213 N Quaker</h1>
+        <!-- LOC: address -->
+        <!-- ZIP still needed: "Lubbock, TX 794xx" -->
+        <p class="crss-info-address">2213 N Quaker<br>Lubbock, TX</p>
+        <!-- LOC: phone — change the tel: href AND the visible number -->
+        <span class="crss-info-phone">[Phone &mdash; still needed]</span>
+        <!-- LOC: office-note -->
+        <p class="crss-info-office-note">
+          The office for this location is at:<br>
+          [Office address — PLACEHOLDER, confirm with CapRock]
+        </p>
+        <!-- LOC: details-url -->
+        <a href="#" class="crss-info-details-link">View Location Details →</a>
+
+        <div class="crss-info-map">
+          <!-- LOC: map-query / map-title
+               Maps Embed API. The key is public by design: it ships in
+               the page source of every visitor. What protects it is the
+               HTTP referrer restriction in Google Cloud, not secrecy,
+               so keep that restriction and add the live domain to it.
+               Requires "Maps Embed API" enabled on the same project. -->
+          <iframe
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD7bbQkgWrqUx0Voz6uJilxl0NdCt7Kbgo&q=CapRock+Self-Storage,+2213+N+Quaker,+Lubbock,+TX"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Map to CapRock Self-Storage, 2213 N Quaker, Lubbock, TX">
+          </iframe>
+        </div>
+      </div>
+    </aside>
+
+    <main class="crss-main">
+      <!-- Units come from WebSelfStorage via the /api/wss proxy, never
+           direct: the API key cannot be exposed to the browser. Rates
+           and availability are live, so nothing here is hardcoded.
+           Set WSS_ENDPOINT in the script below after deploying. -->
+      <section id="units" class="crss-section crss-panel">
+        <h2>Units</h2>
+        <p class="crss-panel-lede">Sizes, rates and availability for this location, live from the facility system.</p>
+
+        <div class="crss-unit-filters" data-crss-unit-filters hidden></div>
+
+        <div data-crss-units>
+          <p class="crss-unit-state">Checking current availability&hellip;</p>
+        </div>
+      </section>
+
+      <!-- Every claim below is one this project already established:
+           the four facility standards from about-caprock.html, the nine
+           sizes from size-guide.html, and the "options vary by location"
+           phrasing from vehicle-storage.html. The three groups with no
+           confirmed facts stay explicitly empty rather than guessing. -->
+      <!-- LOC: features — the six groups below are generic. Only
+           change them if a property genuinely differs. -->
+      <section id="features" class="crss-section crss-panel">
+        <h2>Features</h2>
+        <p class="crss-panel-lede">What this property offers today. Anything not listed here has not been confirmed for this location yet, so ask the office rather than assuming.</p>
+
+        <div class="crss-feature-grid">
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="true">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M9.5 9.5v11" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="crss-feature-label">Unit Features</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Nine unit sizes, from a 2&nbsp;&times;&nbsp;5 locker up to a 10&nbsp;&times;&nbsp;30</li>
+                <li>Compare them side by side in the <a href="/size-guide">Size Guide</a></li>
+                <li>Not sure what fits? Try the <a href="/storage-calculator">Storage Calculator</a></li>
+              </ul>
+              <p class="crss-feature-todo">PLACEHOLDER &mdash; drive-up access, ground-floor units and climate control are not confirmed for this property. Add them here once CapRock confirms.</p>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V7l8-3 8 3v13" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 20v-6h5v6M2.5 20h19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="crss-feature-label">Access</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Gated access, so entry to the property is controlled</li>
+              </ul>
+              <p class="crss-feature-todo">PLACEHOLDER &mdash; gate hours and office hours are not confirmed. No hours are stated until they are, since getting these wrong sends people to a locked gate.</p>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5l7 3v5.2c0 4.2-2.9 7.6-7 8.8-4.1-1.2-7-4.6-7-8.8V6.5l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2.1 2.1L15.2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="crss-feature-label">Security</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Gated access for controlled entry</li>
+                <li>Video surveillance throughout the property</li>
+                <li>Clean, well-maintained buildings</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 8.5h17v11a1 1 0 01-1 1h-15a1 1 0 01-1-1v-11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2.5 4.5h19v4h-19zM10 12.5h4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+              <span class="crss-feature-label">Extras</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <p class="crss-feature-todo">PLACEHOLDER &mdash; whether this location sells boxes, locks, tape or other moving supplies on site has not been confirmed.</p>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16.5v-3l2-5.5a2 2 0 011.9-1.3h10.2A2 2 0 0119 8l2 5.5v3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 16.5h18v2.5h-3v-2.5M6 19v-2.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/></svg></span>
+              <span class="crss-feature-label">Parking</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Vehicle, RV and boat storage options vary by location</li>
+                <li>Ask this office which options they currently offer</li>
+              </ul>
+              <p class="crss-feature-note">More on <a href="/vehicle-storage">vehicle storage</a>.</p>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M20.5 12.5l-8 8-9-9v-8h8l9 9z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="crss-feature-label">Promotions</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <p class="crss-feature-todo">PLACEHOLDER &mdash; no promotion is claimed. Add one here only when CapRock confirms a real, current offer and its terms.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews" class="crss-section crss-section-stub">
+        <h2>Reviews</h2>
+        <p class="crss-stub-note">Placeholder for now. Real reviews connect once the data source is decided.</p>
+      </section>
+
+      <!-- Only questions answerable from what this project has already
+           established are answered. Everything that depends on CapRock's
+           actual policy is listed at the bottom as still-open, rather
+           than answered with a plausible guess. -->
+      <section id="faqs" class="crss-section crss-panel">
+        <h2>Storage Faqs</h2>
+
+        <div class="crss-faq-list">
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>How long do I have to rent for?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>Leases run month to month, with no long-term commitment. Rent for a single season or for years, and give notice when you are ready to move out.</p>
+            </div>
+          </div>
+
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>What size unit do I need?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>There are nine sizes, from a 2&nbsp;&times;&nbsp;5 locker that holds a few boxes up to a 10&nbsp;&times;&nbsp;30 that can take a full household. The <a href="/size-guide">Size Guide</a> compares them side by side, and the <a href="/storage-calculator">Storage Calculator</a> turns a description of what you are storing into a starting size.</p>
+              <p>If you are between two sizes, the larger one is usually the cheaper mistake.</p>
+            </div>
+          </div>
+
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>How is the property secured?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>The property is gated, so entry is controlled rather than open to anyone driving past, and video surveillance covers the site. The buildings are kept clean and maintained.</p>
+            </div>
+          </div>
+
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>What am I not allowed to store?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>Self storage everywhere excludes the same broad categories: flammable, explosive or hazardous materials such as fuel, paint and propane; perishable food; living things, whether plants or animals; and anything illegal. Your signed lease is the authority on the full list.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLACEHOLDER: these need CapRock's real answers before launch.
+             They are listed rather than answered because a wrong answer
+             about gate hours, locks or billing creates a support call and
+             a bad first visit. -->
+        <div class="crss-faq-open">
+          <p class="crss-faq-open-head">Still to confirm with CapRock</p>
+          <ul>
+            <li>Gate access hours and office hours</li>
+            <li>Whether you bring your own lock or buy one on site</li>
+            <li>Accepted payment methods and whether autopay is offered</li>
+            <li>Whether tenant insurance or a protection plan is required</li>
+            <li>Whether this property uses Noke smart locks, which the SROA reference page documents for the same building</li>
+          </ul>
+          <p class="crss-faq-open-note">Until these are confirmed, <a href="/contact-us">contact us</a> or call the office and we will answer directly.</p>
+        </div>
+      </section>
+
+      <!-- Local SEO block, following the topic pattern of the SROA
+           reference page for Lubbock (the city, getting around, work and
+           study, things to do, the former air base) but written from
+           scratch. These are widely documented facts about Lubbock rather
+           than claims about CapRock. Worth a read-through by someone who
+           actually knows the city before launch. -->
+      <!-- LOC: city-info — REWRITE ENTIRELY for a new city.
+           Do not reuse Lubbock's copy anywhere else. -->
+      <section id="city-info" class="crss-section crss-panel">
+        <h2>City Information</h2>
+
+        <div class="crss-city">
+          <h3>About Lubbock</h3>
+          <p>Lubbock is the largest city on the South Plains of West Texas and the seat of Lubbock County. It is known as the Hub City because it functions as the commercial, medical and educational centre for a wide stretch of surrounding farmland, pulling in far more people than its own population of roughly a quarter of a million would suggest.</p>
+
+          <h3>Getting around</h3>
+          <p>Interstate 27 runs north to south through the city, Loop 289 rings it, and US&nbsp;84, the Marsha Sharp Freeway, carries traffic out to the west.</p>
+
+          <h3>Work and study</h3>
+          <p>Texas Tech University and the Texas Tech University Health Sciences Center anchor both the local economy and the city's character, and the student population turns over enough each year to keep storage in steady demand. Lubbock Christian University and a Lubbock campus of South Plains College add to that. On the healthcare side, Covenant Health and University Medical Center are among the largest employers in the region.</p>
+          <p>Outside the campuses and hospitals, agriculture still defines the surrounding South Plains, where cotton is the dominant crop. Families moving for a job at the university, the hospitals or in agribusiness make up a good share of the people who need a unit for a few months.</p>
+
+          <h3>Schools and neighbourhoods</h3>
+          <p>Lubbock is served by several districts, principally Lubbock ISD, along with Frenship ISD to the west and Lubbock-Cooper ISD to the south. Households moving between these districts, or in and out of the neighbourhoods around Texas Tech, are a common reason for a short-term unit while a sale or a lease lines up.</p>
+
+          <h3>Things to do</h3>
+          <p>The Buddy Holly Center and the Buddy Holly Hall of Performing Arts and Sciences mark the city's best-known musical export. Texas Tech is home to the National Ranching Heritage Center, and the Lubbock Lake Landmark preserves an archaeological site on the northern edge of town. The Depot District carries much of the city's live music and nightlife, and Lubbock sits at the centre of the Texas High Plains, which grows a large share of the state's wine grapes.</p>
+
+          <h3>Military</h3>
+          <p>Reese Air Force Base, west of the city, closed in 1997, and the site now operates as Reese Technology Center, a research and business park. There is no longer an active installation in Lubbock itself, though service members relocating through the region still store here. See <a href="/military-storage">military storage</a> for how month-to-month terms fit a PCS timeline.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<style>
+  .crss-location, .crss-location *, .crss-location *::before, .crss-location *::after {
+    box-sizing: border-box;
+  }
+  .crss-location :where(h1, h2, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-location :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-location :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-location {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+
+  /* ============ STICKY SUB-NAV ============ */
+  .crss-subnav {
+    position: sticky;
+    /* Offset from what is actually pinned right now, not from the
+       header's height. In GHL the header sits in its own Global
+       Section wrapper and does not stay pinned, so assuming its height
+       left this bar floating 88px down the viewport with page content
+       scrolling through the gap above it. --crss-stuck-h is published
+       on scroll and is 0 when nothing is pinned. */
+    top: var(--crss-stuck-h, 0px);
+    z-index: 30;
+    background: var(--crss-charcoal, #292724);
+    box-shadow: 0 10px 26px -22px rgba(41, 39, 36, 0.9);
+  }
+  .crss-subnav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    gap: 2px;
+    padding: 0 32px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .crss-subnav-inner::-webkit-scrollbar {
+    display: none;
+  }
+  .crss-subnav-link {
+    position: relative;
+    flex-shrink: 0;
+    padding: 18px 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(241, 227, 204, 0.62);
+    border-bottom: 2px solid transparent;
+    transition: color .24s ease, border-color .24s ease;
+  }
+  .crss-subnav-link:hover {
+    color: var(--crss-cream, #F1E3CC);
+  }
+  .crss-subnav-link.is-active {
+    color: var(--crss-white, #FFFFFF);
+    border-bottom-color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ SHELL ============ */
+  .crss-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 44px 32px 104px;
+    display: grid;
+    grid-template-columns: 348px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* ---- Facility info card ---- */
+  .crss-info-card {
+    position: sticky;
+    top: calc(var(--crss-stuck-h, 0px) + var(--crss-subnav-h, 50px) + 28px);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04), 0 18px 40px -26px rgba(41, 39, 36, 0.4);
+  }
+  /* Facility photo.
+     The photo is 2073x758, far wider than these panels, so cover crops
+     it hard. The vertical anchor keeps the building band in frame
+     rather than centring on empty sky or tarmac. */
+  .crss-info-photo {
+    height: 196px;
+    background-color: var(--crss-taupe, #7F6C5D);
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
+    background-size: cover;
+    background-position: center 56%;
+    background-repeat: no-repeat;
+  }
+  .crss-info-body {
+    padding: 26px 26px 28px;
+  }
+  .crss-info-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    margin-bottom: 12px;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-info-address {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .crss-info-phone {
+    display: inline-block;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 20px;
+    transition: color .22s ease;
+  }
+  .crss-info-phone:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+  }
+  .crss-info-office-note {
+    font-size: 13.5px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.6;
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .crss-info-details-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 22px;
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
+  }
+  .crss-info-details-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
+  }
+  .crss-info-map {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-info-map iframe {
+    display: block;
+    width: 100%;
+    height: 184px;
+    border: 0;
+    filter: saturate(0.82) contrast(0.97);
+    transition: filter .34s ease;
+  }
+  .crss-info-map:hover iframe {
+    filter: none;
+  }
+
+  /* ---- Main column ---- */
+  .crss-main {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    min-width: 0;
+  }
+  .crss-section {
+    scroll-margin-top: calc(var(--crss-stuck-h, 0px) + var(--crss-subnav-h, 50px) + 20px);
+  }
+  /* These five sections are still unbuilt. The dashed edge is deliberate:
+     it keeps them reading as scaffolding, not as finished content. */
+  .crss-section-stub {
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 6px;
+    padding: 40px 40px 42px;
+  }
+  .crss-section-stub h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-section-stub h2::after {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 16px 0 14px;
+  }
+  .crss-stub-note {
+    font-size: 15.5px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.68;
+    max-width: 62ch;
+  }
+
+  /* ============ BUILT-OUT SECTIONS ============
+     .crss-panel is the finished counterpart to .crss-section-stub:
+     same footprint, but a real white card rather than dashed
+     scaffolding. Units and Reviews keep the stub treatment because
+     they genuinely are not built yet. */
+  .crss-panel {
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 40px 40px 42px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+  }
+  .crss-panel h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-panel h2::after {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 16px 0 18px;
+  }
+  .crss-panel-lede {
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 62ch;
+    margin-bottom: 26px;
+  }
+  .crss-panel a {
+    color: var(--crss-terracotta, #A44A23);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(164, 74, 35, 0.35);
+    transition: text-decoration-color .22s ease;
+  }
+  .crss-panel a:hover {
+    text-decoration-color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ---- Feature accordion grid ---- */
+  .crss-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .crss-feature {
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--crss-bone, #FAF7F1);
+    transition: border-color .26s ease;
+  }
+  .crss-feature:hover {
+    border-color: rgba(164, 74, 35, 0.28);
+  }
+  .crss-feature-trigger {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--crss-charcoal, #292724);
+    background: none;
+    border: none;
+    padding: 17px 18px;
+    cursor: pointer;
+  }
+  .crss-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--crss-cream, #F1E3CC);
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-feature-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .crss-feature-label {
+    flex: 1;
+  }
+  .crss-feature-chevron {
+    font-size: 11px;
+    color: var(--crss-taupe, #7F6C5D);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-feature-trigger[aria-expanded="true"] .crss-feature-chevron {
+    transform: rotate(180deg);
+  }
+  .crss-feature-panel {
+    display: none;
+    padding: 0 18px 18px 65px;
+  }
+  .crss-feature-trigger[aria-expanded="true"] + .crss-feature-panel {
+    display: block;
+  }
+  .crss-feature-panel ul {
+    list-style: none;
+  }
+  .crss-feature-panel li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    padding: 5px 0;
+  }
+  .crss-feature-note {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 10px;
+  }
+  /* Deliberately unanswered, kept visibly unfinished */
+  .crss-feature-todo {
+    font-size: 13.5px;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--crss-taupe, #7F6C5D);
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-top: 10px;
+  }
+
+  /* ---- FAQ accordion ---- */
+  .crss-faq-list {
+    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-faq {
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 18.5px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    text-align: left;
+    color: var(--crss-charcoal, #292724);
+    background: none;
+    border: none;
+    padding: 20px 2px;
+    cursor: pointer;
+    transition: color .22s ease;
+  }
+  .crss-faq-q:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  /* Plus that becomes a minus, drawn in CSS */
+  .crss-faq-sign {
+    position: relative;
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+  .crss-faq-sign::before,
+  .crss-faq-sign::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6.5px;
+    width: 15px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-faq-sign::after {
+    transform: rotate(90deg);
+  }
+  .crss-faq-q[aria-expanded="true"] .crss-faq-sign::after {
+    transform: rotate(0deg);
+  }
+  .crss-faq-a {
+    display: none;
+    padding: 0 2px 24px;
+    max-width: 68ch;
+  }
+  .crss-faq-q[aria-expanded="true"] + .crss-faq-a {
+    display: block;
+  }
+  .crss-faq-a p {
+    font-size: 15.5px;
+    line-height: 1.72;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-faq-a p + p {
+    margin-top: 14px;
+  }
+
+  /* ---- Questions with no confirmed answer yet ---- */
+  .crss-faq-open {
+    margin-top: 30px;
+    padding: 24px 26px 26px;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 5px;
+  }
+  .crss-faq-open-head {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 14px;
+  }
+  .crss-faq-open ul {
+    list-style: none;
+  }
+  .crss-faq-open li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    padding: 5px 0;
+  }
+  .crss-faq-open-note {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 14px;
+  }
+
+  /* ---- City information prose ---- */
+  .crss-city h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    color: var(--crss-charcoal, #292724);
+    margin-top: 28px;
+    margin-bottom: 10px;
+  }
+  .crss-city h3:first-child {
+    margin-top: 0;
+  }
+  .crss-city p {
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 70ch;
+  }
+  .crss-city p + p {
+    margin-top: 14px;
+  }
+
+  /* ---- Unconfirmed-facility notice ----
+     Deliberately loud. Every other unconfirmed thing on this site is
+     visibly marked; the facility address was the one item that read as
+     fact, and it is the highest-stakes one to get wrong. */
+  .crss-unconfirmed {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px 32px 0;
+  }
+  .crss-unconfirmed p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-cream, #F1E3CC);
+    border: 1px dashed var(--crss-terracotta, #A44A23);
+    border-left: 3px solid var(--crss-terracotta, #A44A23);
+    border-radius: 4px;
+    padding: 16px 20px;
+  }
+  .crss-unconfirmed strong {
+    font-weight: 600;
+  }
+  .crss-info-map-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 184px;
+    text-align: center;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-city-warning {
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--crss-taupe, #7F6C5D);
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+  }
+
+  /* ---- Units: live availability ---- */
+  .crss-unit-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .crss-unit-pill {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    border-radius: 4px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: color .22s ease, background .22s ease, border-color .22s ease;
+  }
+  .crss-unit-pill:hover {
+    border-color: rgba(164, 74, 35, 0.4);
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-unit-pill.is-active {
+    background: var(--crss-charcoal, #292724);
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-cream, #F1E3CC);
+  }
+
+  .crss-unit-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-unit {
+    display: grid;
+    grid-template-columns: minmax(88px, 130px) 1fr auto;
+    gap: 8px 24px;
+    align-items: center;
+    padding: 22px 2px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-unit-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 25px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+    line-height: 1.1;
+  }
+  .crss-unit-meta {
+    display: block;
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-top: 6px;
+  }
+  .crss-unit-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .crss-unit-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 3px;
+    padding: 5px 9px;
+  }
+  .crss-unit-right {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .crss-unit-rate {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 23px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-terracotta, #A44A23);
+    line-height: 1.1;
+  }
+  .crss-unit-rate span {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-unit-avail {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-top: 6px;
+  }
+  .crss-unit-cta {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* Loading, error and empty all share one restrained treatment: none
+     of them should look like a broken page. */
+  .crss-unit-state {
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 5px;
+    padding: 24px 26px;
+  }
+  .crss-unit-state a {
+    color: var(--crss-terracotta, #A44A23);
+    font-weight: 600;
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-location {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 960px) {
+    .crss-shell {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .crss-info-card {
+      position: static;
+    }
+  }
+  @media (max-width: 768px) {
+    .crss-unconfirmed {
+      padding: 16px 26px 0;
+    }
+    .crss-unit {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .crss-unit-right {
+      text-align: left;
+    }
+    .crss-shell {
+      padding: 36px 26px 80px;
+    }
+    .crss-panel {
+      padding: 32px 28px 34px;
+    }
+    .crss-feature-grid {
+      grid-template-columns: 1fr;
+    }
+    .crss-subnav-inner {
+      padding: 0 26px;
+    }
+    .crss-section-stub {
+      padding: 32px 28px 34px;
+    }
+  }
+  /* Below this the five tabs no longer fit, so the row scrolls. The
+     fade is the only cue that there is more to the right, the
+     scrollbar itself is hidden. */
+  @media (max-width: 720px) {
+    .crss-subnav {
+      position: sticky;
+    }
+    .crss-subnav::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 46px;
+      background: linear-gradient(90deg, rgba(41, 39, 36, 0), var(--crss-charcoal, #292724));
+      pointer-events: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-unconfirmed {
+      padding: 14px 20px 0;
+    }
+    .crss-shell {
+      padding: 32px 20px 72px;
+    }
+    .crss-panel {
+      padding: 26px 22px 28px;
+    }
+    .crss-feature-panel {
+      padding: 0 16px 16px;
+    }
+    .crss-faq-q {
+      font-size: 17px;
+    }
+    .crss-faq-open {
+      padding: 20px 18px 22px;
+    }
+    .crss-subnav-inner {
+      padding: 0 20px;
+    }
+    .crss-subnav-link {
+      padding: 16px 14px;
+    }
+    .crss-section-stub {
+      padding: 28px 24px 30px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-location *, .crss-location *::before, .crss-location *::after {
+      transition: none !important;
+    }
+    .crss-info-details-link:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var loc = document.querySelector('.crss-location');
+    var header = document.querySelector('.crss-header'); // lives in the header Global Section elsewhere on this page
+    if (!loc || !header) return;
+    var subnav = loc.querySelector('.crss-subnav');
+
+    /* ---- Make sticky possible at all ----
+       position: sticky silently stops working if any ancestor
+       establishes a scroll container. GHL wraps this block in its own
+       section, row and column elements, and if any of them carries
+       overflow: hidden/auto/scroll then the sub-nav and the info card
+       simply scroll away with the page.
+
+       Only the values that break sticky are changed. Horizontal
+       clipping is preserved with overflow-x: clip, which unlike hidden
+       does not create a scroll container. */
+    (function unclipAncestors() {
+      var node = loc.parentElement;
+      while (node && node !== document.body && node !== document.documentElement) {
+        var cs = window.getComputedStyle(node);
+        if (/(auto|scroll|hidden)/.test(cs.overflowY) ||
+            /(auto|scroll|hidden)/.test(cs.overflowX)) {
+          node.style.overflowX = 'clip';
+          node.style.overflowY = 'visible';
+        }
+        node = node.parentElement;
+      }
+    })();
+
+    /* ---- Publish the sub-nav height, and how much is actually pinned ----
+       --crss-stuck-h is the height the header currently occupies at the
+       top of the viewport: its bottom edge, floored at zero. Pinned,
+       that is its height. Scrolled away, or never stuck because of a GHL
+       wrapper, it is 0. Measuring real geometry keeps the same code
+       correct in the local preview, where the header does stick, and in
+       GHL, where it does not. */
+    function syncSubnavHeight() {
+      document.documentElement.style.setProperty('--crss-subnav-h', subnav.offsetHeight + 'px');
+    }
+
+    function syncStuckHeight() {
+      var bottom = header.getBoundingClientRect().bottom;
+      document.documentElement.style.setProperty(
+        '--crss-stuck-h', Math.max(0, Math.round(bottom)) + 'px'
+      );
+    }
+
+    /* Scroll fires far more often than a frame renders, so coalesce. */
+    var pendingFrame = false;
+    function onScroll() {
+      if (pendingFrame) return;
+      pendingFrame = true;
+      window.requestAnimationFrame(function () {
+        pendingFrame = false;
+        syncStuckHeight();
+      });
+    }
+
+    syncSubnavHeight();
+    syncStuckHeight();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () {
+      syncSubnavHeight();
+      syncStuckHeight();
+    });
+
+    /* ---- Smooth scroll to anchors, offset for the sticky header + subnav ---- */
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    loc.querySelectorAll('.crss-subnav-link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var targetId = link.getAttribute('data-target');
+        var target = document.getElementById(targetId);
+        if (!target) return;
+        e.preventDefault();
+        // Same reasoning as --crss-stuck-h: offset by what is really
+        // pinned, or anchors land 88px off in GHL.
+        var pinned = Math.max(0, header.getBoundingClientRect().bottom);
+        var offset = pinned + subnav.offsetHeight + 16;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+    });
+
+    /* ---- Highlight the active sub-nav tab as sections scroll into view ---- */
+    var sections = loc.querySelectorAll('.crss-section');
+    var links = loc.querySelectorAll('.crss-subnav-link');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('is-active'); });
+          var match = loc.querySelector('.crss-subnav-link[data-target="' + entry.target.id + '"]');
+          if (match) match.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-' + (Math.max(0, header.getBoundingClientRect().bottom) + subnav.offsetHeight + 20) + 'px 0px -60% 0px', threshold: 0 });
+    sections.forEach(function (s) { observer.observe(s); });
+    /* ---- Feature and FAQ accordions ----
+       aria-expanded is the single source of truth: the CSS shows and
+       hides each panel off that attribute, so there is no separate
+       class to keep in sync. Several can be open at once. */
+    loc.querySelectorAll('.crss-feature-trigger, .crss-faq-q').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      });
+    });
+
+    /* ================= UNITS: live availability =================
+       Fetched through the Vercel proxy, never direct: the
+       WebSelfStorage key must not reach the browser.
+
+       SET THIS after `vercel deploy --prod`, e.g.
+         'https://caprock-api.vercel.app/api/wss'
+       Left empty, the section shows its call-the-office fallback
+       rather than firing a request that cannot succeed. */
+    var WSS_ENDPOINT = '';
+    var WSS_FACILITY = 'lubbock-2213-n-quaker';
+
+    var unitsHost = loc.querySelector('[data-crss-units]');
+    var filterHost = loc.querySelector('[data-crss-unit-filters]');
+
+    function unitState(html) {
+      unitsHost.innerHTML = '<p class="crss-unit-state">' + html + '</p>';
+    }
+
+    var FALLBACK = 'Call the office for current sizes, rates and availability. ' +
+                   '<a href="/contact-us">Contact us</a>';
+
+    function money(n) {
+      var v = Number(n);
+      if (!isFinite(v)) return null;
+      /* Whole dollars lose the .00; cents are kept as given. */
+      return '$' + (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2));
+    }
+
+    /* Buckets rather than one pill per size: with more unit types this
+       still reads as a short row of choices. */
+    function bucketOf(u) {
+      var sq = Number(u.sqft);
+      if (!isFinite(sq)) return 'all';
+      if (sq <= 50) return 'small';
+      if (sq <= 150) return 'medium';
+      return 'large';
+    }
+
+    function tagsFor(u) {
+      var t = [];
+      if (u.driveUp) t.push('Drive-up');
+      if (u.climate) t.push('Climate controlled');
+      if (u.electricity) t.push('Electricity');
+      if (u.ada) t.push('ADA accessible');
+      return t;
+    }
+
+    function renderUnits(list) {
+      if (!list.length) {
+        unitState('Nothing is available at this size right now. ' + FALLBACK);
+        return;
+      }
+      var rows = list.map(function (u) {
+        var meta = [];
+        if (u.sqft) meta.push(u.sqft + ' sq ft');
+        if (u.height) meta.push(u.height + ' ft high');
+        var tags = tagsFor(u).map(function (x) {
+          return '<span class="crss-unit-tag">' + x + '</span>';
+        }).join('');
+        var rate = money(u.rate);
+        return '<div class="crss-unit">' +
+          '<div>' +
+            '<div class="crss-unit-size">' + (u.size || '') + '</div>' +
+            (meta.length ? '<span class="crss-unit-meta">' + meta.join(' &middot; ') + '</span>' : '') +
+          '</div>' +
+          '<div class="crss-unit-tags">' + tags + '</div>' +
+          '<div class="crss-unit-right">' +
+            (rate ? '<div class="crss-unit-rate">' + rate + ' <span>/mo</span></div>' : '') +
+            '<div class="crss-unit-avail">' +
+              (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist') +
+            '</div>' +
+            /* Enquire, not Reserve: there is no booking flow yet. The
+               POST /reservation endpoint needs its request body sorted
+               out before this can become a real reservation. */
+            '<a class="crss-unit-cta" href="/contact-us">Enquire &rarr;</a>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      unitsHost.innerHTML = '<div class="crss-unit-list">' + rows + '</div>';
+    }
+
+    function renderFilters(all) {
+      var buckets = [
+        { key: 'all', label: 'All sizes' },
+        { key: 'small', label: 'Small' },
+        { key: 'medium', label: 'Medium' },
+        { key: 'large', label: 'Large' },
+      ].filter(function (b) {
+        return b.key === 'all' || all.some(function (u) { return bucketOf(u) === b.key; });
+      });
+
+      /* One bucket plus "All" is not a choice, so show nothing. */
+      if (buckets.length < 3) return;
+
+      filterHost.hidden = false;
+      filterHost.innerHTML = buckets.map(function (b, i) {
+        return '<button type="button" class="crss-unit-pill' + (i === 0 ? ' is-active' : '') +
+               '" data-bucket="' + b.key + '">' + b.label + '</button>';
+      }).join('');
+
+      filterHost.addEventListener('click', function (e) {
+        var btn = e.target.closest('.crss-unit-pill');
+        if (!btn) return;
+        filterHost.querySelectorAll('.crss-unit-pill').forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        btn.classList.add('is-active');
+        var key = btn.getAttribute('data-bucket');
+        renderUnits(key === 'all' ? all : all.filter(function (u) { return bucketOf(u) === key; }));
+      });
+    }
+
+    if (!unitsHost) {
+      /* nothing to do */
+    } else if (!WSS_ENDPOINT) {
+      unitState('Live availability is not connected yet. ' + FALLBACK);
+    } else {
+      fetch(WSS_ENDPOINT + '?facility=' + encodeURIComponent(WSS_FACILITY) + '&resource=movein')
+        .then(function (r) {
+          if (!r.ok) throw new Error('http ' + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          var all = (data && data.unitTypes) || [];
+          /* Sort smallest first: people shop by size, not by the order
+             the facility system happens to return. */
+          all.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
+          renderFilters(all);
+          renderUnits(all);
+        })
+        .catch(function (err) {
+          /* Never show a stack trace or a raw status to a customer. */
+          console.error('units fetch failed:', err);
+          unitState('Availability could not be loaded just now. ' + FALLBACK);
+        });
+    }
+
+  })();
+</script>

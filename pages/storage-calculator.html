@@ -1,0 +1,337 @@
+<!-- ================================================================
+     CapRock Self Storage — Storage Calculator page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /storage-calculator
+
+     Simple, real interaction: pick what you're storing, get a
+     recommended size. Sizes match the same 9 sizes used on the
+     Size Guide page, keep the two in sync if sizes ever change.
+     ================================================================ -->
+<div class="crss-calc">
+  <div class="crss-calc-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Calculator</span>
+    </nav>
+
+    <h1 class="crss-calc-title">Storage Size Calculator</h1>
+    <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
+
+    <div class="crss-calc-options" id="crss-calc-options">
+      <button type="button" class="crss-calc-option" data-size="5 &times; 5" data-sqft="25 sq ft" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
+      <button type="button" class="crss-calc-option" data-size="5 &times; 10" data-sqft="50 sq ft" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 10" data-sqft="100 sq ft" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 15" data-sqft="150 sq ft" data-detail="A two to three bedroom home">2&ndash;3 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 20" data-sqft="200 sq ft" data-detail="A three to four bedroom home, or a vehicle plus household items">3&ndash;4 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-size="10 &times; 30" data-sqft="300 sq ft" data-detail="A large home's full contents, or business inventory">Large home<br><span>or business</span></button>
+    </div>
+
+    <div class="crss-calc-result" id="crss-calc-result">
+      <p class="crss-calc-result-label">Recommended size</p>
+      <p class="crss-calc-result-size" id="crss-calc-result-size"></p>
+      <p class="crss-calc-result-detail" id="crss-calc-result-detail"></p>
+      <div class="crss-calc-result-actions">
+        <a href="/find-storage" class="crss-calc-btn-primary">Find a Location</a>
+        <a href="/size-guide" class="crss-calc-btn-secondary">Compare All Sizes</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-calc {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-calc, .crss-calc *, .crss-calc *::before, .crss-calc *::after {
+    box-sizing: border-box;
+  }
+  .crss-calc :where(h1, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-calc :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-calc :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-calc-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-calc-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-calc-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
+  }
+  .crss-calc-subtitle {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 58ch;
+    margin-bottom: 44px;
+  }
+
+  /* ============ OPTION TILES ============ */
+  .crss-calc-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .crss-calc-option {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    text-align: center;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 26px 16px;
+    cursor: pointer;
+    line-height: 1.45;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1), box-shadow .28s ease,
+                border-color .28s ease, background .28s ease, color .28s ease;
+  }
+  .crss-calc-option span {
+    display: block;
+    font-weight: 400;
+    color: var(--crss-ink-soft, #5F564C);
+    font-size: 13.5px;
+    margin-top: 2px;
+    transition: color .28s ease;
+  }
+  .crss-calc-option:hover {
+    transform: translateY(-3px);
+    border-color: rgba(164, 74, 35, 0.35);
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 16px 32px -14px rgba(41, 39, 36, 0.26);
+  }
+  /* Selected reads as a solid, deliberate choice rather than a tinted box */
+  .crss-calc-option.is-selected {
+    background: var(--crss-charcoal, #292724);
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-cream, #F1E3CC);
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.10), 0 16px 32px -14px rgba(41, 39, 36, 0.45);
+  }
+  .crss-calc-option.is-selected span {
+    color: rgba(241, 227, 204, 0.72);
+  }
+
+  /* ============ RESULT ============ */
+  .crss-calc-result {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 48px 40px 44px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 20px 44px -20px rgba(41, 39, 36, 0.28);
+  }
+  /* Terracotta cap marks this panel as the answer */
+  .crss-calc-result::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--crss-terracotta, #A44A23);
+  }
+  .crss-calc-result.is-visible {
+    display: block;
+  }
+  .crss-calc-result-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 14px;
+  }
+  .crss-calc-result-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: clamp(40px, 6vw, 58px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 14px;
+  }
+  /* The sq ft figure the script appends beside the size */
+  .crss-calc-result-sqft {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .crss-calc-result-detail {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 46ch;
+    margin: 0 auto 32px;
+  }
+  .crss-calc-result-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .crss-calc-btn-primary, .crss-calc-btn-secondary {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border-radius: 4px;
+    transition: background .26s ease, color .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease, border-color .26s ease;
+  }
+  .crss-calc-btn-primary {
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.12);
+  }
+  .crss-calc-btn-primary:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(164, 74, 35, 0.6);
+  }
+  .crss-calc-btn-secondary {
+    background: transparent;
+    color: var(--crss-charcoal, #292724);
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+  }
+  .crss-calc-btn-secondary:hover {
+    border-color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-calc {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-calc-inner {
+      padding: 48px 26px 80px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-calc-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-calc-result {
+      padding: 38px 24px 34px;
+    }
+    .crss-calc-result-actions {
+      flex-direction: column;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-calc *, .crss-calc *::before, .crss-calc *::after {
+      transition: none !important;
+    }
+    .crss-calc-option:hover, .crss-calc-btn-primary:hover, .crss-calc-btn-secondary:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var options = document.getElementById('crss-calc-options');
+    var result = document.getElementById('crss-calc-result');
+    var resultSize = document.getElementById('crss-calc-result-size');
+    var resultDetail = document.getElementById('crss-calc-result-detail');
+    if (!options || !result) return;
+
+    options.querySelectorAll('.crss-calc-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        options.querySelectorAll('.crss-calc-option').forEach(function (b) {
+          b.classList.remove('is-selected');
+        });
+        btn.classList.add('is-selected');
+        resultSize.innerHTML = btn.getAttribute('data-size') + ' <span class="crss-calc-result-sqft">' + btn.getAttribute('data-sqft') + '</span>';
+        resultDetail.textContent = btn.getAttribute('data-detail') + '.';
+        result.classList.add('is-visible');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  })();
+</script>

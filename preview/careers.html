@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview: Careers</title>
+<style>
+  /* Preview-only reset. In GHL the page builder supplies this. */
+  html, body { margin: 0; padding: 0; }
+  body { background: #FAF7F1; }
+</style>
+</head>
+<body>
+<!-- ================================================================
+     CapRock Self Storage — Global Header
+     Save this as a GHL Global Section so every page shares it.
+     It owns the shared brand colors, fonts, and the live sticky
+     header height that other pages' Custom Code blocks read from
+     (via the --crss-header-h variable on the document root).
+
+     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     - Logo: the artwork is the wordmark now, the text version is gone.
+       A CSS window crops the full lockup to end after SELF-STORAGE,
+       dropping the tagline, which is unreadable at header size (see
+       .crss-logo). Favicon is set in GHL settings. Worth asking the
+       designer for a horizontal SVG lockup without the tagline: it
+       would replace the crop with a plain height:100% image and stay
+       sharp on retina, where a 58px raster is working hard.
+     - Real phone number (used in 3 spots: header, mobile panel)
+     - Fonts: Fraunces + Work Sans is a starting pairing, swap for
+       CapRock's real brand fonts once chosen
+     ================================================================ -->
+<header class="crss-header">
+  <div class="crss-header-inner">
+
+    <!-- The artwork is now the whole wordmark; the text version is gone.
+
+         The asset is the full lockup (1774x887) in five bands: mark,
+         CAPROCK, SELF-STORAGE, a divider rule, then the tagline. The
+         link is a fixed window and the image inside is oversized and
+         offset so the crop ENDS AFTER SELF-STORAGE.
+
+         The tagline is dropped deliberately. It is 39px of the 887px
+         artwork, so at header height it renders about 3px tall and
+         reads as a smudge rather than words. The divider goes with it,
+         since a rule with nothing beneath it looks like a mistake.
+         Band positions were measured off the alpha channel, not
+         guessed: the kept region is x=83 y=12 1614x759.
+
+         alt carries the brand name rather than sitting empty, so if the
+         image ever fails the header still says who this is. That is
+         also why the link no longer needs its own aria-label, which
+         would double up with the alt. -->
+    <a href="/caprock-self-service" class="crss-logo">
+      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
+    </a>
+
+    <nav class="crss-nav" aria-label="Primary">
+      <a href="/find-storage" class="crss-nav-link">Find Storage</a>
+      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
+      <a href="/help-center" class="crss-nav-link">Help Center</a>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/storage-calculator">Storage Calculator</a>
+          <a href="/storage-tips">Storage Tips</a>
+          <a href="/vehicle-storage">Vehicle Storage</a>
+          <a href="/student-storage">Student Storage</a>
+          <a href="/military-storage">Military Storage</a>
+        </div>
+      </div>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          About Us <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/about-caprock">About CapRock</a>
+          <a href="/careers">Careers</a>
+          <a href="/contact-us">Contact Us</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="crss-header-actions">
+      <!-- PLACEHOLDER phone number -->
+      <a href="tel:18060000000" class="crss-phone">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>(806) 000-0000</span>
+      </a>
+      <a href="#" class="crss-account-link" aria-label="My Account">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>My Account</span>
+      </a>
+      <a href="#" class="crss-paybill-btn">Pay Your Bill</a>
+    </div>
+
+    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div class="crss-mobile-panel">
+    <a href="/find-storage" class="crss-mobile-link">Find Storage</a>
+    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
+    <a href="/help-center" class="crss-mobile-link">Help Center</a>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/storage-calculator">Storage Calculator</a>
+      <a href="/storage-tips">Storage Tips</a>
+      <a href="/vehicle-storage">Vehicle Storage</a>
+      <a href="/student-storage">Student Storage</a>
+      <a href="/military-storage">Military Storage</a>
+    </div>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      About Us <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/about-caprock">About CapRock</a>
+      <a href="/careers">Careers</a>
+      <a href="/contact-us">Contact Us</a>
+    </div>
+
+    <a href="tel:18060000000" class="crss-mobile-link">(806) 000-0000</a>
+    <a href="#" class="crss-mobile-link">My Account</a>
+  </div>
+</header>
+
+<style>
+  /* Fonts: placeholder pairing, swap for CapRock's real brand fonts.
+     Fraunces is loaded as a variable font (optical size + italic) so
+     large display headings get the true display cut, not a scaled-up
+     text cut. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Work+Sans:ital,wght@0,300..700;1,400..600&display=swap');
+
+  /* ================================================================
+     SHARED BRAND TOKENS
+     These live here because the header loads on every page first;
+     other pages' Custom Code blocks reuse these same variables
+     instead of redeclaring them. Every page still repeats a literal
+     fallback in its own var() calls so it renders correctly when
+     opened standalone, without this file present.
+     ================================================================ */
+  :root {
+    /* Core brand */
+    --crss-cream: #F1E3CC;
+    --crss-terracotta: #A44A23;
+    --crss-terracotta-dark: #863B1A;
+    --crss-taupe: #7F6C5D;
+    --crss-charcoal: #292724;
+    --crss-white: #FFFFFF;
+
+    /* Extended surfaces + ink.
+       bone     = the page field (cream is now an accent, not the whole page)
+       sand     = inset / secondary surface
+       ink-soft = body prose; 7.2:1 on white, where taupe is 5.0:1 */
+    --crss-bone: #FAF7F1;
+    --crss-sand: #EFE7DA;
+    --crss-ink-soft: #5F564C;
+    --crss-border: rgba(41, 39, 36, 0.12);
+    --crss-rule: rgba(41, 39, 36, 0.09);
+
+    /* Live sticky heights, re-published by JS at runtime */
+    --crss-header-h: 88px;  /* 84px inner + 3px top rule + 1px hairline */
+    --crss-subnav-h: 50px;
+  }
+
+  .crss-header, .crss-header *, .crss-header *::before, .crss-header *::after {
+    box-sizing: border-box;
+  }
+  /* Reserves the fixed header's space. Height is set by script. */
+  .crss-header-spacer {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    flex: none;
+  }
+  .crss-header :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-header :where(button) {
+    font: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+  }
+  .crss-header :focus-visible {
+    outline: 2px solid var(--crss-terracotta);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ============ MASTHEAD ============ */
+  .crss-header {
+    /* fixed, not sticky. Sticky only travels inside its own parent,
+       and GHL wraps this Global Section in a row exactly as tall as
+       the header, leaving it nowhere to travel: it scrolled straight
+       off. Fixed is positioned against the viewport, so no GHL wrapper
+       can constrain it. left/right 0 also makes it full-bleed without
+       the negative-margin trick the page wrappers need. */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal);
+    background: var(--crss-white);
+    border-top: 3px solid var(--crss-terracotta);
+    border-bottom: 1px solid var(--crss-rule);
+    box-shadow: 0 8px 24px -20px rgba(41, 39, 36, 0.55);
+  }
+  .crss-header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 84px; /* fixed, NOT var(--crss-header-h): JS publishes the measured total (incl. borders) into that variable, reading it back here would grow the header on every resize */
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+
+  /* ---- Wordmark ----
+     The link itself is the window. Sized so the kept region lands 58px
+     tall: scale = 58/759, so the full 1774px artwork renders at 136px
+     and the 1614x759 crop becomes 123x58 at offset -6,-1. */
+  .crss-logo {
+    display: block;
+    width: 123px;
+    height: 58px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .crss-logo img {
+    display: block;
+    width: 136px;
+    height: auto;
+    max-width: none;   /* GHL sets img{max-width:100%}, which would break the crop */
+    margin: -1px 0 0 -6px;
+  }
+
+  /* ---- Primary nav: hairline underline on hover, not a filled pill ---- */
+  .crss-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+  }
+  .crss-nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    color: var(--crss-ink-soft);
+    white-space: nowrap;
+    transition: color .22s ease;
+  }
+  .crss-nav-link::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 4px;
+    height: 1.5px;
+    background: var(--crss-terracotta);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-nav-link:hover,
+  .crss-dropdown:hover > .crss-nav-link,
+  .crss-dropdown-trigger[aria-expanded="true"] {
+    color: var(--crss-charcoal);
+  }
+  .crss-nav-link:hover::after,
+  .crss-dropdown:hover > .crss-nav-link::after,
+  .crss-dropdown-trigger[aria-expanded="true"]::after {
+    transform: scaleX(1);
+  }
+  .crss-caret {
+    font-size: 9px;
+    margin-left: 5px;
+    color: var(--crss-taupe);
+    transition: transform .25s ease;
+  }
+  .crss-dropdown:hover .crss-caret,
+  .crss-dropdown-trigger[aria-expanded="true"] .crss-caret {
+    transform: translateY(1px);
+  }
+
+  /* ---- Dropdowns ---- */
+  .crss-dropdown {
+    position: relative;
+  }
+  .crss-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 216px;
+    background: var(--crss-white);
+    border: 1px solid var(--crss-rule);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 18px 40px -16px rgba(41, 39, 36, 0.30);
+    padding: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity .22s ease, transform .22s cubic-bezier(.4, 0, .2, 1), visibility .22s;
+  }
+  /* Invisible bridge, so the pointer can cross the gap between the
+     trigger and the menu without the menu closing underneath it. */
+  .crss-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -12px;
+    height: 12px;
+  }
+  .crss-dropdown-menu a {
+    position: relative;
+    display: block;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--crss-ink-soft);
+    border-radius: 4px;
+    transition: color .2s ease, background .2s ease, padding-left .22s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-dropdown-menu a::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    width: 2px;
+    height: 0;
+    background: var(--crss-terracotta);
+    border-radius: 1px;
+    transform: translateY(-50%);
+    transition: height .22s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-dropdown-menu a:hover {
+    background: var(--crss-bone);
+    color: var(--crss-charcoal);
+    padding-left: 18px;
+  }
+  .crss-dropdown-menu a:hover::before {
+    height: 15px;
+  }
+  .crss-dropdown:hover .crss-dropdown-menu,
+  .crss-dropdown-trigger[aria-expanded="true"] + .crss-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* ---- Utility actions ---- */
+  .crss-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-shrink: 0;
+  }
+  .crss-phone, .crss-account-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--crss-ink-soft);
+    transition: color .22s ease;
+  }
+  .crss-phone:hover, .crss-account-link:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-icon {
+    width: 17px;
+    height: 17px;
+    color: var(--crss-taupe);
+    transition: color .22s ease;
+  }
+  .crss-phone:hover .crss-icon, .crss-account-link:hover .crss-icon {
+    color: var(--crss-terracotta);
+  }
+  .crss-paybill-btn {
+    background: var(--crss-terracotta);
+    color: var(--crss-white);
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 22px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.10);
+    transition: background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1), box-shadow .24s ease;
+  }
+  .crss-paybill-btn:hover {
+    background: var(--crss-terracotta-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px -4px rgba(164, 74, 35, 0.5);
+  }
+
+  /* ---- Mobile toggle: animates into an X via .is-open ---- */
+  .crss-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 34px;
+    height: 34px;
+  }
+  .crss-mobile-toggle span {
+    display: block;
+    height: 1.5px;
+    background: var(--crss-charcoal);
+    border-radius: 2px;
+    transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .2s ease;
+  }
+  .crss-header.is-open .crss-mobile-toggle span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .crss-header.is-open .crss-mobile-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+  .crss-header.is-open .crss-mobile-toggle span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  /* ---- Mobile panel ---- */
+  /* Fixed means the panel cannot scroll with the page, so a tall menu
+     on a short screen would be unreachable. Cap the open header to the
+     viewport and let it scroll internally. */
+  .crss-header.is-open {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  .crss-mobile-panel {
+    display: none;
+    flex-direction: column;
+    padding: 6px 32px 26px;
+    background: var(--crss-bone);
+    border-top: 1px solid var(--crss-rule);
+  }
+  .crss-mobile-link {
+    padding: 15px 2px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--crss-charcoal);
+    border-bottom: 1px solid var(--crss-rule);
+    transition: color .2s ease;
+  }
+  .crss-mobile-link:hover {
+    color: var(--crss-terracotta);
+  }
+  .crss-mobile-accordion-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 2px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--crss-charcoal);
+    border-bottom: 1px solid var(--crss-rule);
+    text-align: left;
+  }
+  .crss-mobile-accordion-trigger[aria-expanded="true"] {
+    color: var(--crss-terracotta);
+  }
+  .crss-mobile-accordion-trigger[aria-expanded="true"] .crss-caret {
+    transform: rotate(180deg);
+  }
+  .crss-mobile-accordion-panel {
+    display: none;
+    flex-direction: column;
+    padding: 6px 2px 10px 18px;
+    border-left: 1px solid var(--crss-border);
+    margin: 8px 0 8px 2px;
+  }
+  .crss-mobile-accordion-panel.is-open {
+    display: flex;
+  }
+  .crss-mobile-accordion-panel a {
+    padding: 9px 0;
+    font-size: 14px;
+    color: var(--crss-ink-soft);
+    transition: color .2s ease;
+  }
+  .crss-mobile-accordion-panel a:hover {
+    color: var(--crss-terracotta);
+  }
+
+  /* The full nav + utility row needs roughly 1200px at its desktop
+     rhythm. Rather than let nowrap links collide on the way down,
+     tighten spacing first and drop the My Account label (still
+     reachable in the mobile panel and the footer). */
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  /* The header needs no negative-margin breakout: position: fixed with
+     left/right 0 already spans the viewport. */
+
+  @media (max-width: 1280px) {
+    .crss-header-inner {
+      gap: 20px;
+      padding: 0 24px;
+    }
+    .crss-nav-link {
+      padding: 10px 11px;
+      font-size: 13.5px;
+    }
+    .crss-nav-link::after {
+      left: 11px;
+      right: 11px;
+    }
+    .crss-header-actions {
+      gap: 14px;
+    }
+    /* icon only: the label is the widest item in this row */
+    .crss-account-link span {
+      display: none;
+    }
+    .crss-paybill-btn {
+      padding: 12px 18px;
+    }
+  }
+  @media (max-width: 1180px) {
+    .crss-nav, .crss-header-actions {
+      display: none;
+    }
+    .crss-mobile-toggle {
+      display: flex;
+      margin-left: auto;
+    }
+    .crss-header.is-open .crss-mobile-panel {
+      display: flex;
+    }
+  }
+  @media (max-width: 768px) {
+    /* 50px lockup: scale = 50/759 */
+    .crss-logo {
+      width: 106px;
+      height: 50px;
+    }
+    .crss-logo img {
+      width: 117px;
+      margin: -1px 0 0 -5px;
+    }
+    .crss-header-inner {
+      height: 76px;
+      padding: 0 24px;
+    }
+    .crss-mobile-panel {
+      padding: 6px 24px 24px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-header-inner {
+      padding: 0 20px;
+    }
+    .crss-mobile-panel {
+      padding: 6px 20px 24px;
+    }
+    /* 44px lockup: scale = 44/759 */
+    .crss-logo {
+      width: 94px;
+      height: 44px;
+    }
+    .crss-logo img {
+      width: 103px;
+      margin: -1px 0 0 -5px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-header *, .crss-header *::before, .crss-header *::after {
+      transition: none !important;
+    }
+    .crss-paybill-btn:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    /* ---- Safety net: ensure a viewport meta tag exists ----
+       Without <meta name="viewport" content="width=device-width">, a
+       phone lays the page out at roughly 980 CSS pixels and scales it
+       down. Media queries then evaluate against 980px, so the mobile
+       breakpoints never fire and the page renders as a shrunken desktop
+       with no hamburger. Hosts normally inject this tag; this only acts
+       if it is genuinely absent, and is a no-op otherwise. */
+    if (!document.querySelector('meta[name="viewport"]')) {
+      var vp = document.createElement('meta');
+      vp.name = 'viewport';
+      vp.content = 'width=device-width, initial-scale=1';
+      document.head.appendChild(vp);
+    }
+
+    var header = document.querySelector('.crss-header');
+    if (!header) return;
+    var mobileToggle = header.querySelector('.crss-mobile-toggle');
+
+    /* ---- Mobile menu toggle ---- */
+    mobileToggle.addEventListener('click', function () {
+      var isOpen = header.classList.toggle('is-open');
+      mobileToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    /* ---- Mobile accordions (Storage Tools / About Us) ---- */
+    header.querySelectorAll('.crss-mobile-accordion-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panel = btn.nextElementSibling;
+        var isOpen = panel.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+
+    /* ---- Desktop dropdowns (click, keyboard-friendly; hover handled in CSS) ---- */
+    header.querySelectorAll('.crss-dropdown-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = btn.getAttribute('aria-expanded') === 'true';
+        header.querySelectorAll('.crss-dropdown-trigger').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+        btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.crss-dropdown')) {
+        header.querySelectorAll('.crss-dropdown-trigger').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    /* ---- Publish the real header height so any other page's
+       Custom Code block can position itself against it via
+       var(--crss-header-h) ---- */
+    /* ---- Hold the space the fixed header no longer occupies ----
+       Inserted here rather than as padding in all 13 page files, so
+       there is one place to get it right.
+
+       The height measured is the masthead ROW plus its borders, not
+       header.offsetHeight: with the mobile menu open the latter
+       includes the whole panel, which would shove the page down by
+       several hundred pixels while the menu is open. */
+    var spacer = document.createElement('div');
+    spacer.className = 'crss-header-spacer';
+    spacer.setAttribute('aria-hidden', 'true');
+    if (header.parentNode) header.parentNode.insertBefore(spacer, header.nextSibling);
+
+    var inner = header.querySelector('.crss-header-inner');
+
+    function syncHeaderHeight() {
+      var cs = window.getComputedStyle(header);
+      var h = inner.offsetHeight +
+              parseFloat(cs.borderTopWidth || 0) +
+              parseFloat(cs.borderBottomWidth || 0);
+      h = Math.round(h);
+      spacer.style.height = h + 'px';
+      document.documentElement.style.setProperty('--crss-header-h', h + 'px');
+    }
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
+  })();
+</script>
+
+<!-- ================================================================
+     TEMPORARY: GHL preview router.
+
+     DELETE THIS WHOLE <script> BLOCK ONCE THE DOMAIN IS LIVE.
+
+     Every internal link in this build is root-relative ("/size-guide"),
+     which is correct: on a real domain it resolves against the site
+     root and needs no maintenance. But GHL's preview does not serve
+     pages by slug at all. Each page is an opaque id:
+
+         https://sites.leadconnectorhq.com/preview/cW98h0TtU2henZQksFdg
+
+     so "/size-guide" points at the host root and 404s. There is no
+     prefix to derive, so the ids have to be mapped explicitly.
+
+     This runs ONLY on sites.leadconnectorhq.com. On the real domain the
+     host check fails, the script does nothing, and the root-relative
+     links work natively. Nothing has to be undone at launch beyond
+     deleting this block.
+
+     If a page is recreated in GHL its preview id changes and the entry
+     here goes stale. That is another reason this is temporary.
+     ================================================================ -->
+<script>
+  (function () {
+    if (window.location.hostname !== 'sites.leadconnectorhq.com') return;
+
+    var BASE = 'https://sites.leadconnectorhq.com/preview/';
+    var Q = '?notrack=true';
+
+    var IDS = {
+      '/': 'aVhwRw4YFh95ayIWlGGh',
+      '/caprock-self-service': 'aVhwRw4YFh95ayIWlGGh',
+      '/find-storage': '3pwccyzRU4U9rplOb4TJ',
+      '/size-guide': 'cW98h0TtU2henZQksFdg',
+      '/help-center': 'ZkTYd1bMoDXNxPoqigls',
+      '/storage-calculator': 'JxaBnIAg0qVPOacQxks9',
+      '/storage-tips': 'xUmYQkBhKqzT53km4Yss',
+      '/vehicle-storage': 'RAuHToTUsnKaeEa9kLVC',
+      '/student-storage': 'cmSOtz4CAKY6svZfc9PZ',
+      '/military-storage': 'F2V7skG0KFxRZQYjKvAJ',
+      '/about-caprock': 'NQ9ulH7SQbeuLcIUN7Bb',
+      '/careers': 'D9i2P7wYpWQ5LngEjrsp',
+      '/contact-us': 'sOCAozOJOj5F2JB64RY7',
+      '/lubbock-2213-n-quaker': 'z9SAHTIBX5pdxckMhdcA'
+    };
+
+    function resolve(href) {
+      if (!href) return null;
+      var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
+      if (path === '') path = '/';
+      var id = IDS[path];
+      return id ? BASE + id + Q : null;
+    }
+
+    /* Capture phase, so this also catches links the page builds with JS
+       (the facility cards) and runs before the hero search's own
+       submit handler sets window.location itself. */
+    /* An internal link with no entry in IDS must not fall through: the
+       browser would go to sites.leadconnectorhq.com/<slug> and 404,
+       which during a review looks like the site is broken rather than
+       like the page simply has not been built. Hold the visitor where
+       they are and say which page is missing. */
+    var toast, hideTimer;
+    function notice(path) {
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.setAttribute('style',
+          'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);' +
+          'z-index:9999;max-width:min(92vw,470px);padding:14px 18px;' +
+          'border-radius:6px;background:#292724;color:#F1E3CC;text-align:center;' +
+          'font:500 14px/1.5 "Work Sans",Arial,sans-serif;' +
+          'box-shadow:0 12px 32px -10px rgba(0,0,0,.6);' +
+          'opacity:0;transition:opacity .2s ease;pointer-events:none;');
+        document.body.appendChild(toast);
+      }
+      toast.textContent = 'Preview only — no GHL page exists yet for ' + path;
+      toast.style.opacity = '1';
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () { toast.style.opacity = '0'; }, 2800);
+    }
+
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
+      if (!a) return;
+      var href = a.getAttribute('href');
+      var url = resolve(href);
+      e.preventDefault();
+      if (url) {
+        window.location.href = url;
+      } else {
+        notice(href);
+      }
+    }, true);
+
+    document.addEventListener('submit', function (e) {
+      if (e.target && e.target.id === 'crss-hero-search') {
+        var url = resolve('/find-storage');
+        if (!url) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = url;
+      }
+    }, true);
+  })();
+</script>
+
+<!-- ================================================================
+     CapRock Self Storage — Careers page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /careers
+
+     PLACEHOLDER: no real job openings or "why work here" content
+     was provided. The openings section defaults to an empty state,
+     swap in a real job board or GHL form once there's something to
+     list.
+     ================================================================ -->
+<div class="crss-careers">
+  <div class="crss-careers-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Careers</span>
+    </nav>
+
+    <h1 class="crss-careers-title">Careers at CapRock</h1>
+    <p class="crss-careers-subtitle">[PLACEHOLDER — add a short "why work here" intro once available.]</p>
+
+    <div class="crss-careers-block">
+      <h2>Current Openings</h2>
+      <div class="crss-careers-empty">
+        <p>No open positions right now. Check back soon, or reach out below and we'll keep your information on file.</p>
+      </div>
+    </div>
+
+    <div class="crss-careers-cta">
+      <p>Interested in future openings?</p>
+      <a href="/contact-us" class="crss-careers-cta-btn">Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-careers {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-careers, .crss-careers *, .crss-careers *::before, .crss-careers *::after {
+    box-sizing: border-box;
+  }
+  .crss-careers :where(h1, h2, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-careers :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-careers :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-careers-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-careers-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-careers-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
+  }
+  /* Still a marked placeholder, so it stays italic and muted */
+  .crss-careers-subtitle {
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--crss-taupe, #7F6C5D);
+    max-width: 58ch;
+    margin-bottom: 48px;
+  }
+
+  /* ============ OPENINGS ============ */
+  .crss-careers-block {
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 34px 36px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+  }
+  .crss-careers-block h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+    margin-bottom: 20px;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-careers-empty {
+    padding: 40px 28px;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px dashed rgba(127, 108, 93, 0.5);
+    border-radius: 4px;
+    text-align: center;
+  }
+  .crss-careers-empty p {
+    font-size: 15.5px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.65;
+    max-width: 46ch;
+    margin: 0 auto;
+  }
+
+  /* ============ CLOSING CTA ============ */
+  .crss-careers-cta {
+    position: relative;
+    overflow: hidden;
+    margin-top: 32px;
+    padding: 54px 40px;
+    background: var(--crss-charcoal, #292724);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .crss-careers-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(164, 74, 35, 0.30), transparent 62%);
+    pointer-events: none;
+  }
+  .crss-careers-cta p {
+    position: relative;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: clamp(21px, 2.6vw, 27px);
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--crss-cream, #F1E3CC);
+    margin-bottom: 26px;
+  }
+  .crss-careers-cta-btn {
+    position: relative;
+    display: inline-block;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 34px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
+  }
+  .crss-careers-cta-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-careers {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-careers-inner {
+      padding: 48px 26px 80px;
+    }
+    .crss-careers-block {
+      padding: 28px 26px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-careers-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-careers-block {
+      padding: 26px 24px;
+    }
+    .crss-careers-empty {
+      padding: 30px 20px;
+    }
+    .crss-careers-cta {
+      padding: 42px 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-careers *, .crss-careers *::before, .crss-careers *::after {
+      transition: none !important;
+    }
+    .crss-careers-cta-btn:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<!-- ================================================================
+     CapRock Self Storage — Global Footer
+     Save this as a SECOND GHL Global Section (alongside the header)
+     and add it to the bottom of every page. It is not part of any one
+     page's Custom Code block, otherwise it would only ever show up on
+     that single page.
+
+     Structure follows the SROA footer spec (divider bar, four link
+     columns, locations, legal, copyright, scroll-to-top), rendered in
+     CapRock's brand system. Link columns list only pages that actually
+     exist in this project.
+
+     Deliberately NOT carried over from the SROA spec:
+     - "Storage Experts", "Wine Storage", "Blog", "INO Armor®" — INO
+       Armor® is SROA's registered trademark and the rest are pages
+       CapRock does not have.
+     - "Investor Relations", "Commercial Spaces", "Social Responsibility"
+     - The Operational States list (32 states) and Featured Cities list.
+       CapRock has one facility. A single Locations row is used instead
+       and grows as facilities are added.
+     - SROA's fine-print legal disclaimer, which describes their offers,
+       fees and lease terms, not CapRock's.
+
+     PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
+     - Real phone number and email (shared with header + contact page)
+     - Real social profile URLs, or delete the Follow Us column
+     - Legal disclaimer text, reviewed by whoever handles CapRock's terms
+     - Terms of Service and Privacy Policy pages
+     ================================================================ -->
+<footer class="crss-footer">
+  <div class="crss-footer-bar" aria-hidden="true"></div>
+
+  <div class="crss-footer-inner">
+    <div class="crss-footer-cols">
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Storage Tools</h2>
+        <ul>
+          <li><a href="/storage-calculator">Storage Calculator</a></li>
+          <li><a href="/storage-tips">Storage Tips</a></li>
+          <li><a href="/vehicle-storage">Vehicle Storage</a></li>
+          <li><a href="/student-storage">Student Storage</a></li>
+          <li><a href="/military-storage">Military Storage</a></li>
+          <li><a href="/size-guide">Size Guide</a></li>
+          <li><a href="/help-center">Help Center</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">About CapRock</h2>
+        <ul>
+          <li><a href="/about-caprock">About CapRock</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/contact-us">Contact Us</a></li>
+          <li><a href="/find-storage">Find Storage</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Reach Out</h2>
+        <ul>
+          <!-- PLACEHOLDER phone, same dummy number as the header -->
+          <li>
+            <a href="tel:18060000000" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>(806) 000-0000</span>
+            </a>
+          </li>
+          <!-- PLACEHOLDER email, same as the contact page -->
+          <li>
+            <a href="mailto:info@caprockselfstorage.com" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 7l8.5 6 8.5-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>Email us</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Follow Us</h2>
+        <!-- PLACEHOLDER: real profile URLs, or delete this column -->
+        <div class="crss-footer-social">
+          <a href="#" aria-label="CapRock Self Storage on Facebook">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 8.5h2.2V5.6c-.4-.05-1.4-.15-2.6-.15-2.6 0-4.3 1.6-4.3 4.5v2.3H7.3v3.2h2.5v8.05h3.3V15.45h2.5l.4-3.2h-2.9v-2c0-.95.25-1.75 1.4-1.75z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Instagram">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on X">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l7.6 9.9L4.4 20M20 4l-7.3 8M9.8 12.6L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Pinterest">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.3 20l1.9-7.2M9.6 10.6c0-1.7 1.2-3 3-3 1.7 0 2.8 1.1 2.8 2.8 0 2-1 3.6-2.5 3.6-.8 0-1.4-.7-1.2-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="crss-footer-locations">
+      <h2 class="crss-footer-head">Locations</h2>
+      <!-- Grows as facilities are added, one per city. -->
+      <p><a href="/lubbock-2213-n-quaker">Lubbock, TX</a></p>
+    </div>
+
+    <div class="crss-footer-legal">
+      <!-- PLACEHOLDER: real disclaimer text. Rates, fees, offer terms and
+           lease proration all need to come from whoever handles CapRock's
+           terms. Nothing is stated here until then. -->
+      <p class="crss-footer-disclaimer">[PLACEHOLDER &mdash; legal disclaimer. Rates, availability, fees and lease terms go here once CapRock&rsquo;s actual terms are confirmed.]</p>
+
+      <div class="crss-footer-baseline">
+        <p>&copy; <span id="crss-footer-year">2026</span> CapRock Self Storage. All rights reserved.</p>
+        <p class="crss-footer-legal-links">
+          <!-- PLACEHOLDER destinations, neither page exists yet -->
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button type="button" class="crss-totop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<style>
+  .crss-footer, .crss-footer *, .crss-footer *::before, .crss-footer *::after {
+    box-sizing: border-box;
+  }
+  .crss-footer :where(h2, p, ul) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-footer ul {
+    list-style: none;
+  }
+  .crss-footer :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-footer :focus-visible, .crss-totop:focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-footer {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  /* Divider bar between page content and the footer */
+  .crss-footer-bar {
+    height: 3px;
+    background: var(--crss-terracotta, #A44A23);
+  }
+  .crss-footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 32px 44px;
+  }
+
+  /* ============ LINK COLUMNS ============ */
+  .crss-footer-cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    padding-bottom: 44px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-footer-head {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 18px;
+  }
+  .crss-footer-col li + li {
+    margin-top: 11px;
+  }
+  .crss-footer-col a {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    transition: color .22s ease;
+  }
+  .crss-footer-col a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-footer-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .crss-footer-contact svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--crss-taupe, #7F6C5D);
+    transition: color .22s ease;
+  }
+  .crss-footer-contact:hover svg {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ---- Social ---- */
+  .crss-footer-social {
+    display: flex;
+    gap: 10px;
+  }
+  .crss-footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    color: var(--crss-taupe, #7F6C5D);
+    transition: color .24s ease, border-color .24s ease, background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1);
+  }
+  .crss-footer-social svg {
+    width: 18px;
+    height: 18px;
+  }
+  .crss-footer-social a:hover {
+    color: var(--crss-white, #FFFFFF);
+    background: var(--crss-terracotta, #A44A23);
+    border-color: var(--crss-terracotta, #A44A23);
+    transform: translateY(-2px);
+  }
+
+  /* ============ LOCATIONS ============ */
+  .crss-footer-locations {
+    padding: 34px 0;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-footer-locations p {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.9;
+  }
+  .crss-footer-locations-empty {
+    font-style: italic;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-footer-locations a {
+    transition: color .22s ease;
+  }
+  .crss-footer-locations a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ LEGAL ============ */
+  .crss-footer-legal {
+    padding-top: 30px;
+  }
+  .crss-footer-disclaimer {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 26px;
+  }
+  .crss-footer-baseline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-footer-legal-links {
+    display: flex;
+    gap: 22px;
+  }
+  .crss-footer-legal-links a {
+    transition: color .22s ease;
+  }
+  .crss-footer-legal-links a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ SCROLL TO TOP ============ */
+  .crss-totop {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 45;
+    width: 46px;
+    height: 46px;
+    border: none;
+    border-radius: 50%;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(41, 39, 36, 0.2), 0 14px 30px -12px rgba(164, 74, 35, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity .28s ease, transform .28s cubic-bezier(.4, 0, .2, 1), visibility .28s, background .24s ease;
+  }
+  .crss-totop svg {
+    width: 20px;
+    height: 20px;
+  }
+  .crss-totop.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .crss-totop:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-footer {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 900px) {
+    .crss-footer-cols {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 36px;
+    }
+  }
+  @media (max-width: 768px) {
+    .crss-footer-inner {
+      padding: 60px 24px 40px;
+    }
+    .crss-footer-cols {
+      gap: 32px;
+      padding-bottom: 36px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-footer-inner {
+      padding: 56px 20px 36px;
+    }
+    .crss-footer-cols {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .crss-footer-baseline {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .crss-totop {
+      right: 16px;
+      bottom: 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-footer *, .crss-totop {
+      transition: none !important;
+    }
+    .crss-footer-social a:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    /* ---- Copyright year, so this never goes stale ---- */
+    var year = document.getElementById('crss-footer-year');
+    if (year) year.textContent = new Date().getFullYear();
+
+    /* ---- Scroll-to-top ---- */
+    var btn = document.querySelector('.crss-totop');
+    if (!btn) return;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function toggle() {
+      btn.classList.toggle('is-visible', window.pageYOffset > 520);
+    }
+    toggle();
+    window.addEventListener('scroll', toggle, { passive: true });
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  })();
+</script>
+
+<script>
+/* ================================================================
+   PREVIEW-ONLY navigation shim. Not part of any GHL page.
+
+   The source files link to real site paths ("/size-guide"), which is
+   correct for GHL but means nothing to a static dev server, so Live
+   Server answers "Cannot GET /size-guide". This maps those paths onto
+   the flat preview/*.html files at click time.
+
+   Handled in the capture phase so it also catches links the page
+   builds with JS (the facility cards) and beats the hero search's own
+   submit handler.
+   ================================================================ */
+(function () {
+  var MAP = {
+    '/': 'home.html',
+    '/caprock-self-service': 'home.html',
+    '/find-storage': 'find-storage.html',
+    '/size-guide': 'size-guide.html',
+    '/help-center': 'help-center.html',
+    '/storage-calculator': 'storage-calculator.html',
+    '/storage-tips': 'storage-tips.html',
+    '/vehicle-storage': 'vehicle-storage.html',
+    '/student-storage': 'student-storage.html',
+    '/military-storage': 'military-storage.html',
+    '/about-caprock': 'about-caprock.html',
+    '/careers': 'careers.html',
+    '/contact-us': 'contact-us.html',
+    '/lubbock-2213-n-quaker': 'lubbock-2213-n-quaker.html'
+  };
+
+  function resolve(href) {
+    if (!href) return null;
+    var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
+    if (path === '') path = '/';
+    return MAP[path] || null;
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
+    if (!a) return;
+    var file = resolve(a.getAttribute('href'));
+    if (!file) return;
+    e.preventDefault();
+    window.location.href = file;
+  }, true);
+
+  /* The hero search sets window.location itself, so intercept before it. */
+  document.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'crss-hero-search') {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = 'find-storage.html';
+    }
+  }, true);
+})();
+</script>
+</body>
+</html>

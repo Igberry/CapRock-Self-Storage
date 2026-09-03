@@ -1,0 +1,276 @@
+<!-- ================================================================
+     CapRock Self Storage — Military Storage page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /military-storage
+
+     PLACEHOLDER: no specific military discount is stated since none
+     was confirmed, copy stays general until that's decided.
+     ================================================================ -->
+<div class="crss-audience">
+  <div class="crss-audience-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Military Storage</span>
+    </nav>
+
+    <h1 class="crss-audience-title">Military Storage</h1>
+    <p class="crss-audience-subtitle">Flexible storage for PCS moves, deployments, and everything in between.</p>
+
+    <div class="crss-audience-blocks">
+      <div class="crss-audience-block">
+        <h2>Built for a moving schedule you don't control</h2>
+        <p>PCS orders and deployments don't always leave much lead time. A nearby unit gives you somewhere to store household goods and personal belongings without committing to a long-term lease.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Month-to-month flexibility</h2>
+        <p>Rent for as long as you're away, and stop whenever your situation changes, no long-term contract required.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Ask about military rates</h2>
+        <p>Availability of military discounts varies by location. Check with your nearest CapRock facility for current rates.</p>
+      </div>
+    </div>
+
+    <div class="crss-audience-cta">
+      <p>Find military-friendly storage near you.</p>
+      <a href="/find-storage" class="crss-audience-cta-btn">Find Your Nearest Location</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Shared by the three audience landing pages (Vehicle, Student,
+     Military). Keep these three <style> blocks identical, they are
+     the same component pasted into three GHL pages. */
+
+  .crss-audience {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-audience, .crss-audience *, .crss-audience *::before, .crss-audience *::after {
+    box-sizing: border-box;
+  }
+  .crss-audience :where(h1, h2, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-audience :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-audience :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-audience-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-audience-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  /* Editorial rule under the title, drawn in CSS so the markup stays as-is */
+  .crss-audience-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
+  }
+  .crss-audience-subtitle {
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 58ch;
+    margin-bottom: 48px;
+  }
+
+  /* ============ CONTENT BLOCKS ============ */
+  .crss-audience-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 56px;
+  }
+  .crss-audience-block {
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 6px;
+    padding: 34px 36px;
+    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .crss-audience-block:hover {
+    transform: translateY(-3px);
+    border-color: rgba(164, 74, 35, 0.28);
+    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 18px 36px -14px rgba(41, 39, 36, 0.26);
+  }
+  .crss-audience-block h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+    margin-bottom: 12px;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-audience-block p {
+    font-size: 16px;
+    line-height: 1.72;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  /* Inline prose links get a restrained underline rather than bare color */
+  .crss-audience-block p a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(164, 74, 35, 0.35);
+    transition: text-decoration-color .22s ease;
+  }
+  .crss-audience-block p a:hover {
+    text-decoration-color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* ============ CLOSING CTA ============ */
+  .crss-audience-cta {
+    position: relative;
+    overflow: hidden;
+    padding: 54px 40px;
+    background: var(--crss-charcoal, #292724);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .crss-audience-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(164, 74, 35, 0.30), transparent 62%);
+    pointer-events: none;
+  }
+  .crss-audience-cta p {
+    position: relative;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: clamp(21px, 2.6vw, 27px);
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--crss-cream, #F1E3CC);
+    margin-bottom: 26px;
+  }
+  .crss-audience-cta-btn {
+    position: relative;
+    display: inline-block;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 34px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
+  }
+  .crss-audience-cta-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-audience {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-audience-inner {
+      padding: 48px 26px 80px;
+    }
+    .crss-audience-block {
+      padding: 28px 26px;
+    }
+    .crss-audience-cta {
+      padding: 46px 26px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-audience-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-audience-block {
+      padding: 26px 24px;
+    }
+    .crss-audience-cta {
+      padding: 42px 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-audience *, .crss-audience *::before, .crss-audience *::after {
+      transition: none !important;
+    }
+    .crss-audience-block:hover, .crss-audience-cta-btn:hover {
+      transform: none;
+    }
+  }
+</style>

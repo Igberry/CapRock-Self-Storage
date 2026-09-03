@@ -1,0 +1,275 @@
+<!-- ================================================================
+     CapRock Self Storage — Storage Tips page
+     Body content only, header Global Section goes above this.
+     Path suggestion: /storage-tips
+     Generic, industry-standard packing/storage advice, no company-
+     specific claims.
+     ================================================================ -->
+<div class="crss-tips">
+  <div class="crss-tips-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/caprock-self-service">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Tips</span>
+    </nav>
+
+    <h1 class="crss-tips-title">Storage Tips</h1>
+    <p class="crss-tips-subtitle">A few habits that make packing, storing, and finding things later a lot easier.</p>
+
+    <div class="crss-tips-list">
+      <div class="crss-tip"><span class="crss-tip-num">01</span><div><h3>Label every box</h3><p>Write the room and a few contents on at least two sides of each box, so you can read it no matter how it's stacked.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">02</span><div><h3>Use uniform box sizes where you can</h3><p>Same-sized boxes stack more securely and use space more efficiently than a mix of odd shapes.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">03</span><div><h3>Heavier items on the bottom</h3><p>Stack heavier, sturdier boxes first and lighter or fragile items on top to avoid crushing.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">04</span><div><h3>Leave a walkway</h3><p>Plan an aisle down the middle of your unit so you can reach items in the back without unstacking everything.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">05</span><div><h3>Cover furniture with breathable covers</h3><p>Cloth sheets or moving blankets protect from dust while still letting air circulate. Plastic can trap moisture.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">06</span><div><h3>Keep items off the floor</h3><p>Pallets or a few spare boards under boxes and furniture help protect against ground moisture.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">07</span><div><h3>Disassemble large furniture</h3><p>Bed frames, tables, and shelving units usually store more compactly, and safely, taken apart.</p></div></div>
+      <div class="crss-tip"><span class="crss-tip-num">08</span><div><h3>Keep an inventory</h3><p>A simple list or a few photos of what's in each box can save a lot of guesswork later.</p></div></div>
+    </div>
+
+    <div class="crss-tips-cta">
+      <p>Ready to find a unit?</p>
+      <a href="/find-storage" class="crss-tips-cta-btn">Find Your Nearest Location</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .crss-tips {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-tips, .crss-tips *, .crss-tips *::before, .crss-tips *::after {
+    box-sizing: border-box;
+  }
+  .crss-tips :where(h1, h3, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-tips :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-tips :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .crss-tips-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-tips-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-tips-title::after {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 2px;
+    background: var(--crss-terracotta, #A44A23);
+    margin: 24px 0 22px;
+  }
+  .crss-tips-subtitle {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 58ch;
+    margin-bottom: 48px;
+  }
+
+  /* ============ NUMBERED LIST ============ */
+  /* The list is pulled slightly wider than the text column so the row
+     hover tint has breathing room around the copy. The bleed lives on
+     the list, not on each row, so the top rule and every row rule stay
+     flush with one another. */
+  .crss-tips-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0 -16px 0 -12px;
+    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-tip {
+    display: flex;
+    gap: 28px;
+    padding: 30px 16px 30px 12px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-radius: 4px;
+    transition: background .28s ease;
+  }
+  .crss-tip:hover {
+    background: rgba(241, 227, 204, 0.42);
+  }
+  .crss-tip-num {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: rgba(164, 74, 35, 0.42);
+    flex-shrink: 0;
+    width: 48px;
+    transition: color .28s ease;
+  }
+  .crss-tip:hover .crss-tip-num {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-tip h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.012em;
+    margin-bottom: 8px;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-tip p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+
+  /* ============ CLOSING CTA ============ */
+  .crss-tips-cta {
+    position: relative;
+    overflow: hidden;
+    margin-top: 72px;
+    padding: 54px 40px;
+    background: var(--crss-charcoal, #292724);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .crss-tips-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(164, 74, 35, 0.30), transparent 62%);
+    pointer-events: none;
+  }
+  .crss-tips-cta p {
+    position: relative;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: clamp(21px, 2.6vw, 27px);
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: var(--crss-cream, #F1E3CC);
+    margin-bottom: 26px;
+  }
+  .crss-tips-cta-btn {
+    position: relative;
+    display: inline-block;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 16px 34px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
+  }
+  .crss-tips-cta-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
+  }
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-tips {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-tips-inner {
+      padding: 48px 26px 80px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-tips-inner {
+      padding: 44px 20px 72px;
+    }
+    .crss-tips-list {
+      margin: 0 -12px 0 -10px;
+    }
+    .crss-tip {
+      gap: 18px;
+      padding: 24px 12px 24px 10px;
+    }
+    .crss-tip-num {
+      width: 38px;
+      font-size: 23px;
+    }
+    .crss-tips-cta {
+      padding: 42px 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-tips *, .crss-tips *::before, .crss-tips *::after {
+      transition: none !important;
+    }
+    .crss-tips-cta-btn:hover {
+      transform: none;
+    }
+  }
+</style>
