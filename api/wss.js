@@ -150,23 +150,91 @@ const SHAPE = {
       }),
     };
   },
-  location: (v) => ({
-    name: pick(v, 'name', 'locationName'),
-    address: pick(v, 'address', 'address1', 'street'),
-    city: pick(v, 'city'),
-    state: pick(v, 'state', 'region'),
-    zip: pick(v, 'zip', 'postalCode', 'zipCode'),
-    phone: pick(v, 'phone', 'phoneNumber'),
-    officeHours: pick(v, 'officeHours', 'hours'),
-    accessHours: pick(v, 'accessHours', 'gateHours'),
-    coupons: pick(v, 'coupons', 'promotions') || [],
-  }),
+  /* The payload nests everything under "location", and the address,
+     hours and features each have their own shape. Flattened here so a
+     page does not have to know any of that.
+
+     locationServices is dropped: it duplicates locationFeatures with
+     internal GUIDs and amounts attached. units is dropped too - it
+     repeats what /movein returns, including unit ids. */
+  location: (v) => {
+    const loc = pick(v, 'location') || v;
+    const addr = pick(loc, 'address') || {};
+    const geo = pick(addr, 'location') || {};
+    const hours = pick(loc, 'hoursOfOperation') || {};
+
+    /* "06:00:00" is not something to show a customer. */
+    const clock = (t) => {
+      if (typeof t !== 'string') return null;
+      const [h, m] = t.split(':').map(Number);
+      if (!isFinite(h)) return null;
+      const ampm = h < 12 ? 'am' : 'pm';
+      const hour = h % 12 === 0 ? 12 : h % 12;
+      return m ? `${hour}:${String(m).padStart(2, '0')}${ampm}` : `${hour}${ampm}`;
+    };
+
+    const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday',
+                  'friday', 'saturday', 'sunday'];
+    const SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    /* Seven identical lines read as noise, so collapse runs of days
+       that share the same hours into "Mon-Sat 10am - 5pm". */
+    const summarise = (set) => {
+      if (!set) return null;
+      const rows = DAYS.map((d, i) => {
+        const day = pick(set, d) || {};
+        const open = pick(day, 'isOpen');
+        return {
+          label: SHORT[i],
+          text: open === false ? 'Closed'
+                : [clock(pick(day, 'open')), clock(pick(day, 'close'))].filter(Boolean).join(' - '),
+        };
+      });
+      const out = [];
+      for (const r of rows) {
+        const last = out[out.length - 1];
+        if (last && last.text === r.text) last.end = r.label;
+        else out.push({ start: r.label, end: null, text: r.text });
+      }
+      return out
+        .filter((g) => g.text)
+        .map((g) => `${g.start}${g.end ? '-' + g.end : ''} ${g.text}`)
+        .join(', ');
+    };
+
+    return {
+      name: pick(loc, 'name'),
+      address: pick(addr, 'addressLine1'),
+      address2: pick(addr, 'addressLine2') || null,
+      city: pick(addr, 'city'),
+      state: pick(addr, 'state'),
+      zip: pick(addr, 'postalCode'),
+      latitude: pick(geo, 'latitude'),
+      longitude: pick(geo, 'longitude'),
+      phone: pick(loc, 'phone'),
+      officeHours: summarise(pick(hours, 'office')),
+      gateHours: summarise(pick(hours, 'gate')),
+      features: (pick(loc, 'locationFeatures') || [])
+        .map((f) => pick(f, 'description'))
+        .filter(Boolean),
+      coupons: (pick(loc, 'coupons') || []).map((c) => ({
+        description: pick(c, 'description'),
+        conditions: pick(c, 'instructions') || null,
+      })),
+      allowsReservations: Boolean(pick(loc, 'allowsReservations')),
+    };
+  },
+  /* The field is imageLinks, not images, which is why this returned an
+     empty array before. The URLs come back as http; upgraded here
+     because a page served over https blocks mixed content and the
+     photos would silently never appear. */
   images: (v) => {
-    const list = Array.isArray(v) ? v : (pick(v, 'images') || []);
+    const list = pick(v, 'imageLinks', 'images') || [];
     return {
       images: (Array.isArray(list) ? list : [])
-        .map((i) => (typeof i === 'string' ? i : pick(i, 'url', 'imageUrl', 'src')))
-        .filter(Boolean),
+        .map((i) => (typeof i === 'string' ? i : pick(i, 'imageUrl', 'url', 'src')))
+        .filter(Boolean)
+        .map((u) => u.replace(/^http:\/\//i, 'https://')),
     };
   },
   reviews: (v) => {

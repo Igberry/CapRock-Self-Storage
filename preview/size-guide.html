@@ -95,7 +95,14 @@
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         <span>My Account</span>
       </a>
-      <a href="#" class="crss-paybill-btn">Pay Your Bill</a>
+      <!-- Live payment portal for this location, from the
+           WebSelfStorage /paymentPortalUrl endpoint. Hardcoded
+           rather than fetched: it is stable, and fetching it
+           would add a request to all 13 pages to fill one href.
+           Opens in a new tab, since it is a different system
+           and tenants should not lose the site. -->
+      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+         class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
     </div>
 
     <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
@@ -131,6 +138,11 @@
 
     <a href="tel:18060000000" class="crss-mobile-link">(806) 000-0000</a>
     <a href="#" class="crss-mobile-link">My Account</a>
+    <!-- Absent before: the desktop utility row is hidden below
+         1180px, so on a phone there was no way to reach the
+         payment portal at all. -->
+    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44" class="crss-mobile-link"
+       target="_blank" rel="noopener">Pay Your Bill</a>
   </div>
 </header>
 
@@ -614,6 +626,43 @@
 
 <script>
   (function () {
+    /* ---- WebSelfStorage proxy, published for every page ----
+       Units, the Size Guide, the Storage Calculator and both
+       facility card grids all read live data. GHL gives Custom
+       Code blocks no shared script, so without this the endpoint
+       would be pasted into five separate blocks and a change would
+       mean five re-pastes. The header is on every page, so it is
+       the one place that can hold it.
+
+       The key is NOT here and never can be: this is the public
+       proxy URL. The credential lives in Vercel. */
+    window.CRSS_WSS = {
+      endpoint: 'https://cap-rock-self-storage.vercel.app/api/wss',
+      facility: 'lubbock-2213-n-quaker',
+
+      /* Small helper so five pages do not each reinvent the fetch,
+         the error handling and the JSON parse. Resolves to null on
+         any failure rather than rejecting, so callers can simply
+         fall back to their static content. */
+      get: function (resource) {
+        var url = this.endpoint + '?facility=' + encodeURIComponent(this.facility) +
+                  '&resource=' + encodeURIComponent(resource);
+        return fetch(url)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function (e) {
+            console.error('CRSS_WSS ' + resource + ' failed:', e);
+            return null;
+          });
+      },
+
+      /* Rates come back as numbers; whole dollars lose the .00. */
+      money: function (v) {
+        var num = Number(v);
+        if (!isFinite(num)) return null;
+        return '$' + (num % 1 === 0 ? num.toFixed(0) : num.toFixed(2));
+      }
+    };
+
     /* ---- Safety net: ensure a viewport meta tag exists ----
        Without <meta name="viewport" content="width=device-width">, a
        phone lays the page out at roughly 980 CSS pixels and scales it
@@ -828,74 +877,16 @@
     </nav>
 
     <h1 class="crss-sg-title">Find the Right Storage Unit Size</h1>
-    <p class="crss-sg-subtitle">Compare common unit sizes below. Every location's exact availability varies, so check a specific location for current sizes and pricing.</p>
+    <p class="crss-sg-subtitle">The sizes available at CapRock, with current monthly rates. Availability changes, so check the location page before you travel.</p>
 
-    <div class="crss-sg-grid">
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:30px;height:12px;"></div></div>
-        <div class="crss-size-dim">2 &times; 5</div>
-        <div class="crss-size-sqft">10 sq ft</div>
-        <p class="crss-size-fits">Seasonal decorations, small file boxes, a few totes.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:30px;height:18px;"></div></div>
-        <div class="crss-size-dim">3 &times; 5</div>
-        <div class="crss-size-sqft">15 sq ft</div>
-        <p class="crss-size-fits">Closet overflow, sporting equipment, a couple small furniture pieces.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:30px;height:30px;"></div></div>
-        <div class="crss-size-dim">5 &times; 5</div>
-        <div class="crss-size-sqft">25 sq ft</div>
-        <p class="crss-size-fits">About a walk-in closet's worth: boxes, a dresser, a few chairs.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:60px;height:30px;"></div></div>
-        <div class="crss-size-dim">5 &times; 10</div>
-        <div class="crss-size-sqft">50 sq ft</div>
-        <p class="crss-size-fits">A studio or one bedroom apartment's furniture and boxes.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:60px;height:60px;"></div></div>
-        <div class="crss-size-dim">10 &times; 10</div>
-        <div class="crss-size-sqft">100 sq ft</div>
-        <p class="crss-size-fits">A one to two bedroom apartment, including larger furniture and appliances.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:90px;height:60px;"></div></div>
-        <div class="crss-size-dim">10 &times; 15</div>
-        <div class="crss-size-sqft">150 sq ft</div>
-        <p class="crss-size-fits">A two to three bedroom home's furniture and boxes.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:120px;height:60px;"></div></div>
-        <div class="crss-size-dim">10 &times; 20</div>
-        <div class="crss-size-sqft">200 sq ft</div>
-        <p class="crss-size-fits">A three to four bedroom home, or a vehicle plus household items.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:150px;height:60px;"></div></div>
-        <div class="crss-size-dim">10 &times; 25</div>
-        <div class="crss-size-sqft">250 sq ft</div>
-        <p class="crss-size-fits">A large home's full contents, or multiple vehicles.</p>
-      </div>
-
-      <div class="crss-size-card">
-        <div class="crss-size-diagram"><div class="crss-size-box" style="width:180px;height:60px;"></div></div>
-        <div class="crss-size-dim">10 &times; 30</div>
-        <div class="crss-size-sqft">300 sq ft</div>
-        <p class="crss-size-fits">A full house or business inventory. The largest size typically available.</p>
-      </div>
-
-    </div>
+    <!-- Rendered from live WebSelfStorage data, not hardcoded.
+         This page used to list nine generic industry sizes; the
+         facility rents four, including an 8x10 that was missing
+         from the nine, while six that were listed are not rented.
+         A visitor could pick a size here and arrive to find it
+         does not exist. -->
+    <div class="crss-sg-grid" data-crss-sizes></div>
+    <p class="crss-sg-state" data-crss-sizes-state>Loading current unit sizes&hellip;</p>
 
     <div class="crss-sg-cta">
       <p>Still not sure which size fits?</p>
@@ -1065,6 +1056,46 @@
   }
 
   /* ============ CLOSING CTA ============ */
+  /* Loading and failure share one restrained treatment: a page that
+     cannot reach the API should not look broken. */
+  .crss-sg-state {
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 6px;
+    padding: 26px 28px;
+  }
+  .crss-sg-state a {
+    color: var(--crss-terracotta, #A44A23);
+    font-weight: 600;
+  }
+  .crss-size-rate {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 21px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-terracotta, #A44A23);
+    margin-top: 14px;
+  }
+  .crss-size-rate span {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-size-flags {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-top: 8px;
+  }
+
   .crss-sg-cta {
     position: relative;
     overflow: hidden;
@@ -1163,6 +1194,79 @@
     }
   }
 </style>
+
+<script>
+  (function () {
+    var grid = document.querySelector('[data-crss-sizes]');
+    var state = document.querySelector('[data-crss-sizes-state]');
+    if (!grid || !state) return;
+
+    var FALLBACK = 'Current sizes could not be loaded just now. ' +
+      '<a href="/lubbock-2213-n-quaker">See the location page</a> or call the office.';
+
+    /* Copy per size. Keyed on WxL so it survives the list changing;
+       anything unrecognised falls back to a description derived from
+       the square footage rather than being left blank. */
+    var COPY = {
+      '5x5':   "About a walk-in closet's worth: boxes, a dresser, a few chairs.",
+      '5x10':  "A studio or one bedroom apartment's furniture and boxes.",
+      '8x10':  "A one bedroom apartment including larger furniture, or the contents of a small garage.",
+      '10x10': "A one to two bedroom apartment, including larger furniture and appliances.",
+      '10x15': "A two to three bedroom home's furniture and boxes.",
+      '10x20': "A three to four bedroom home, or a vehicle plus household items.",
+      '10x30': "A full house or business inventory. The largest size here."
+    };
+
+    function describe(u) {
+      var key = u.width + 'x' + u.length;
+      if (COPY[key]) return COPY[key];
+      var sq = Number(u.sqft) || 0;
+      if (sq <= 30) return 'Seasonal items, boxes and a few small pieces.';
+      if (sq <= 60) return 'A studio or one bedroom\u2019s furniture and boxes.';
+      if (sq <= 120) return 'A one to two bedroom home, including larger furniture.';
+      if (sq <= 220) return 'A two to three bedroom home\u2019s contents.';
+      return 'A full house or business inventory.';
+    }
+
+    /* 6px per foot, matching the scale the static cards used, so the
+       drawings stay proportional to one another. The widest here
+       (10x30) lands at 180px, which fits the 260px column. */
+    var PX_PER_FT = 6;
+
+    if (!window.CRSS_WSS) {
+      state.innerHTML = FALLBACK;
+      return;
+    }
+
+    window.CRSS_WSS.get('movein').then(function (data) {
+      var list = (data && data.unitTypes) || [];
+      if (!list.length) {
+        state.innerHTML = FALLBACK;
+        return;
+      }
+      list.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
+
+      grid.innerHTML = list.map(function (u) {
+        var w = Math.round((Number(u.length) || 0) * PX_PER_FT);
+        var h = Math.round((Number(u.width) || 0) * PX_PER_FT);
+        var rate = window.CRSS_WSS.money(u.rate);
+        var flags = [u.driveUp && 'Drive-up', u.climate && 'Climate controlled', u.ada && 'ADA']
+                      .filter(Boolean).join(' &middot; ');
+        return '<div class="crss-size-card">' +
+          '<div class="crss-size-diagram"><div class="crss-size-box" style="width:' + w +
+            'px;height:' + h + 'px;"></div></div>' +
+          '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length + '</div>' +
+          '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
+          '<p class="crss-size-fits">' + describe(u) + '</p>' +
+          (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +
+          (rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
+        '</div>';
+      }).join('');
+
+      state.hidden = true;
+    });
+  })();
+</script>
 
 <!-- ================================================================
      CapRock Self Storage — Global Footer

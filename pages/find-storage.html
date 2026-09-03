@@ -211,6 +211,13 @@
     line-height: 1.6;
     margin-bottom: 18px;
   }
+  /* Live starting rate, revealed once the proxy responds. */
+  .crss-loc-price {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 12px;
+  }
   .crss-loc-link {
     display: inline-flex;
     align-items: center;
@@ -321,6 +328,7 @@
           '<div class="crss-loc-body">' +
             '<h3>' + loc.name + '</h3>' +
             '<p>' + loc.address + '</p>' +
+              '<p class="crss-loc-price" data-crss-price hidden></p>' +
             '<span class="crss-loc-link">View Location &rarr;</span>' +
           '</div>' +
         '</a>';
@@ -337,5 +345,26 @@
       });
       renderCards(filtered);
     });
+
+    /* ---- Live starting price on the facility cards ----
+       A starting rate is the strongest single hook on a storage
+       listing, and the data is already there for the Units section.
+       Filled in after render: if the proxy is unreachable the card
+       stays as it was rather than showing an empty slot. */
+    if (window.CRSS_WSS) {
+      window.CRSS_WSS.get('movein').then(function (data) {
+        if (!data || !data.unitTypes) return;
+        var rates = data.unitTypes
+          .filter(function (u) { return u.available && isFinite(Number(u.rate)); })
+          .map(function (u) { return Number(u.rate); });
+        if (!rates.length) return;
+        var from = window.CRSS_WSS.money(Math.min.apply(null, rates));
+        if (!from) return;
+        document.querySelectorAll('[data-crss-price]').forEach(function (el) {
+          el.textContent = 'From ' + from + '/mo';
+          el.hidden = false;
+        });
+      });
+    }
   })();
 </script>
