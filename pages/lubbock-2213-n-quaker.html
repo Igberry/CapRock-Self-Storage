@@ -109,9 +109,19 @@
     </aside>
 
     <main class="crss-main">
-      <section id="units" class="crss-section crss-section-stub">
+      <!-- Units come from WebSelfStorage via the /api/wss proxy, never
+           direct: the API key cannot be exposed to the browser. Rates
+           and availability are live, so nothing here is hardcoded.
+           Set WSS_ENDPOINT in the script below after deploying. -->
+      <section id="units" class="crss-section crss-panel">
         <h2>Units</h2>
-        <p class="crss-stub-note">Promo banner, size filter pills, and the live unit/price list build here once the WebSelfStorage API key is connected.</p>
+        <p class="crss-panel-lede">Sizes, rates and availability for this location, live from the facility system.</p>
+
+        <div class="crss-unit-filters" data-crss-unit-filters hidden></div>
+
+        <div data-crss-units>
+          <p class="crss-unit-state">Checking current availability&hellip;</p>
+        </div>
       </section>
 
       <!-- Every claim below is one this project already established:
@@ -855,6 +865,138 @@
     margin-bottom: 22px;
   }
 
+  /* ---- Units: live availability ---- */
+  .crss-unit-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .crss-unit-pill {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    border-radius: 4px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: color .22s ease, background .22s ease, border-color .22s ease;
+  }
+  .crss-unit-pill:hover {
+    border-color: rgba(164, 74, 35, 0.4);
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-unit-pill.is-active {
+    background: var(--crss-charcoal, #292724);
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-cream, #F1E3CC);
+  }
+
+  .crss-unit-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-unit {
+    display: grid;
+    grid-template-columns: minmax(88px, 130px) 1fr auto;
+    gap: 8px 24px;
+    align-items: center;
+    padding: 22px 2px;
+    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+  }
+  .crss-unit-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 25px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+    line-height: 1.1;
+  }
+  .crss-unit-meta {
+    display: block;
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-top: 6px;
+  }
+  .crss-unit-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .crss-unit-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 3px;
+    padding: 5px 9px;
+  }
+  .crss-unit-right {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .crss-unit-rate {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 23px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-terracotta, #A44A23);
+    line-height: 1.1;
+  }
+  .crss-unit-rate span {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-unit-avail {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-top: 6px;
+  }
+  .crss-unit-cta {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+  }
+
+  /* Loading, error and empty all share one restrained treatment: none
+     of them should look like a broken page. */
+  .crss-unit-state {
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: var(--crss-ink-soft, #5F564C);
+    background: var(--crss-sand, #EFE7DA);
+    border-radius: 5px;
+    padding: 24px 26px;
+  }
+  .crss-unit-state a {
+    color: var(--crss-terracotta, #A44A23);
+    font-weight: 600;
+  }
+
   /* ---- Full-bleed inside GHL ----
      GHL wraps a Custom Code element in its own centred, max-width row,
      so a full-width band stops short and leaves gutters either side.
@@ -890,6 +1032,13 @@
   @media (max-width: 768px) {
     .crss-unconfirmed {
       padding: 16px 26px 0;
+    }
+    .crss-unit {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .crss-unit-right {
+      text-align: left;
     }
     .crss-shell {
       padding: 36px 26px 80px;
@@ -1071,6 +1220,143 @@
         btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
       });
     });
+
+    /* ================= UNITS: live availability =================
+       Fetched through the Vercel proxy, never direct: the
+       WebSelfStorage key must not reach the browser.
+
+       SET THIS after `vercel deploy --prod`, e.g.
+         'https://caprock-api.vercel.app/api/wss'
+       Left empty, the section shows its call-the-office fallback
+       rather than firing a request that cannot succeed. */
+    var WSS_ENDPOINT = '';
+    var WSS_FACILITY = 'lubbock-2213-n-quaker';
+
+    var unitsHost = loc.querySelector('[data-crss-units]');
+    var filterHost = loc.querySelector('[data-crss-unit-filters]');
+
+    function unitState(html) {
+      unitsHost.innerHTML = '<p class="crss-unit-state">' + html + '</p>';
+    }
+
+    var FALLBACK = 'Call the office for current sizes, rates and availability. ' +
+                   '<a href="/contact-us">Contact us</a>';
+
+    function money(n) {
+      var v = Number(n);
+      if (!isFinite(v)) return null;
+      /* Whole dollars lose the .00; cents are kept as given. */
+      return '$' + (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2));
+    }
+
+    /* Buckets rather than one pill per size: with more unit types this
+       still reads as a short row of choices. */
+    function bucketOf(u) {
+      var sq = Number(u.sqft);
+      if (!isFinite(sq)) return 'all';
+      if (sq <= 50) return 'small';
+      if (sq <= 150) return 'medium';
+      return 'large';
+    }
+
+    function tagsFor(u) {
+      var t = [];
+      if (u.driveUp) t.push('Drive-up');
+      if (u.climate) t.push('Climate controlled');
+      if (u.electricity) t.push('Electricity');
+      if (u.ada) t.push('ADA accessible');
+      return t;
+    }
+
+    function renderUnits(list) {
+      if (!list.length) {
+        unitState('Nothing is available at this size right now. ' + FALLBACK);
+        return;
+      }
+      var rows = list.map(function (u) {
+        var meta = [];
+        if (u.sqft) meta.push(u.sqft + ' sq ft');
+        if (u.height) meta.push(u.height + ' ft high');
+        var tags = tagsFor(u).map(function (x) {
+          return '<span class="crss-unit-tag">' + x + '</span>';
+        }).join('');
+        var rate = money(u.rate);
+        return '<div class="crss-unit">' +
+          '<div>' +
+            '<div class="crss-unit-size">' + (u.size || '') + '</div>' +
+            (meta.length ? '<span class="crss-unit-meta">' + meta.join(' &middot; ') + '</span>' : '') +
+          '</div>' +
+          '<div class="crss-unit-tags">' + tags + '</div>' +
+          '<div class="crss-unit-right">' +
+            (rate ? '<div class="crss-unit-rate">' + rate + ' <span>/mo</span></div>' : '') +
+            '<div class="crss-unit-avail">' +
+              (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist') +
+            '</div>' +
+            /* Enquire, not Reserve: there is no booking flow yet. The
+               POST /reservation endpoint needs its request body sorted
+               out before this can become a real reservation. */
+            '<a class="crss-unit-cta" href="/contact-us">Enquire &rarr;</a>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      unitsHost.innerHTML = '<div class="crss-unit-list">' + rows + '</div>';
+    }
+
+    function renderFilters(all) {
+      var buckets = [
+        { key: 'all', label: 'All sizes' },
+        { key: 'small', label: 'Small' },
+        { key: 'medium', label: 'Medium' },
+        { key: 'large', label: 'Large' },
+      ].filter(function (b) {
+        return b.key === 'all' || all.some(function (u) { return bucketOf(u) === b.key; });
+      });
+
+      /* One bucket plus "All" is not a choice, so show nothing. */
+      if (buckets.length < 3) return;
+
+      filterHost.hidden = false;
+      filterHost.innerHTML = buckets.map(function (b, i) {
+        return '<button type="button" class="crss-unit-pill' + (i === 0 ? ' is-active' : '') +
+               '" data-bucket="' + b.key + '">' + b.label + '</button>';
+      }).join('');
+
+      filterHost.addEventListener('click', function (e) {
+        var btn = e.target.closest('.crss-unit-pill');
+        if (!btn) return;
+        filterHost.querySelectorAll('.crss-unit-pill').forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        btn.classList.add('is-active');
+        var key = btn.getAttribute('data-bucket');
+        renderUnits(key === 'all' ? all : all.filter(function (u) { return bucketOf(u) === key; }));
+      });
+    }
+
+    if (!unitsHost) {
+      /* nothing to do */
+    } else if (!WSS_ENDPOINT) {
+      unitState('Live availability is not connected yet. ' + FALLBACK);
+    } else {
+      fetch(WSS_ENDPOINT + '?facility=' + encodeURIComponent(WSS_FACILITY) + '&resource=movein')
+        .then(function (r) {
+          if (!r.ok) throw new Error('http ' + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          var all = (data && data.unitTypes) || [];
+          /* Sort smallest first: people shop by size, not by the order
+             the facility system happens to return. */
+          all.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
+          renderFilters(all);
+          renderUnits(all);
+        })
+        .catch(function (err) {
+          /* Never show a stack trace or a raw status to a customer. */
+          console.error('units fetch failed:', err);
+          unitState('Availability could not be loaded just now. ' + FALLBACK);
+        });
+    }
 
   })();
 </script>
