@@ -163,6 +163,15 @@
   .crss-header, .crss-header *, .crss-header *::before, .crss-header *::after {
     box-sizing: border-box;
   }
+  /* Reserves the fixed header's space. Height is set by script. */
+  .crss-header-spacer {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    flex: none;
+  }
   .crss-header :where(a) {
     text-decoration: none;
     color: inherit;
@@ -182,9 +191,17 @@
 
   /* ============ MASTHEAD ============ */
   .crss-header {
-    position: sticky;
+    /* fixed, not sticky. Sticky only travels inside its own parent,
+       and GHL wraps this Global Section in a row exactly as tall as
+       the header, leaving it nowhere to travel: it scrolled straight
+       off. Fixed is positioned against the viewport, so no GHL wrapper
+       can constrain it. left/right 0 also makes it full-bleed without
+       the negative-margin trick the page wrappers need. */
+    position: fixed;
     top: 0;
-    z-index: 40;
+    left: 0;
+    right: 0;
+    z-index: 999;
     font-family: 'Work Sans', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     color: var(--crss-charcoal);
@@ -414,6 +431,13 @@
   }
 
   /* ---- Mobile panel ---- */
+  /* Fixed means the panel cannot scroll with the page, so a tall menu
+     on a short screen would be unreachable. Cap the open header to the
+     viewport and let it scroll internally. */
+  .crss-header.is-open {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
   .crss-mobile-panel {
     display: none;
     flex-direction: column;
@@ -491,10 +515,8 @@
   html {
     overflow-x: clip;
   }
-  .crss-header {
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-  }
+  /* The header needs no negative-margin breakout: position: fixed with
+     left/right 0 already spans the viewport. */
 
   @media (max-width: 1280px) {
     .crss-header-inner {
@@ -633,8 +655,29 @@
     /* ---- Publish the real header height so any other page's
        Custom Code block can position itself against it via
        var(--crss-header-h) ---- */
+    /* ---- Hold the space the fixed header no longer occupies ----
+       Inserted here rather than as padding in all 13 page files, so
+       there is one place to get it right.
+
+       The height measured is the masthead ROW plus its borders, not
+       header.offsetHeight: with the mobile menu open the latter
+       includes the whole panel, which would shove the page down by
+       several hundred pixels while the menu is open. */
+    var spacer = document.createElement('div');
+    spacer.className = 'crss-header-spacer';
+    spacer.setAttribute('aria-hidden', 'true');
+    if (header.parentNode) header.parentNode.insertBefore(spacer, header.nextSibling);
+
+    var inner = header.querySelector('.crss-header-inner');
+
     function syncHeaderHeight() {
-      document.documentElement.style.setProperty('--crss-header-h', header.offsetHeight + 'px');
+      var cs = window.getComputedStyle(header);
+      var h = inner.offsetHeight +
+              parseFloat(cs.borderTopWidth || 0) +
+              parseFloat(cs.borderBottomWidth || 0);
+      h = Math.round(h);
+      spacer.style.height = h + 'px';
+      document.documentElement.style.setProperty('--crss-header-h', h + 'px');
     }
     syncHeaderHeight();
     window.addEventListener('resize', syncHeaderHeight);

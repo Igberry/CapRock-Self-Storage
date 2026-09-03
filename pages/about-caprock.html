@@ -160,7 +160,7 @@
     font-size: 16px;
     line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
-    padding: 14px 0 14px 30px;
+    padding: 14px 0;
     position: relative;
     border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
   }
@@ -170,19 +170,6 @@
   }
   .crss-about-list li:first-child {
     padding-top: 0;
-  }
-  /* A measured rule rather than a bullet dot */
-  .crss-about-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 25px;
-    width: 14px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
-  }
-  .crss-about-list li:first-child::before {
-    top: 11px;
   }
 
   /* ============ CLOSING CTA ============ */

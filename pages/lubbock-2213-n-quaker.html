@@ -99,7 +99,7 @@
                so keep that restriction and add the live domain to it.
                Requires "Maps Embed API" enabled on the same project. -->
           <iframe
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBv5v5ZA_pJvv_jT_ERUuXAQbG0xBqOWRY&q=CapRock+Self-Storage,+2213+N+Quaker,+Lubbock,+TX"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD7bbQkgWrqUx0Voz6uJilxl0NdCt7Kbgo&q=CapRock+Self-Storage,+2213+N+Quaker,+Lubbock,+TX"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             title="Map to CapRock Self-Storage, 2213 N Quaker, Lubbock, TX">
@@ -346,7 +346,13 @@
   /* ============ STICKY SUB-NAV ============ */
   .crss-subnav {
     position: sticky;
-    top: var(--crss-header-h, 88px);
+    /* Offset from what is actually pinned right now, not from the
+       header's height. In GHL the header sits in its own Global
+       Section wrapper and does not stay pinned, so assuming its height
+       left this bar floating 88px down the viewport with page content
+       scrolling through the gap above it. --crss-stuck-h is published
+       on scroll and is 0 when nothing is pinned. */
+    top: var(--crss-stuck-h, 0px);
     z-index: 30;
     background: var(--crss-charcoal, #292724);
     box-shadow: 0 10px 26px -22px rgba(41, 39, 36, 0.9);
@@ -398,7 +404,7 @@
   /* ---- Facility info card ---- */
   .crss-info-card {
     position: sticky;
-    top: calc(var(--crss-header-h, 88px) + var(--crss-subnav-h, 50px) + 28px);
+    top: calc(var(--crss-stuck-h, 0px) + var(--crss-subnav-h, 50px) + 28px);
     background: var(--crss-white, #FFFFFF);
     border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
     border-radius: 6px;
@@ -498,7 +504,7 @@
     min-width: 0;
   }
   .crss-section {
-    scroll-margin-top: calc(var(--crss-header-h, 88px) + var(--crss-subnav-h, 50px) + 20px);
+    scroll-margin-top: calc(var(--crss-stuck-h, 0px) + var(--crss-subnav-h, 50px) + 20px);
   }
   /* These five sections are still unbuilt. The dashed edge is deliberate:
      it keeps them reading as scaffolding, not as finished content. */
@@ -649,20 +655,10 @@
     list-style: none;
   }
   .crss-feature-panel li {
-    position: relative;
     font-size: 14.5px;
     line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
-    padding: 5px 0 5px 18px;
-  }
-  .crss-feature-panel li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 15px;
-    width: 9px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
+    padding: 5px 0;
   }
   .crss-feature-note {
     font-size: 14px;
@@ -774,20 +770,10 @@
     list-style: none;
   }
   .crss-faq-open li {
-    position: relative;
     font-size: 14.5px;
     line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
-    padding: 5px 0 5px 18px;
-  }
-  .crss-faq-open li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 15px;
-    width: 9px;
-    height: 2px;
-    background: var(--crss-taupe, #7F6C5D);
+    padding: 5px 0;
   }
   .crss-faq-open-note {
     font-size: 14px;
@@ -985,13 +971,65 @@
     if (!loc || !header) return;
     var subnav = loc.querySelector('.crss-subnav');
 
-    /* ---- Publish this block's own sticky height so CSS can use it ---- */
+    /* ---- Make sticky possible at all ----
+       position: sticky silently stops working if any ancestor
+       establishes a scroll container. GHL wraps this block in its own
+       section, row and column elements, and if any of them carries
+       overflow: hidden/auto/scroll then the sub-nav and the info card
+       simply scroll away with the page.
+
+       Only the values that break sticky are changed. Horizontal
+       clipping is preserved with overflow-x: clip, which unlike hidden
+       does not create a scroll container. */
+    (function unclipAncestors() {
+      var node = loc.parentElement;
+      while (node && node !== document.body && node !== document.documentElement) {
+        var cs = window.getComputedStyle(node);
+        if (/(auto|scroll|hidden)/.test(cs.overflowY) ||
+            /(auto|scroll|hidden)/.test(cs.overflowX)) {
+          node.style.overflowX = 'clip';
+          node.style.overflowY = 'visible';
+        }
+        node = node.parentElement;
+      }
+    })();
+
+    /* ---- Publish the sub-nav height, and how much is actually pinned ----
+       --crss-stuck-h is the height the header currently occupies at the
+       top of the viewport: its bottom edge, floored at zero. Pinned,
+       that is its height. Scrolled away, or never stuck because of a GHL
+       wrapper, it is 0. Measuring real geometry keeps the same code
+       correct in the local preview, where the header does stick, and in
+       GHL, where it does not. */
     function syncSubnavHeight() {
       document.documentElement.style.setProperty('--crss-subnav-h', subnav.offsetHeight + 'px');
-      subnav.style.top = header.offsetHeight + 'px';
     }
+
+    function syncStuckHeight() {
+      var bottom = header.getBoundingClientRect().bottom;
+      document.documentElement.style.setProperty(
+        '--crss-stuck-h', Math.max(0, Math.round(bottom)) + 'px'
+      );
+    }
+
+    /* Scroll fires far more often than a frame renders, so coalesce. */
+    var pendingFrame = false;
+    function onScroll() {
+      if (pendingFrame) return;
+      pendingFrame = true;
+      window.requestAnimationFrame(function () {
+        pendingFrame = false;
+        syncStuckHeight();
+      });
+    }
+
     syncSubnavHeight();
-    window.addEventListener('resize', syncSubnavHeight);
+    syncStuckHeight();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () {
+      syncSubnavHeight();
+      syncStuckHeight();
+    });
 
     /* ---- Smooth scroll to anchors, offset for the sticky header + subnav ---- */
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1001,7 +1039,10 @@
         var target = document.getElementById(targetId);
         if (!target) return;
         e.preventDefault();
-        var offset = header.offsetHeight + subnav.offsetHeight + 16;
+        // Same reasoning as --crss-stuck-h: offset by what is really
+        // pinned, or anchors land 88px off in GHL.
+        var pinned = Math.max(0, header.getBoundingClientRect().bottom);
+        var offset = pinned + subnav.offsetHeight + 16;
         var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
         window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
       });
@@ -1018,7 +1059,7 @@
           if (match) match.classList.add('is-active');
         }
       });
-    }, { rootMargin: '-' + (header.offsetHeight + subnav.offsetHeight + 20) + 'px 0px -60% 0px', threshold: 0 });
+    }, { rootMargin: '-' + (Math.max(0, header.getBoundingClientRect().bottom) + subnav.offsetHeight + 20) + 'px 0px -60% 0px', threshold: 0 });
     sections.forEach(function (s) { observer.observe(s); });
     /* ---- Feature and FAQ accordions ----
        aria-expanded is the single source of truth: the CSS shows and
