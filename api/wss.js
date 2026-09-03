@@ -240,8 +240,15 @@ module.exports = async function handler(req, res) {
         resourceName, entity, upstream.status,
         (body && body.Value && body.Value.ErrorMessage) || ''
       );
-      return res.status(upstream.status === 401 ? 503 : 502)
-                .json({ error: upstream.status === 401 ? 'not_configured' : 'upstream_error' });
+      /* Distinct codes on purpose. 'not_configured' means this
+         deployment carries no key at all; 'upstream_unauthorized'
+         means a key was sent and U-Haul refused it, which points at
+         the auth scheme rather than a missing variable. Collapsing
+         both into one message makes them indistinguishable from
+         outside, which is exactly when you need to tell them apart. */
+      return res.status(502).json({
+        error: upstream.status === 401 ? 'upstream_unauthorized' : 'upstream_error',
+      });
     }
 
     /* Error bodies wrap the payload ({"Value":{"Success":false,...}}),
