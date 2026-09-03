@@ -205,10 +205,22 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'method_not_allowed' });
   }
 
-  const key = process.env.WSS_API_KEY;
+  /* Trimmed. Pasting a key into `vercel env add` or the dashboard
+     commonly captures a trailing newline or a stray space, and the
+     upstream then rejects a key that is otherwise correct. The raw
+     form is what this API wants: its own 401 says "Specify your API
+     key in the Authorization header", and a raw-key request returns
+     200 in Postman. */
+  const rawKey = process.env.WSS_API_KEY;
+  const key = typeof rawKey === 'string' ? rawKey.trim() : rawKey;
   if (!key) {
     console.error('WSS_API_KEY is not set on this deployment');
     return res.status(503).json({ error: 'not_configured' });
+  }
+  if (rawKey !== key) {
+    /* Worth knowing: the stored value has surrounding whitespace
+       that should be cleaned up at the source. */
+    console.warn('WSS_API_KEY had surrounding whitespace; trimmed');
   }
 
   const entity = FACILITIES[String(req.query.facility || '')];
@@ -236,9 +248,10 @@ module.exports = async function handler(req, res) {
       /* Logged, never returned: upstream error bodies echo the request,
          and this API's 401 body describes the auth header directly. */
       console.error(
-        'wss %s %s -> %s %s',
+        'wss %s %s -> %s %s (key length %d)',
         resourceName, entity, upstream.status,
-        (body && body.Value && body.Value.ErrorMessage) || ''
+        (body && body.Value && body.Value.ErrorMessage) || '',
+        key.length
       );
       /* Distinct codes on purpose. 'not_configured' means this
          deployment carries no key at all; 'upstream_unauthorized'
