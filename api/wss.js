@@ -37,6 +37,10 @@
      vercel deploy --prod
    ================================================================ */
 
+/* Environment variables are baked in at build time, so a change to
+   WSS_API_KEY in the Vercel dashboard does nothing until the next
+   deployment. If the key looks right but the upstream still returns
+   401, redeploy before assuming the value is wrong. */
 const API_BASE = 'https://api.webselfstorage.com/v4';
 const UPSTREAM_TIMEOUT_MS = 8000;
 
