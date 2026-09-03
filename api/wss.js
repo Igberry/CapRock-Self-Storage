@@ -234,47 +234,22 @@ module.exports = async function handler(req, res) {
   const buildPath = RESOURCES[resourceName];
   if (!buildPath) return res.status(400).json({ error: 'unknown_resource' });
 
-  const scheme = process.env.WSS_AUTH_SCHEME || '';
+  /* Bearer, confirmed empirically: sending the raw key returns 401
+     and the same request with a Bearer prefix returns 200. The API's
+     own error text ("Specify your API key in the Authorization
+     header") is no guide - it returns that for an invalid key too.
+     Overridable, but no env var is needed for the normal case. */
+  const scheme = process.env.WSS_AUTH_SCHEME || 'Bearer';
   const authValue = scheme ? `${scheme} ${key}` : key;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
 
   try {
-    /* TEMPORARY - remove once the scheme is known.
-
-       A raw key and a "Bearer " prefix are both plausible. The API's
-       401 says "Specify your API key in the Authorization header", but
-       a deliberately invalid key returns that same text, so the wording
-       proves nothing either way. Rather than redeploy once per guess,
-       try the configured form, fall back to the other on 401, and log
-       which one the upstream accepted.
-
-       Once the log names a winner: set WSS_AUTH_SCHEME to match and
-       delete this block. Left in permanently it would double the
-       latency of every genuinely unauthorized request. */
-    function callUpstream(authHeader) {
-      return fetch(API_BASE + buildPath(entity), {
-        headers: { Authorization: authHeader, Accept: 'application/json' },
-        signal: controller.signal,
-      });
-    }
-
-    const alternate = scheme ? key : 'Bearer ' + key;
-    let upstream = await callUpstream(authValue);
-
-    if (upstream.status === 401) {
-      const retry = await callUpstream(alternate);
-      if (retry.ok) {
-        console.warn(
-          'AUTH SCHEME: upstream accepted the %s. Set WSS_AUTH_SCHEME to match and remove the fallback.',
-          scheme ? 'raw key' : 'Bearer prefix'
-        );
-        upstream = retry;
-      } else {
-        console.error('AUTH SCHEME: raw key and Bearer prefix were both rejected with 401.');
-      }
-    }
+    const upstream = await fetch(API_BASE + buildPath(entity), {
+      headers: { Authorization: authValue, Accept: 'application/json' },
+      signal: controller.signal,
+    });
 
     const body = await upstream.json().catch(() => null);
 
