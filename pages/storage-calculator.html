@@ -3,9 +3,13 @@
      Body content only, header Global Section goes above this.
      Path suggestion: /storage-calculator
 
-     Simple, real interaction: pick what you're storing, get a
-     recommended size. Sizes match the same 9 sizes used on the
-     Size Guide page, keep the two in sync if sizes ever change.
+     Pick what you're storing, get a recommended size. The six
+     options are editorial: they describe what a person has, which
+     no API knows. The size and the rate behind each one come from
+     the facility record, because this page used to recommend a
+     10 x 10, a 10 x 15 and a 10 x 20, none of which are rented
+     here. A calculator that names a unit you cannot rent is worse
+     than no calculator.
      ================================================================ -->
 <div class="crss-calc">
   <div class="crss-calc-inner">
@@ -18,18 +22,22 @@
     <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
 
     <div class="crss-calc-options" id="crss-calc-options">
-      <button type="button" class="crss-calc-option" data-size="5 &times; 5" data-sqft="25 sq ft" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
-      <button type="button" class="crss-calc-option" data-size="5 &times; 10" data-sqft="50 sq ft" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
-      <button type="button" class="crss-calc-option" data-size="10 &times; 10" data-sqft="100 sq ft" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
-      <button type="button" class="crss-calc-option" data-size="10 &times; 15" data-sqft="150 sq ft" data-detail="A two to three bedroom home">2&ndash;3 bedroom<br><span>home</span></button>
-      <button type="button" class="crss-calc-option" data-size="10 &times; 20" data-sqft="200 sq ft" data-detail="A three to four bedroom home, or a vehicle plus household items">3&ndash;4 bedroom<br><span>home</span></button>
-      <button type="button" class="crss-calc-option" data-size="10 &times; 30" data-sqft="300 sq ft" data-detail="A large home's full contents, or business inventory">Large home<br><span>or business</span></button>
+      <!-- data-need is the space the contents want, in square feet.
+           The unit that gets recommended for it is looked up live. -->
+      <button type="button" class="crss-calc-option" data-need="25" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
+      <button type="button" class="crss-calc-option" data-need="50" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
+      <button type="button" class="crss-calc-option" data-need="100" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
+      <button type="button" class="crss-calc-option" data-need="150" data-detail="A two to three bedroom home">2&ndash;3 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-need="200" data-detail="A three to four bedroom home, or a vehicle plus household items">3&ndash;4 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-need="300" data-detail="A large home&rsquo;s full contents, or business inventory">Large home<br><span>or business</span></button>
     </div>
 
     <div class="crss-calc-result" id="crss-calc-result">
       <p class="crss-calc-result-label">Recommended size</p>
       <p class="crss-calc-result-size" id="crss-calc-result-size"></p>
+      <p class="crss-calc-result-rate" id="crss-calc-result-rate" hidden></p>
       <p class="crss-calc-result-detail" id="crss-calc-result-detail"></p>
+      <p class="crss-calc-result-note" id="crss-calc-result-note" hidden></p>
       <div class="crss-calc-result-actions">
         <a href="/find-storage" class="crss-calc-btn-primary">Find a Location</a>
         <a href="/size-guide" class="crss-calc-btn-secondary">Compare All Sizes</a>
@@ -220,6 +228,22 @@
     vertical-align: middle;
     margin-left: 6px;
   }
+  .crss-calc-result-rate {
+    font-size: 17px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+    margin-bottom: 14px;
+  }
+  /* Caveats: a cheaper larger unit, or two smaller ones. Quieter
+     than the recommendation, but never hidden behind a click. */
+  .crss-calc-result-note {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--crss-taupe, #7F6C5D);
+    max-width: 46ch;
+    margin: -18px auto 30px;
+  }
   .crss-calc-result-detail {
     font-size: 16px;
     line-height: 1.65;
@@ -318,8 +342,119 @@
     var options = document.getElementById('crss-calc-options');
     var result = document.getElementById('crss-calc-result');
     var resultSize = document.getElementById('crss-calc-result-size');
+    var resultRate = document.getElementById('crss-calc-result-rate');
     var resultDetail = document.getElementById('crss-calc-result-detail');
+    var resultNote = document.getElementById('crss-calc-result-note');
     if (!options || !result) return;
+
+    /* Sorted smallest first, filled in when the facility record
+       arrives. Null until then, and null forever if the proxy is
+       unreachable, which the fallback below is written for. */
+    var UNITS = null;
+    var pendingNeed = null;
+
+    function money(v) {
+      return window.CRSS_WSS ? window.CRSS_WSS.money(v) : null;
+    }
+
+    function label(u) {
+      return Number(u.width) + ' &times; ' + Number(u.length);
+    }
+
+    /* The smallest unit that holds the contents. Classic size-guide
+       behaviour, and the one people expect. Where it goes wrong is
+       priced into the notes below rather than silently optimised:
+       a customer who asked for a 1 bedroom and was handed a 10 x 30
+       deserves to be told why, not just charged for it. */
+    function smallestThatFits(need) {
+      for (var i = 0; i < UNITS.length; i++) {
+        if (Number(UNITS[i].sqft) >= need) return UNITS[i];
+      }
+      return null;
+    }
+
+    /* A bigger unit that costs less. Not a trick: drive-up units
+       without temperature control undercut smaller interior ones
+       here, so the 8 x 10 really is larger and cheaper than the
+       5 x 10. Saying so is the whole point of showing live rates. */
+    function cheaperAndBigger(pick) {
+      var best = null;
+      UNITS.forEach(function (u) {
+        if (Number(u.sqft) <= Number(pick.sqft)) return;
+        if (!(Number(u.rate) < Number(pick.rate))) return;
+        if (!best || Number(u.rate) < Number(best.rate)) best = u;
+      });
+      return best;
+    }
+
+    /* Two of something smaller, when the only unit that fits is a
+       long way past what was asked for. This facility jumps from
+       80 sq ft to 300, so a one bedroom would otherwise be quoted a
+       10 x 30. Two 8 x 10s are more space for less money. */
+    function twoSmaller(need, pick) {
+      var best = null;
+      UNITS.forEach(function (u) {
+        if (Number(u.sqft) >= Number(pick.sqft)) return;
+        if (Number(u.sqft) * 2 < need) return;
+        if (!(Number(u.rate) * 2 < Number(pick.rate))) return;
+        if (!best || Number(u.rate) < Number(best.rate)) best = u;
+      });
+      return best;
+    }
+
+    function show(need, detail) {
+      var notes = [];
+
+      /* No data: give the honest answer, which is the amount of
+         space rather than a unit number we cannot vouch for. */
+      if (!UNITS || !UNITS.length) {
+        resultSize.innerHTML = 'About ' + need +
+          ' <span class="crss-calc-result-sqft">sq ft</span>';
+        resultRate.hidden = true;
+        notes.push('Current sizes could not be loaded just now. Call ' +
+                   '(806) 701-5660 and we will match this to what is open.');
+      } else {
+        var pick = smallestThatFits(need);
+        if (!pick) {
+          /* Bigger than anything here. Say so plainly. */
+          pick = UNITS[UNITS.length - 1];
+          notes.push('That is the largest unit at this location. ' +
+                     'Two units are often the answer for a move this size, ' +
+                     'so call the office and we will work it out with you.');
+        } else {
+          var cheaper = cheaperAndBigger(pick);
+          if (cheaper) {
+            notes.push('A ' + label(cheaper) + ' is bigger and costs less at ' +
+                       money(cheaper.rate) + '/mo, if you do not need temperature control.');
+          }
+          var pair = twoSmaller(need, pick);
+          if (pair) {
+            notes.push('Two ' + label(pair) + ' units come to ' +
+                       (Number(pair.sqft) * 2) + ' sq ft for ' + money(Number(pair.rate) * 2) +
+                       '/mo, which is more space for less than the ' + label(pick) + '.');
+          }
+        }
+
+        resultSize.innerHTML = label(pick) +
+          ' <span class="crss-calc-result-sqft">' + Number(pick.sqft) + ' sq ft</span>';
+        var rate = money(pick.rate);
+        if (rate) {
+          resultRate.textContent = rate + '/mo';
+          resultRate.hidden = false;
+        } else {
+          resultRate.hidden = true;
+        }
+      }
+
+      resultDetail.textContent = detail + '.';
+      if (notes.length) {
+        resultNote.textContent = notes.join(' ');
+        resultNote.hidden = false;
+      } else {
+        resultNote.hidden = true;
+      }
+      result.classList.add('is-visible');
+    }
 
     options.querySelectorAll('.crss-calc-option').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -327,11 +462,26 @@
           b.classList.remove('is-selected');
         });
         btn.classList.add('is-selected');
-        resultSize.innerHTML = btn.getAttribute('data-size') + ' <span class="crss-calc-result-sqft">' + btn.getAttribute('data-sqft') + '</span>';
-        resultDetail.textContent = btn.getAttribute('data-detail') + '.';
-        result.classList.add('is-visible');
+        pendingNeed = btn;
+        show(Number(btn.getAttribute('data-need')), btn.getAttribute('data-detail'));
         result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
     });
+
+    if (window.CRSS_WSS) {
+      window.CRSS_WSS.get('movein').then(function (data) {
+        if (!data || !data.unitTypes) return;
+        UNITS = data.unitTypes.filter(function (u) {
+          return u.available && isFinite(Number(u.sqft)) &&
+                 isFinite(Number(u.width)) && isFinite(Number(u.length));
+        }).sort(function (a, b) { return Number(a.sqft) - Number(b.sqft); });
+        /* Someone may have clicked while this was in flight. Redraw
+           their answer rather than leaving them on the fallback. */
+        if (pendingNeed) {
+          show(Number(pendingNeed.getAttribute('data-need')),
+               pendingNeed.getAttribute('data-detail'));
+        }
+      });
+    }
   })();
 </script>

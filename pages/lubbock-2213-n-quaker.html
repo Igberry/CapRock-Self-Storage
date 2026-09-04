@@ -114,8 +114,8 @@
       </section>
 
       <!-- Every claim below is one this project already established:
-           the four facility standards from about-caprock.html, the nine
-           sizes from size-guide.html, and the "options vary by location"
+           the four facility standards from about-caprock.html, the live
+           sizes from the facility record, and the "options vary by location"
            phrasing from vehicle-storage.html. The three groups with no
            confirmed facts stay explicitly empty rather than guessing. -->
       <!-- LOC: features — the six groups below are generic. Only
@@ -133,14 +133,14 @@
             </button>
             <div class="crss-feature-panel">
               <ul>
-                <li>Nine unit sizes, from a 2&nbsp;&times;&nbsp;5 locker up to a 10&nbsp;&times;&nbsp;30</li>
-                <li>Compare them side by side in the <a href="/size-guide">Size Guide</a></li>
-                <li>Not sure what fits? Try the <a href="/storage-calculator">Storage Calculator</a></li>
-              </ul>
+                <li data-crss-size-range data-tpl="Unit sizes from a {min} locker up to a {max}">Unit sizes from a 5&nbsp;&times;&nbsp;5 locker up to a 10&nbsp;&times;&nbsp;30</li>
                 <li>Drive-up access on the outdoor units</li>
                 <li>Temperature controlled interior units</li>
                 <li>Powered units with electricity</li>
                 <li>Lighted units</li>
+                <li>Compare them side by side in the <a href="/size-guide">Size Guide</a></li>
+                <li>Not sure what fits? Try the <a href="/storage-calculator">Storage Calculator</a></li>
+              </ul>
             </div>
           </div>
 
@@ -258,7 +258,7 @@
               <span class="crss-faq-sign" aria-hidden="true"></span>
             </button>
             <div class="crss-faq-a">
-              <p>There are nine sizes, from a 2&nbsp;&times;&nbsp;5 locker that holds a few boxes up to a 10&nbsp;&times;&nbsp;30 that can take a full household. The <a href="/size-guide">Size Guide</a> compares them side by side, and the <a href="/storage-calculator">Storage Calculator</a> turns a description of what you are storing into a starting size.</p>
+              <p><span data-crss-size-range data-tpl="Sizes run from a {min} locker that holds a few boxes up to a {max} that can take a full household.">Sizes run from a 5&nbsp;&times;&nbsp;5 locker that holds a few boxes up to a 10&nbsp;&times;&nbsp;30 that can take a full household.</span> The <a href="/size-guide">Size Guide</a> compares them side by side, and the <a href="/storage-calculator">Storage Calculator</a> turns a description of what you are storing into a starting size.</p>
               <p>If you are between two sizes, the larger one is usually the cheaper mistake.</p>
             </div>
           </div>
@@ -1248,6 +1248,36 @@
     var unitsHost = loc.querySelector('[data-crss-units]');
     var filterHost = loc.querySelector('[data-crss-unit-filters]');
 
+    /* ---- Unit size range, live ----
+       Every "sizes from X to Y" claim on this page carries a
+       data-tpl template and is rewritten from the facility record.
+       The markup holds the true values for today, so the page is
+       correct with JavaScript off and self-correcting when the
+       facility adds or drops a size. A hardcoded count is exactly
+       how this page came to advertise a 2 x 5 locker that has never
+       existed here.
+
+       Built from the numeric width and length, never the free-text
+       description, so nothing from the API reaches innerHTML. */
+    function fillSizeRange(unitTypes) {
+      var els = document.querySelectorAll('[data-crss-size-range]');
+      if (!els.length || !unitTypes || !unitTypes.length) return;
+      var sized = unitTypes.filter(function (u) {
+        return isFinite(Number(u.sqft)) && isFinite(Number(u.width)) && isFinite(Number(u.length));
+      }).sort(function (a, b) { return Number(a.sqft) - Number(b.sqft); });
+      if (!sized.length) return;
+      function label(u) {
+        return Number(u.width) + '&nbsp;&times;&nbsp;' + Number(u.length);
+      }
+      var min = label(sized[0]);
+      var max = label(sized[sized.length - 1]);
+      els.forEach(function (el) {
+        var tpl = el.getAttribute('data-tpl');
+        if (!tpl) return;
+        el.innerHTML = tpl.replace('{min}', min).replace('{max}', max);
+      });
+    }
+
     function unitState(html) {
       unitsHost.innerHTML = '<p class="crss-unit-state">' + html + '</p>';
     }
@@ -1361,6 +1391,7 @@
           /* Sort smallest first: people shop by size, not by the order
              the facility system happens to return. */
           all.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
+          fillSizeRange(all);
           renderFilters(all);
           renderUnits(all);
         })

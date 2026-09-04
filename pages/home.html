@@ -12,12 +12,13 @@
      NOTHING IS CLAIMED HERE THAT THIS PROJECT HASN'T ALREADY
      ESTABLISHED. The feature and value-prop copy reuses the four
      facility standards from about-caprock.html (gated access, video
-     surveillance, clean buildings, month-to-month leases), the nine
-     sizes from size-guide.html, and the "options vary by location"
+     surveillance, clean buildings, month-to-month leases), the live
+     sizes from the facility record, and the "options vary by location"
      phrasing from vehicle-storage.html.
 
      PLACEHOLDERS STILL NEEDED (search "PLACEHOLDER"):
-     - Hero promo line: no offer is claimed until CapRock confirms one
+     - (done) Hero promo line is live from the facility record, and
+       stays hidden unless a coupon actually comes back.
      - (done) Hero photography is in. Still worth swapping the 2.1MB
        PNG for a resized JPEG, see the note on .crss-hero-media.
      - Trust badges: real accreditations only. The SROA spec's BBB /
@@ -29,7 +30,6 @@
        the sample quotes from the SROA spec in here, they are real
        named customers of a different company.
      - Facility photos and star ratings / review counts
-     - Real phone number (shared with header, Lubbock page, contact page)
 
      KNOWN DUPLICATION: the LOCATIONS array near the bottom of this file
      must be kept in sync with the one in find-storage.html until both
@@ -49,7 +49,8 @@
       <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
       <p class="crss-hero-sub">
         Gated access, video surveillance, and month-to-month leases.
-        Nine unit sizes, from a 2&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30 drive-up space.
+        <span data-crss-size-range
+              data-tpl="Unit sizes from a {min} locker to a {max} drive-up space.">Unit sizes from a 5&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30 drive-up space.</span>
       </p>
 
       <form class="crss-hero-search" id="crss-hero-search" role="search">
@@ -133,7 +134,7 @@
             <svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5l4.5 4.5L19.5 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
           <h3>Pick your size</h3>
-          <p>Nine sizes, from a 2&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30. Not sure? The <a href="/storage-calculator">calculator</a> will narrow it down.</p>
+          <p><span data-crss-size-range data-tpl="Sizes from a {min} locker to a {max}.">Sizes from a 5&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30.</span> Not sure? The <a href="/storage-calculator">calculator</a> will narrow it down.</p>
         </li>
         <li class="crss-step">
           <span class="crss-step-icon" aria-hidden="true">
@@ -156,7 +157,7 @@
 
       <h2 class="crss-home-h2">Storage for life&rsquo;s big and small moments</h2>
       <p>Most people do not rent a storage unit because they want to. They rent one because a lease ended, a house sold, a kid came home for the summer, or the garage finally lost. Whatever put you here, the unit itself should be the simplest part.</p>
-      <p>That is why leases run month to month. Take the space for a season or for a few years, and hand back the keys when you are done. If you are not sure how much room you need, the <a href="/size-guide">size guide</a> lays out all nine sizes side by side, and the <a href="/storage-calculator">storage calculator</a> turns a rough description of what you are storing into a starting size.</p>
+      <p>That is why leases run month to month. Take the space for a season or for a few years, and hand back the keys when you are done. If you are not sure how much room you need, the <a href="/size-guide">size guide</a> lays out every size side by side, and the <a href="/storage-calculator">storage calculator</a> turns a rough description of what you are storing into a starting size.</p>
 
       <h2 class="crss-home-h2">Why customers choose CapRock</h2>
       <p>No long contracts, no guessing about who can get onto the property, and no mystery about what you are renting.</p>
@@ -165,7 +166,7 @@
         <li><strong>Gated access.</strong> Entry to the property is controlled, not open to anyone who drives past.</li>
         <li><strong>Video surveillance.</strong> Cameras cover the property.</li>
         <li><strong>Clean, well-maintained buildings.</strong> The grounds and units are looked after.</li>
-        <li><strong>Nine unit sizes.</strong> From a 2&nbsp;&times;&nbsp;5 locker up to a 10&nbsp;&times;&nbsp;30, so you are not paying for space you will not use.</li>
+        <li><strong>A size that fits.</strong> <span data-crss-size-range data-tpl="From a {min} locker up to a {max}">From a 5&nbsp;&times;&nbsp;5 locker up to a 10&nbsp;&times;&nbsp;30</span>, so you are not paying for space you will not use.</li>
         <li><strong>Vehicle and RV parking.</strong> Options vary by location, so ask your nearest facility what they currently offer.</li>
       </ul>
       <p class="crss-longcopy-close">If you know roughly what you need, <a href="/find-storage">find your nearest location</a> and give them a call.</p>
@@ -208,8 +209,8 @@
           <span class="crss-feat-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M9.5 9.5v11" stroke="currentColor" stroke-width="1.6"/></svg>
           </span>
-          <h3>Nine unit sizes</h3>
-          <p>From a 2&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30.</p>
+          <h3>A range of sizes</h3>
+          <p><span data-crss-size-range data-tpl="From a {min} locker to a {max}.">From a 5&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30.</span></p>
         </div>
 
         <div class="crss-feat">
@@ -1157,6 +1158,36 @@
       });
     }
 
+    /* ---- Unit size range, live ----
+       Every "sizes from X to Y" claim on this page carries a
+       data-tpl template and is rewritten from the facility record.
+       The markup holds the true values for today, so the page is
+       correct with JavaScript off and self-correcting when the
+       facility adds or drops a size. A hardcoded count is exactly
+       how this page came to advertise a 2 x 5 locker that has never
+       existed here.
+
+       Built from the numeric width and length, never the free-text
+       description, so nothing from the API reaches innerHTML. */
+    function fillSizeRange(unitTypes) {
+      var els = document.querySelectorAll('[data-crss-size-range]');
+      if (!els.length || !unitTypes || !unitTypes.length) return;
+      var sized = unitTypes.filter(function (u) {
+        return isFinite(Number(u.sqft)) && isFinite(Number(u.width)) && isFinite(Number(u.length));
+      }).sort(function (a, b) { return Number(a.sqft) - Number(b.sqft); });
+      if (!sized.length) return;
+      function label(u) {
+        return Number(u.width) + '&nbsp;&times;&nbsp;' + Number(u.length);
+      }
+      var min = label(sized[0]);
+      var max = label(sized[sized.length - 1]);
+      els.forEach(function (el) {
+        var tpl = el.getAttribute('data-tpl');
+        if (!tpl) return;
+        el.innerHTML = tpl.replace('{min}', min).replace('{max}', max);
+      });
+    }
+
     /* ---- Live starting price on the facility cards ----
        A starting rate is the strongest single hook on a storage
        listing, and the data is already there for the Units section.
@@ -1169,6 +1200,7 @@
           .filter(function (u) { return u.available && isFinite(Number(u.rate)); })
           .map(function (u) { return Number(u.rate); });
         if (!rates.length) return;
+        fillSizeRange(data.unitTypes);
         var from = window.CRSS_WSS.money(Math.min.apply(null, rates));
         if (!from) return;
         document.querySelectorAll('[data-crss-price]').forEach(function (el) {
