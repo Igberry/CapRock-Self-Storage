@@ -109,7 +109,7 @@
     </div>
   </section>
 
-  <!-- ============ FIND FACILITIES (1 of 2) ============ -->
+  <!-- ============ FIND FACILITIES ============ -->
   <section class="crss-facilities crss-facilities-tint">
     <div class="crss-home-inner">
       <p class="crss-home-eyebrow crss-is-centered">Move into a storage facility today</p>
@@ -269,13 +269,24 @@
     </div>
   </section>
 
-  <!-- ============ FIND FACILITIES (2 of 2) ============ -->
-  <section class="crss-facilities">
+  <!-- ============ CLOSING CALL TO ACTION ============
+       This was a second copy of the facility grid. The SROA layout
+       repeats that block because it lists hundreds of locations and
+       the reader has scrolled a long way from the first one. CapRock
+       has one facility, so it showed the same card twice on one page.
+
+       The conversion moment at the end of the page is worth keeping;
+       the duplication is not. When there are several locations, the
+       card grid can come back here in place of this. -->
+  <section class="crss-close">
     <div class="crss-home-inner">
       <p class="crss-home-eyebrow crss-is-centered">Ready when you are</p>
-      <h2 class="crss-home-h2 crss-is-centered">Find nearby storage facilities</h2>
-      <div class="crss-fac-grid" data-crss-facilities></div>
-      <p class="crss-fac-note">More CapRock locations are on the way. <a href="/find-storage">See all locations</a></p>
+      <h2 class="crss-home-h2 crss-is-centered">Storage in Lubbock, when you need it</h2>
+      <p class="crss-close-lede">Month-to-month leases, gated access, and someone on the end of the phone who can answer a question about it.</p>
+      <div class="crss-close-actions">
+        <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">View the Lubbock facility</a>
+        <a href="tel:+18067015660" class="crss-close-phone">(806) 701-5660</a>
+      </div>
     </div>
   </section>
 
@@ -595,6 +606,53 @@
   }
   .crss-trust-prose p + p {
     margin-top: 20px;
+  }
+
+  /* ============ CLOSING CALL TO ACTION ============
+     Dark, so the page closes on something distinct from the white
+     sections above it rather than trailing off. */
+  .crss-close {
+    background: var(--crss-charcoal, #292724);
+  }
+  .crss-close .crss-home-eyebrow {
+    color: rgba(241, 227, 204, 0.7);
+  }
+  .crss-close .crss-home-h2 {
+    color: var(--crss-white, #FFFFFF);
+  }
+  .crss-close .crss-home-h2.crss-is-centered {
+    margin-bottom: 18px;
+  }
+  .crss-close-lede {
+    font-size: 16.5px;
+    line-height: 1.7;
+    text-align: center;
+    color: rgba(241, 227, 204, 0.82);
+    max-width: 54ch;
+    margin: 0 auto 34px;
+  }
+  .crss-close-actions {
+    display: flex;
+    gap: 18px 28px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  /* The number is a link, not a button: on a phone it dials, and on a
+     desktop it is the thing someone reads off the screen. */
+  .crss-close-phone {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-cream, #F1E3CC);
+    border-bottom: 1px solid rgba(241, 227, 204, 0.35);
+    padding-bottom: 2px;
+    transition: color .22s ease, border-color .22s ease;
+  }
+  .crss-close-phone:hover {
+    color: var(--crss-white, #FFFFFF);
+    border-color: var(--crss-white, #FFFFFF);
   }
 
   /* ============ FACILITY CARDS ============ */
