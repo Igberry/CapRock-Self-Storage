@@ -44,10 +44,25 @@
 const API_BASE = 'https://api.webselfstorage.com/v4';
 const UPSTREAM_TIMEOUT_MS = 8000;
 
-/* Not "*": an open proxy lets anyone spend CapRock's API quota. */
+/* Not "*": an open proxy lets anyone spend CapRock's API quota.
+
+   The live domain comes from an env var rather than this list, so
+   going live is a Vercel setting and a redeploy, not a code change
+   that has to be written, reviewed and pushed on launch day:
+
+     vercel env add CRSS_SITE_ORIGINS production
+     https://caprockselfstorage.com,https://www.caprockselfstorage.com
+
+   Comma-separated, and BOTH the bare and www. forms are needed: the
+   browser sends whichever host the visitor actually typed, and an
+   Origin that is not on this list is refused. Scheme and host only,
+   no trailing slash, or the string compare in cors() will not match. */
 const ALLOWED_ORIGINS = [
   'https://sites.leadconnectorhq.com',
-  // TODO add CapRock's live domain, and its www. variant, at launch.
+  ...(process.env.CRSS_SITE_ORIGINS || '')
+    .split(',')
+    .map((o) => o.trim().replace(/\/+$/, ''))
+    .filter(Boolean),
 ];
 
 /* Slug the page asks for -> WebSelfStorage entity id. Keeps the raw id
