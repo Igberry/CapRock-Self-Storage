@@ -51,7 +51,7 @@ const UPSTREAM_TIMEOUT_MS = 8000;
    that has to be written, reviewed and pushed on launch day:
 
      vercel env add CRSS_SITE_ORIGINS production
-     https://caprockselfstorage.com,https://www.caprockselfstorage.com
+     https://caprock-storage.com,https://www.caprock-storage.com
 
    Comma-separated, and BOTH the bare and www. forms are needed: the
    browser sends whichever host the visitor actually typed, and an
