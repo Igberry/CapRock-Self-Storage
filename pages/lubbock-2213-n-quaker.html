@@ -352,7 +352,7 @@
   .crss-location :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   .crss-location {
@@ -374,7 +374,6 @@
     top: var(--crss-stuck-h, 0px);
     z-index: 30;
     background: var(--crss-charcoal, #292724);
-    box-shadow: 0 10px 26px -22px rgba(41, 39, 36, 0.9);
   }
   .crss-subnav-inner {
     max-width: 1280px;
@@ -425,10 +424,9 @@
     position: sticky;
     top: calc(var(--crss-stuck-h, 0px) + var(--crss-subnav-h, 50px) + 28px);
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 6px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04), 0 18px 40px -26px rgba(41, 39, 36, 0.4);
   }
   /* Facility photo.
      The photo is 2073x758, far wider than these panels, so cover crops
@@ -479,7 +477,7 @@
     color: var(--crss-ink-soft, #5F564C);
     line-height: 1.6;
     background: var(--crss-sand, #EFE7DA);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 14px 16px;
     margin-bottom: 18px;
   }
@@ -499,9 +497,9 @@
     transform: translateX(3px);
   }
   .crss-info-map {
-    border-radius: 4px;
+    border-radius: 0;
     overflow: hidden;
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-info-map iframe {
     display: block;
@@ -530,7 +528,7 @@
   .crss-section-stub {
     background: var(--crss-sand, #EFE7DA);
     border: 1px dashed rgba(127, 108, 93, 0.5);
-    border-radius: 6px;
+    border-radius: 0;
     padding: 40px 40px 42px;
   }
   .crss-section-stub h2 {
@@ -545,9 +543,9 @@
   .crss-section-stub h2::after {
     content: '';
     display: block;
-    width: 42px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
     margin: 16px 0 14px;
   }
   .crss-stub-note {
@@ -564,10 +562,9 @@
      they genuinely are not built yet. */
   .crss-panel {
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 6px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     padding: 40px 40px 42px;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
   }
   .crss-panel h2 {
     font-family: 'Fraunces', Georgia, serif;
@@ -581,9 +578,9 @@
   .crss-panel h2::after {
     content: '';
     display: block;
-    width: 42px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
     margin: 16px 0 18px;
   }
   .crss-panel-lede {
@@ -613,8 +610,8 @@
     gap: 14px;
   }
   .crss-feature {
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 5px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     overflow: hidden;
     background: var(--crss-bone, #FAF7F1);
     transition: border-color .26s ease;
@@ -697,17 +694,17 @@
     color: var(--crss-taupe, #7F6C5D);
     background: var(--crss-sand, #EFE7DA);
     border: 1px dashed rgba(127, 108, 93, 0.5);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 12px 14px;
     margin-top: 10px;
   }
 
   /* ---- FAQ accordion ---- */
   .crss-faq-list {
-    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-top: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-faq {
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-faq-q {
     display: flex;
@@ -779,7 +776,7 @@
     padding: 24px 26px 26px;
     background: var(--crss-sand, #EFE7DA);
     border: 1px dashed rgba(127, 108, 93, 0.5);
-    border-radius: 5px;
+    border-radius: 0;
   }
   .crss-faq-open-head {
     font-size: 10.5px;
@@ -845,7 +842,7 @@
     background: var(--crss-cream, #F1E3CC);
     border: 1px dashed var(--crss-terracotta, #A44A23);
     border-left: 3px solid var(--crss-terracotta, #A44A23);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 16px 20px;
   }
   .crss-unconfirmed strong {
@@ -859,7 +856,7 @@
     text-align: center;
     background: var(--crss-sand, #EFE7DA);
     border: 1px dashed rgba(127, 108, 93, 0.5);
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.16em;
@@ -873,7 +870,7 @@
     color: var(--crss-taupe, #7F6C5D);
     background: var(--crss-sand, #EFE7DA);
     border: 1px dashed rgba(127, 108, 93, 0.5);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 14px 16px;
     margin-bottom: 22px;
   }
@@ -893,8 +890,8 @@
     text-transform: uppercase;
     color: var(--crss-ink-soft, #5F564C);
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
-    border-radius: 4px;
+    border: 1px solid var(--crss-border, #D9CDB9);
+    border-radius: 0;
     padding: 10px 16px;
     cursor: pointer;
     transition: color .22s ease, background .22s ease, border-color .22s ease;
@@ -912,7 +909,7 @@
   .crss-unit-list {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-top: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-unit {
     display: grid;
@@ -920,7 +917,7 @@
     gap: 8px 24px;
     align-items: center;
     padding: 22px 2px;
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-unit-size {
     font-family: 'Fraunces', Georgia, serif;
@@ -953,7 +950,7 @@
     letter-spacing: 0.06em;
     color: var(--crss-ink-soft, #5F564C);
     background: var(--crss-sand, #EFE7DA);
-    border-radius: 3px;
+    border-radius: 0;
     padding: 5px 9px;
   }
   .crss-unit-right {
@@ -1002,7 +999,7 @@
     line-height: 1.68;
     color: var(--crss-ink-soft, #5F564C);
     background: var(--crss-sand, #EFE7DA);
-    border-radius: 5px;
+    border-radius: 0;
     padding: 24px 26px;
   }
   .crss-unit-state a {

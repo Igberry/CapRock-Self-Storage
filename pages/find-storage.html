@@ -58,7 +58,7 @@
   .crss-findstorage :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   .crss-findstorage-inner {
@@ -104,9 +104,9 @@
   .crss-fs-title::after {
     content: '';
     display: block;
-    width: 54px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
     margin: 24px 0 22px;
   }
   .crss-fs-subtitle {
@@ -141,9 +141,8 @@
     font-family: inherit;
     color: var(--crss-charcoal, #292724);
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
-    border-radius: 6px;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+    border: 1px solid var(--crss-border, #D9CDB9);
+    border-radius: 0;
     transition: border-color .24s ease, box-shadow .24s ease;
   }
   .crss-fs-search input::placeholder {
@@ -153,7 +152,6 @@
   .crss-fs-search input:focus {
     outline: none;
     border-color: var(--crss-terracotta, #A44A23);
-    box-shadow: 0 0 0 3px rgba(164, 74, 35, 0.12);
   }
   .crss-fs-search:focus-within .crss-fs-search-icon {
     color: var(--crss-terracotta, #A44A23);
@@ -168,16 +166,14 @@
   .crss-loc-card {
     display: block;
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 6px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
     transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
   }
   .crss-loc-card:hover {
     transform: translateY(-4px);
     border-color: rgba(164, 74, 35, 0.28);
-    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 22px 44px -16px rgba(41, 39, 36, 0.30);
   }
   /* Facility photo.
      The photo is 2073x758, far wider than these panels, so cover crops
@@ -242,7 +238,7 @@
     line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
     background: var(--crss-sand, #EFE7DA);
-    border-radius: 6px;
+    border-radius: 0;
     padding: 56px 28px;
   }
 

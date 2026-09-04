@@ -143,7 +143,7 @@
   .crss-footer :focus-visible, .crss-totop:focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   .crss-footer {
@@ -169,7 +169,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
     padding-bottom: 44px;
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-footer-head {
     font-size: 10.5px;
@@ -218,7 +218,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    border: 1px solid var(--crss-border, #D9CDB9);
     color: var(--crss-taupe, #7F6C5D);
     transition: color .24s ease, border-color .24s ease, background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1);
   }
@@ -236,7 +236,7 @@
   /* ============ LOCATIONS ============ */
   .crss-footer-locations {
     padding: 34px 0;
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-footer-locations p {
     font-size: 15px;
@@ -300,7 +300,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(41, 39, 36, 0.2), 0 14px 30px -12px rgba(164, 74, 35, 0.7);
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);

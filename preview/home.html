@@ -182,8 +182,19 @@
     --crss-bone: #FAF7F1;
     --crss-sand: #EFE7DA;
     --crss-ink-soft: #5F564C;
-    --crss-border: rgba(41, 39, 36, 0.12);
-    --crss-rule: rgba(41, 39, 36, 0.09);
+
+    /* Hairlines, warm rather than transparent black.
+       A line drawn in rgba(0,0,0,.09) belongs to no brand; it is the
+       colour every framework reaches for. These are tans mixed from
+       the same family as the cream and the sand, so the structure of
+       the page reads as part of the palette instead of a grid drawn
+       on top of it. Opaque on purpose: ink on paper, not a veil.
+         border = the structural line, around a card or a field
+         rule   = the lighter division, between rows in a list
+         ink    = the heavy rule that opens a section */
+    --crss-border: #D9CDB9;
+    --crss-rule: #E7DECD;
+    --crss-rule-ink: #C4B49B;
 
     /* Live sticky heights, re-published by JS at runtime */
     --crss-header-h: 88px;  /* 84px inner + 3px top rule + 1px hairline */
@@ -216,7 +227,7 @@
   .crss-header :focus-visible {
     outline: 2px solid var(--crss-terracotta);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   /* ============ MASTHEAD ============ */
@@ -238,7 +249,6 @@
     background: var(--crss-white);
     border-top: 3px solid var(--crss-terracotta);
     border-bottom: 1px solid var(--crss-rule);
-    box-shadow: 0 8px 24px -20px rgba(41, 39, 36, 0.55);
   }
   .crss-header-inner {
     max-width: 1280px;
@@ -332,8 +342,7 @@
     min-width: 216px;
     background: var(--crss-white);
     border: 1px solid var(--crss-rule);
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 18px 40px -16px rgba(41, 39, 36, 0.30);
+    border-radius: 0;
     padding: 6px;
     opacity: 0;
     visibility: hidden;
@@ -357,7 +366,7 @@
     font-size: 13.5px;
     font-weight: 500;
     color: var(--crss-ink-soft);
-    border-radius: 4px;
+    border-radius: 0;
     transition: color .2s ease, background .2s ease, padding-left .22s cubic-bezier(.4, 0, .2, 1);
   }
   .crss-dropdown-menu a::before {
@@ -368,7 +377,7 @@
     width: 2px;
     height: 0;
     background: var(--crss-terracotta);
-    border-radius: 1px;
+    border-radius: 0;
     transform: translateY(-50%);
     transition: height .22s cubic-bezier(.4, 0, .2, 1);
   }
@@ -423,15 +432,13 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 13px 22px;
-    border-radius: 4px;
+    border-radius: 0;
     white-space: nowrap;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.10);
     transition: background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1), box-shadow .24s ease;
   }
   .crss-paybill-btn:hover {
     background: var(--crss-terracotta-dark);
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px -4px rgba(164, 74, 35, 0.5);
   }
 
   /* ---- Mobile toggle: animates into an X via .is-open ---- */
@@ -447,7 +454,7 @@
     display: block;
     height: 1.5px;
     background: var(--crss-charcoal);
-    border-radius: 2px;
+    border-radius: 0;
     transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .2s ease;
   }
   .crss-header.is-open .crss-mobile-toggle span:nth-child(1) {
@@ -821,7 +828,7 @@
         toast.setAttribute('style',
           'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);' +
           'z-index:9999;max-width:min(92vw,470px);padding:14px 18px;' +
-          'border-radius:6px;background:#292724;color:#F1E3CC;text-align:center;' +
+          'border-radius: 0;background:#292724;color:#F1E3CC;text-align:center;' +
           'font:500 14px/1.5 "Work Sans",Arial,sans-serif;' +
           'box-shadow:0 12px 32px -10px rgba(0,0,0,.6);' +
           'opacity:0;transition:opacity .2s ease;pointer-events:none;');
@@ -972,8 +979,13 @@
   <!-- ============ FIND FACILITIES ============ -->
   <section class="crss-facilities crss-facilities-tint">
     <div class="crss-home-inner">
-      <p class="crss-home-eyebrow crss-is-centered">Move into a storage facility today</p>
-      <h2 class="crss-home-h2 crss-is-centered">Find nearby storage facilities</h2>
+      <header class="crss-sec-head">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">01</span>
+          <p class="crss-home-eyebrow">Move into a storage facility today</p>
+        </div>
+        <h2 class="crss-home-h2">Find nearby storage facilities</h2>
+      </header>
       <div class="crss-fac-grid" data-crss-facilities></div>
       <p class="crss-fac-note">More CapRock locations are on the way. <a href="/find-storage">See all locations</a></p>
     </div>
@@ -982,8 +994,13 @@
   <!-- ============ 3 SIMPLE STEPS ============ -->
   <section class="crss-steps">
     <div class="crss-home-inner">
-      <p class="crss-home-eyebrow crss-is-centered">Finding storage is easy</p>
-      <h2 class="crss-home-h2 crss-is-centered">Three simple steps</h2>
+      <header class="crss-sec-head">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">02</span>
+          <p class="crss-home-eyebrow">Finding storage is easy</p>
+        </div>
+        <h2 class="crss-home-h2">Three simple steps</h2>
+      </header>
 
       <ol class="crss-steps-grid">
         <li class="crss-step">
@@ -1009,7 +1026,7 @@
         </li>
       </ol>
 
-      <div class="crss-is-centered">
+      <div>
         <a href="/find-storage" class="crss-btn-primary">Let&rsquo;s get started</a>
       </div>
     </div>
@@ -1040,9 +1057,14 @@
   <!-- ============ FEATURES GRID ============ -->
   <section class="crss-features">
     <div class="crss-home-inner">
-      <p class="crss-home-eyebrow crss-is-centered">Storage features</p>
-      <h2 class="crss-home-h2 crss-is-centered">What you get</h2>
-      <p class="crss-home-lede crss-is-centered">Every item below is a standard this project has already committed to. Climate control, drive-up access, and autopay are deliberately absent until CapRock confirms them.</p>
+      <header class="crss-sec-head crss-sec-head-split">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">03</span>
+          <p class="crss-home-eyebrow">Storage features</p>
+        </div>
+        <h2 class="crss-home-h2">What you get</h2>
+        <p class="crss-sec-aside">Every item below is a standard this project has already committed to. Climate control, drive-up access, and autopay are deliberately absent until CapRock confirms them.</p>
+      </header>
 
       <div class="crss-feat-grid">
         <div class="crss-feat">
@@ -1099,8 +1121,13 @@
   <!-- ============ TESTIMONIALS ============ -->
   <section class="crss-testimonials">
     <div class="crss-home-inner">
-      <p class="crss-home-eyebrow crss-is-centered">Testimonials</p>
-      <h2 class="crss-home-h2 crss-is-centered">What our customers say</h2>
+      <header class="crss-sec-head">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">04</span>
+          <p class="crss-home-eyebrow">Testimonials</p>
+        </div>
+        <h2 class="crss-home-h2">What our customers say</h2>
+      </header>
 
       <!-- PLACEHOLDER: these four cards are empty scaffolding on purpose.
            The SROA spec supplies four real, named reviews ("Heather Y.",
@@ -1173,7 +1200,7 @@
   .crss-home :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   /* ============ SHARED SECTION FURNITURE ============ */
@@ -1209,12 +1236,63 @@
   .crss-home-h2.crss-is-centered {
     margin-bottom: 44px;
   }
-  .crss-home-lede {
-    font-size: 17px;
-    line-height: 1.7;
+  /* ---- Section opener ----
+     One device, every section: a rule across the column, the number
+     and label sitting on it, the heading left aligned beneath.
+
+     What it replaces was an uppercase label centred above a centred
+     heading, five times down the page. Centring everything removes
+     the left edge a reader's eye runs down, so the page has no
+     spine and each section arrives with the same weight as the one
+     before it. The numerals do the other half of the work: they
+     say where you are in a document. */
+  .crss-sec-head {
+    border-top: 1px solid var(--crss-rule-ink, #C4B49B);
+    padding-top: 16px;
+    margin-bottom: 48px;
+  }
+  .crss-sec-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  /* Set in the display serif, not the label face: it is a figure on
+     a page, not another piece of UI chrome. */
+  .crss-sec-num {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 13px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-sec-head .crss-home-eyebrow {
+    margin-bottom: 0;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-sec-head .crss-home-h2 {
+    margin-bottom: 0;
+    max-width: 20ch;
+  }
+  /* The supporting line sits beside the heading rather than under
+     it, so the opener occupies two columns and the eye has somewhere
+     to go sideways before it goes down. */
+  .crss-sec-head-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 72px;
+    align-items: end;
+  }
+  .crss-sec-head-split .crss-sec-meta {
+    grid-column: 1 / -1;
+  }
+  .crss-sec-aside {
+    font-size: 16.5px;
+    line-height: 1.72;
     color: var(--crss-ink-soft, #5F564C);
-    max-width: 62ch;
-    margin: -28px auto 48px;
+    max-width: 54ch;
   }
   .crss-btn-primary {
     display: inline-block;
@@ -1225,14 +1303,12 @@
     letter-spacing: 0.11em;
     text-transform: uppercase;
     padding: 16px 34px;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.12);
+    border-radius: 0;
     transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
   }
   .crss-btn-primary:hover {
     background: var(--crss-terracotta-dark, #863B1A);
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px -8px rgba(164, 74, 35, 0.6);
   }
 
   /* ============ HERO ============ */
@@ -1320,10 +1396,9 @@
     gap: 10px;
     align-items: stretch;
     background: var(--crss-white, #FFFFFF);
-    border-radius: 6px;
+    border-radius: 0;
     padding: 10px;
     max-width: 980px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 26px 60px -24px rgba(0, 0, 0, 0.6);
   }
   .crss-hero-field {
     position: relative;
@@ -1336,7 +1411,7 @@
     flex: 2.1 1 0;
   }
   .crss-hero-field + .crss-hero-field {
-    border-left: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-left: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-hero-search-icon {
     position: absolute;
@@ -1358,7 +1433,7 @@
     color: var(--crss-charcoal, #292724);
     background: transparent;
     border: none;
-    border-radius: 4px;
+    border-radius: 0;
     padding: 15px 14px;
     cursor: pointer;
   }
@@ -1396,13 +1471,12 @@
     text-transform: uppercase;
     padding: 16px 32px;
     border: none;
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     transition: background .26s ease, box-shadow .26s ease;
   }
   .crss-hero-submit:hover {
     background: var(--crss-terracotta-dark, #863B1A);
-    box-shadow: 0 10px 22px -8px rgba(164, 74, 35, 0.7);
   }
 
   /* ============ TRUST STRIP ============ */
@@ -1530,16 +1604,14 @@
   .crss-fac-card {
     display: block;
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 6px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
     transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
   }
   .crss-fac-card:hover {
     transform: translateY(-4px);
     border-color: rgba(164, 74, 35, 0.28);
-    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 22px 44px -16px rgba(41, 39, 36, 0.30);
   }
   /* Facility photo. The photo is 2073x758, far wider than this panel,
      so cover crops it hard. The vertical anchor keeps the building band
@@ -1700,15 +1772,22 @@
     background: var(--crss-bone, #FAF7F1);
   }
   .crss-longcopy .crss-home-h2 {
-    margin-top: 8px;
+    border-top: 1px solid var(--crss-rule-ink, #C4B49B);
+    padding-top: 20px;
+    margin-top: 52px;
+    margin-bottom: 22px;
+    max-width: 24ch;
   }
-  .crss-longcopy .crss-home-h2::after {
-    content: '';
-    display: block;
-    width: 46px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
-    margin: 20px 0 22px;
+  .crss-longcopy .crss-home-h2:first-child {
+    margin-top: 0;
+  }
+  /* The opening paragraph carries a little more weight than the
+     ones after it, the way a lead paragraph does in print. */
+  .crss-longcopy .crss-home-h2 + p {
+    font-size: 18.5px;
+    line-height: 1.72;
+    color: var(--crss-charcoal, #292724);
+    margin-top: 0;
   }
   .crss-longcopy p {
     font-size: 17px;
@@ -1730,13 +1809,10 @@
   .crss-longcopy a:hover {
     text-decoration-color: var(--crss-terracotta, #A44A23);
   }
-  .crss-longcopy .crss-home-h2 + p {
-    margin-top: 0;
-  }
   .crss-value-list {
     list-style: none;
     margin-top: 26px;
-    border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-top: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-value-list li {
     position: relative;
@@ -1744,7 +1820,7 @@
     line-height: 1.7;
     color: var(--crss-ink-soft, #5F564C);
     padding: 16px 0;
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-value-list strong {
     font-weight: 600;
@@ -1765,16 +1841,14 @@
   }
   .crss-feat {
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 6px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     padding: 32px 30px 34px;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
     transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
   }
   .crss-feat:hover {
     transform: translateY(-3px);
     border-color: rgba(164, 74, 35, 0.28);
-    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 18px 36px -14px rgba(41, 39, 36, 0.26);
   }
   .crss-feat-icon {
     display: inline-flex;
@@ -1823,7 +1897,7 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 40px 38px 36px;
-    border-radius: 6px;
+    border-radius: 0;
     background: var(--crss-charcoal, #292724);
     color: var(--crss-cream, #F1E3CC);
   }
@@ -1923,13 +1997,19 @@
     }
     .crss-hero-field-text {
       flex: 1 1 100%;
-      border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+      border-bottom: 1px solid var(--crss-rule, #E7DECD);
     }
     .crss-hero-field-text + .crss-hero-field {
       border-left: none;
     }
   }
   @media (max-width: 900px) {
+    .crss-sec-head-split {
+      display: block;
+    }
+    .crss-sec-aside {
+      margin-top: 22px;
+    }
     .crss-steps-grid {
       grid-template-columns: 1fr;
       gap: 44px;
@@ -1968,7 +2048,7 @@
     }
     .crss-hero-field + .crss-hero-field {
       border-left: none;
-      border-top: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+      border-top: 1px solid var(--crss-rule, #E7DECD);
     }
     .crss-hero-field-text {
       border-bottom: none;
@@ -2344,7 +2424,7 @@
   .crss-footer :focus-visible, .crss-totop:focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   .crss-footer {
@@ -2370,7 +2450,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
     padding-bottom: 44px;
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-footer-head {
     font-size: 10.5px;
@@ -2419,7 +2499,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
+    border: 1px solid var(--crss-border, #D9CDB9);
     color: var(--crss-taupe, #7F6C5D);
     transition: color .24s ease, border-color .24s ease, background .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1);
   }
@@ -2437,7 +2517,7 @@
   /* ============ LOCATIONS ============ */
   .crss-footer-locations {
     padding: 34px 0;
-    border-bottom: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-footer-locations p {
     font-size: 15px;
@@ -2501,7 +2581,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(41, 39, 36, 0.2), 0 14px 30px -12px rgba(164, 74, 35, 0.7);
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);

@@ -81,7 +81,7 @@
   .crss-help :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   .crss-help-inner {
@@ -126,9 +126,9 @@
   .crss-help-title::after {
     content: '';
     display: block;
-    width: 54px;
-    height: 2px;
-    background: var(--crss-terracotta, #A44A23);
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
     margin: 24px 0 22px;
   }
   .crss-help-subtitle {
@@ -163,9 +163,8 @@
     font-family: inherit;
     color: var(--crss-charcoal, #292724);
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-border, rgba(41, 39, 36, 0.12));
-    border-radius: 6px;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
+    border: 1px solid var(--crss-border, #D9CDB9);
+    border-radius: 0;
     transition: border-color .24s ease, box-shadow .24s ease;
   }
   .crss-help-search input::placeholder {
@@ -175,7 +174,6 @@
   .crss-help-search input:focus {
     outline: none;
     border-color: var(--crss-terracotta, #A44A23);
-    box-shadow: 0 0 0 3px rgba(164, 74, 35, 0.12);
   }
   .crss-help-search:focus-within .crss-help-search-icon {
     color: var(--crss-terracotta, #A44A23);
@@ -191,10 +189,9 @@
     position: relative;
     display: block;
     background: var(--crss-white, #FFFFFF);
-    border: 1px solid var(--crss-rule, rgba(41, 39, 36, 0.09));
-    border-radius: 6px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
     padding: 30px 28px;
-    box-shadow: 0 1px 2px rgba(41, 39, 36, 0.04);
     transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
   }
   /* Hairline that draws itself along the top edge on hover */
@@ -206,7 +203,7 @@
     right: -1px;
     height: 2px;
     background: var(--crss-terracotta, #A44A23);
-    border-radius: 6px 6px 0 0;
+    border-radius: 0;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform .34s cubic-bezier(.4, 0, .2, 1);
@@ -214,7 +211,6 @@
   .crss-help-card:hover {
     transform: translateY(-3px);
     border-color: rgba(164, 74, 35, 0.28);
-    box-shadow: 0 2px 4px rgba(41, 39, 36, 0.04), 0 18px 36px -14px rgba(41, 39, 36, 0.26);
   }
   .crss-help-card:hover::before {
     transform: scaleX(1);
@@ -247,7 +243,7 @@
     line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
     background: var(--crss-sand, #EFE7DA);
-    border-radius: 6px;
+    border-radius: 0;
     padding: 48px 28px;
   }
 
@@ -258,7 +254,7 @@
     margin-top: 72px;
     padding: 54px 40px;
     background: var(--crss-charcoal, #292724);
-    border-radius: 6px;
+    border-radius: 0;
     text-align: center;
   }
   .crss-help-cta::before {
@@ -292,14 +288,12 @@
     letter-spacing: 0.11em;
     text-transform: uppercase;
     padding: 16px 34px;
-    border-radius: 4px;
-    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 0;
     transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
   }
   .crss-help-cta-btn:hover {
     background: var(--crss-terracotta-dark, #863B1A);
     transform: translateY(-2px);
-    box-shadow: 0 0 0 1px rgba(241, 227, 204, 0.24), 0 12px 24px -8px rgba(164, 74, 35, 0.75);
   }
 
   /* ---- Full-bleed inside GHL ----
