@@ -84,7 +84,7 @@
 
   <!-- ============ TRUST STRIP ============ -->
   <section class="crss-trust">
-    <div class="crss-trust-photo">
+    <div class="crss-trust-band">
       <div class="crss-trust-badges">
         <!-- PLACEHOLDER: real, earned accreditations only. Do not drop in
              the BBB / Shopper Approved / Reputation.com badges from the
@@ -531,35 +531,25 @@
   .crss-trust {
     background: var(--crss-white, #FFFFFF);
   }
-  /* Facility photo band. The badges sit on top of it, so the scrim is
-     doing legibility work here too, not just tone: without it the
-     cream badge text would sit on bright sky. */
-  .crss-trust-photo {
+  /* Badge band.
+     This used to repeat the hero photograph. The hero is one screen
+     above it, so the same building showed up twice in a single
+     scroll, which reads as a site short of pictures rather than as
+     a deliberate echo. A flat band gives the badges the contrast
+     they need without competing with the hero.
+
+     The API returns five photographs of this property, but they are
+     480px wide natively (the larger URLs are upscales), so none of
+     them can carry a full-bleed band. If a real wide shot of the
+     gate or the drive turns up later, it belongs here. */
+  .crss-trust-band {
     position: relative;
-    min-height: 300px;
+    min-height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 56px 32px;
-    background-color: var(--crss-taupe, #7F6C5D);
-    background-image:
-      linear-gradient(rgba(41, 39, 36, 0.62), rgba(41, 39, 36, 0.62)),
-      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9866f0738fb3768df5fcf1.png');
-    background-size: cover;
-    background-position: center 56%;
-    background-repeat: no-repeat;
-  }
-  .crss-trust-photo-note {
-    position: absolute;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(241, 227, 204, 0.6);
-    white-space: nowrap;
+    background: var(--crss-charcoal, #292724);
   }
   .crss-trust-badges {
     display: flex;
@@ -1033,7 +1023,7 @@
     .crss-hero-inner {
       padding: 88px 26px 88px;
     }
-    .crss-trust-photo {
+    .crss-trust-band {
       min-height: 260px;
       padding: 52px 26px;
     }
@@ -1070,7 +1060,7 @@
     .crss-hero-inner {
       padding: 76px 20px 80px;
     }
-    .crss-trust-photo {
+    .crss-trust-band {
       min-height: 240px;
       padding: 52px 20px;
     }
