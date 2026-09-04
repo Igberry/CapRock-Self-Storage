@@ -101,8 +101,16 @@
            would add a request to all 13 pages to fill one href.
            Opens in a new tab, since it is a different system
            and tenants should not lose the site. -->
-      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
-         class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
+      <!-- The payment portal is DOWN, not missing. The API returns
+           https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44
+           which resolves but accepts no connection on http or https:
+           15s timeouts from two separate networks. Restore that URL
+           here once U-Haul (ams@uhaul.com) has it responding.
+
+           Until then this goes to Contact Us. A button that hangs
+           the browser and then shows a connection error is worse
+           than one that reaches someone who can take a payment. -->
+      <a href="/contact-us" class="crss-paybill-btn">Pay Your Bill</a>
     </div>
 
     <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
@@ -141,8 +149,7 @@
     <!-- Absent before: the desktop utility row is hidden below
          1180px, so on a phone there was no way to reach the
          payment portal at all. -->
-    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44" class="crss-mobile-link"
-       target="_blank" rel="noopener">Pay Your Bill</a>
+    <a href="/contact-us" class="crss-mobile-link">Pay Your Bill</a>
   </div>
 </header>
 
