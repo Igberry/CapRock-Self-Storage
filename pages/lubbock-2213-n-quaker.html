@@ -520,6 +520,22 @@
     gap: 28px;
     min-width: 0;
   }
+  /* Section figures, counted rather than typed, so they cannot
+     drift out of step with the sections they label. */
+  .crss-main {
+    counter-reset: crss-sec;
+  }
+  .crss-section h2::before {
+    counter-increment: crss-sec;
+    content: counter(crss-sec, decimal-leading-zero);
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 12px;
+  }
   .crss-section {
     scroll-margin-top: calc(var(--crss-stuck-h, 0px) + var(--crss-subnav-h, 50px) + 20px);
   }

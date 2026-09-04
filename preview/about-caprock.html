@@ -998,6 +998,22 @@
   .crss-about-placeholder p {
     font-style: italic;
   }
+  /* Section figures, counted rather than typed, so they cannot
+     drift out of step with the sections they label. */
+  .crss-about-inner {
+    counter-reset: crss-blk;
+  }
+  .crss-about-block h2::before {
+    counter-increment: crss-blk;
+    content: counter(crss-blk, decimal-leading-zero);
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--crss-terracotta, #A44A23);
+    margin-bottom: 12px;
+  }
   .crss-about-block h2 {
     font-family: 'Fraunces', Georgia, serif;
     font-optical-sizing: auto;
