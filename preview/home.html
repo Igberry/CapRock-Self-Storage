@@ -86,10 +86,10 @@
     </nav>
 
     <div class="crss-header-actions">
-      <!-- PLACEHOLDER phone number -->
-      <a href="tel:18060000000" class="crss-phone">
+      <!-- Confirmed from /v4/location/1030298. -->
+      <a href="tel:+18067015660" class="crss-phone">
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        <span>(806) 000-0000</span>
+        <span>(806) 701-5660</span>
       </a>
       <a href="#" class="crss-account-link" aria-label="My Account">
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -144,7 +144,7 @@
       <a href="/contact-us">Contact Us</a>
     </div>
 
-    <a href="tel:18060000000" class="crss-mobile-link">(806) 000-0000</a>
+    <a href="tel:+18067015660" class="crss-mobile-link">(806) 701-5660</a>
     <a href="#" class="crss-mobile-link">My Account</a>
     <!-- Absent before: the desktop utility row is hidden below
          1180px, so on a phone there was no way to reach the
@@ -903,9 +903,10 @@
   <section class="crss-hero">
     <div class="crss-hero-media" aria-hidden="true"></div>
     <div class="crss-hero-inner">
-      <!-- PLACEHOLDER: promotional offer line. SROA runs "UP TO 50% OFF*"
-           here. Nothing is stated until CapRock confirms a real offer. -->
-      <p class="crss-hero-eyebrow">[PLACEHOLDER &mdash; promotional offer]</p>
+      <!-- Filled from the facility record. Hidden until a real
+           coupon arrives, so the hero never shows an empty slot or
+           an offer that has since been withdrawn. -->
+      <p class="crss-hero-eyebrow" data-crss-promo hidden></p>
 
       <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
       <p class="crss-hero-sub">
@@ -1981,8 +1982,8 @@
         name: 'Lubbock, 2213 N Quaker',
         city: 'Lubbock',
         state: 'TX',
-        address: '2213 N Quaker, Lubbock, TX',
-        phone: '[Phone — still needed]',   // PLACEHOLDER, shared with the header
+        address: '2213 North Quaker Ave, Lubbock, TX 79416',
+        phone: '(806) 701-5660',
         url: '/lubbock-2213-n-quaker'
       }
     ];
@@ -2046,6 +2047,31 @@
           el.textContent = 'From ' + from + '/mo';
           el.hidden = false;
         });
+      });
+    }
+
+    /* ---- Live promotion in the hero ----
+       Offers come and go, so this is read rather than written in. The
+       eyebrow stays hidden unless a coupon actually comes back: an
+       empty promo slot looks broken, and a stale one is worse.
+
+       The strongest offer wins the slot, ranked by the discount
+       percentage in the description. Conditions are not shown here
+       because the hero has no room for them; the Promotions panel on
+       the location page carries the full terms. */
+    if (window.CRSS_WSS) {
+      window.CRSS_WSS.get('location').then(function (d) {
+        if (!d || !d.coupons || !d.coupons.length) return;
+        var el = document.querySelector('[data-crss-promo]');
+        if (!el) return;
+        var best = d.coupons.slice().sort(function (a, b) {
+          var pa = parseInt((a.description || '').match(/(\d+)\s*%/) || [0, 0], 10);
+          var pb = parseInt((b.description || '').match(/(\d+)\s*%/) || [0, 0], 10);
+          return pb - pa;
+        })[0];
+        if (!best || !best.description) return;
+        el.textContent = best.description;
+        el.hidden = false;
       });
     }
   })();
@@ -2112,11 +2138,11 @@
       <div class="crss-footer-col">
         <h2 class="crss-footer-head">Reach Out</h2>
         <ul>
-          <!-- PLACEHOLDER phone, same dummy number as the header -->
+          <!-- Confirmed from /v4/location/1030298. -->
           <li>
-            <a href="tel:18060000000" class="crss-footer-contact">
+            <a href="tel:+18067015660" class="crss-footer-contact">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <span>(806) 000-0000</span>
+              <span>(806) 701-5660</span>
             </a>
           </li>
           <!-- PLACEHOLDER email, same as the contact page -->

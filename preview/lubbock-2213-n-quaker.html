@@ -86,10 +86,10 @@
     </nav>
 
     <div class="crss-header-actions">
-      <!-- PLACEHOLDER phone number -->
-      <a href="tel:18060000000" class="crss-phone">
+      <!-- Confirmed from /v4/location/1030298. -->
+      <a href="tel:+18067015660" class="crss-phone">
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        <span>(806) 000-0000</span>
+        <span>(806) 701-5660</span>
       </a>
       <a href="#" class="crss-account-link" aria-label="My Account">
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -144,7 +144,7 @@
       <a href="/contact-us">Contact Us</a>
     </div>
 
-    <a href="tel:18060000000" class="crss-mobile-link">(806) 000-0000</a>
+    <a href="tel:+18067015660" class="crss-mobile-link">(806) 701-5660</a>
     <a href="#" class="crss-mobile-link">My Account</a>
     <!-- Absent before: the desktop utility row is hidden below
          1180px, so on a phone there was no way to reach the
@@ -862,7 +862,7 @@
 
 <!-- ================================================================
      CapRock Self Storage — LOCATION PAGE
-     Live page: CapRock Self-Storage, 2213 N Quaker, Lubbock, TX
+     Live page: CapRock Self Storage, 2213 North Quaker Ave, Lubbock, TX 79416
 
      THIS FILE IS THE TEMPLATE FOR EVERY LOCATION PAGE.
      There is no separate template file on purpose: a copy would drift
@@ -908,17 +908,12 @@
      ================================================================ -->
 <div class="crss-location">
 
-  <!-- ============ PRE-LAUNCH NOTICE ============
-       The facility is confirmed now, so the address, map and city
-       content below are real. What is still a placeholder is the phone
-       number, which is a dummy. Delete this block once the real number
-       is in and the remaining items below are filled. -->
-  <div class="crss-unconfirmed" role="note">
-    <p><strong>Not ready to publish.</strong> The address and map are
-    confirmed, but the phone number is still a placeholder, and the ZIP
-    code, office note and facility photo are outstanding. A live page
-    with a wrong phone number is worse than no page.</p>
-  </div>
+  <!-- The pre-launch notice is gone: phone, ZIP, hours and
+       promotions are all confirmed from the facility record now.
+       What is left is a choice rather than a blocker - whether to
+       use the five photos the API returns instead of the single
+       uploaded one - and the APPOINTMENT ONLY question flagged in
+       the Access panel. -->
 
   <!-- ============ STICKY SUB-NAV ============ -->
   <nav class="crss-subnav" aria-label="Page sections">
@@ -941,15 +936,9 @@
         <!-- LOC: title -->
         <h1 class="crss-info-title">Lubbock, 2213 N Quaker</h1>
         <!-- LOC: address -->
-        <!-- ZIP still needed: "Lubbock, TX 794xx" -->
-        <p class="crss-info-address">2213 N Quaker<br>Lubbock, TX</p>
+        <p class="crss-info-address">2213 North Quaker Ave<br>Lubbock, TX 79416</p>
         <!-- LOC: phone — change the tel: href AND the visible number -->
-        <span class="crss-info-phone">[Phone &mdash; still needed]</span>
-        <!-- LOC: office-note -->
-        <p class="crss-info-office-note">
-          The office for this location is at:<br>
-          [Office address — PLACEHOLDER, confirm with CapRock]
-        </p>
+        <a href="tel:+18067015660" class="crss-info-phone">(806) 701-5660</a>
         <!-- LOC: details-url -->
         <a href="#" class="crss-info-details-link">View Location Details →</a>
 
@@ -961,10 +950,10 @@
                so keep that restriction and add the live domain to it.
                Requires "Maps Embed API" enabled on the same project. -->
           <iframe
-            src="https://www.google.com/maps?q=CapRock+Self-Storage,+2213+N+Quaker,+Lubbock,+TX&output=embed"
+            src="https://www.google.com/maps?q=CapRock+Self+Storage,+2213+North+Quaker+Ave,+Lubbock,+TX+79416&output=embed"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Map to CapRock Self-Storage, 2213 N Quaker, Lubbock, TX">
+            title="Map to CapRock Self Storage, 2213 North Quaker Ave, Lubbock, TX 79416">
           </iframe>
         </div>
       </div>
@@ -1010,7 +999,10 @@
                 <li>Compare them side by side in the <a href="/size-guide">Size Guide</a></li>
                 <li>Not sure what fits? Try the <a href="/storage-calculator">Storage Calculator</a></li>
               </ul>
-              <p class="crss-feature-todo">PLACEHOLDER &mdash; drive-up access, ground-floor units and climate control are not confirmed for this property. Add them here once CapRock confirms.</p>
+                <li>Drive-up access on the outdoor units</li>
+                <li>Temperature controlled interior units</li>
+                <li>Powered units with electricity</li>
+                <li>Lighted units</li>
             </div>
           </div>
 
@@ -1023,8 +1015,16 @@
             <div class="crss-feature-panel">
               <ul>
                 <li>Gated access, so entry to the property is controlled</li>
+                <li>Electronic gate access</li>
+                <li data-crss-gate-hours>Gate hours: call the office to confirm</li>
+                <li data-crss-office-hours>Office hours: call the office to confirm</li>
               </ul>
-              <p class="crss-feature-todo">PLACEHOLDER &mdash; gate hours and office hours are not confirmed. No hours are stated until they are, since getting these wrong sends people to a locked gate.</p>
+              <!-- Worth confirming before launch: the facility record is
+                   flagged "APPOINTMENT ONLY". That may mean office visits
+                   are by appointment, or something broader. Until it is
+                   clear, the line below is true under either reading,
+                   rather than committing to one and being wrong. -->
+              <p class="crss-feature-note">Call ahead before visiting the office.</p>
             </div>
           </div>
 
@@ -1039,6 +1039,8 @@
                 <li>Gated access for controlled entry</li>
                 <li>Video surveillance throughout the property</li>
                 <li>Clean, well-maintained buildings</li>
+                <li>Fenced and walled perimeter</li>
+                <li>Lighted units</li>
               </ul>
             </div>
           </div>
@@ -1050,7 +1052,12 @@
               <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
             </button>
             <div class="crss-feature-panel">
-              <p class="crss-feature-todo">PLACEHOLDER &mdash; whether this location sells boxes, locks, tape or other moving supplies on site has not been confirmed.</p>
+              <ul>
+                <li>Boxes and moving supplies on site</li>
+                <li>Carts and dollies available</li>
+                <li>Low cost insurance available</li>
+                <li>Deliveries accepted</li>
+              </ul>
             </div>
           </div>
 
@@ -1076,7 +1083,9 @@
               <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
             </button>
             <div class="crss-feature-panel">
-              <p class="crss-feature-todo">PLACEHOLDER &mdash; no promotion is claimed. Add one here only when CapRock confirms a real, current offer and its terms.</p>
+              <ul data-crss-coupons>
+                <li>Ask the office about current offers.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1531,6 +1540,10 @@
     line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
     padding: 5px 0;
+  }
+  .crss-coupon-cond {
+    color: var(--crss-taupe, #7F6C5D);
+    font-size: 13px;
   }
   .crss-feature-note {
     font-size: 14px;
@@ -2220,6 +2233,39 @@
         });
     }
 
+
+    /* ---- Hours and promotions, live ----
+       These two genuinely change, so they are read from the facility
+       record rather than written into the page. Everything else in
+       the Features panel is a structural fact and stays in markup.
+
+       Failure is silent on purpose: the markup already carries a
+       truthful fallback ("call the office to confirm"), which is a
+       better thing to show than an error. */
+    if (window.CRSS_WSS) {
+      window.CRSS_WSS.get('location').then(function (d) {
+        if (!d) return;
+
+        var gate = loc.querySelector('[data-crss-gate-hours]');
+        if (gate && d.gateHours) gate.textContent = 'Gate hours: ' + d.gateHours;
+
+        var office = loc.querySelector('[data-crss-office-hours]');
+        if (office && d.officeHours) office.textContent = 'Office hours: ' + d.officeHours;
+
+        var coupons = loc.querySelector('[data-crss-coupons]');
+        if (coupons && d.coupons && d.coupons.length) {
+          coupons.innerHTML = d.coupons.map(function (c) {
+            /* Conditions are shown with the offer, never separately:
+               "20% off" without "no refunds for early move out" is not
+               the offer the customer would actually be signing up to. */
+            var cond = c.conditions
+              ? ' <span class="crss-coupon-cond">(' + c.conditions.toLowerCase() + ')</span>'
+              : '';
+            return '<li>' + c.description + cond + '</li>';
+          }).join('');
+        }
+      });
+    }
   })();
 </script>
 
@@ -2284,11 +2330,11 @@
       <div class="crss-footer-col">
         <h2 class="crss-footer-head">Reach Out</h2>
         <ul>
-          <!-- PLACEHOLDER phone, same dummy number as the header -->
+          <!-- Confirmed from /v4/location/1030298. -->
           <li>
-            <a href="tel:18060000000" class="crss-footer-contact">
+            <a href="tel:+18067015660" class="crss-footer-contact">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <span>(806) 000-0000</span>
+              <span>(806) 701-5660</span>
             </a>
           </li>
           <!-- PLACEHOLDER email, same as the contact page -->

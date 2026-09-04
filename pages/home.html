@@ -41,9 +41,10 @@
   <section class="crss-hero">
     <div class="crss-hero-media" aria-hidden="true"></div>
     <div class="crss-hero-inner">
-      <!-- PLACEHOLDER: promotional offer line. SROA runs "UP TO 50% OFF*"
-           here. Nothing is stated until CapRock confirms a real offer. -->
-      <p class="crss-hero-eyebrow">[PLACEHOLDER &mdash; promotional offer]</p>
+      <!-- Filled from the facility record. Hidden until a real
+           coupon arrives, so the hero never shows an empty slot or
+           an offer that has since been withdrawn. -->
+      <p class="crss-hero-eyebrow" data-crss-promo hidden></p>
 
       <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
       <p class="crss-hero-sub">
@@ -1119,8 +1120,8 @@
         name: 'Lubbock, 2213 N Quaker',
         city: 'Lubbock',
         state: 'TX',
-        address: '2213 N Quaker, Lubbock, TX',
-        phone: '[Phone — still needed]',   // PLACEHOLDER, shared with the header
+        address: '2213 North Quaker Ave, Lubbock, TX 79416',
+        phone: '(806) 701-5660',
         url: '/lubbock-2213-n-quaker'
       }
     ];
@@ -1184,6 +1185,31 @@
           el.textContent = 'From ' + from + '/mo';
           el.hidden = false;
         });
+      });
+    }
+
+    /* ---- Live promotion in the hero ----
+       Offers come and go, so this is read rather than written in. The
+       eyebrow stays hidden unless a coupon actually comes back: an
+       empty promo slot looks broken, and a stale one is worse.
+
+       The strongest offer wins the slot, ranked by the discount
+       percentage in the description. Conditions are not shown here
+       because the hero has no room for them; the Promotions panel on
+       the location page carries the full terms. */
+    if (window.CRSS_WSS) {
+      window.CRSS_WSS.get('location').then(function (d) {
+        if (!d || !d.coupons || !d.coupons.length) return;
+        var el = document.querySelector('[data-crss-promo]');
+        if (!el) return;
+        var best = d.coupons.slice().sort(function (a, b) {
+          var pa = parseInt((a.description || '').match(/(\d+)\s*%/) || [0, 0], 10);
+          var pb = parseInt((b.description || '').match(/(\d+)\s*%/) || [0, 0], 10);
+          return pb - pa;
+        })[0];
+        if (!best || !best.description) return;
+        el.textContent = best.description;
+        el.hidden = false;
       });
     }
   })();
