@@ -762,57 +762,86 @@
          thing the picture is there to say. */
       art: function (u) {
         var sq = Number(u && u.sqft) || 0;
-        var C = {
-          wall:  'var(--crss-sand, #EFE7DA)',
-          floor: 'var(--crss-cream, #F1E3CC)',
-          line:  'var(--crss-charcoal, #292724)',
-          box:   'var(--crss-terracotta, #A44A23)',
-          soft:  'var(--crss-taupe, #7F6C5D)'
-        };
-        /* Contents per band, drawn on the floor line at y=74. */
-        var fill;
-        if (sq <= 30) {
-          fill = '<rect x="34" y="56" width="18" height="18" fill="' + C.box + '"/>' +
-                 '<rect x="34" y="42" width="18" height="13" fill="' + C.soft + '"/>' +
-                 '<rect x="55" y="60" width="14" height="14" fill="' + C.soft + '"/>' +
-                 '<rect x="71" y="50" width="11" height="24" fill="' + C.box + '" opacity=".55"/>';
-        } else if (sq <= 60) {
-          fill = '<rect x="26" y="54" width="20" height="20" fill="' + C.box + '"/>' +
-                 '<rect x="26" y="38" width="20" height="15" fill="' + C.soft + '"/>' +
-                 '<rect x="49" y="46" width="13" height="28" fill="' + C.soft + '" opacity=".7"/>' +
-                 '<rect x="65" y="34" width="8" height="40" fill="' + C.box + '" opacity=".5"/>' +
-                 '<rect x="76" y="58" width="16" height="16" fill="' + C.box + '"/>';
-        } else if (sq <= 120) {
-          fill = '<rect x="22" y="58" width="40" height="16" fill="' + C.soft + '"/>' +
-                 '<rect x="22" y="48" width="40" height="11" fill="' + C.soft + '" opacity=".7"/>' +
-                 '<rect x="66" y="52" width="17" height="22" fill="' + C.box + '"/>' +
-                 '<rect x="66" y="38" width="17" height="13" fill="' + C.box + '" opacity=".6"/>' +
-                 '<rect x="86" y="44" width="10" height="30" fill="' + C.soft + '" opacity=".55"/>';
-        } else if (sq <= 320) {
-          fill = '<rect x="18" y="56" width="34" height="18" fill="' + C.soft + '"/>' +
-                 '<rect x="18" y="46" width="34" height="11" fill="' + C.soft + '" opacity=".7"/>' +
-                 '<rect x="56" y="34" width="18" height="40" fill="' + C.box + '" opacity=".55"/>' +
-                 '<rect x="78" y="52" width="16" height="22" fill="' + C.box + '"/>' +
-                 '<rect x="78" y="38" width="16" height="13" fill="' + C.box + '" opacity=".6"/>' +
-                 '<rect x="97" y="60" width="9" height="14" fill="' + C.soft + '"/>';
-        } else {
-          /* Big enough for a vehicle, so the picture says so. */
-          fill = '<rect x="16" y="56" width="62" height="12" rx="0" fill="' + C.soft + '"/>' +
-                 '<rect x="30" y="46" width="34" height="11" fill="' + C.soft + '" opacity=".72"/>' +
-                 '<rect x="24" y="68" width="8" height="6" fill="' + C.line + '"/>' +
-                 '<rect x="62" y="68" width="8" height="6" fill="' + C.line + '"/>' +
-                 '<rect x="84" y="54" width="20" height="20" fill="' + C.box + '"/>' +
-                 '<rect x="84" y="40" width="20" height="13" fill="' + C.box + '" opacity=".6"/>';
+        var INK   = 'var(--crss-charcoal, #292724)';
+        var WALL  = 'var(--crss-sand, #EFE7DA)';
+        var FLOOR = 'var(--crss-cream, #F1E3CC)';
+        var BOX   = 'var(--crss-terracotta, #A44A23)';
+        var SOFT  = 'var(--crss-taupe, #7F6C5D)';
+
+        /* A carton, not a coloured rectangle: the lid line and the
+           seam down the middle are what make it read as a box at
+           thumbnail size. */
+        function carton(x, y, w, h, fill) {
+          var lid = y + Math.max(3, Math.round(h * 0.24));
+          return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+                   '" fill="' + fill + '"/>' +
+                 '<path d="M' + x + ' ' + lid + 'h' + w +
+                   'M' + (x + w / 2) + ' ' + y + 'v' + (lid - y) + '"/>';
         }
-        return '<svg viewBox="0 0 120 96" role="img" aria-label="Illustration of a ' +
-                 (u && u.size ? u.size : 'storage') + ' unit" focusable="false">' +
-                 '<rect x="6" y="6" width="108" height="68" fill="' + C.wall + '"/>' +
-                 '<rect x="6" y="74" width="108" height="16" fill="' + C.floor + '"/>' +
-                 fill +
-                 /* Door frame last, so contents sit inside it. */
-                 '<rect x="6" y="6" width="108" height="84" fill="none" stroke="' + C.line +
+        function slab(x, y, w, h, fill) {
+          return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+                 '" fill="' + fill + '"/>';
+        }
+
+        /* Contents sit on the floor line at y=74. Each band holds
+           visibly more than the one before it, because that is the
+           only question the picture answers. */
+        var items;
+        if (sq <= 30) {
+          items = carton(32, 54, 18, 20, BOX) +
+                  carton(32, 39, 18, 14, SOFT) +
+                  carton(54, 58, 15, 16, SOFT) +
+                  slab(74, 46, 8, 28, BOX);
+        } else if (sq <= 60) {
+          items = carton(22, 52, 19, 22, BOX) +
+                  carton(22, 37, 19, 14, SOFT) +
+                  slab(45, 40, 8, 34, SOFT) +
+                  carton(57, 55, 18, 19, BOX) +
+                  carton(79, 59, 14, 15, SOFT);
+        } else if (sq <= 120) {
+          /* Sofa: seat, back, one arm. */
+          items = slab(18, 58, 40, 16, SOFT) +
+                  slab(18, 47, 40, 12, SOFT) +
+                  slab(18, 47, 6, 27, SOFT) +
+                  carton(64, 52, 18, 22, BOX) +
+                  carton(64, 37, 18, 14, BOX) +
+                  slab(88, 44, 9, 30, SOFT);
+        } else if (sq <= 320) {
+          items = slab(14, 58, 34, 16, SOFT) +
+                  slab(14, 47, 34, 12, SOFT) +
+                  slab(52, 34, 16, 40, SOFT) +
+                  slab(52, 52, 16, 1, SOFT) +
+                  carton(72, 52, 18, 22, BOX) +
+                  carton(72, 37, 18, 14, BOX) +
+                  carton(94, 60, 13, 14, SOFT);
+        } else {
+          /* Big enough for a vehicle, so it shows one. */
+          items = slab(12, 58, 58, 12, SOFT) +
+                  slab(26, 47, 32, 12, SOFT) +
+                  '<circle cx="26" cy="72" r="4" fill="' + INK + '"/>' +
+                  '<circle cx="58" cy="72" r="4" fill="' + INK + '"/>' +
+                  carton(78, 52, 20, 22, BOX) +
+                  carton(78, 37, 20, 14, BOX);
+        }
+
+        return '<svg viewBox="0 0 120 96" role="img" aria-label="' +
+                 (u && u.size ? u.size : 'Storage') + ' unit, drawn to show what fits" ' +
+                 'focusable="false">' +
+                 '<rect x="6" y="6" width="108" height="84" fill="' + WALL + '"/>' +
+                 '<rect x="6" y="74" width="108" height="16" fill="' + FLOOR + '"/>' +
+                 '<g stroke="' + INK + '" stroke-width="1" stroke-linecap="square">' +
+                   items +
+                 '</g>' +
+                 /* Roll-up door, part raised: the slats above the
+                    opening are what say "storage unit" rather than
+                    "room". Drawn last so it sits over the contents. */
+                 '<rect x="6" y="6" width="108" height="15" fill="' + FLOOR + '"/>' +
+                 '<g stroke="' + INK + '" stroke-width="1">' +
+                   '<path d="M6 11h108M6 16h108"/>' +
+                 '</g>' +
+                 '<rect x="6" y="6" width="108" height="84" fill="none" stroke="' + INK +
                    '" stroke-width="2"/>' +
-                 '<path d="M6 20h108" stroke="' + C.line + '" stroke-width="2"/>' +
+                 '<path d="M6 21h108" stroke="' + INK + '" stroke-width="2"/>' +
                '</svg>';
       },
 
