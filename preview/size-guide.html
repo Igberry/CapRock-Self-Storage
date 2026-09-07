@@ -748,6 +748,149 @@
       },
 
       /* Rates come back as numbers; whole dollars lose the .00. */
+      /* ---- Unit illustrations ----
+         Drawn here, in CapRock's palette, rather than taken from the
+         facility system's listing. Those pictures are U-Haul's own
+         artwork, down to the U-HAUL boxes in them, and putting a
+         competitor's illustrations on this site would be both a
+         copyright problem and free advertising for them.
+
+         Flat geometry on purpose: it matches a site drawn with square
+         corners and hairlines, and it stays sharp at any size, where a
+         photograph of an empty unit tells you nothing about scale.
+         What varies between bands is how much fits, which is the only
+         thing the picture is there to say. */
+      art: function (u) {
+        var sq = Number(u && u.sqft) || 0;
+        var C = {
+          wall:  'var(--crss-sand, #EFE7DA)',
+          floor: 'var(--crss-cream, #F1E3CC)',
+          line:  'var(--crss-charcoal, #292724)',
+          box:   'var(--crss-terracotta, #A44A23)',
+          soft:  'var(--crss-taupe, #7F6C5D)'
+        };
+        /* Contents per band, drawn on the floor line at y=74. */
+        var fill;
+        if (sq <= 30) {
+          fill = '<rect x="34" y="56" width="18" height="18" fill="' + C.box + '"/>' +
+                 '<rect x="34" y="42" width="18" height="13" fill="' + C.soft + '"/>' +
+                 '<rect x="55" y="60" width="14" height="14" fill="' + C.soft + '"/>' +
+                 '<rect x="71" y="50" width="11" height="24" fill="' + C.box + '" opacity=".55"/>';
+        } else if (sq <= 60) {
+          fill = '<rect x="26" y="54" width="20" height="20" fill="' + C.box + '"/>' +
+                 '<rect x="26" y="38" width="20" height="15" fill="' + C.soft + '"/>' +
+                 '<rect x="49" y="46" width="13" height="28" fill="' + C.soft + '" opacity=".7"/>' +
+                 '<rect x="65" y="34" width="8" height="40" fill="' + C.box + '" opacity=".5"/>' +
+                 '<rect x="76" y="58" width="16" height="16" fill="' + C.box + '"/>';
+        } else if (sq <= 120) {
+          fill = '<rect x="22" y="58" width="40" height="16" fill="' + C.soft + '"/>' +
+                 '<rect x="22" y="48" width="40" height="11" fill="' + C.soft + '" opacity=".7"/>' +
+                 '<rect x="66" y="52" width="17" height="22" fill="' + C.box + '"/>' +
+                 '<rect x="66" y="38" width="17" height="13" fill="' + C.box + '" opacity=".6"/>' +
+                 '<rect x="86" y="44" width="10" height="30" fill="' + C.soft + '" opacity=".55"/>';
+        } else if (sq <= 320) {
+          fill = '<rect x="18" y="56" width="34" height="18" fill="' + C.soft + '"/>' +
+                 '<rect x="18" y="46" width="34" height="11" fill="' + C.soft + '" opacity=".7"/>' +
+                 '<rect x="56" y="34" width="18" height="40" fill="' + C.box + '" opacity=".55"/>' +
+                 '<rect x="78" y="52" width="16" height="22" fill="' + C.box + '"/>' +
+                 '<rect x="78" y="38" width="16" height="13" fill="' + C.box + '" opacity=".6"/>' +
+                 '<rect x="97" y="60" width="9" height="14" fill="' + C.soft + '"/>';
+        } else {
+          /* Big enough for a vehicle, so the picture says so. */
+          fill = '<rect x="16" y="56" width="62" height="12" rx="0" fill="' + C.soft + '"/>' +
+                 '<rect x="30" y="46" width="34" height="11" fill="' + C.soft + '" opacity=".72"/>' +
+                 '<rect x="24" y="68" width="8" height="6" fill="' + C.line + '"/>' +
+                 '<rect x="62" y="68" width="8" height="6" fill="' + C.line + '"/>' +
+                 '<rect x="84" y="54" width="20" height="20" fill="' + C.box + '"/>' +
+                 '<rect x="84" y="40" width="20" height="13" fill="' + C.box + '" opacity=".6"/>';
+        }
+        return '<svg viewBox="0 0 120 96" role="img" aria-label="Illustration of a ' +
+                 (u && u.size ? u.size : 'storage') + ' unit" focusable="false">' +
+                 '<rect x="6" y="6" width="108" height="68" fill="' + C.wall + '"/>' +
+                 '<rect x="6" y="74" width="108" height="16" fill="' + C.floor + '"/>' +
+                 fill +
+                 /* Door frame last, so contents sit inside it. */
+                 '<rect x="6" y="6" width="108" height="84" fill="none" stroke="' + C.line +
+                   '" stroke-width="2"/>' +
+                 '<path d="M6 20h108" stroke="' + C.line + '" stroke-width="2"/>' +
+               '</svg>';
+      },
+
+      /* ---- Facility attributes, in English ----
+         The feed describes a unit as "Interior 1st Floor Street Level
+         Climate ADA ADA": an internal vocabulary, space-joined, with
+         duplicates. Matching known phrases longest-first is reliable
+         where splitting on spaces is not, and the map turns system
+         words into the words a customer would use. Anything
+         unrecognised is passed through rather than dropped, so a new
+         attribute shows up as itself instead of vanishing. */
+      attributes: function (u) {
+        var desc = (u && u.description) || '';
+        if (!desc) return [];
+
+        /* Listed in the order they should READ: how you get in, where
+           it is, then what it has. The feed's own order is arbitrary,
+           and following it produced lines like "Street level, Lower
+           level" that argue with themselves.
+
+           "Street Level" becomes "Step-free access", which is what it
+           means. Left as "Street level" it contradicts "Lower level"
+           on the same unit, and a customer cannot tell which is true. */
+        var MAP = [
+          ['Drive Up',      'Drive-up access'],
+          ['Interior',      'Interior unit'],
+          ['1st Floor',     'Ground floor'],
+          ['Lower Level',   'Lower level'],
+          ['Inside Level',  'Inside the building'],
+          ['Outside Level', 'Outside'],
+          ['Street Level',  'Step-free access'],
+          ['Drivethrough',  'Drive-through'],
+          ['Climate',       'Temperature controlled'],
+          ['No Climate',    'Not temperature controlled'],
+          ['Electricity',   'Powered'],
+          ['Rollup',        'Roll-up door'],
+          ['Double',        'Double unit'],
+          ['Bonus',         'Bonus space'],
+          ['ADA',           'ADA accessible']
+        ];
+
+        /* Match longest phrase first, which is a different order from
+           the one above: "No Climate" has to be consumed before
+           "Climate" can match, or every drive-up unit claims to be
+           temperature controlled. Display order is restored after. */
+        var byLength = MAP.map(function (pair, i) {
+          return { phrase: pair[0], label: pair[1], rank: i };
+        }).sort(function (a, b) { return b.phrase.length - a.phrase.length; });
+
+        var rest = desc;
+        var found = [];
+        byLength.forEach(function (m) {
+          var re = new RegExp(m.phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+          if (!re.test(rest)) return;
+          rest = rest.replace(re, ' ');
+          if (!found.some(function (f) { return f.label === m.label; })) found.push(m);
+        });
+        found.sort(function (a, b) { return a.rank - b.rank; });
+
+        var out = found.map(function (m) { return m.label; });
+        /* Anything the vocabulary does not cover is passed through, so
+           a new attribute appears as itself rather than disappearing. */
+        rest.split(/\s+/).forEach(function (w) {
+          if (w && out.indexOf(w) === -1) out.push(w);
+        });
+        return out;
+      },
+
+      /* Small, Medium or Large, on the same thresholds the location
+         page filters by, so a unit cannot be Small in one place and
+         Medium in another. */
+      band: function (u) {
+        var sq = Number(u && u.sqft) || 0;
+        if (sq <= 50) return 'Small';
+        if (sq <= 150) return 'Medium';
+        return 'Large';
+      },
+
       money: function (v) {
         var num = Number(v);
         if (!isFinite(num)) return null;
@@ -878,6 +1021,19 @@
       <p>Still not sure which size fits?</p>
       <a href="/lubbock-2213-n-quaker" class="crss-sg-cta-btn">See Units and Prices</a>
     </div>
+
+    <!-- Details dialog. One element reused for every size, filled
+         on open: fifteen hidden copies of the same panel would be
+         fifteen times the markup for a thing at most one of which
+         is ever on screen.
+
+         <dialog> rather than a div: the browser handles the
+         backdrop, Escape, and returning focus to the card that
+         opened it, all of which are easy to get wrong by hand. -->
+    <dialog class="crss-sg-modal" data-crss-modal aria-labelledby="crss-sg-modal-title">
+      <button type="button" class="crss-sg-modal-close" data-crss-modal-close aria-label="Close">&times;</button>
+      <div data-crss-modal-body></div>
+    </dialog>
   </div>
 </div>
 
@@ -1079,6 +1235,203 @@
     margin-top: 8px;
   }
 
+  /* ---- Details dialog ---- */
+  .crss-sg-modal {
+    width: min(760px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    padding: 0;
+    border: 1px solid var(--crss-rule-ink, #C4B49B);
+    background: var(--crss-white, #FFFFFF);
+    color: var(--crss-charcoal, #292724);
+    overflow: auto;
+  }
+  .crss-sg-modal::backdrop {
+    background: rgba(41, 39, 36, 0.55);
+  }
+  .crss-sg-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    font-family: inherit;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--crss-taupe, #7F6C5D);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color .2s ease;
+  }
+  .crss-sg-modal-close:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-sg-modal-inner {
+    padding: 34px 36px 38px;
+  }
+  .crss-sg-modal-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 40px 0 0;
+  }
+  .crss-sg-modal-title::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
+    margin: 18px 0 24px;
+  }
+  /* Illustration beside the measurements, the way the facility
+     system lays it out: the picture answers "how big" and the figures
+     confirm it. */
+  .crss-sg-modal-top {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 30px;
+  }
+  .crss-sg-modal-art svg {
+    display: block;
+    width: 200px;
+    height: auto;
+  }
+  .crss-sg-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 26px;
+  }
+  .crss-sg-fact-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 7px;
+  }
+  .crss-sg-fact-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 21px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-sg-fact-note {
+    font-size: 13px;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 4px;
+  }
+  .crss-sg-modal h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--crss-charcoal, #292724);
+    margin: 26px 0 12px;
+  }
+  .crss-sg-modal-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 26px;
+  }
+  .crss-sg-modal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .crss-sg-modal ul li {
+    position: relative;
+    padding: 3px 0 3px 15px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-sg-modal ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    background: var(--crss-terracotta, #A44A23);
+  }
+  .crss-sg-modal-prose {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 66ch;
+  }
+  .crss-sg-modal-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-sg-modal-rate {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 26px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-sg-modal-rate span {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-left: 5px;
+  }
+  .crss-sg-modal-btn {
+    display: inline-block;
+    margin-left: auto;
+    padding: 14px 28px;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .22s ease;
+  }
+  .crss-sg-modal-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+  }
+  /* The card is a button now, so it has to stop looking like a panel
+     that happens to be clickable. */
+  .crss-sg-card-btn {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    text-align: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .crss-size-more {
+    display: block;
+    margin-top: 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+  }
   .crss-sg-cta {
     position: relative;
     overflow: hidden;
@@ -1156,6 +1509,20 @@
     }
   }
   @media (max-width: 560px) {
+    .crss-sg-modal-top,
+    .crss-sg-facts,
+    .crss-sg-modal-cols {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .crss-sg-modal-art svg {
+      width: 160px;
+    }
+    .crss-sg-modal-inner {
+      padding: 28px 22px 30px;
+    }
+    .crss-sg-modal-btn {
+      margin-left: 0;
+    }
     .crss-sizeguide-inner {
       padding: 44px 20px 72px;
     }
@@ -1214,6 +1581,139 @@
        (10x30) lands at 180px, which fits the 260px column. */
     var PX_PER_FT = 6;
 
+    /* ================= UNIT DETAILS DIALOG =================
+       What a unit holds, by size band rather than a lookup per size:
+       a size added to the rate sheet later still opens a useful panel
+       instead of an empty one.
+
+       The lists are ordinary storage knowledge, written here. They are
+       deliberately not lifted from the facility system's own unit
+       pages, which are U-Haul's copy. */
+    var BANDS = [
+      { upTo: 30,  uses: ['Decluttering a room', 'Seasonal decorations', 'Storing between semesters'],
+        items: ['Boxes of household items', 'Seasonal clothing', 'Small furniture', 'Books and documents',
+                'Sports equipment', 'Holiday decorations'],
+        prose: 'About the footprint of a walk-in closet. It takes what will not fit in one ' +
+               'any more: a stack of boxes, a few small pieces of furniture, and the things ' +
+               'that only come out once a year.' },
+      { upTo: 60,  uses: ['A studio or dorm move', 'A room of furniture', 'Storing between homes'],
+        items: ['A mattress set', 'A chest of drawers', 'A small sofa', 'Boxes of clothes and kitchenware',
+                'A bicycle', 'Office or file boxes'],
+        prose: 'Roughly the size of a large walk-in wardrobe, and the size most students and ' +
+               'single renters take. It holds the contents of one furnished room with space ' +
+               'left to walk in and reach the back.' },
+      { upTo: 120, uses: ['A one or two bedroom move', 'Clearing a garage', 'Business stock'],
+        items: ['A bedroom set', 'A sofa and armchairs', 'A dining table and chairs',
+                'A washer or dryer', 'Twenty to thirty boxes', 'Garden tools and equipment'],
+        prose: 'The size of a small bedroom. A one bedroom home fits comfortably, including ' +
+               'the larger furniture and appliances that defeat smaller units, and it is the ' +
+               'usual choice for emptying a garage.' },
+      { upTo: 260, uses: ['A two or three bedroom move', 'A long renovation', 'Trade equipment'],
+        items: ['Several bedroom sets', 'A full living room', 'A refrigerator and appliances',
+                'Fifty or more boxes', 'A workbench and tools', 'Patio furniture'],
+        prose: 'A single-car garage, near enough. It takes a family home’s worth of furniture ' +
+               'with room to stack, which makes it the size to pick for a renovation that ' +
+               'might run longer than planned.' },
+      { upTo: 450, uses: ['A three or four bedroom move', 'Vehicle storage', 'Business inventory'],
+        items: ['A whole household of furniture', 'Major appliances', 'A car, boat or trailer',
+                'Bulk business stock', 'Workshop machinery', 'Landscaping equipment'],
+        prose: 'Long enough for a vehicle with room to spare, or for the contents of a larger ' +
+               'family home. At this size the drive-up access matters as much as the space: ' +
+               'you can back a van to the door.' },
+      { upTo: Infinity, uses: ['A full house move', 'Commercial storage', 'Fleet or plant'],
+        items: ['The contents of a large home', 'Multiple vehicles', 'Pallets of inventory',
+                'Construction plant', 'Trade fair and event kit', 'Archive and records'],
+        prose: 'The largest CapRock rents, and closer to a small commercial unit than a ' +
+               'storage locker. It suits a whole house, a business that needs stock at ' +
+               'arm’s length, or more than one vehicle.' }
+    ];
+
+    function bandFor(u) {
+      var sq = Number(u.sqft) || 0;
+      for (var i = 0; i < BANDS.length; i++) {
+        if (sq <= BANDS[i].upTo) return BANDS[i];
+      }
+      return BANDS[BANDS.length - 1];
+    }
+
+    function list(items) {
+      return '<ul>' + items.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>';
+    }
+
+    function wireModal(units) {
+      var modal = document.querySelector('[data-crss-modal]');
+      var body = document.querySelector('[data-crss-modal-body]');
+      var closeBtn = document.querySelector('[data-crss-modal-close]');
+      /* <dialog> is well supported now, but if it is not there at all
+         the cards simply do nothing rather than throwing on click. */
+      if (!modal || !body || typeof modal.showModal !== 'function') return;
+
+      document.querySelectorAll('[data-crss-size]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var u = units[Number(btn.getAttribute('data-crss-size'))];
+          if (!u) return;
+          var band = bandFor(u);
+          var rate = window.CRSS_WSS.money(u.rate);
+          var cubic = (Number(u.sqft) || 0) * (Number(u.height) || 0);
+
+          body.innerHTML =
+            '<div class="crss-sg-modal-inner">' +
+              '<h2 class="crss-sg-modal-title" id="crss-sg-modal-title">' +
+                u.width + ' &times; ' + u.length + ' Unit Information</h2>' +
+
+              '<div class="crss-sg-modal-top">' +
+                '<div class="crss-sg-modal-art">' + window.CRSS_WSS.art(u) + '</div>' +
+                '<div class="crss-sg-facts">' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Measurements</p>' +
+                    '<p class="crss-sg-fact-value">' + u.sqft + ' sq ft</p>' +
+                    (cubic ? '<p class="crss-sg-fact-note">' + cubic + ' cu ft</p>' : '') +
+                  '</div>' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Height</p>' +
+                    '<p class="crss-sg-fact-value">' + (u.height ? u.height + ' ft' : '&mdash;') + '</p>' +
+                    '<p class="crss-sg-fact-note">Door height is lower than the ceiling.</p>' +
+                  '</div>' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Type</p>' +
+                    '<p class="crss-sg-fact-value">' + window.CRSS_WSS.band(u) + '</p>' +
+                  '</div>' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Features</p>' +
+                    '<p class="crss-sg-fact-note" style="margin-top:0">' +
+                      window.CRSS_WSS.attributes(u).join(', ') + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+
+              '<h3>Common uses</h3>' + list(band.uses) +
+              '<h3>What people usually store</h3>' +
+              '<div class="crss-sg-modal-cols">' +
+                list(band.items.slice(0, Math.ceil(band.items.length / 2))) +
+                list(band.items.slice(Math.ceil(band.items.length / 2))) +
+              '</div>' +
+              '<h3>How big is a ' + u.width + ' &times; ' + u.length + '?</h3>' +
+              '<p class="crss-sg-modal-prose">' + band.prose + '</p>' +
+
+              '<div class="crss-sg-modal-foot">' +
+                (rate ? '<p class="crss-sg-modal-rate">' + rate + '<span>per month</span></p>' : '') +
+                '<a class="crss-sg-modal-btn" href="/lubbock-2213-n-quaker#units">Check availability</a>' +
+              '</div>' +
+            '</div>';
+
+          modal.showModal();
+        });
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', function () { modal.close(); });
+      /* Clicking the backdrop closes it. The dialog fills its own box,
+         so a click landing on the dialog element itself was outside
+         the content. */
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) modal.close();
+      });
+    }
+
     if (!window.CRSS_WSS) {
       state.innerHTML = FALLBACK;
       return;
@@ -1227,24 +1727,31 @@
       }
       list.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
 
-      grid.innerHTML = list.map(function (u) {
+      grid.innerHTML = list.map(function (u, i) {
         var w = Math.round((Number(u.length) || 0) * PX_PER_FT);
         var h = Math.round((Number(u.width) || 0) * PX_PER_FT);
         var rate = window.CRSS_WSS.money(u.rate);
         var flags = [u.driveUp && 'Drive-up', u.climate && 'Climate controlled', u.ada && 'ADA']
                       .filter(Boolean).join(' &middot; ');
-        return '<div class="crss-size-card">' +
-          '<div class="crss-size-diagram"><div class="crss-size-box" style="width:' + w +
-            'px;height:' + h + 'px;"></div></div>' +
-          '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length + '</div>' +
-          '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
-          '<p class="crss-size-fits">' + describe(u) + '</p>' +
-          (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +
-          (rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
-        '</div>';
+        /* A button, not a div with a click handler: it reaches the
+           keyboard and a screen reader announces it as something that
+           can be pressed. */
+        return '<button type="button" class="crss-sg-card-btn" data-crss-size="' + i + '">' +
+          '<div class="crss-size-card">' +
+            '<div class="crss-size-diagram"><div class="crss-size-box" style="width:' + w +
+              'px;height:' + h + 'px;"></div></div>' +
+            '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length + '</div>' +
+            '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
+            '<p class="crss-size-fits">' + describe(u) + '</p>' +
+            (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +
+            (rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
+            '<span class="crss-size-more">Unit details</span>' +
+          '</div>' +
+        '</button>';
       }).join('');
 
       state.hidden = true;
+      wireModal(list);
     });
   })();
 </script>

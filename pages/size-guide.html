@@ -37,6 +37,19 @@
       <p>Still not sure which size fits?</p>
       <a href="/lubbock-2213-n-quaker" class="crss-sg-cta-btn">See Units and Prices</a>
     </div>
+
+    <!-- Details dialog. One element reused for every size, filled
+         on open: fifteen hidden copies of the same panel would be
+         fifteen times the markup for a thing at most one of which
+         is ever on screen.
+
+         <dialog> rather than a div: the browser handles the
+         backdrop, Escape, and returning focus to the card that
+         opened it, all of which are easy to get wrong by hand. -->
+    <dialog class="crss-sg-modal" data-crss-modal aria-labelledby="crss-sg-modal-title">
+      <button type="button" class="crss-sg-modal-close" data-crss-modal-close aria-label="Close">&times;</button>
+      <div data-crss-modal-body></div>
+    </dialog>
   </div>
 </div>
 
@@ -238,6 +251,203 @@
     margin-top: 8px;
   }
 
+  /* ---- Details dialog ---- */
+  .crss-sg-modal {
+    width: min(760px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    padding: 0;
+    border: 1px solid var(--crss-rule-ink, #C4B49B);
+    background: var(--crss-white, #FFFFFF);
+    color: var(--crss-charcoal, #292724);
+    overflow: auto;
+  }
+  .crss-sg-modal::backdrop {
+    background: rgba(41, 39, 36, 0.55);
+  }
+  .crss-sg-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    font-family: inherit;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--crss-taupe, #7F6C5D);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color .2s ease;
+  }
+  .crss-sg-modal-close:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-sg-modal-inner {
+    padding: 34px 36px 38px;
+  }
+  .crss-sg-modal-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 40px 0 0;
+  }
+  .crss-sg-modal-title::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
+    margin: 18px 0 24px;
+  }
+  /* Illustration beside the measurements, the way the facility
+     system lays it out: the picture answers "how big" and the figures
+     confirm it. */
+  .crss-sg-modal-top {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 30px;
+  }
+  .crss-sg-modal-art svg {
+    display: block;
+    width: 200px;
+    height: auto;
+  }
+  .crss-sg-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 26px;
+  }
+  .crss-sg-fact-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 7px;
+  }
+  .crss-sg-fact-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 21px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-sg-fact-note {
+    font-size: 13px;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 4px;
+  }
+  .crss-sg-modal h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--crss-charcoal, #292724);
+    margin: 26px 0 12px;
+  }
+  .crss-sg-modal-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 26px;
+  }
+  .crss-sg-modal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .crss-sg-modal ul li {
+    position: relative;
+    padding: 3px 0 3px 15px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-sg-modal ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    background: var(--crss-terracotta, #A44A23);
+  }
+  .crss-sg-modal-prose {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 66ch;
+  }
+  .crss-sg-modal-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-sg-modal-rate {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 26px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-sg-modal-rate span {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-left: 5px;
+  }
+  .crss-sg-modal-btn {
+    display: inline-block;
+    margin-left: auto;
+    padding: 14px 28px;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .22s ease;
+  }
+  .crss-sg-modal-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+  }
+  /* The card is a button now, so it has to stop looking like a panel
+     that happens to be clickable. */
+  .crss-sg-card-btn {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    text-align: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .crss-size-more {
+    display: block;
+    margin-top: 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+  }
   .crss-sg-cta {
     position: relative;
     overflow: hidden;
@@ -315,6 +525,20 @@
     }
   }
   @media (max-width: 560px) {
+    .crss-sg-modal-top,
+    .crss-sg-facts,
+    .crss-sg-modal-cols {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .crss-sg-modal-art svg {
+      width: 160px;
+    }
+    .crss-sg-modal-inner {
+      padding: 28px 22px 30px;
+    }
+    .crss-sg-modal-btn {
+      margin-left: 0;
+    }
     .crss-sizeguide-inner {
       padding: 44px 20px 72px;
     }
@@ -373,6 +597,139 @@
        (10x30) lands at 180px, which fits the 260px column. */
     var PX_PER_FT = 6;
 
+    /* ================= UNIT DETAILS DIALOG =================
+       What a unit holds, by size band rather than a lookup per size:
+       a size added to the rate sheet later still opens a useful panel
+       instead of an empty one.
+
+       The lists are ordinary storage knowledge, written here. They are
+       deliberately not lifted from the facility system's own unit
+       pages, which are U-Haul's copy. */
+    var BANDS = [
+      { upTo: 30,  uses: ['Decluttering a room', 'Seasonal decorations', 'Storing between semesters'],
+        items: ['Boxes of household items', 'Seasonal clothing', 'Small furniture', 'Books and documents',
+                'Sports equipment', 'Holiday decorations'],
+        prose: 'About the footprint of a walk-in closet. It takes what will not fit in one ' +
+               'any more: a stack of boxes, a few small pieces of furniture, and the things ' +
+               'that only come out once a year.' },
+      { upTo: 60,  uses: ['A studio or dorm move', 'A room of furniture', 'Storing between homes'],
+        items: ['A mattress set', 'A chest of drawers', 'A small sofa', 'Boxes of clothes and kitchenware',
+                'A bicycle', 'Office or file boxes'],
+        prose: 'Roughly the size of a large walk-in wardrobe, and the size most students and ' +
+               'single renters take. It holds the contents of one furnished room with space ' +
+               'left to walk in and reach the back.' },
+      { upTo: 120, uses: ['A one or two bedroom move', 'Clearing a garage', 'Business stock'],
+        items: ['A bedroom set', 'A sofa and armchairs', 'A dining table and chairs',
+                'A washer or dryer', 'Twenty to thirty boxes', 'Garden tools and equipment'],
+        prose: 'The size of a small bedroom. A one bedroom home fits comfortably, including ' +
+               'the larger furniture and appliances that defeat smaller units, and it is the ' +
+               'usual choice for emptying a garage.' },
+      { upTo: 260, uses: ['A two or three bedroom move', 'A long renovation', 'Trade equipment'],
+        items: ['Several bedroom sets', 'A full living room', 'A refrigerator and appliances',
+                'Fifty or more boxes', 'A workbench and tools', 'Patio furniture'],
+        prose: 'A single-car garage, near enough. It takes a family home’s worth of furniture ' +
+               'with room to stack, which makes it the size to pick for a renovation that ' +
+               'might run longer than planned.' },
+      { upTo: 450, uses: ['A three or four bedroom move', 'Vehicle storage', 'Business inventory'],
+        items: ['A whole household of furniture', 'Major appliances', 'A car, boat or trailer',
+                'Bulk business stock', 'Workshop machinery', 'Landscaping equipment'],
+        prose: 'Long enough for a vehicle with room to spare, or for the contents of a larger ' +
+               'family home. At this size the drive-up access matters as much as the space: ' +
+               'you can back a van to the door.' },
+      { upTo: Infinity, uses: ['A full house move', 'Commercial storage', 'Fleet or plant'],
+        items: ['The contents of a large home', 'Multiple vehicles', 'Pallets of inventory',
+                'Construction plant', 'Trade fair and event kit', 'Archive and records'],
+        prose: 'The largest CapRock rents, and closer to a small commercial unit than a ' +
+               'storage locker. It suits a whole house, a business that needs stock at ' +
+               'arm’s length, or more than one vehicle.' }
+    ];
+
+    function bandFor(u) {
+      var sq = Number(u.sqft) || 0;
+      for (var i = 0; i < BANDS.length; i++) {
+        if (sq <= BANDS[i].upTo) return BANDS[i];
+      }
+      return BANDS[BANDS.length - 1];
+    }
+
+    function list(items) {
+      return '<ul>' + items.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>';
+    }
+
+    function wireModal(units) {
+      var modal = document.querySelector('[data-crss-modal]');
+      var body = document.querySelector('[data-crss-modal-body]');
+      var closeBtn = document.querySelector('[data-crss-modal-close]');
+      /* <dialog> is well supported now, but if it is not there at all
+         the cards simply do nothing rather than throwing on click. */
+      if (!modal || !body || typeof modal.showModal !== 'function') return;
+
+      document.querySelectorAll('[data-crss-size]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var u = units[Number(btn.getAttribute('data-crss-size'))];
+          if (!u) return;
+          var band = bandFor(u);
+          var rate = window.CRSS_WSS.money(u.rate);
+          var cubic = (Number(u.sqft) || 0) * (Number(u.height) || 0);
+
+          body.innerHTML =
+            '<div class="crss-sg-modal-inner">' +
+              '<h2 class="crss-sg-modal-title" id="crss-sg-modal-title">' +
+                u.width + ' &times; ' + u.length + ' Unit Information</h2>' +
+
+              '<div class="crss-sg-modal-top">' +
+                '<div class="crss-sg-modal-art">' + window.CRSS_WSS.art(u) + '</div>' +
+                '<div class="crss-sg-facts">' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Measurements</p>' +
+                    '<p class="crss-sg-fact-value">' + u.sqft + ' sq ft</p>' +
+                    (cubic ? '<p class="crss-sg-fact-note">' + cubic + ' cu ft</p>' : '') +
+                  '</div>' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Height</p>' +
+                    '<p class="crss-sg-fact-value">' + (u.height ? u.height + ' ft' : '&mdash;') + '</p>' +
+                    '<p class="crss-sg-fact-note">Door height is lower than the ceiling.</p>' +
+                  '</div>' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Type</p>' +
+                    '<p class="crss-sg-fact-value">' + window.CRSS_WSS.band(u) + '</p>' +
+                  '</div>' +
+                  '<div>' +
+                    '<p class="crss-sg-fact-label">Features</p>' +
+                    '<p class="crss-sg-fact-note" style="margin-top:0">' +
+                      window.CRSS_WSS.attributes(u).join(', ') + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+
+              '<h3>Common uses</h3>' + list(band.uses) +
+              '<h3>What people usually store</h3>' +
+              '<div class="crss-sg-modal-cols">' +
+                list(band.items.slice(0, Math.ceil(band.items.length / 2))) +
+                list(band.items.slice(Math.ceil(band.items.length / 2))) +
+              '</div>' +
+              '<h3>How big is a ' + u.width + ' &times; ' + u.length + '?</h3>' +
+              '<p class="crss-sg-modal-prose">' + band.prose + '</p>' +
+
+              '<div class="crss-sg-modal-foot">' +
+                (rate ? '<p class="crss-sg-modal-rate">' + rate + '<span>per month</span></p>' : '') +
+                '<a class="crss-sg-modal-btn" href="/lubbock-2213-n-quaker#units">Check availability</a>' +
+              '</div>' +
+            '</div>';
+
+          modal.showModal();
+        });
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', function () { modal.close(); });
+      /* Clicking the backdrop closes it. The dialog fills its own box,
+         so a click landing on the dialog element itself was outside
+         the content. */
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) modal.close();
+      });
+    }
+
     if (!window.CRSS_WSS) {
       state.innerHTML = FALLBACK;
       return;
@@ -386,24 +743,31 @@
       }
       list.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
 
-      grid.innerHTML = list.map(function (u) {
+      grid.innerHTML = list.map(function (u, i) {
         var w = Math.round((Number(u.length) || 0) * PX_PER_FT);
         var h = Math.round((Number(u.width) || 0) * PX_PER_FT);
         var rate = window.CRSS_WSS.money(u.rate);
         var flags = [u.driveUp && 'Drive-up', u.climate && 'Climate controlled', u.ada && 'ADA']
                       .filter(Boolean).join(' &middot; ');
-        return '<div class="crss-size-card">' +
-          '<div class="crss-size-diagram"><div class="crss-size-box" style="width:' + w +
-            'px;height:' + h + 'px;"></div></div>' +
-          '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length + '</div>' +
-          '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
-          '<p class="crss-size-fits">' + describe(u) + '</p>' +
-          (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +
-          (rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
-        '</div>';
+        /* A button, not a div with a click handler: it reaches the
+           keyboard and a screen reader announces it as something that
+           can be pressed. */
+        return '<button type="button" class="crss-sg-card-btn" data-crss-size="' + i + '">' +
+          '<div class="crss-size-card">' +
+            '<div class="crss-size-diagram"><div class="crss-size-box" style="width:' + w +
+              'px;height:' + h + 'px;"></div></div>' +
+            '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length + '</div>' +
+            '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
+            '<p class="crss-size-fits">' + describe(u) + '</p>' +
+            (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +
+            (rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
+            '<span class="crss-size-more">Unit details</span>' +
+          '</div>' +
+        '</button>';
       }).join('');
 
       state.hidden = true;
+      wireModal(list);
     });
   })();
 </script>
