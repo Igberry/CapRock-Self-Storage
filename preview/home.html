@@ -51,12 +51,12 @@
          image ever fails the header still says who this is. That is
          also why the link no longer needs its own aria-label, which
          would double up with the alt. -->
-    <a href="/caprock-self-service" class="crss-logo">
+    <a href="/home" class="crss-logo">
       <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
     </a>
 
     <nav class="crss-nav" aria-label="Primary">
-      <a href="/find-storage" class="crss-nav-link">Find Storage</a>
+      <a href="/lubbock-2213-n-quaker" class="crss-nav-link">Our Location</a>
       <a href="/size-guide" class="crss-nav-link">Size Guide</a>
       <a href="/help-center" class="crss-nav-link">Help Center</a>
 
@@ -79,7 +79,6 @@
         </button>
         <div class="crss-dropdown-menu">
           <a href="/about-caprock">About CapRock</a>
-          <a href="/careers">Careers</a>
           <a href="/contact-us">Contact Us</a>
         </div>
       </div>
@@ -117,7 +116,7 @@
 
   <!-- Mobile menu panel -->
   <div class="crss-mobile-panel">
-    <a href="/find-storage" class="crss-mobile-link">Find Storage</a>
+    <a href="/lubbock-2213-n-quaker" class="crss-mobile-link">Our Location</a>
     <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
     <a href="/help-center" class="crss-mobile-link">Help Center</a>
 
@@ -137,7 +136,6 @@
     </button>
     <div class="crss-mobile-accordion-panel">
       <a href="/about-caprock">About CapRock</a>
-      <a href="/careers">Careers</a>
       <a href="/contact-us">Contact Us</a>
     </div>
 
@@ -758,112 +756,6 @@
   })();
 </script>
 
-<!-- ================================================================
-     TEMPORARY: GHL preview router.
-
-     DELETE THIS WHOLE <script> BLOCK ONCE THE DOMAIN IS LIVE.
-
-     Every internal link in this build is root-relative ("/size-guide"),
-     which is correct: on a real domain it resolves against the site
-     root and needs no maintenance. But GHL's preview does not serve
-     pages by slug at all. Each page is an opaque id:
-
-         https://sites.leadconnectorhq.com/preview/cW98h0TtU2henZQksFdg
-
-     so "/size-guide" points at the host root and 404s. There is no
-     prefix to derive, so the ids have to be mapped explicitly.
-
-     This runs ONLY on sites.leadconnectorhq.com. On the real domain the
-     host check fails, the script does nothing, and the root-relative
-     links work natively. Nothing has to be undone at launch beyond
-     deleting this block.
-
-     If a page is recreated in GHL its preview id changes and the entry
-     here goes stale. That is another reason this is temporary.
-     ================================================================ -->
-<script>
-  (function () {
-    if (window.location.hostname !== 'sites.leadconnectorhq.com') return;
-
-    var BASE = 'https://sites.leadconnectorhq.com/preview/';
-    var Q = '?notrack=true';
-
-    var IDS = {
-      '/': 'aVhwRw4YFh95ayIWlGGh',
-      '/caprock-self-service': 'aVhwRw4YFh95ayIWlGGh',
-      '/find-storage': '3pwccyzRU4U9rplOb4TJ',
-      '/size-guide': 'cW98h0TtU2henZQksFdg',
-      '/help-center': 'ZkTYd1bMoDXNxPoqigls',
-      '/storage-calculator': 'JxaBnIAg0qVPOacQxks9',
-      '/storage-tips': 'xUmYQkBhKqzT53km4Yss',
-      '/vehicle-storage': 'RAuHToTUsnKaeEa9kLVC',
-      '/student-storage': 'cmSOtz4CAKY6svZfc9PZ',
-      '/military-storage': 'F2V7skG0KFxRZQYjKvAJ',
-      '/about-caprock': 'NQ9ulH7SQbeuLcIUN7Bb',
-      '/careers': 'D9i2P7wYpWQ5LngEjrsp',
-      '/contact-us': 'sOCAozOJOj5F2JB64RY7',
-      '/lubbock-2213-n-quaker': 'z9SAHTIBX5pdxckMhdcA'
-    };
-
-    function resolve(href) {
-      if (!href) return null;
-      var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
-      if (path === '') path = '/';
-      var id = IDS[path];
-      return id ? BASE + id + Q : null;
-    }
-
-    /* Capture phase, so this also catches links the page builds with JS
-       (the facility cards) and runs before the hero search's own
-       submit handler sets window.location itself. */
-    /* An internal link with no entry in IDS must not fall through: the
-       browser would go to sites.leadconnectorhq.com/<slug> and 404,
-       which during a review looks like the site is broken rather than
-       like the page simply has not been built. Hold the visitor where
-       they are and say which page is missing. */
-    var toast, hideTimer;
-    function notice(path) {
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.setAttribute('style',
-          'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);' +
-          'z-index:9999;max-width:min(92vw,470px);padding:14px 18px;' +
-          'border-radius: 0;background:#292724;color:#F1E3CC;text-align:center;' +
-          'font:500 14px/1.5 "Work Sans",Arial,sans-serif;' +
-          'box-shadow:0 12px 32px -10px rgba(0,0,0,.6);' +
-          'opacity:0;transition:opacity .2s ease;pointer-events:none;');
-        document.body.appendChild(toast);
-      }
-      toast.textContent = 'Preview only — no GHL page exists yet for ' + path;
-      toast.style.opacity = '1';
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(function () { toast.style.opacity = '0'; }, 2800);
-    }
-
-    document.addEventListener('click', function (e) {
-      var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
-      if (!a) return;
-      var href = a.getAttribute('href');
-      var url = resolve(href);
-      e.preventDefault();
-      if (url) {
-        window.location.href = url;
-      } else {
-        notice(href);
-      }
-    }, true);
-
-    document.addEventListener('submit', function (e) {
-      if (e.target && e.target.id === 'crss-hero-search') {
-        var url = resolve('/find-storage');
-        if (!url) return;
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.href = url;
-      }
-    }, true);
-  })();
-</script>
 
 <!-- ================================================================
      CapRock Self Storage — Home page
@@ -899,8 +791,8 @@
      - Facility photos and star ratings / review counts
 
      KNOWN DUPLICATION: the LOCATIONS array near the bottom of this file
-     must be kept in sync with the one in find-storage.html until both
-     move to a real data source.
+     is the only copy now that find-storage.html is gone. It should
+     still move to a real data source as locations are added.
      ================================================================ -->
 <div class="crss-home">
 
@@ -920,37 +812,22 @@
               data-tpl="Unit sizes from a {min} locker to a {max} drive-up space.">Unit sizes from a 5&nbsp;&times;&nbsp;5 locker to a 10&nbsp;&times;&nbsp;30 drive-up space.</span>
       </p>
 
-      <form class="crss-hero-search" id="crss-hero-search" role="search">
-        <div class="crss-hero-field crss-hero-field-text">
-          <svg class="crss-hero-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="crss-hero-q" placeholder="Search by city, state, or ZIP" aria-label="Search by city, state, or ZIP">
-        </div>
+      <!-- This was a search: a city or ZIP field, a storage type, a
+           unit size, and a Find Units button that carried all three to
+           the Find Storage page.
 
-        <div class="crss-hero-field">
-          <!-- Climate-controlled is deliberately absent: not confirmed
-               for this facility. Add it once CapRock confirms. -->
-          <select id="crss-hero-type" aria-label="Storage type">
-            <option value="">Storage type</option>
-            <option value="self">Self storage unit</option>
-            <option value="vehicle">Vehicle or RV parking</option>
-          </select>
-        </div>
+           That page is gone, and with one facility there is nothing
+           left for a search to do. A box that returns Lubbock whatever
+           you type into it is worse than no box: someone types
+           "Amarillo", lands on a Lubbock page, and concludes the site
+           is broken rather than that we have one location. So the hero
+           goes straight to the units instead.
 
-        <div class="crss-hero-field">
-          <!-- Examples are filled from the facility record and the
-               option is dropped if nothing is rented in that band, so
-               the menu can never offer a size that does not exist.
-               The text here is what is true today, for no-JS. -->
-          <select id="crss-hero-size" aria-label="Unit size">
-            <option value="">Unit size</option>
-            <option value="small" data-crss-bucket="small">Small (5&nbsp;&times;&nbsp;5 to 5&nbsp;&times;&nbsp;10)</option>
-            <option value="medium" data-crss-bucket="medium">Medium (8&nbsp;&times;&nbsp;10)</option>
-            <option value="large" data-crss-bucket="large">Large (10&nbsp;&times;&nbsp;30)</option>
-          </select>
-        </div>
-
-        <button type="submit" class="crss-hero-submit">Find Units</button>
-      </form>
+           Bring the search back when there is a second facility. -->
+      <div class="crss-hero-actions">
+        <a href="/lubbock-2213-n-quaker" class="crss-hero-cta">See Units and Prices</a>
+        <a href="tel:+18067015660" class="crss-hero-phone">(806) 701-5660</a>
+      </div>
     </div>
   </section>
 
@@ -982,12 +859,12 @@
       <header class="crss-sec-head">
         <div class="crss-sec-meta">
           <span class="crss-sec-num">01</span>
-          <p class="crss-home-eyebrow">Move into a storage facility today</p>
+          <p class="crss-home-eyebrow">Move in this week</p>
         </div>
-        <h2 class="crss-home-h2">Find nearby storage facilities</h2>
+        <h2 class="crss-home-h2">Our Lubbock facility</h2>
       </header>
       <div class="crss-fac-grid" data-crss-facilities></div>
-      <p class="crss-fac-note">More CapRock locations are on the way. <a href="/find-storage">See all locations</a></p>
+      <p class="crss-fac-note">More CapRock locations are on the way.</p>
     </div>
   </section>
 
@@ -1007,8 +884,8 @@
           <span class="crss-step-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
           </span>
-          <h3>Find a location</h3>
-          <p>Start with the CapRock facility closest to you.</p>
+          <h3>Check availability</h3>
+          <p>See what is open right now at our Lubbock property.</p>
         </li>
         <li class="crss-step">
           <span class="crss-step-icon" aria-hidden="true">
@@ -1027,7 +904,7 @@
       </ol>
 
       <div>
-        <a href="/find-storage" class="crss-btn-primary">Let&rsquo;s get started</a>
+        <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">Let&rsquo;s get started</a>
       </div>
     </div>
   </section>
@@ -1050,7 +927,7 @@
         <li><strong>A size that fits.</strong> <span data-crss-size-range data-tpl="From a {min} locker up to a {max}">From a 5&nbsp;&times;&nbsp;5 locker up to a 10&nbsp;&times;&nbsp;30</span>, so you are not paying for space you will not use.</li>
         <li><strong>Vehicle and RV parking.</strong> Options vary by location, so ask your nearest facility what they currently offer.</li>
       </ul>
-      <p class="crss-longcopy-close">If you know roughly what you need, <a href="/find-storage">find your nearest location</a> and give them a call.</p>
+      <p class="crss-longcopy-close">If you know roughly what you need, <a href="/lubbock-2213-n-quaker">see what is available in Lubbock</a> and give the office a call.</p>
     </div>
   </section>
 
@@ -1352,9 +1229,9 @@
         rgba(41, 39, 36, 0.60) 68%,
         rgba(41, 39, 36, 0.48) 100%),
       radial-gradient(90% 130% at 90% 8%, rgba(164, 74, 35, 0.30), transparent 62%),
-      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ab2d73dd2068ce68b83db.jpg');
+      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ec591a2de8f8e8fbb6441.jpg');
     background-size: cover;
-    background-position: center 58%;
+    background-position: center 50%;
     background-repeat: no-repeat;
   }
 
@@ -1390,93 +1267,44 @@
     margin-bottom: 40px;
   }
 
-  /* ---- Hero search card ---- */
-  .crss-hero-search {
+  /* ---- Hero actions ----
+     Replaces the search card. The button is the same weight and
+     rhythm the Find Units button had, so the hero's proportions are
+     unchanged; the number sits beside it because on a phone half the
+     people who get this far would rather call than browse. */
+  .crss-hero-actions {
     display: flex;
-    gap: 10px;
-    align-items: stretch;
-    background: var(--crss-white, #FFFFFF);
-    border-radius: 0;
-    padding: 10px;
-    max-width: 980px;
-  }
-  .crss-hero-field {
-    position: relative;
-    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    flex: 1 1 0;
-    min-width: 0;
+    gap: 16px 26px;
   }
-  .crss-hero-field-text {
-    flex: 2.1 1 0;
-  }
-  .crss-hero-field + .crss-hero-field {
-    border-left: 1px solid var(--crss-rule, #E7DECD);
-  }
-  .crss-hero-search-icon {
-    position: absolute;
-    left: 14px;
-    width: 18px;
-    height: 18px;
-    color: var(--crss-taupe, #7F6C5D);
-    pointer-events: none;
-    transition: color .22s ease;
-  }
-  .crss-hero-field-text:focus-within .crss-hero-search-icon {
-    color: var(--crss-terracotta, #A44A23);
-  }
-  .crss-hero-search input,
-  .crss-hero-search select {
-    width: 100%;
-    font-family: inherit;
-    font-size: 15px;
-    color: var(--crss-charcoal, #292724);
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 15px 14px;
-    cursor: pointer;
-  }
-  .crss-hero-search input {
-    padding-left: 42px;
-    cursor: text;
-  }
-  .crss-hero-search input::placeholder {
-    color: var(--crss-taupe, #7F6C5D);
-  }
-  .crss-hero-search input:focus,
-  .crss-hero-search select:focus {
-    outline: none;
-    background: var(--crss-bone, #FAF7F1);
-  }
-  .crss-hero-search select {
-    appearance: none;
-    -webkit-appearance: none;
-    /* chevron drawn inline so no external asset is needed */
-    background-image: linear-gradient(45deg, transparent 50%, var(--crss-taupe, #7F6C5D) 50%),
-                      linear-gradient(135deg, var(--crss-taupe, #7F6C5D) 50%, transparent 50%);
-    background-position: calc(100% - 18px) calc(50% + 1px), calc(100% - 13px) calc(50% + 1px);
-    background-size: 5px 5px, 5px 5px;
-    background-repeat: no-repeat;
-    padding-right: 34px;
-  }
-  .crss-hero-submit {
-    flex: 0 0 auto;
-    font-family: inherit;
+  .crss-hero-cta {
+    display: inline-block;
     background: var(--crss-terracotta, #A44A23);
     color: var(--crss-white, #FFFFFF);
     font-weight: 600;
     font-size: 12px;
     letter-spacing: 0.11em;
     text-transform: uppercase;
-    padding: 16px 32px;
-    border: none;
-    border-radius: 0;
-    cursor: pointer;
-    transition: background .26s ease, box-shadow .26s ease;
+    padding: 18px 34px;
+    transition: background .26s ease;
   }
-  .crss-hero-submit:hover {
+  .crss-hero-cta:hover {
     background: var(--crss-terracotta-dark, #863B1A);
+  }
+  .crss-hero-phone {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-cream, #F1E3CC);
+    border-bottom: 1px solid rgba(241, 227, 204, 0.35);
+    padding-bottom: 2px;
+    transition: color .22s ease, border-color .22s ease;
+  }
+  .crss-hero-phone:hover {
+    color: var(--crss-white, #FFFFFF);
+    border-color: var(--crss-white, #FFFFFF);
   }
 
   /* ============ TRUST STRIP ============ */
@@ -1619,9 +1447,9 @@
   .crss-fac-photo {
     height: 178px;
     background-color: var(--crss-taupe, #7F6C5D);
-    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ab2d73dd2068ce68b83db.jpg');
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ec591a2de8f8e8fbb6441.jpg');
     background-size: cover;
-    background-position: center 56%;
+    background-position: center 50%;
     background-repeat: no-repeat;
   }
   .crss-fac-body {
@@ -1992,16 +1820,6 @@
   }
 
   @media (max-width: 1080px) {
-    .crss-hero-search {
-      flex-wrap: wrap;
-    }
-    .crss-hero-field-text {
-      flex: 1 1 100%;
-      border-bottom: 1px solid var(--crss-rule, #E7DECD);
-    }
-    .crss-hero-field-text + .crss-hero-field {
-      border-left: none;
-    }
   }
   @media (max-width: 900px) {
     .crss-sec-head-split {
@@ -2043,19 +1861,6 @@
     }
   }
   @media (max-width: 700px) {
-    .crss-hero-field {
-      flex: 1 1 100%;
-    }
-    .crss-hero-field + .crss-hero-field {
-      border-left: none;
-      border-top: 1px solid var(--crss-rule, #E7DECD);
-    }
-    .crss-hero-field-text {
-      border-bottom: none;
-    }
-    .crss-hero-submit {
-      flex: 1 1 100%;
-    }
   }
 
   @media (max-width: 560px) {
@@ -2104,7 +1909,7 @@
 
     /* ================================================================
        PLACEHOLDER location data.
-       KEEP IN SYNC with the LOCATIONS array in find-storage.html.
+       The only copy of this data, now that find-storage.html is gone.
        Both should move to a real data source (Supabase, or a GHL
        custom object) rather than being hand-edited in two files.
        Star ratings and review counts are intentionally absent: there
@@ -2144,24 +1949,6 @@
       grid.innerHTML = html;
     });
 
-    /* ---- Hero search hands off to the Find Storage page ----
-       There is no backend here, so rather than fake a result, the form
-       carries what was typed over to /find-storage as query params. */
-    var form = document.getElementById('crss-hero-search');
-    if (form) {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var params = [];
-        var q = document.getElementById('crss-hero-q');
-        var type = document.getElementById('crss-hero-type');
-        var size = document.getElementById('crss-hero-size');
-        if (q && q.value.trim()) params.push('q=' + encodeURIComponent(q.value.trim()));
-        if (type && type.value) params.push('type=' + encodeURIComponent(type.value));
-        if (size && size.value) params.push('size=' + encodeURIComponent(size.value));
-        window.location.href = '/find-storage' + (params.length ? '?' + params.join('&') : '');
-      });
-    }
-
     /* ---- Unit size range, live ----
        Every "sizes from X to Y" claim on this page carries a
        data-tpl template and is rewritten from the facility record.
@@ -2172,44 +1959,6 @@
        existed here.
 
        Built from the numeric width and length, never the free-text
-       description, so nothing from the API reaches innerHTML. */
-    /* ---- Unit size menu, live ----
-       Same problem as the prose, and it survived the first pass
-       because these options wrote &times; without the non-breaking
-       spaces the search was looking for. The bands match the filter
-       pills on the location page so the two never disagree. */
-    function fillSizeBuckets(unitTypes) {
-      var BANDS = { small: [0, 50], medium: [51, 150], large: [151, Infinity] };
-      document.querySelectorAll('[data-crss-bucket]').forEach(function (opt) {
-        var band = BANDS[opt.getAttribute('data-crss-bucket')];
-        if (!band) return;
-        var inBand = (unitTypes || []).filter(function (u) {
-          var sq = Number(u.sqft);
-          return isFinite(sq) && sq >= band[0] && sq <= band[1] &&
-                 isFinite(Number(u.width)) && isFinite(Number(u.length));
-        }).sort(function (a, b) { return Number(a.sqft) - Number(b.sqft); });
-
-        /* Nothing rented in this band: drop the option rather than
-           invite someone to search for it. */
-        if (!inBand.length) {
-          if (opt.parentNode) opt.parentNode.removeChild(opt);
-          return;
-        }
-        function label(u) {
-          return Number(u.width) + ' × ' + Number(u.length);
-        }
-        var name = opt.getAttribute('data-crss-bucket');
-        name = name.charAt(0).toUpperCase() + name.slice(1);
-        var span = inBand.length > 1
-          ? label(inBand[0]) + ' to ' + label(inBand[inBand.length - 1])
-          : label(inBand[0]);
-        /* textContent, not innerHTML: an <option> renders entities as
-           literal text, which is why the markup uses &nbsp; and this
-           uses the characters themselves. */
-        opt.textContent = name + ' (' + span + ')';
-      });
-    }
-
     function fillSizeRange(unitTypes) {
       var els = document.querySelectorAll('[data-crss-size-range]');
       if (!els.length || !unitTypes || !unitTypes.length) return;
@@ -2242,7 +1991,6 @@
           .map(function (u) { return Number(u.rate); });
         if (!rates.length) return;
         fillSizeRange(data.unitTypes);
-        fillSizeBuckets(data.unitTypes);
         var from = window.CRSS_WSS.money(Math.min.apply(null, rates));
         if (!from) return;
         document.querySelectorAll('[data-crss-price]').forEach(function (el) {
@@ -2331,9 +2079,8 @@
         <h2 class="crss-footer-head">About CapRock</h2>
         <ul>
           <li><a href="/about-caprock">About CapRock</a></li>
-          <li><a href="/careers">Careers</a></li>
           <li><a href="/contact-us">Contact Us</a></li>
-          <li><a href="/find-storage">Find Storage</a></li>
+          <li><a href="/lubbock-2213-n-quaker">Our Location</a></li>
         </ul>
       </div>
 
@@ -2704,7 +2451,6 @@
   var MAP = {
     '/': 'home.html',
     '/caprock-self-service': 'home.html',
-    '/find-storage': 'find-storage.html',
     '/size-guide': 'size-guide.html',
     '/help-center': 'help-center.html',
     '/storage-calculator': 'storage-calculator.html',
@@ -2713,7 +2459,6 @@
     '/student-storage': 'student-storage.html',
     '/military-storage': 'military-storage.html',
     '/about-caprock': 'about-caprock.html',
-    '/careers': 'careers.html',
     '/contact-us': 'contact-us.html',
     '/lubbock-2213-n-quaker': 'lubbock-2213-n-quaker.html'
   };
@@ -2739,7 +2484,7 @@
     if (e.target && e.target.id === 'crss-hero-search') {
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = 'find-storage.html';
+      window.location.href = "lubbock-2213-n-quaker.html";
     }
   }, true);
 })();

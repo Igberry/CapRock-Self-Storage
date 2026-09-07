@@ -38,12 +38,12 @@
          image ever fails the header still says who this is. That is
          also why the link no longer needs its own aria-label, which
          would double up with the alt. -->
-    <a href="/caprock-self-service" class="crss-logo">
+    <a href="/home" class="crss-logo">
       <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
     </a>
 
     <nav class="crss-nav" aria-label="Primary">
-      <a href="/find-storage" class="crss-nav-link">Find Storage</a>
+      <a href="/lubbock-2213-n-quaker" class="crss-nav-link">Our Location</a>
       <a href="/size-guide" class="crss-nav-link">Size Guide</a>
       <a href="/help-center" class="crss-nav-link">Help Center</a>
 
@@ -66,7 +66,6 @@
         </button>
         <div class="crss-dropdown-menu">
           <a href="/about-caprock">About CapRock</a>
-          <a href="/careers">Careers</a>
           <a href="/contact-us">Contact Us</a>
         </div>
       </div>
@@ -104,7 +103,7 @@
 
   <!-- Mobile menu panel -->
   <div class="crss-mobile-panel">
-    <a href="/find-storage" class="crss-mobile-link">Find Storage</a>
+    <a href="/lubbock-2213-n-quaker" class="crss-mobile-link">Our Location</a>
     <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
     <a href="/help-center" class="crss-mobile-link">Help Center</a>
 
@@ -124,7 +123,6 @@
     </button>
     <div class="crss-mobile-accordion-panel">
       <a href="/about-caprock">About CapRock</a>
-      <a href="/careers">Careers</a>
       <a href="/contact-us">Contact Us</a>
     </div>
 
@@ -745,109 +743,3 @@
   })();
 </script>
 
-<!-- ================================================================
-     TEMPORARY: GHL preview router.
-
-     DELETE THIS WHOLE <script> BLOCK ONCE THE DOMAIN IS LIVE.
-
-     Every internal link in this build is root-relative ("/size-guide"),
-     which is correct: on a real domain it resolves against the site
-     root and needs no maintenance. But GHL's preview does not serve
-     pages by slug at all. Each page is an opaque id:
-
-         https://sites.leadconnectorhq.com/preview/cW98h0TtU2henZQksFdg
-
-     so "/size-guide" points at the host root and 404s. There is no
-     prefix to derive, so the ids have to be mapped explicitly.
-
-     This runs ONLY on sites.leadconnectorhq.com. On the real domain the
-     host check fails, the script does nothing, and the root-relative
-     links work natively. Nothing has to be undone at launch beyond
-     deleting this block.
-
-     If a page is recreated in GHL its preview id changes and the entry
-     here goes stale. That is another reason this is temporary.
-     ================================================================ -->
-<script>
-  (function () {
-    if (window.location.hostname !== 'sites.leadconnectorhq.com') return;
-
-    var BASE = 'https://sites.leadconnectorhq.com/preview/';
-    var Q = '?notrack=true';
-
-    var IDS = {
-      '/': 'aVhwRw4YFh95ayIWlGGh',
-      '/caprock-self-service': 'aVhwRw4YFh95ayIWlGGh',
-      '/find-storage': '3pwccyzRU4U9rplOb4TJ',
-      '/size-guide': 'cW98h0TtU2henZQksFdg',
-      '/help-center': 'ZkTYd1bMoDXNxPoqigls',
-      '/storage-calculator': 'JxaBnIAg0qVPOacQxks9',
-      '/storage-tips': 'xUmYQkBhKqzT53km4Yss',
-      '/vehicle-storage': 'RAuHToTUsnKaeEa9kLVC',
-      '/student-storage': 'cmSOtz4CAKY6svZfc9PZ',
-      '/military-storage': 'F2V7skG0KFxRZQYjKvAJ',
-      '/about-caprock': 'NQ9ulH7SQbeuLcIUN7Bb',
-      '/careers': 'D9i2P7wYpWQ5LngEjrsp',
-      '/contact-us': 'sOCAozOJOj5F2JB64RY7',
-      '/lubbock-2213-n-quaker': 'z9SAHTIBX5pdxckMhdcA'
-    };
-
-    function resolve(href) {
-      if (!href) return null;
-      var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
-      if (path === '') path = '/';
-      var id = IDS[path];
-      return id ? BASE + id + Q : null;
-    }
-
-    /* Capture phase, so this also catches links the page builds with JS
-       (the facility cards) and runs before the hero search's own
-       submit handler sets window.location itself. */
-    /* An internal link with no entry in IDS must not fall through: the
-       browser would go to sites.leadconnectorhq.com/<slug> and 404,
-       which during a review looks like the site is broken rather than
-       like the page simply has not been built. Hold the visitor where
-       they are and say which page is missing. */
-    var toast, hideTimer;
-    function notice(path) {
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.setAttribute('style',
-          'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);' +
-          'z-index:9999;max-width:min(92vw,470px);padding:14px 18px;' +
-          'border-radius: 0;background:#292724;color:#F1E3CC;text-align:center;' +
-          'font:500 14px/1.5 "Work Sans",Arial,sans-serif;' +
-          'box-shadow:0 12px 32px -10px rgba(0,0,0,.6);' +
-          'opacity:0;transition:opacity .2s ease;pointer-events:none;');
-        document.body.appendChild(toast);
-      }
-      toast.textContent = 'Preview only — no GHL page exists yet for ' + path;
-      toast.style.opacity = '1';
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(function () { toast.style.opacity = '0'; }, 2800);
-    }
-
-    document.addEventListener('click', function (e) {
-      var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
-      if (!a) return;
-      var href = a.getAttribute('href');
-      var url = resolve(href);
-      e.preventDefault();
-      if (url) {
-        window.location.href = url;
-      } else {
-        notice(href);
-      }
-    }, true);
-
-    document.addEventListener('submit', function (e) {
-      if (e.target && e.target.id === 'crss-hero-search') {
-        var url = resolve('/find-storage');
-        if (!url) return;
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.href = url;
-      }
-    }, true);
-  })();
-</script>
