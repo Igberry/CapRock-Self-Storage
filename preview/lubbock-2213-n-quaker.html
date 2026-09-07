@@ -876,13 +876,10 @@
      ----------------------------------------------------------------
      STILL OPEN ON THIS PAGE
      ----------------------------------------------------------------
-     - Real phone number (still the shared dummy)
-     - ZIP code for the street address
-     - Office address note text
-     - Facility photo in the info card
-     - Units section: blocked on the WebSelfStorage API key, which
-       needs a server-side proxy, it cannot sit in Custom Code
-     - Reviews section: waiting on a data-source decision
+     - Reviews: the section is removed until there is somewhere real
+       to read them from. The feed returns an empty list, so there
+       was nothing to show and no date by which there would be.
+     - "View Location Details" still points at nothing
      - The open questions listed in the Storage Faqs panel
      ================================================================ -->
 <div class="crss-location">
@@ -899,7 +896,6 @@
     <div class="crss-subnav-inner">
       <a href="#units" class="crss-subnav-link is-active" data-target="units">Units</a>
       <a href="#features" class="crss-subnav-link" data-target="features">Features</a>
-      <a href="#reviews" class="crss-subnav-link" data-target="reviews">Reviews</a>
       <a href="#faqs" class="crss-subnav-link" data-target="faqs">Storage Faqs</a>
       <a href="#city-info" class="crss-subnav-link" data-target="city-info">City Information</a>
     </div>
@@ -1068,11 +1064,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section id="reviews" class="crss-section crss-section-stub">
-        <h2>Reviews</h2>
-        <p class="crss-stub-note">Placeholder for now. Real reviews connect once the data source is decided.</p>
       </section>
 
       <!-- Only questions answerable from what this project has already
@@ -1382,35 +1373,6 @@
   }
   /* These five sections are still unbuilt. The dashed edge is deliberate:
      it keeps them reading as scaffolding, not as finished content. */
-  .crss-section-stub {
-    background: var(--crss-sand, #EFE7DA);
-    border: 1px dashed rgba(127, 108, 93, 0.5);
-    border-radius: 0;
-    padding: 40px 40px 42px;
-  }
-  .crss-section-stub h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-optical-sizing: auto;
-    font-size: 27px;
-    font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: -0.015em;
-    color: var(--crss-charcoal, #292724);
-  }
-  .crss-section-stub h2::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: var(--crss-rule-ink, #C4B49B);
-    margin: 16px 0 14px;
-  }
-  .crss-stub-note {
-    font-size: 15.5px;
-    color: var(--crss-ink-soft, #5F564C);
-    line-height: 1.68;
-    max-width: 62ch;
-  }
 
   /* ============ BUILT-OUT SECTIONS ============
      .crss-panel is the finished counterpart to .crss-section-stub:
@@ -1919,9 +1881,6 @@
     .crss-subnav-inner {
       padding: 0 26px;
     }
-    .crss-section-stub {
-      padding: 32px 28px 34px;
-    }
   }
   /* Below this the five tabs no longer fit, so the row scrolls. The
      fade is the only cue that there is more to the right, the
@@ -1965,9 +1924,6 @@
     }
     .crss-subnav-link {
       padding: 16px 14px;
-    }
-    .crss-section-stub {
-      padding: 28px 24px 30px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -2089,15 +2045,17 @@
     });
 
     /* ================= UNITS: live availability =================
-       Fetched through the Vercel proxy, never direct: the
-       WebSelfStorage key must not reach the browser.
+       Read through window.CRSS_WSS, the shared helper in the header
+       Global Section, rather than fetching the proxy directly.
 
-       SET THIS after `vercel deploy --prod`, e.g.
-         'https://caprock-api.vercel.app/api/wss'
-       Left empty, the section shows its call-the-office fallback
-       rather than firing a request that cannot succeed. */
-    var WSS_ENDPOINT = 'https://cap-rock-self-storage.vercel.app/api/wss';
-    var WSS_FACILITY = 'lubbock-2213-n-quaker';
+       This section used to call fetch() itself, with its own copy of
+       the endpoint. That worked, right up until the helper started
+       merging in the unit types the /movein feed leaves out: every
+       other page widened to fifteen sizes and this one, the page a
+       customer actually chooses from, quietly stayed at five.
+
+       A second way to reach the same data is a second thing to keep
+       in step, and it will always be the one nobody remembers. */
 
     var unitsHost = loc.querySelector('[data-crss-units]');
     var filterHost = loc.querySelector('[data-crss-unit-filters]');
@@ -2237,16 +2195,13 @@
 
     if (!unitsHost) {
       /* nothing to do */
-    } else if (!WSS_ENDPOINT) {
+    } else if (!window.CRSS_WSS) {
       unitState('Live availability is not connected yet. ' + FALLBACK);
     } else {
-      fetch(WSS_ENDPOINT + '?facility=' + encodeURIComponent(WSS_FACILITY) + '&resource=movein')
-        .then(function (r) {
-          if (!r.ok) throw new Error('http ' + r.status);
-          return r.json();
-        })
+      window.CRSS_WSS.get('movein')
         .then(function (data) {
           var all = (data && data.unitTypes) || [];
+          if (!all.length) throw new Error('no unit types');
           /* Sort smallest first: people shop by size, not by the order
              the facility system happens to return. */
           all.sort(function (a, b) { return (Number(a.sqft) || 0) - (Number(b.sqft) || 0); });
