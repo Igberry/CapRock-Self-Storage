@@ -586,6 +586,14 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
+    /* Each card sizes to its own content. A grid stretches everything
+       in a row to the tallest item by default, so opening one panel
+       grew the closed card beside it to match and left a tall empty
+       box next to the answer someone had just asked for.
+
+       Closed cards are all the same height anyway, since the trigger
+       is the same, so the tidy row survives. */
+    align-items: start;
   }
   .crss-feature {
     border: 1px solid var(--crss-rule, #E7DECD);
