@@ -3,12 +3,14 @@
      Body content only, header Global Section goes above this.
      Path suggestion: /about-caprock
 
-     PLACEHOLDER: no real company history, founding story, or team
-     info was provided, so "Our Story" is left as a clearly marked
-     prompt rather than invented. The "What to Expect" block reuses
-     the facility standards already established in this project
-     (gated access, video surveillance, month-to-month leases),
-     not new claims.
+     STILL NEEDED: a founding story. No company history, founding
+     story or team information has been provided, and none is invented
+     here. The "Our Story" block is removed rather than left showing a
+     prompt to customers; see the note where it used to sit.
+
+     The "What to Expect" block reuses the facility standards already
+     established in this project (gated access, video surveillance,
+     month-to-month leases), not new claims.
      ================================================================ -->
 <div class="crss-about">
   <div class="crss-about-inner">
@@ -19,10 +21,25 @@
 
     <h1 class="crss-about-title">About CapRock Self Storage</h1>
 
-    <div class="crss-about-block crss-about-placeholder">
-      <h2>Our Story</h2>
-      <p>[PLACEHOLDER. Add CapRock's founding story, mission, and what makes the company different. This section is intentionally left blank rather than filled with invented history.]</p>
-    </div>
+    <!-- "Our Story" is out, not blank.
+
+         It was a block reading the word PLACEHOLDER in brackets to
+         every visitor of a live site, which tells them the company
+         has not finished its own About page. That is worse than
+         having no story section at all, and worse than the story
+         being short.
+
+         Nothing here is invented in its place: a founding story is
+         the one thing on this site that cannot be derived from the
+         facility record or written from general knowledge.
+
+         When CapRock supplies the copy, the block goes back exactly
+         where this comment sits:
+
+           <div class="crss-about-block">
+             <h2>Our Story</h2>
+             <p>TEXT</p>
+           </div>                                                  -->
 
     <div class="crss-about-block">
       <h2>What You Can Expect</h2>
@@ -121,15 +138,6 @@
     border-radius: 0;
     padding: 34px 36px;
     margin-bottom: 20px;
-  }
-  /* Deliberately unfinished: stays visibly marked as a placeholder
-     so nobody mistakes it for real, approved company copy. */
-  .crss-about-placeholder {
-    border: 1px dashed rgba(127, 108, 93, 0.55);
-    background: var(--crss-sand, #EFE7DA);
-  }
-  .crss-about-placeholder p {
-    font-style: italic;
   }
   /* Section figures, counted rather than typed, so they cannot
      drift out of step with the sections they label. */
