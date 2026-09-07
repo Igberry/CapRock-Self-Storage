@@ -59,6 +59,8 @@ const UPSTREAM_TIMEOUT_MS = 8000;
    no trailing slash, or the string compare in cors() will not match. */
 const ALLOWED_ORIGINS = [
   'https://sites.leadconnectorhq.com',
+  'https://caprock-storage.com',
+  'https://www.caprock-storage.com',
   ...(process.env.CRSS_SITE_ORIGINS || '')
     .split(',')
     .map((o) => o.trim().replace(/\/+$/, ''))
@@ -271,13 +273,30 @@ const SHAPE = {
 };
 
 function applyCors(req, res) {
+  /* Vary goes on EVERY response, allowed or not.
+
+     It was inside the if, and that was a real outage. The allow header
+     is chosen per request from the Origin, so the response is not the
+     same for every caller - which is exactly what Vary exists to say.
+     Without it the CDN stored one copy under a key that ignored
+     Origin. A single request from an origin that was not yet on the
+     list (a browser, a curl, a link preview) cached a response with no
+     allow header, and every visitor afterwards was served that copy,
+     including from origins that were on the list. The whole site lost
+     its live prices because of one request from the wrong place. */
+  res.setHeader('Vary', 'Origin');
+
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  /* Cache deliberately rather than by accident. Rates and vacancy do
+     change, so a minute is the most staleness worth trading for the
+     upstream calls it saves. */
+  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=120');
 }
 
 module.exports = async function handler(req, res) {
