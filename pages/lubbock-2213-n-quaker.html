@@ -1359,6 +1359,13 @@
       return 'A full house or business inventory';
     }
 
+    /* Read off the info card rather than written again here, so this
+       page has one phone number in it. Cloning the page for another
+       facility already means changing that link; it should not also
+       mean finding a second copy buried in the script. */
+    var telLink = loc.querySelector('.crss-info-phone');
+    var TEL = (telLink && telLink.getAttribute('href')) || '/contact-us';
+
     function renderUnits(list) {
       if (!list.length) {
         unitState('Nothing is available at this size right now. ' + FALLBACK);
@@ -1387,19 +1394,29 @@
 
           '<div class="crss-unit-right">' +
             (rate ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' : '') +
-            /* Sizes the live feed does not carry come from CapRock's
-               rate sheet, which has a price but no trustworthy count.
-               Saying "Waitlist" for those would turn a gap in the data
-               into a claim that the unit is full. */
+            /* The status line states, the button acts. "Call to check"
+               was sitting in the status line, which made it look like
+               a button that did nothing: it is an instruction, and an
+               instruction that cannot be followed by pressing it is
+               worse than no instruction.
+
+               So the status says what is known, and the button carries
+               whatever the right next step is for that row. Sizes the
+               live feed does not return have a price from CapRock's
+               rate sheet but no trustworthy count, and "Waitlist"
+               there would turn a gap in the data into a claim that the
+               unit is full. */
             '<div class="crss-unit-avail">' +
-              (u.live === false ? 'Call to check'
+              (u.live === false ? 'Availability on request'
                                 : (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist')) +
             '</div>' +
             /* Enquire, not Reserve. The facility system has Rent Now
                and Reserve buttons because it can take the money; this
                site has no booking flow, and a Reserve button that only
                opens a contact form is a promise it cannot keep. */
-            '<a class="crss-unit-cta" href="/contact-us">Enquire</a>' +
+            (u.live === false
+              ? '<a class="crss-unit-cta" href="' + TEL + '">Call to check</a>'
+              : '<a class="crss-unit-cta" href="/contact-us">Enquire</a>') +
           '</div>' +
         '</div>';
       }).join('');
