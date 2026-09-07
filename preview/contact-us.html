@@ -1060,6 +1060,24 @@
     <h1 class="crss-contact-title">Contact Us</h1>
     <p class="crss-contact-subtitle">Have a general question? Send us a message. For questions about a specific unit or move-in, find your nearest location instead.</p>
 
+    <!-- Filled from the query string when someone arrives from an
+         Enquire button on the location page, and hidden otherwise.
+
+         It exists because the form below is GHL's own element, in its
+         own iframe, which this code cannot reach into. Showing the
+         unit here at least means the visitor can see it was carried
+         over, and has the size and price in front of them while they
+         type rather than scrolling back to find it.
+
+         Getting it INTO the form is a GHL setting, not code: give the
+         message field a query key of "message" in the form builder and
+         GHL prefills it from the same URL this button already sends. -->
+    <div class="crss-enquiry" data-crss-enquiry hidden>
+      <p class="crss-enquiry-label">You are enquiring about</p>
+      <p class="crss-enquiry-unit" data-crss-enquiry-unit></p>
+      <p class="crss-enquiry-note" data-crss-enquiry-note></p>
+    </div>
+
     <div class="crss-contact-info">
       <div class="crss-contact-info-row">
         <span class="crss-contact-label">Phone</span>
@@ -1155,6 +1173,40 @@
     max-width: 60ch;
     line-height: 1.65;
     margin-bottom: 48px;
+  }
+
+  /* ---- Carried-over enquiry ----
+     Terracotta edge rather than another bordered card: it is a note
+     about why you are here, not a second panel of contact details. */
+  .crss-enquiry {
+    background: var(--crss-cream, #F1E3CC);
+    border-left: 3px solid var(--crss-terracotta, #A44A23);
+    padding: 20px 24px 22px;
+    margin-bottom: 32px;
+  }
+  .crss-enquiry-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 8px;
+  }
+  .crss-enquiry-unit {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-enquiry-note {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 8px;
   }
 
   /* ============ CONTACT DETAILS ============
@@ -1261,6 +1313,38 @@
     }
   }
 </style>
+
+<script>
+  (function () {
+    var host = document.querySelector('[data-crss-enquiry]');
+    if (!host) return;
+
+    /* Read with URLSearchParams and write with textContent, so nothing
+       from the query string is ever parsed as HTML. Anyone can put
+       anything in a URL and send someone the link. */
+    var params = new URLSearchParams(window.location.search);
+    var unit = params.get('unit');
+    if (!unit) return;
+
+    var rate = params.get('rate');
+    var height = params.get('h');
+
+    var unitEl = host.querySelector('[data-crss-enquiry-unit]');
+    var noteEl = host.querySelector('[data-crss-enquiry-note]');
+
+    unitEl.textContent = unit + (height ? ' \u00D7 ' + height + '\u2032 high' : '');
+
+    /* The rate is what the page quoted when they pressed the button.
+       Saying so is the honest framing: it is a snapshot, not a promise,
+       and rates move. */
+    var note = rate
+      ? 'Quoted at ' + rate + ' per month when you pressed Enquire. Mention this size in your message and we will confirm the current rate and availability.'
+      : 'Mention this size in your message and we will confirm the current rate and availability.';
+    noteEl.textContent = note;
+
+    host.hidden = false;
+  })();
+</script>
 
 <!-- ================================================================
      CapRock Self Storage — Global Footer

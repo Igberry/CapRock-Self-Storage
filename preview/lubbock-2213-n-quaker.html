@@ -2379,6 +2379,26 @@
     var telLink = loc.querySelector('.crss-info-phone');
     var TEL = (telLink && telLink.getAttribute('href')) || '/contact-us';
 
+    /* The contact form is GHL's own element in its own iframe, so this
+       page cannot type into it. What it can do is put the unit in the
+       URL: the contact page shows it back to the visitor, and GHL
+       fills the message field itself once that field is given a query
+       key of "message" in the form builder.
+
+       "message" is written as a full sentence rather than a code, so
+       whatever reads it - the form, the CRM, or a person glancing at
+       the address bar - gets something meaningful. */
+    function enquiryHref(u, rate) {
+      var size = u.width + ' x ' + u.length;
+      var msg = 'I would like to enquire about a ' + size + ' unit' +
+                (rate ? ' at ' + rate + ' per month' : '') + '.';
+      return '/contact-us' +
+        '?unit=' + encodeURIComponent(size) +
+        (u.height ? '&h=' + encodeURIComponent(u.height) : '') +
+        (rate ? '&rate=' + encodeURIComponent(rate) : '') +
+        '&message=' + encodeURIComponent(msg);
+    }
+
     function renderUnits(list) {
       if (!list.length) {
         unitState('Nothing is available at this size right now. ' + FALLBACK);
@@ -2426,10 +2446,15 @@
             /* Enquire, not Reserve. The facility system has Rent Now
                and Reserve buttons because it can take the money; this
                site has no booking flow, and a Reserve button that only
-               opens a contact form is a promise it cannot keep. */
+               opens a contact form is a promise it cannot keep.
+
+               The link carries the unit with it. Without that, someone
+               spends five minutes choosing a 10 x 30 and lands on a
+               blank form asking how it can help, having to describe
+               from memory what they were just looking at. */
             (u.live === false
               ? '<a class="crss-unit-cta" href="' + TEL + '">Call to check</a>'
-              : '<a class="crss-unit-cta" href="/contact-us">Enquire</a>') +
+              : '<a class="crss-unit-cta" href="' + enquiryHref(u, rate) + '">Enquire</a>') +
           '</div>' +
         '</div>';
       }).join('');
