@@ -1345,8 +1345,13 @@
           '<div class="crss-unit-tags">' + tags + '</div>' +
           '<div class="crss-unit-right">' +
             (rate ? '<div class="crss-unit-rate">' + rate + ' <span>/mo</span></div>' : '') +
+            /* Sizes the live feed does not carry come from CapRock's
+               rate sheet, which has a price but no trustworthy count.
+               Saying "Waitlist" for those would turn a gap in the data
+               into a claim that the unit is full. */
             '<div class="crss-unit-avail">' +
-              (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist') +
+              (u.live === false ? 'Call to check'
+                                : (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist')) +
             '</div>' +
             /* Enquire, not Reserve: there is no booking flow yet. The
                POST /reservation endpoint needs its request body sorted

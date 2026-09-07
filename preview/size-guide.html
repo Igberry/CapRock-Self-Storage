@@ -655,14 +655,96 @@
          any failure rather than rejecting, so callers can simply
          fall back to their static content. */
       get: function (resource) {
+        var self = this;
         var url = this.endpoint + '?facility=' + encodeURIComponent(this.facility) +
                   '&resource=' + encodeURIComponent(resource);
         return fetch(url)
           .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            return resource === 'movein' ? self.mergeCatalogue(data) : data;
+          })
           .catch(function (e) {
             console.error('CRSS_WSS ' + resource + ' failed:', e);
             return null;
           });
+      },
+
+      /* ---- The rest of the rate sheet ----
+         The /movein feed returns five unit types. CapRock rents
+         fifteen, plus two parking spaces. The feed appears to carry
+         only part of what is on the books, and /location has no unit
+         data at all, so there is nowhere else to read the rest from.
+
+         These are the ones the feed leaves out, transcribed from
+         CapRock's own rate sheet on 7 September 2026.
+
+         THIS LIST CANNOT CORRECT ITSELF. Every other price on the
+         site updates when it changes in WebSelfStorage; these do not.
+         Anything the feed returns always wins, so a price is only
+         ever taken from here when there is no live one for that size.
+         Worth asking WebSelfStorage why the feed is short, because
+         the answer would let this list be deleted.
+
+         Vacancy is deliberately absent. The sheet had counts, but a
+         count copied out of a spreadsheet is a claim about today that
+         will be wrong by next week, so these say "call to check"
+         rather than inventing a number.
+
+         The 7 x 10 on the sheet is not here: it has zero units built,
+         so it is a price for something that does not exist yet. */
+      CATALOGUE: [
+        { size: '5 x 7',   width: 5,  length: 7,  height: 8, sqft: 35,  rate: 45,
+          driveUp: false, climate: true,  ada: true,  electricity: false,
+          description: 'Interior 1st Floor Street Level Climate Rollup ADA' },
+        { size: '5 x 7',   width: 5,  length: 7,  height: 9, sqft: 35,  rate: 55,
+          driveUp: false, climate: true,  ada: false, electricity: false,
+          description: 'Interior Lower Level Street Level Drivethrough Climate Rollup' },
+        { size: '5 x 10',  width: 5,  length: 10, height: 9, sqft: 50,  rate: 73.95,
+          driveUp: false, climate: true,  ada: false, electricity: false,
+          description: 'Interior Lower Level Street Level Drivethrough Climate Rollup' },
+        { size: '10 x 10', width: 10, length: 10, height: 8, sqft: 100, rate: 89,
+          driveUp: false, climate: true,  ada: true,  electricity: false,
+          description: 'Interior 1st Floor Street Level Drivethrough Climate ADA' },
+        { size: '10 x 24', width: 10, length: 24, height: 8, sqft: 240, rate: 99.95,
+          driveUp: true,  climate: false, ada: false, electricity: true,
+          description: 'Drive Up 1st Floor Outside Level Drivethrough No Climate Rollup Electricity' },
+        { size: '10 x 40', width: 10, length: 40, height: 8, sqft: 400, rate: 159,
+          driveUp: true,  climate: false, ada: false, electricity: true,
+          description: 'Drive Up 1st Floor Inside Level No Climate Rollup Electricity' },
+        { size: '16 x 10', width: 16, length: 10, height: 8, sqft: 160, rate: 74.95,
+          driveUp: true,  climate: false, ada: false, electricity: false,
+          description: 'Drive Up 1st Floor Inside Level No Climate' },
+        { size: '20 x 30', width: 20, length: 30, height: 8, sqft: 600, rate: 199,
+          driveUp: true,  climate: false, ada: false, electricity: false,
+          description: 'Drive Up 1st Floor Inside Level No Climate Double' },
+        { size: '20 x 40', width: 20, length: 40, height: 8, sqft: 800, rate: 279.95,
+          driveUp: true,  climate: false, ada: false, electricity: true,
+          description: 'Drive Up 1st Floor Outside Level No Climate Double Electricity' }
+      ],
+
+      /* The two outdoor parking spaces are not here. They are a
+         different product from a storage unit, only the vehicle page
+         shows them, and putting them in this shared helper would mean
+         every page carrying data one page uses. They are written into
+         vehicle-storage.html directly. */
+
+      /* Live data always wins. A size only comes from CATALOGUE when
+         the feed did not return that width, length and height. */
+      mergeCatalogue: function (data) {
+        if (!data || !Array.isArray(data.unitTypes)) return data;
+        var key = function (u) { return [u.width, u.length, u.height].join('x'); };
+        var live = {};
+        data.unitTypes.forEach(function (u) { u.live = true; live[key(u)] = true; });
+        this.CATALOGUE.forEach(function (u) {
+          if (live[key(u)]) return;
+          var copy = {};
+          for (var f in u) { if (Object.prototype.hasOwnProperty.call(u, f)) copy[f] = u[f]; }
+          copy.live = false;
+          copy.available = null;
+          copy.vacantCount = null;
+          data.unitTypes.push(copy);
+        });
+        return data;
       },
 
       /* Rates come back as numbers; whole dollars lose the .00. */

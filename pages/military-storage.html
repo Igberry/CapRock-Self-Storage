@@ -167,10 +167,38 @@
     margin-bottom: 12px;
     color: var(--crss-charcoal, #292724);
   }
+  .crss-park-list {
+    list-style: none;
+    margin: 14px 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--crss-rule, #E7DECD);
+    border: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-park-list li {
+    background: var(--crss-white, #FFFFFF);
+    padding: 11px 14px;
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-park-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+    margin-right: 10px;
+  }
   .crss-audience-block p {
     font-size: 16px;
     line-height: 1.72;
     color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-audience-block p + p {
+    margin-top: 12px;
   }
   /* Inline prose links get a restrained underline rather than bare color */
   .crss-audience-block p a {

@@ -3,10 +3,13 @@
      Body content only, header Global Section goes above this.
      Path suggestion: /vehicle-storage
 
-     PLACEHOLDER: exact vehicle storage options (covered, uncovered,
-     enclosed) vary by location and aren't confirmed for this
-     facility, copy is phrased to point people to ask their location
-     rather than promising specific features.
+     Vehicle options are confirmed from CapRock's rate sheet: two
+     uncovered outdoor spaces at $50 a month, plus drive-up units up
+     to a 20 x 40 for anything that needs a roof.
+
+     Those two prices are written into the markup, because the parking
+     spaces are absent from the /movein feed and there is nothing to
+     read live. They will not correct themselves.
      ================================================================ -->
 <div class="crss-audience">
   <div class="crss-audience-inner">
@@ -23,9 +26,23 @@
         <h2>Why store your vehicle with CapRock</h2>
         <p>Street and driveway parking leaves vehicles exposed to weather and passersby. A dedicated storage space keeps a car, motorcycle, RV, or boat off your property and under watch, without tying up space you need at home.</p>
       </div>
+      <!-- This block used to say options "vary by location" and to ask
+           the office, because nothing had been confirmed. CapRock's
+           rate sheet settles it, so it says what is actually here.
+
+           Prices are written in rather than read live: the parking
+           spaces are not in the /movein feed, so there is nothing to
+           read. Check them against the rate sheet when rates change.
+           Confirmed 7 September 2026. -->
       <div class="crss-audience-block">
-        <h2>Options vary by location</h2>
-        <p>Depending on the facility, vehicle storage may include uncovered parking spaces, covered parking, or enclosed units large enough for a vehicle. Ask your nearest CapRock location which options they currently offer.</p>
+        <h2>What is available in Lubbock</h2>
+        <p>Two uncovered outdoor spaces, both $50 a month:</p>
+        <ul class="crss-park-list">
+          <li><span class="crss-park-size">10 &times; 30</span> outside, drive-through</li>
+          <li><span class="crss-park-size">10 &times; 40</span> outside, ADA accessible</li>
+        </ul>
+        <p>If you would rather keep a vehicle under cover, the drive-up units go up to a 20&nbsp;&times;&nbsp;40 and several are long enough for a car, a boat or a small RV. Sizes and current rates are on the <a href="/lubbock-2213-n-quaker">Lubbock page</a>.</p>
+        <p>There is one of each parking space, so they go quickly. Call the office on <a href="tel:+18067015660">(806)&nbsp;701&#8209;5660</a> before you travel.</p>
       </div>
       <div class="crss-audience-block">
         <h2>Flexible, month-to-month</h2>
@@ -169,10 +186,38 @@
     margin-bottom: 12px;
     color: var(--crss-charcoal, #292724);
   }
+  .crss-park-list {
+    list-style: none;
+    margin: 14px 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--crss-rule, #E7DECD);
+    border: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-park-list li {
+    background: var(--crss-white, #FFFFFF);
+    padding: 11px 14px;
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-park-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+    margin-right: 10px;
+  }
   .crss-audience-block p {
     font-size: 16px;
     line-height: 1.72;
     color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-audience-block p + p {
+    margin-top: 12px;
   }
   /* Inline prose links get a restrained underline rather than bare color */
   .crss-audience-block p a {

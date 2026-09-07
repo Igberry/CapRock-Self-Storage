@@ -655,14 +655,96 @@
          any failure rather than rejecting, so callers can simply
          fall back to their static content. */
       get: function (resource) {
+        var self = this;
         var url = this.endpoint + '?facility=' + encodeURIComponent(this.facility) +
                   '&resource=' + encodeURIComponent(resource);
         return fetch(url)
           .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            return resource === 'movein' ? self.mergeCatalogue(data) : data;
+          })
           .catch(function (e) {
             console.error('CRSS_WSS ' + resource + ' failed:', e);
             return null;
           });
+      },
+
+      /* ---- The rest of the rate sheet ----
+         The /movein feed returns five unit types. CapRock rents
+         fifteen, plus two parking spaces. The feed appears to carry
+         only part of what is on the books, and /location has no unit
+         data at all, so there is nowhere else to read the rest from.
+
+         These are the ones the feed leaves out, transcribed from
+         CapRock's own rate sheet on 7 September 2026.
+
+         THIS LIST CANNOT CORRECT ITSELF. Every other price on the
+         site updates when it changes in WebSelfStorage; these do not.
+         Anything the feed returns always wins, so a price is only
+         ever taken from here when there is no live one for that size.
+         Worth asking WebSelfStorage why the feed is short, because
+         the answer would let this list be deleted.
+
+         Vacancy is deliberately absent. The sheet had counts, but a
+         count copied out of a spreadsheet is a claim about today that
+         will be wrong by next week, so these say "call to check"
+         rather than inventing a number.
+
+         The 7 x 10 on the sheet is not here: it has zero units built,
+         so it is a price for something that does not exist yet. */
+      CATALOGUE: [
+        { size: '5 x 7',   width: 5,  length: 7,  height: 8, sqft: 35,  rate: 45,
+          driveUp: false, climate: true,  ada: true,  electricity: false,
+          description: 'Interior 1st Floor Street Level Climate Rollup ADA' },
+        { size: '5 x 7',   width: 5,  length: 7,  height: 9, sqft: 35,  rate: 55,
+          driveUp: false, climate: true,  ada: false, electricity: false,
+          description: 'Interior Lower Level Street Level Drivethrough Climate Rollup' },
+        { size: '5 x 10',  width: 5,  length: 10, height: 9, sqft: 50,  rate: 73.95,
+          driveUp: false, climate: true,  ada: false, electricity: false,
+          description: 'Interior Lower Level Street Level Drivethrough Climate Rollup' },
+        { size: '10 x 10', width: 10, length: 10, height: 8, sqft: 100, rate: 89,
+          driveUp: false, climate: true,  ada: true,  electricity: false,
+          description: 'Interior 1st Floor Street Level Drivethrough Climate ADA' },
+        { size: '10 x 24', width: 10, length: 24, height: 8, sqft: 240, rate: 99.95,
+          driveUp: true,  climate: false, ada: false, electricity: true,
+          description: 'Drive Up 1st Floor Outside Level Drivethrough No Climate Rollup Electricity' },
+        { size: '10 x 40', width: 10, length: 40, height: 8, sqft: 400, rate: 159,
+          driveUp: true,  climate: false, ada: false, electricity: true,
+          description: 'Drive Up 1st Floor Inside Level No Climate Rollup Electricity' },
+        { size: '16 x 10', width: 16, length: 10, height: 8, sqft: 160, rate: 74.95,
+          driveUp: true,  climate: false, ada: false, electricity: false,
+          description: 'Drive Up 1st Floor Inside Level No Climate' },
+        { size: '20 x 30', width: 20, length: 30, height: 8, sqft: 600, rate: 199,
+          driveUp: true,  climate: false, ada: false, electricity: false,
+          description: 'Drive Up 1st Floor Inside Level No Climate Double' },
+        { size: '20 x 40', width: 20, length: 40, height: 8, sqft: 800, rate: 279.95,
+          driveUp: true,  climate: false, ada: false, electricity: true,
+          description: 'Drive Up 1st Floor Outside Level No Climate Double Electricity' }
+      ],
+
+      /* The two outdoor parking spaces are not here. They are a
+         different product from a storage unit, only the vehicle page
+         shows them, and putting them in this shared helper would mean
+         every page carrying data one page uses. They are written into
+         vehicle-storage.html directly. */
+
+      /* Live data always wins. A size only comes from CATALOGUE when
+         the feed did not return that width, length and height. */
+      mergeCatalogue: function (data) {
+        if (!data || !Array.isArray(data.unitTypes)) return data;
+        var key = function (u) { return [u.width, u.length, u.height].join('x'); };
+        var live = {};
+        data.unitTypes.forEach(function (u) { u.live = true; live[key(u)] = true; });
+        this.CATALOGUE.forEach(function (u) {
+          if (live[key(u)]) return;
+          var copy = {};
+          for (var f in u) { if (Object.prototype.hasOwnProperty.call(u, f)) copy[f] = u[f]; }
+          copy.live = false;
+          copy.available = null;
+          copy.vacantCount = null;
+          data.unitTypes.push(copy);
+        });
+        return data;
       },
 
       /* Rates come back as numbers; whole dollars lose the .00. */
@@ -762,10 +844,13 @@
      Body content only, header Global Section goes above this.
      Path suggestion: /vehicle-storage
 
-     PLACEHOLDER: exact vehicle storage options (covered, uncovered,
-     enclosed) vary by location and aren't confirmed for this
-     facility, copy is phrased to point people to ask their location
-     rather than promising specific features.
+     Vehicle options are confirmed from CapRock's rate sheet: two
+     uncovered outdoor spaces at $50 a month, plus drive-up units up
+     to a 20 x 40 for anything that needs a roof.
+
+     Those two prices are written into the markup, because the parking
+     spaces are absent from the /movein feed and there is nothing to
+     read live. They will not correct themselves.
      ================================================================ -->
 <div class="crss-audience">
   <div class="crss-audience-inner">
@@ -782,9 +867,23 @@
         <h2>Why store your vehicle with CapRock</h2>
         <p>Street and driveway parking leaves vehicles exposed to weather and passersby. A dedicated storage space keeps a car, motorcycle, RV, or boat off your property and under watch, without tying up space you need at home.</p>
       </div>
+      <!-- This block used to say options "vary by location" and to ask
+           the office, because nothing had been confirmed. CapRock's
+           rate sheet settles it, so it says what is actually here.
+
+           Prices are written in rather than read live: the parking
+           spaces are not in the /movein feed, so there is nothing to
+           read. Check them against the rate sheet when rates change.
+           Confirmed 7 September 2026. -->
       <div class="crss-audience-block">
-        <h2>Options vary by location</h2>
-        <p>Depending on the facility, vehicle storage may include uncovered parking spaces, covered parking, or enclosed units large enough for a vehicle. Ask your nearest CapRock location which options they currently offer.</p>
+        <h2>What is available in Lubbock</h2>
+        <p>Two uncovered outdoor spaces, both $50 a month:</p>
+        <ul class="crss-park-list">
+          <li><span class="crss-park-size">10 &times; 30</span> outside, drive-through</li>
+          <li><span class="crss-park-size">10 &times; 40</span> outside, ADA accessible</li>
+        </ul>
+        <p>If you would rather keep a vehicle under cover, the drive-up units go up to a 20&nbsp;&times;&nbsp;40 and several are long enough for a car, a boat or a small RV. Sizes and current rates are on the <a href="/lubbock-2213-n-quaker">Lubbock page</a>.</p>
+        <p>There is one of each parking space, so they go quickly. Call the office on <a href="tel:+18067015660">(806)&nbsp;701&#8209;5660</a> before you travel.</p>
       </div>
       <div class="crss-audience-block">
         <h2>Flexible, month-to-month</h2>
@@ -928,10 +1027,38 @@
     margin-bottom: 12px;
     color: var(--crss-charcoal, #292724);
   }
+  .crss-park-list {
+    list-style: none;
+    margin: 14px 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--crss-rule, #E7DECD);
+    border: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-park-list li {
+    background: var(--crss-white, #FFFFFF);
+    padding: 11px 14px;
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-park-size {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+    margin-right: 10px;
+  }
   .crss-audience-block p {
     font-size: 16px;
     line-height: 1.72;
     color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-audience-block p + p {
+    margin-top: 12px;
   }
   /* Inline prose links get a restrained underline rather than bare color */
   .crss-audience-block p a {
