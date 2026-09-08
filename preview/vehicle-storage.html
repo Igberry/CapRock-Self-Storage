@@ -730,6 +730,42 @@
          every page carrying data one page uses. They are written into
          vehicle-storage.html directly. */
 
+      /* ---- Drop units a customer cannot tell apart ----
+         Three pairs were showing the same footprint and the same list
+         of features at two different prices: a 5 x 5 at $39 and $49, a
+         5 x 7 at $45 and $55, a 5 x 10 at $63.95 and $73.95. Asked to
+         choose, nobody picks the dearer one, and the page looks
+         broken for offering it.
+
+         WHY THEY LOOK IDENTICAL. They are not: the dearer one in each
+         pair is a lower-level, drive-through unit with a roll-up door,
+         which is what the extra ten dollars buys. Those three
+         attributes were removed at CapRock's instruction, and removing
+         them took away the only visible reason for the price gap.
+
+         So this is a consequence, not a coincidence, and there are two
+         ways back. Restoring one distinguishing line would justify the
+         price and let all of them sell. Removing the dearer one, which
+         is what CapRock asked for, hides about 35 rentable units from
+         the site: 11 vacant 5 x 5s alone.
+
+         Grouped on footprint and feature set rather than a list of
+         sizes, so a pair created later is handled without an edit. */
+      dedupe: function (list) {
+        var groups = {};
+        list.forEach(function (u) {
+          var key = u.width + 'x' + u.length + '|' + (u.climate ? 'c' : 'd');
+          if (!groups[key] || Number(u.rate) < Number(groups[key].rate)) {
+            groups[key] = u;
+          }
+        });
+        var keep = [];
+        for (var k in groups) {
+          if (Object.prototype.hasOwnProperty.call(groups, k)) keep.push(groups[k]);
+        }
+        return keep;
+      },
+
       /* Live data always wins. A size only comes from CATALOGUE when
          the feed did not return that width, length and height. */
       mergeCatalogue: function (data) {
@@ -746,6 +782,10 @@
           copy.vacantCount = null;
           data.unitTypes.push(copy);
         });
+        /* After the merge, not before: a duplicate can be one live unit
+           and one from the rate sheet, and dropping the dearer one only
+           works once both are in the same list. */
+        data.unitTypes = this.dedupe(data.unitTypes);
         return data;
       },
 
