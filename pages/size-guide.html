@@ -312,10 +312,14 @@
     align-items: start;
     margin-bottom: 30px;
   }
-  .crss-sg-modal-art svg {
+  .crss-sg-modal-art .crss-unit-photo {
     display: block;
     width: 200px;
     height: auto;
+    aspect-ratio: 400 / 318;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-sg-facts {
     display: grid;
@@ -530,7 +534,7 @@
     .crss-sg-modal-cols {
       grid-template-columns: minmax(0, 1fr);
     }
-    .crss-sg-modal-art svg {
+    .crss-sg-modal-art .crss-unit-photo {
       width: 160px;
     }
     .crss-sg-modal-inner {

@@ -907,10 +907,18 @@
     padding: 24px 2px;
     border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
-  .crss-unit-art svg {
+  /* One selector for both: the slot holds a photograph, or the drawn
+     fallback if that photograph fails to load, and each carries
+     .crss-unit-photo. Aspect ratio is fixed so the row does not jump
+     as the image arrives. */
+  .crss-unit-art .crss-unit-photo {
     display: block;
     width: 104px;
     height: auto;
+    aspect-ratio: 400 / 318;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px solid var(--crss-rule, #E7DECD);
   }
   /* min-width:0 so a long "fits" line wraps inside its column instead
      of forcing the grid wider than the panel. */
@@ -1088,7 +1096,7 @@
       grid-template-columns: 84px minmax(0, 1fr);
       gap: 14px 18px;
     }
-    .crss-unit-art svg {
+    .crss-unit-art .crss-unit-photo {
       width: 84px;
     }
     .crss-unit-attrs,

@@ -750,100 +750,89 @@
       },
 
       /* Rates come back as numbers; whole dollars lose the .00. */
-      /* ---- Unit illustrations ----
-         Drawn here, in CapRock's palette, rather than taken from the
-         facility system's listing. Those pictures are U-Haul's own
-         artwork, down to the U-HAUL boxes in them, and putting a
-         competitor's illustrations on this site would be both a
-         copyright problem and free advertising for them.
+      /* ---- Unit photographs ----
+         Two photographs of a storage unit interior, alternating down
+         the list so fourteen rows are not fourteen copies of one
+         picture.
 
-         Flat geometry on purpose: it matches a site drawn with square
-         corners and hairlines, and it stays sharp at any size, where a
-         photograph of an empty unit tells you nothing about scale.
-         What varies between bands is how much fits, which is the only
-         thing the picture is there to say. */
+         Which one a unit gets is decided by its own dimensions, not by
+         its position in the list. Position would reshuffle every
+         picture on the page the moment a size was added or sold out,
+         which reads as a glitch to anyone who visits twice; width plus
+         length never changes for a given unit.
+
+         Both were cropped before upload to remove a "Made with AI"
+         badge burned into the top right corner, and re-encoded from
+         1.2MB and 1.5MB PNGs to about 22KB each. They display at 104px
+         in the unit rows and 200px in the Size Guide dialog, so 400px
+         wide covers both at twice the density.
+
+         The drawing is still here as the fallback. If an image 404s or
+         the CDN is slow, onerror swaps in a diagram rather than
+         leaving a broken-image icon in every row. */
+      PHOTOS: [
+        'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa034bbbfc1456f8c66acb8.jpg',
+        'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa034bb8de363112b5465f6.jpg'
+      ],
+
       art: function (u) {
-        var sq = Number(u && u.sqft) || 0;
-        var INK   = 'var(--crss-charcoal, #292724)';
+        /* Hashed rather than summed. Adding width to length and taking
+           the parity looks like it would alternate, and does not:
+           storage dimensions are almost all even numbers, so the sum
+           is almost always even and thirteen of fourteen rows landed
+           on the same photograph. Hashing the whole "WxLxH" string
+           splits these fourteen seven and seven.
+
+           Height is in the key because it is what separates the two
+           5 x 5s and the two 5 x 10s, which would otherwise be
+           identical rows with identical pictures. */
+        var key = [
+          Number(u && u.width) || 0,
+          Number(u && u.length) || 0,
+          Number(u && u.height) || 0
+        ].join('x');
+        var n = 0;
+        for (var i = 0; i < key.length; i++) {
+          n = ((n << 5) - n + key.charCodeAt(i)) | 0;
+        }
+        var src = this.PHOTOS[Math.abs(n) % this.PHOTOS.length];
+        var alt = (u && u.size)
+          ? 'Inside a CapRock storage unit, similar to the ' + u.size
+          : 'Inside a CapRock storage unit';
+
+        /* The fallback is set from the element itself rather than a
+           global, so it works wherever this markup is dropped, and
+           onerror is cleared first so a failing fallback cannot loop. */
+        return '<img class="crss-unit-photo" src="' + src + '" alt="' + alt + '" ' +
+               'loading="lazy" decoding="async" width="400" height="318" ' +
+               'onerror="this.onerror=null;this.outerHTML=window.CRSS_WSS.diagram();">';
+      },
+
+      /* Kept for the fallback above, and for anywhere a drawing suits
+         better than a photograph. Flat geometry, brand palette, no
+         detail that disappears at 104px. */
+      diagram: function () {
         var WALL  = 'var(--crss-sand, #EFE7DA)';
         var FLOOR = 'var(--crss-cream, #F1E3CC)';
+        var INK   = 'var(--crss-charcoal, #292724)';
         var BOX   = 'var(--crss-terracotta, #A44A23)';
         var SOFT  = 'var(--crss-taupe, #7F6C5D)';
-
-        /* A carton, not a coloured rectangle: the lid line and the
-           seam down the middle are what make it read as a box at
-           thumbnail size. */
         function carton(x, y, w, h, fill) {
-          var lid = y + Math.max(3, Math.round(h * 0.24));
-          return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
-                   '" fill="' + fill + '"/>' +
-                 '<path d="M' + x + ' ' + lid + 'h' + w +
-                   'M' + (x + w / 2) + ' ' + y + 'v' + (lid - y) + '"/>';
+          var lid = y + Math.max(3, Math.round(h * 0.22));
+          return '<g stroke="' + INK + '" stroke-width="1">' +
+            '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + fill + '"/>' +
+            '<path d="M' + x + ' ' + lid + 'h' + w + '"/>' +
+          '</g>';
         }
-        function slab(x, y, w, h, fill) {
-          return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
-                 '" fill="' + fill + '"/>';
-        }
-
-        /* Contents sit on the floor line at y=74. Each band holds
-           visibly more than the one before it, because that is the
-           only question the picture answers. */
-        var items;
-        if (sq <= 30) {
-          items = carton(32, 54, 18, 20, BOX) +
-                  carton(32, 39, 18, 14, SOFT) +
-                  carton(54, 58, 15, 16, SOFT) +
-                  slab(74, 46, 8, 28, BOX);
-        } else if (sq <= 60) {
-          items = carton(22, 52, 19, 22, BOX) +
-                  carton(22, 37, 19, 14, SOFT) +
-                  slab(45, 40, 8, 34, SOFT) +
-                  carton(57, 55, 18, 19, BOX) +
-                  carton(79, 59, 14, 15, SOFT);
-        } else if (sq <= 120) {
-          /* Sofa: seat, back, one arm. */
-          items = slab(18, 58, 40, 16, SOFT) +
-                  slab(18, 47, 40, 12, SOFT) +
-                  slab(18, 47, 6, 27, SOFT) +
-                  carton(64, 52, 18, 22, BOX) +
-                  carton(64, 37, 18, 14, BOX) +
-                  slab(88, 44, 9, 30, SOFT);
-        } else if (sq <= 320) {
-          items = slab(14, 58, 34, 16, SOFT) +
-                  slab(14, 47, 34, 12, SOFT) +
-                  slab(52, 34, 16, 40, SOFT) +
-                  slab(52, 52, 16, 1, SOFT) +
-                  carton(72, 52, 18, 22, BOX) +
-                  carton(72, 37, 18, 14, BOX) +
-                  carton(94, 60, 13, 14, SOFT);
-        } else {
-          /* Big enough for a vehicle, so it shows one. */
-          items = slab(12, 58, 58, 12, SOFT) +
-                  slab(26, 47, 32, 12, SOFT) +
-                  '<circle cx="26" cy="72" r="4" fill="' + INK + '"/>' +
-                  '<circle cx="58" cy="72" r="4" fill="' + INK + '"/>' +
-                  carton(78, 52, 20, 22, BOX) +
-                  carton(78, 37, 20, 14, BOX);
-        }
-
-        return '<svg viewBox="0 0 120 96" role="img" aria-label="' +
-                 (u && u.size ? u.size : 'Storage') + ' unit, drawn to show what fits" ' +
-                 'focusable="false">' +
+        return '<svg class="crss-unit-photo" viewBox="0 0 120 96" role="img" ' +
+                 'aria-label="Inside a CapRock storage unit" focusable="false">' +
                  '<rect x="6" y="6" width="108" height="84" fill="' + WALL + '"/>' +
                  '<rect x="6" y="74" width="108" height="16" fill="' + FLOOR + '"/>' +
-                 '<g stroke="' + INK + '" stroke-width="1" stroke-linecap="square">' +
-                   items +
-                 '</g>' +
-                 /* Roll-up door, part raised: the slats above the
-                    opening are what say "storage unit" rather than
-                    "room". Drawn last so it sits over the contents. */
-                 '<rect x="6" y="6" width="108" height="15" fill="' + FLOOR + '"/>' +
-                 '<g stroke="' + INK + '" stroke-width="1">' +
-                   '<path d="M6 11h108M6 16h108"/>' +
-                 '</g>' +
-                 '<rect x="6" y="6" width="108" height="84" fill="none" stroke="' + INK +
-                   '" stroke-width="2"/>' +
-                 '<path d="M6 21h108" stroke="' + INK + '" stroke-width="2"/>' +
+                 carton(26, 52, 22, 22, BOX) +
+                 carton(26, 36, 22, 15, SOFT) +
+                 carton(52, 58, 18, 16, BOX) +
+                 '<rect x="6" y="6" width="108" height="84" fill="none" stroke="' + INK + '" stroke-width="2"/>' +
+                 '<path d="M6 20h108" stroke="' + INK + '" stroke-width="2"/>' +
                '</svg>';
       },
 
@@ -1901,10 +1890,18 @@
     padding: 24px 2px;
     border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
-  .crss-unit-art svg {
+  /* One selector for both: the slot holds a photograph, or the drawn
+     fallback if that photograph fails to load, and each carries
+     .crss-unit-photo. Aspect ratio is fixed so the row does not jump
+     as the image arrives. */
+  .crss-unit-art .crss-unit-photo {
     display: block;
     width: 104px;
     height: auto;
+    aspect-ratio: 400 / 318;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+    border: 1px solid var(--crss-rule, #E7DECD);
   }
   /* min-width:0 so a long "fits" line wraps inside its column instead
      of forcing the grid wider than the panel. */
@@ -2082,7 +2079,7 @@
       grid-template-columns: 84px minmax(0, 1fr);
       gap: 14px 18px;
     }
-    .crss-unit-art svg {
+    .crss-unit-art .crss-unit-photo {
       width: 84px;
     }
     .crss-unit-attrs,
