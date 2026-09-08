@@ -747,8 +747,11 @@
         var w = Math.round((Number(u.length) || 0) * PX_PER_FT);
         var h = Math.round((Number(u.width) || 0) * PX_PER_FT);
         var rate = window.CRSS_WSS.money(u.rate);
-        var flags = [u.driveUp && 'Drive-up', u.climate && 'Climate controlled', u.ada && 'ADA']
-                      .filter(Boolean).join(' &middot; ');
+        /* Taken from the same two sets the rows and the dialog use, so
+           a card cannot claim something the panel behind it denies.
+           It was reading u.driveUp, u.climate and u.ada straight off
+           the feed, which is exactly the data CapRock corrected. */
+        var flags = window.CRSS_WSS.attributes(u).slice(0, 3).join(' &middot; ');
         /* A button, not a div with a click handler: it reaches the
            keyboard and a screen reader announces it as something that
            can be pressed. */

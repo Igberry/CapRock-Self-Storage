@@ -845,69 +845,48 @@
                '</svg>';
       },
 
-      /* ---- Facility attributes, in English ----
-         The feed describes a unit as "Interior 1st Floor Street Level
-         Climate ADA ADA": an internal vocabulary, space-joined, with
-         duplicates. Matching known phrases longest-first is reliable
-         where splitting on spaces is not, and the map turns system
-         words into the words a customer would use. Anything
-         unrecognised is passed through rather than dropped, so a new
-         attribute shows up as itself instead of vanishing. */
+      /* ---- Facility attributes ----
+         Two fixed sets, chosen by whether the unit is temperature
+         controlled. This replaces a parser that translated the feed's
+         own description string, and it replaces it because that string
+         is wrong.
+
+         CapRock marked up a printout of the location page: every
+         interior unit was corrected to one list and every drive-up
+         unit to another, which is why this is a rule rather than a
+         table of exceptions. The 10 x 10 confirms it independently:
+         it needed a single line struck to land exactly on the interior
+         set, without being pointed at by an arrow.
+
+         What the feed says and CapRock says differ on four points:
+           - Lower level      does not exist here; all ground floor
+           - Drive-through    struck from every unit that claimed it
+           - Roll-up door     struck throughout
+           - Powered          reads Electricity
+
+         THIS OVERRIDES THE FACILITY SYSTEM. Five of these units carry
+         a live description from WebSelfStorage, so for those the site
+         now disagrees with the source on purpose. The right fix is to
+         correct the descriptions in WebSelfStorage and delete this
+         function back to a parser; until then a customer reading this
+         page gets what CapRock says is true rather than what the feed
+         says. */
       attributes: function (u) {
-        var desc = (u && u.description) || '';
-        if (!desc) return [];
-
-        /* Listed in the order they should READ: how you get in, where
-           it is, then what it has. The feed's own order is arbitrary,
-           and following it produced lines like "Street level, Lower
-           level" that argue with themselves.
-
-           "Street Level" becomes "Step-free access", which is what it
-           means. Left as "Street level" it contradicts "Lower level"
-           on the same unit, and a customer cannot tell which is true. */
-        var MAP = [
-          ['Drive Up',      'Drive-up access'],
-          ['Interior',      'Interior unit'],
-          ['1st Floor',     'Ground floor'],
-          ['Lower Level',   'Lower level'],
-          ['Inside Level',  'Inside the building'],
-          ['Outside Level', 'Outside'],
-          ['Street Level',  'Step-free access'],
-          ['Drivethrough',  'Drive-through'],
-          ['Climate',       'Temperature controlled'],
-          ['No Climate',    'Not temperature controlled'],
-          ['Electricity',   'Powered'],
-          ['Rollup',        'Roll-up door'],
-          ['Double',        'Double unit'],
-          ['Bonus',         'Bonus space'],
-          ['ADA',           'ADA accessible']
+        if (u && u.climate) {
+          return [
+            'Interior unit',
+            'Ground floor',
+            'Step-free access',
+            'Temperature controlled',
+            'ADA accessible'
+          ];
+        }
+        return [
+          'Drive-up access',
+          'Ground floor',
+          'Not temperature controlled',
+          'Electricity'
         ];
-
-        /* Match longest phrase first, which is a different order from
-           the one above: "No Climate" has to be consumed before
-           "Climate" can match, or every drive-up unit claims to be
-           temperature controlled. Display order is restored after. */
-        var byLength = MAP.map(function (pair, i) {
-          return { phrase: pair[0], label: pair[1], rank: i };
-        }).sort(function (a, b) { return b.phrase.length - a.phrase.length; });
-
-        var rest = desc;
-        var found = [];
-        byLength.forEach(function (m) {
-          var re = new RegExp(m.phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-          if (!re.test(rest)) return;
-          rest = rest.replace(re, ' ');
-          if (!found.some(function (f) { return f.label === m.label; })) found.push(m);
-        });
-        found.sort(function (a, b) { return a.rank - b.rank; });
-
-        var out = found.map(function (m) { return m.label; });
-        /* Anything the vocabulary does not cover is passed through, so
-           a new attribute appears as itself rather than disappearing. */
-        rest.split(/\s+/).forEach(function (w) {
-          if (w && out.indexOf(w) === -1) out.push(w);
-        });
-        return out;
       },
 
       /* Small, Medium or Large, on the same thresholds the location
