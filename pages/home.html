@@ -70,7 +70,7 @@
            Bring the search back when there is a second facility. -->
       <div class="crss-hero-actions">
         <a href="/lubbock-2213-n-quaker" class="crss-hero-cta">See Units and Prices</a>
-        <a href="tel:+18067015660" class="crss-hero-phone">(806) 701-5660</a>
+        <a href="tel:+18065891472" class="crss-hero-phone">(806) 589-1472</a>
       </div>
     </div>
   </section>
@@ -255,7 +255,7 @@
       <p class="crss-close-lede">Month-to-month leases, gated access, and someone on the end of the phone who can answer a question about it.</p>
       <div class="crss-close-actions">
         <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">View the Lubbock facility</a>
-        <a href="tel:+18067015660" class="crss-close-phone">(806) 701-5660</a>
+        <a href="tel:+18065891472" class="crss-close-phone">(806) 589-1472</a>
       </div>
     </div>
   </section>
@@ -1026,7 +1026,7 @@
         city: 'Lubbock',
         state: 'TX',
         address: '2213 North Quaker Ave, Lubbock, TX 79416',
-        phone: '(806) 701-5660',
+        phone: '(806) 589-1472',
         url: '/lubbock-2213-n-quaker'
       }
     ];
@@ -1064,6 +1064,7 @@
        existed here.
 
        Built from the numeric width and length, never the free-text
+       description, so nothing from the API reaches innerHTML. */
     function fillSizeRange(unitTypes) {
       var els = document.querySelectorAll('[data-crss-size-range]');
       if (!els.length || !unitTypes || !unitTypes.length) return;
