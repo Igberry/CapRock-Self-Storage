@@ -24,10 +24,13 @@
        stays hidden unless a coupon actually comes back.
      - (done) Hero photography is in, as a 143KB JPEG. The 2.1MB PNG
        it was uploaded as is gone from the pages.
-     - Trust badges: real accreditations only. The SROA spec's BBB /
-       Shopper Approved / Reputation.com badges are third-party marks
-       belonging to SROA's own accreditations, they are NOT CapRock's
-       and must not be reproduced here.
+     - (done) The accreditation band is removed rather than left
+       showing three empty circles to customers. It returns when
+       CapRock holds something real; the note in the Trust Strip
+       section says how. Earned marks only: the SROA spec's BBB,
+       Shopper Approved and Reputation.com badges are third-party
+       marks belonging to SROA's own accreditations, they are NOT
+       CapRock's and must not be reproduced here.
      - (done) The testimonials section is removed rather than left
        empty. It goes back in when there is a real review source;
        do not paste the sample quotes from the SROA spec, they are
@@ -77,16 +80,31 @@
 
   <!-- ============ TRUST STRIP ============ -->
   <section class="crss-trust">
-    <div class="crss-trust-band">
-      <div class="crss-trust-badges">
-        <!-- PLACEHOLDER: real, earned accreditations only. Do not drop in
-             the BBB / Shopper Approved / Reputation.com badges from the
-             SROA spec, those belong to SROA. -->
-        <div class="crss-trust-badge"><span>Accreditation<br>Placeholder</span></div>
-        <div class="crss-trust-badge"><span>Accreditation<br>Placeholder</span></div>
-        <div class="crss-trust-badge"><span>Accreditation<br>Placeholder</span></div>
-      </div>
-    </div>
+    <!-- The badge band is out, not empty.
+
+         Three dashed circles reading ACCREDITATION PLACEHOLDER sat
+         directly under the hero on a live site, which is the worst
+         place on the page to tell a visitor the site is unfinished.
+
+         When CapRock holds something real, the band goes back exactly
+         here. Only marks the company has actually earned: the BBB,
+         Shopper Approved and Reputation.com badges in the SROA
+         reference are SROA's own accreditations, and reproducing
+         someone else's is both a false claim and a trademark problem.
+
+           <div class="crss-trust-band">
+             <div class="crss-trust-badges">
+               <img class="crss-trust-badge" src="..." alt="...">
+             </div>
+           </div>
+
+         The three rules those classes need went with them. They are in
+         git rather than left dead in the stylesheet, because unlike the
+         footer disclaimer this is a whole band of layout, not one
+         paragraph. Recover them with:
+
+           git log --oneline -- pages/home.html
+           git show <commit>:pages/home.html                        -->
 
     <div class="crss-trust-copy">
       <p class="crss-home-eyebrow">Dedicated to straightforward service</p>
@@ -528,40 +546,6 @@
      480px wide natively (the larger URLs are upscales), so none of
      them can carry a full-bleed band. If a real wide shot of the
      gate or the drive turns up later, it belongs here. */
-  .crss-trust-band {
-    position: relative;
-    min-height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 56px 32px;
-    background: var(--crss-charcoal, #292724);
-  }
-  .crss-trust-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
-    justify-content: center;
-  }
-  .crss-trust-badge {
-    width: 132px;
-    height: 132px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 12px;
-    background: rgba(250, 247, 241, 0.10);
-    border: 1px dashed rgba(241, 227, 204, 0.5);
-    color: rgba(241, 227, 204, 0.86);
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.7;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    backdrop-filter: blur(2px);
-  }
   .crss-trust-copy {
     max-width: 820px;
     margin: 0 auto;
@@ -960,10 +944,6 @@
     .crss-hero-inner {
       padding: 88px 26px 88px;
     }
-    .crss-trust-band {
-      min-height: 260px;
-      padding: 52px 26px;
-    }
     .crss-trust-copy {
       padding: 60px 26px 72px;
     }
@@ -978,14 +958,6 @@
     }
     .crss-hero-inner {
       padding: 76px 20px 80px;
-    }
-    .crss-trust-band {
-      min-height: 240px;
-      padding: 52px 20px;
-    }
-    .crss-trust-badge {
-      width: 108px;
-      height: 108px;
     }
     .crss-trust-copy {
       padding: 56px 20px 64px;
