@@ -811,62 +811,62 @@
         return data;
       },
 
-      /* Rates come back as numbers; whole dollars lose the .00. */
       /* ---- Unit photographs ----
-         Two photographs of a storage unit interior, alternating down
-         the list so fourteen rows are not fourteen copies of one
-         picture.
+         One cutaway per size, showing that size furnished, with the
+         dimensions printed on the drawing. They replace two generic
+         interiors that alternated down the list, which looked tidy but
+         told a customer nothing: the picture beside a 5 x 5 and the
+         picture beside a 20 x 30 were the same room.
 
-         Which one a unit gets is decided by its own dimensions, not by
-         its position in the list. Position would reshuffle every
-         picture on the page the moment a size was added or sold out,
-         which reads as a glitch to anyone who visits twice; width plus
-         length never changes for a given unit.
+         Keyed on the two floor dimensions sorted, so a 16 x 10 and a
+         10 x 16 resolve to the same picture. The site calls it a
+         16 x 10 and the artwork is labelled 10' x 16'; without sorting
+         they would be two different keys and the largest interior unit
+         would silently fall back to a generic photo.
 
-         Both were cropped before upload to remove a "Made with AI"
-         badge burned into the top right corner, and re-encoded from
-         1.2MB and 1.5MB PNGs to about 22KB each. They display at 104px
-         in the unit rows and 200px in the Size Guide dialog, so 400px
-         wide covers both at twice the density.
+         Height is not in the key. The 8ft and 9ft versions of a size
+         are the same floor plan, and one of each pair is dropped by
+         dedupe anyway.
 
-         The drawing is still here as the fallback. If an image 404s or
-         the CDN is slow, onerror swaps in a diagram rather than
-         leaving a broken-image icon in every row. */
-      PHOTOS: [
-        'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa034bbbfc1456f8c66acb8.jpg',
-        'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa034bb8de363112b5465f6.jpg'
-      ],
+         NO PICTURE FOR THE 20 x 40, the largest unit. It falls back to
+         a generic interior, which is honest but says nothing about
+         scale. Worth generating.
+
+         WEIGHT: these are the files as supplied, 1.5MB to 2MB each,
+         about 17MB across the ten, displayed at 104px. Optimised
+         copies at 500px wide and roughly 40KB each are sitting in
+         Downloads/caprock-unit-sizes ready to upload; swapping a URL
+         below is all it takes once they are up. */
+      PHOTOS: {
+        '5x5':   'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa18ed3fb8abdad105786dd.png',
+        '5x7':   'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa18ed3fb8abdad105786e1.png',
+        '5x10':  'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa18ed381f0105816cad305.png',
+        '8x10':  'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa191879416bfd5312e3a6e.png',
+        '10x10': 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa192db8d82674005f8fd15.png',
+        '10x16': 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa19ae381f0105816cc353c.png',
+        '10x24': 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa194d4bfc1456f8c8723b2.png',
+        '10x30': 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa194f89416bfd5312e9eed.png',
+        '10x40': 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa19a0bdd867dc12dfa20ea.png',
+        '20x30': 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa19c958d82674005fa2149.png'
+      },
+
+      /* Used for any size with no drawing of its own. It is a real
+         unit interior with nothing in it that states a dimension, so
+         it cannot contradict the row it sits beside. */
+      PHOTO_FALLBACK: 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aa034bb8de363112b5465f6.jpg',
 
       art: function (u) {
-        /* Hashed rather than summed. Adding width to length and taking
-           the parity looks like it would alternate, and does not:
-           storage dimensions are almost all even numbers, so the sum
-           is almost always even and thirteen of fourteen rows landed
-           on the same photograph. Hashing the whole "WxLxH" string
-           splits these fourteen seven and seven.
-
-           Height is in the key because it is what separates the two
-           5 x 5s and the two 5 x 10s, which would otherwise be
-           identical rows with identical pictures. */
-        var key = [
-          Number(u && u.width) || 0,
-          Number(u && u.length) || 0,
-          Number(u && u.height) || 0
-        ].join('x');
-        var n = 0;
-        for (var i = 0; i < key.length; i++) {
-          n = ((n << 5) - n + key.charCodeAt(i)) | 0;
-        }
-        var src = this.PHOTOS[Math.abs(n) % this.PHOTOS.length];
-        var alt = (u && u.size)
-          ? 'Inside a CapRock storage unit, similar to the ' + u.size
+        var w = Number(u && u.width) || 0;
+        var l = Number(u && u.length) || 0;
+        var key = Math.min(w, l) + 'x' + Math.max(w, l);
+        var src = this.PHOTOS[key] || this.PHOTO_FALLBACK;
+        var alt = (w && l)
+          ? 'Cutaway of a ' + w + ' by ' + l + ' foot CapRock storage unit, furnished'
           : 'Inside a CapRock storage unit';
 
-        /* The fallback is set from the element itself rather than a
-           global, so it works wherever this markup is dropped, and
-           onerror is cleared first so a failing fallback cannot loop. */
+        /* onerror cleared first so a failing fallback cannot loop. */
         return '<img class="crss-unit-photo" src="' + src + '" alt="' + alt + '" ' +
-               'loading="lazy" decoding="async" width="400" height="318" ' +
+               'loading="lazy" decoding="async" ' +
                'onerror="this.onerror=null;this.outerHTML=window.CRSS_WSS.diagram();">';
       },
 
@@ -1357,14 +1357,13 @@
     align-items: start;
     margin-bottom: 30px;
   }
+  /* Not cropped: the drawings carry their dimensions along the edges,
+     and forcing every size into one ratio cut them off. */
   .crss-sg-modal-art .crss-unit-photo {
     display: block;
     width: 200px;
     height: auto;
-    aspect-ratio: 400 / 318;
-    object-fit: cover;
     background: var(--crss-sand, #EFE7DA);
-    border: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-sg-facts {
     display: grid;

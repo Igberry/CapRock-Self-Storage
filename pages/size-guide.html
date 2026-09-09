@@ -312,14 +312,13 @@
     align-items: start;
     margin-bottom: 30px;
   }
+  /* Not cropped: the drawings carry their dimensions along the edges,
+     and forcing every size into one ratio cut them off. */
   .crss-sg-modal-art .crss-unit-photo {
     display: block;
     width: 200px;
     height: auto;
-    aspect-ratio: 400 / 318;
-    object-fit: cover;
     background: var(--crss-sand, #EFE7DA);
-    border: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-sg-facts {
     display: grid;

@@ -909,16 +909,19 @@
   }
   /* One selector for both: the slot holds a photograph, or the drawn
      fallback if that photograph fails to load, and each carries
-     .crss-unit-photo. Aspect ratio is fixed so the row does not jump
-     as the image arrives. */
+     .crss-unit-photo.
+
+     No fixed ratio and no cropping. These drawings have the unit's
+     dimensions printed along their edges, and they are not all the
+     same shape: the small units are square and the long ones are 3:2.
+     Cropping every one to a single ratio cut the measurements off,
+     which are the whole point of the picture. Each keeps its own
+     proportions and the row grows to fit. */
   .crss-unit-art .crss-unit-photo {
     display: block;
     width: 104px;
     height: auto;
-    aspect-ratio: 400 / 318;
-    object-fit: cover;
     background: var(--crss-sand, #EFE7DA);
-    border: 1px solid var(--crss-rule, #E7DECD);
   }
   /* min-width:0 so a long "fits" line wraps inside its column instead
      of forcing the grid wider than the panel. */
