@@ -755,9 +755,27 @@
         var groups = {};
         list.forEach(function (u) {
           var key = u.width + 'x' + u.length + '|' + (u.climate ? 'c' : 'd');
-          if (!groups[key] || Number(u.rate) < Number(groups[key].rate)) {
-            groups[key] = u;
-          }
+          var held = groups[key];
+          if (!held) { groups[key] = u; return; }
+
+          var cheaper = Number(u.rate) < Number(held.rate);
+          /* Cheapest wins, and on a tie the one with more units free.
+             Prices moved and both 5 x 5s landed on $45, which left the
+             winner decided by whichever the feed happened to list
+             first: the lower-level unit, 11 free out of 12. The other
+             is ground floor, ADA, and 17 free out of 25.
+
+             That mattered more than a coin toss. The two attribute
+             lists on this site are chosen by temperature control
+             alone, so both 5 x 5s render as "Ground floor, ADA
+             accessible" whichever survives, and for the lower-level
+             one that is simply untrue. Preferring availability picks
+             the unit the description actually fits, and is the better
+             answer anyway: more free units, less chance of sending
+             someone to a size that has just gone. */
+          var roomier = Number(u.rate) === Number(held.rate) &&
+                        (Number(u.vacantCount) || 0) > (Number(held.vacantCount) || 0);
+          if (cheaper || roomier) groups[key] = u;
         });
         var keep = [];
         for (var k in groups) {
