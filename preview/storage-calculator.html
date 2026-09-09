@@ -555,6 +555,196 @@
   /* The header needs no negative-margin breakout: position: fixed with
      left/right 0 already spans the viewport. */
 
+  /* ============ UNIT DETAILS DIALOG ============
+     Lives here rather than on a page because two pages open it: the
+     Size Guide cards, and the Size Guide link on each row of the
+     location page. It was written once for the Size Guide and the
+     second caller would have meant a second copy of about two hundred
+     lines, which is how two pages start describing the same 10 x 30
+     differently.
+
+     The markup is built by script on first open, so there is one
+     dialog per document however many things can open it. */
+  .crss-udlg {
+    width: min(760px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    padding: 0;
+    border: 1px solid var(--crss-rule-ink, #C4B49B);
+    background: var(--crss-white, #FFFFFF);
+    color: var(--crss-charcoal, #292724);
+    font-family: 'Work Sans', Arial, sans-serif;
+    overflow: auto;
+  }
+  .crss-udlg::backdrop {
+    background: rgba(41, 39, 36, 0.55);
+  }
+  .crss-udlg :where(h2, h3, p, ul) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-udlg-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    font-family: inherit;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--crss-taupe, #7F6C5D);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color .2s ease;
+  }
+  .crss-udlg-close:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-udlg-inner {
+    padding: 34px 36px 38px;
+  }
+  .crss-udlg-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 40px 0 0;
+  }
+  .crss-udlg-title::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
+    margin: 18px 0 24px;
+  }
+  .crss-udlg-top {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 30px;
+  }
+  /* Not cropped: the drawings carry their measurements along the
+     edges, and one fixed ratio cut them off. */
+  .crss-udlg-art .crss-unit-photo {
+    display: block;
+    width: 240px;
+    height: auto;
+    background: var(--crss-sand, #EFE7DA);
+  }
+  .crss-udlg-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 26px;
+  }
+  .crss-udlg-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 7px;
+  }
+  .crss-udlg-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 21px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-udlg-note {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 4px;
+  }
+  .crss-udlg h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--crss-charcoal, #292724);
+    margin: 26px 0 12px;
+  }
+  .crss-udlg-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 26px;
+  }
+  .crss-udlg ul {
+    list-style: none;
+  }
+  .crss-udlg ul li {
+    position: relative;
+    padding: 3px 0 3px 15px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-udlg ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    background: var(--crss-terracotta, #A44A23);
+  }
+  .crss-udlg-prose {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 66ch;
+  }
+  .crss-udlg-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-udlg-rate {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 26px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-udlg-rate span {
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-left: 5px;
+  }
+  .crss-udlg-btn {
+    display: inline-block;
+    margin-left: auto;
+    padding: 14px 28px;
+    background: var(--crss-terracotta, #A44A23);
+    color: var(--crss-white, #FFFFFF);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .22s ease;
+  }
+  .crss-udlg-btn:hover {
+    background: var(--crss-terracotta-dark, #863B1A);
+    color: var(--crss-white, #FFFFFF);
+  }
   @media (max-width: 1280px) {
     .crss-header-inner {
       gap: 20px;
@@ -592,6 +782,20 @@
     }
   }
   @media (max-width: 768px) {
+    .crss-udlg-top,
+    .crss-udlg-facts,
+    .crss-udlg-cols {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .crss-udlg-art .crss-unit-photo {
+      width: 190px;
+    }
+    .crss-udlg-inner {
+      padding: 28px 22px 30px;
+    }
+    .crss-udlg-btn {
+      margin-left: 0;
+    }
     /* 50px lockup: scale = 50/759 */
     .crss-logo {
       width: 106px;
@@ -952,6 +1156,157 @@
         return 'Large';
       },
 
+
+      /* ---- Unit details dialog ----
+         What a unit holds, by size band rather than a lookup per size,
+         so a size added to the rate sheet later still opens a useful
+         panel instead of an empty one.
+
+         The lists are ordinary storage knowledge, written here. They
+         are deliberately not lifted from the facility system's own unit
+         pages, which are U-Haul's copy. */
+      BANDS: [
+        { upTo: 30,  uses: ['Decluttering a room', 'Seasonal decorations', 'Storing between semesters'],
+          items: ['Boxes of household items', 'Seasonal clothing', 'Small furniture', 'Books and documents',
+                  'Sports equipment', 'Holiday decorations'],
+          prose: 'About the footprint of a walk-in closet. It takes what will not fit in one ' +
+                 'any more: a stack of boxes, a few small pieces of furniture, and the things ' +
+                 'that only come out once a year.' },
+        { upTo: 60,  uses: ['A studio or dorm move', 'A room of furniture', 'Storing between homes'],
+          items: ['A mattress set', 'A chest of drawers', 'A small sofa', 'Boxes of clothes and kitchenware',
+                  'A bicycle', 'Office or file boxes'],
+          prose: 'Roughly the size of a large walk-in wardrobe, and the size most students and ' +
+                 'single renters take. It holds the contents of one furnished room with space ' +
+                 'left to walk in and reach the back.' },
+        { upTo: 120, uses: ['A one or two bedroom move', 'Clearing a garage', 'Business stock'],
+          items: ['A bedroom set', 'A sofa and armchairs', 'A dining table and chairs',
+                  'A washer or dryer', 'Twenty to thirty boxes', 'Garden tools and equipment'],
+          prose: 'The size of a small bedroom. A one bedroom home fits comfortably, including ' +
+                 'the larger furniture and appliances that defeat smaller units, and it is the ' +
+                 'usual choice for emptying a garage.' },
+        { upTo: 260, uses: ['A two or three bedroom move', 'A long renovation', 'Trade equipment'],
+          items: ['Several bedroom sets', 'A full living room', 'A refrigerator and appliances',
+                  'Fifty or more boxes', 'A workbench and tools', 'Patio furniture'],
+          prose: 'A single-car garage, near enough. It takes a family home\u2019s worth of furniture ' +
+                 'with room to stack, which makes it the size to pick for a renovation that ' +
+                 'might run longer than planned.' },
+        { upTo: 450, uses: ['A three or four bedroom move', 'Vehicle storage', 'Business inventory'],
+          items: ['A whole household of furniture', 'Major appliances', 'A car, boat or trailer',
+                  'Bulk business stock', 'Workshop machinery', 'Landscaping equipment'],
+          prose: 'Long enough for a vehicle with room to spare, or for the contents of a larger ' +
+                 'family home. At this size the drive-up access matters as much as the space: ' +
+                 'you can back a van to the door.' },
+        { upTo: Infinity, uses: ['A full house move', 'Commercial storage', 'Fleet or plant'],
+          items: ['The contents of a large home', 'Multiple vehicles', 'Pallets of inventory',
+                  'Construction plant', 'Trade fair and event kit', 'Archive and records'],
+          prose: 'The largest CapRock rents, and closer to a small commercial unit than a ' +
+                 'storage locker. It suits a whole house, a business that needs stock at ' +
+                 'arm\u2019s length, or more than one vehicle.' }
+      ],
+
+      bandFor: function (u) {
+        var sq = Number(u && u.sqft) || 0;
+        for (var i = 0; i < this.BANDS.length; i++) {
+          if (sq <= this.BANDS[i].upTo) return this.BANDS[i];
+        }
+        return this.BANDS[this.BANDS.length - 1];
+      },
+
+      /* One dialog per document, made on first open and reused. */
+      dialog: function () {
+        var dlg = document.querySelector('[data-crss-udlg]');
+        if (dlg) return dlg;
+        if (typeof HTMLDialogElement === 'undefined') return null;
+
+        dlg = document.createElement('dialog');
+        dlg.className = 'crss-udlg';
+        dlg.setAttribute('data-crss-udlg', '');
+        dlg.setAttribute('aria-labelledby', 'crss-udlg-title');
+        dlg.innerHTML =
+          '<button type="button" class="crss-udlg-close" aria-label="Close">&times;</button>' +
+          '<div data-crss-udlg-body></div>';
+        document.body.appendChild(dlg);
+
+        dlg.querySelector('.crss-udlg-close')
+           .addEventListener('click', function () { dlg.close(); });
+        /* The dialog fills its own box, so a click that lands on the
+           element itself landed outside the content: that is the
+           backdrop. */
+        dlg.addEventListener('click', function (e) {
+          if (e.target === dlg) dlg.close();
+        });
+        return dlg;
+      },
+
+      openUnit: function (u) {
+        var dlg = this.dialog();
+        if (!dlg || typeof dlg.showModal !== 'function' || !u) return;
+        var body = dlg.querySelector('[data-crss-udlg-body]');
+        var band = this.bandFor(u);
+        var rate = this.money(u.rate);
+        var cubic = (Number(u.sqft) || 0) * (Number(u.height) || 0);
+        /* "Check availability" sends the reader to the unit list.
+           On the page that already is the unit list it would send
+           them to where they are standing, so there it is left off
+           and the panel simply closes. */
+        var onList = !!document.querySelector('[data-crss-units]');
+        var list = function (items) {
+          return '<ul>' + items.map(function (x) {
+            return '<li>' + x + '</li>';
+          }).join('') + '</ul>';
+        };
+
+        body.innerHTML =
+          '<div class="crss-udlg-inner">' +
+            '<h2 class="crss-udlg-title" id="crss-udlg-title">' +
+              u.width + ' &times; ' + u.length + ' Unit Information</h2>' +
+
+            '<div class="crss-udlg-top">' +
+              '<div class="crss-udlg-art">' + this.art(u) + '</div>' +
+              '<div class="crss-udlg-facts">' +
+                '<div>' +
+                  '<p class="crss-udlg-label">Measurements</p>' +
+                  '<p class="crss-udlg-value">' + u.sqft + ' sq ft</p>' +
+                  (cubic ? '<p class="crss-udlg-note">' + cubic + ' cu ft</p>' : '') +
+                '</div>' +
+                '<div>' +
+                  '<p class="crss-udlg-label">Height</p>' +
+                  '<p class="crss-udlg-value">' + (u.height ? u.height + ' ft' : 'Not stated') + '</p>' +
+                  '<p class="crss-udlg-note">Door height is lower than the ceiling.</p>' +
+                '</div>' +
+                '<div>' +
+                  '<p class="crss-udlg-label">Type</p>' +
+                  '<p class="crss-udlg-value">' + this.band(u) + '</p>' +
+                '</div>' +
+                '<div>' +
+                  '<p class="crss-udlg-label">Features</p>' +
+                  '<p class="crss-udlg-note" style="margin-top:0">' +
+                    this.attributes(u).join(', ') + '</p>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            '<h3>Common uses</h3>' + list(band.uses) +
+            '<h3>What people usually store</h3>' +
+            '<div class="crss-udlg-cols">' +
+              list(band.items.slice(0, Math.ceil(band.items.length / 2))) +
+              list(band.items.slice(Math.ceil(band.items.length / 2))) +
+            '</div>' +
+            '<h3>How big is a ' + u.width + ' &times; ' + u.length + '?</h3>' +
+            '<p class="crss-udlg-prose">' + band.prose + '</p>' +
+
+            /* Nothing to put in it means no rule across the bottom
+               of the panel with empty space under it. */
+            ((rate || !onList)
+              ? '<div class="crss-udlg-foot">' +
+                  (rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' : '') +
+                  (onList ? '' : '<a class="crss-udlg-btn" href="/lubbock-2213-n-quaker#units">Check availability</a>') +
+                '</div>'
+              : '') +
+          '</div>';
+
+        dlg.showModal();
+      },
       money: function (v) {
         var num = Number(v);
         if (!isFinite(num)) return null;

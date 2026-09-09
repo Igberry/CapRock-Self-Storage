@@ -954,6 +954,13 @@
     margin-top: 7px;
   }
   .crss-unit-guide {
+    /* A button, not a link: it opens the details panel in place.
+       So it needs the reset a link never did. */
+    font-family: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
     display: inline-block;
     margin-top: 10px;
     font-size: 11px;
@@ -1301,6 +1308,20 @@
        in step, and it will always be the one nobody remembers. */
 
     var unitsHost = loc.querySelector('[data-crss-units]');
+
+    /* The rows on screen right now. The list is re-rendered every
+       time a filter is pressed, so the click handler is delegated to
+       the container and reads the unit back out of here rather than
+       being re-attached to every row on every render. */
+    var shown = [];
+    if (unitsHost) {
+      unitsHost.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-crss-unit]');
+        if (!btn) return;
+        window.CRSS_WSS.openUnit(shown[Number(btn.getAttribute('data-crss-unit'))]);
+      });
+    }
+
     var filterHost = loc.querySelector('[data-crss-unit-filters]');
 
     /* ---- Unit size range, live ----
@@ -1398,11 +1419,12 @@
     }
 
     function renderUnits(list) {
+      shown = list;
       if (!list.length) {
         unitState('Nothing is available at this size right now. ' + FALLBACK);
         return;
       }
-      var rows = list.map(function (u) {
+      var rows = list.map(function (u, i) {
         /* Feet and inches marks, because that is how a unit is read
            aloud: five by five by eight, not 5 x 5. */
         var dims = u.width + '′ × ' + u.length + '′' +
@@ -1418,7 +1440,7 @@
             '<p class="crss-unit-band">' + window.CRSS_WSS.band(u) + '</p>' +
             '<p class="crss-unit-dims">' + dims + '</p>' +
             '<p class="crss-unit-fits">' + fits(u) + '</p>' +
-            '<a class="crss-unit-guide" href="/size-guide">Size Guide</a>' +
+            '<button type="button" class="crss-unit-guide" data-crss-unit="' + i + '">Size Guide</button>' +
           '</div>' +
 
           '<ul class="crss-unit-attrs">' + attrs + '</ul>' +
