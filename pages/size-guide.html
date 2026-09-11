@@ -442,7 +442,8 @@
           '<div class="crss-size-card">' +
             '<div class="crss-size-diagram"><div class="crss-size-box" style="width:' + w +
               'px;height:' + h + 'px;"></div></div>' +
-            '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length + '</div>' +
+            '<div class="crss-size-dim">' + u.width + ' &times; ' + u.length +
+              (u.height ? ' &times; ' + u.height : '') + '</div>' +
             '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
             '<p class="crss-size-fits">' + describe(u) + '</p>' +
             (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +

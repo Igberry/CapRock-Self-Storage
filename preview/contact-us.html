@@ -964,67 +964,53 @@
          every page carrying data one page uses. They are written into
          vehicle-storage.html directly. */
 
-      /* ---- Drop units a customer cannot tell apart ----
-         Three pairs were showing the same footprint and the same list
-         of features at two different prices: a 5 x 5 at $39 and $49, a
-         5 x 7 at $45 and $55, a 5 x 10 at $63.95 and $73.95. Asked to
-         choose, nobody picks the dearer one, and the page looks
-         broken for offering it.
+      /* ---- Why there is no dedupe here ----
+         There was one. It hid one of any two units with the same
+         footprint and price, keeping the cheaper and, on a tie, the
+         one with more units free. CapRock asked for it, because
+         three pairs were showing the same footprint and the same
+         list of features at two different prices, and asked to
+         choose, nobody picks the dearer one.
 
-         WHY THEY LOOK IDENTICAL. They are not: the dearer one in each
-         pair is a lower-level, drive-through unit with a roll-up door,
-         which is what the extra ten dollars buys. Those three
-         attributes were removed at CapRock's instruction, and removing
-         them took away the only visible reason for the price gap.
+         Those pairs were never really identical: the dearer one was
+         a lower-level, drive-through unit with a roll-up door, which
+         is what the extra ten dollars bought. Those three attributes
+         were removed at CapRock's instruction, and removing them took
+         away the only visible reason for the price gap.
 
-         So this is a consequence, not a coincidence, and there are two
-         ways back. Restoring one distinguishing line would justify the
-         price and let all of them sell. Removing the dearer one, which
-         is what CapRock asked for, hides about 35 rentable units from
-         the site: 11 vacant 5 x 5s alone.
+         It is gone because it also hid whatever the feed started
+         returning next. A size could go live in WebSelfStorage and
+         never reach the page, which is the opposite of what reading
+         the feed is for.
 
-         Grouped on footprint and feature set rather than a list of
-         sizes, so a pair created later is handled without an edit. */
-      dedupe: function (list) {
-        var groups = {};
-        list.forEach(function (u) {
-          var key = u.width + 'x' + u.length + '|' + (u.climate ? 'c' : 'd');
-          var held = groups[key];
-          if (!held) { groups[key] = u; return; }
-
-          var cheaper = Number(u.rate) < Number(held.rate);
-          /* Cheapest wins, and on a tie the one with more units free.
-             Prices moved and both 5 x 5s landed on $45, which left the
-             winner decided by whichever the feed happened to list
-             first: the lower-level unit, 11 free out of 12. The other
-             is ground floor, ADA, and 17 free out of 25.
-
-             That mattered more than a coin toss. The two attribute
-             lists on this site are chosen by temperature control
-             alone, so both 5 x 5s render as "Ground floor, ADA
-             accessible" whichever survives, and for the lower-level
-             one that is simply untrue. Preferring availability picks
-             the unit the description actually fits, and is the better
-             answer anyway: more free units, less chance of sending
-             someone to a size that has just gone. */
-          var roomier = Number(u.rate) === Number(held.rate) &&
-                        (Number(u.vacantCount) || 0) > (Number(held.vacantCount) || 0);
-          if (cheaper || roomier) groups[key] = u;
-        });
-        var keep = [];
-        for (var k in groups) {
-          if (Object.prototype.hasOwnProperty.call(groups, k)) keep.push(groups[k]);
-        }
-        return keep;
-      },
+         Everything the feed sends is shown now. Where two rows share
+         a footprint they differ by ceiling height, and every place
+         that renders a size prints the height for exactly that
+         reason. */
 
       /* Live data always wins. A size only comes from CATALOGUE when
-         the feed did not return that width, length and height. */
+         the feed returns nothing with that footprint. */
       mergeCatalogue: function (data) {
         if (!data || !Array.isArray(data.unitTypes)) return data;
-        var key = function (u) { return [u.width, u.length, u.height].join('x'); };
+
+        /* A size is identified by its floor plan and whether it is
+           temperature controlled, not by its ceiling. The feed and
+           the rate sheet disagree about height for the same room:
+           the sheet lists a 5 x 7 x 8 and the feed returns a
+           5 x 7 x 9. Keyed on all three, those are two sizes and
+           the page shows the room twice, once with a live count and
+           once with "call to check".
+
+           So the moment the feed starts returning a footprint, its
+           typed-in stand-ins drop out on their own. That is the
+           whole point: nobody has to notice and delete them. */
+        var key = function (u) {
+          return u.width + 'x' + u.length + '|' + (u.climate ? 'c' : 'd');
+        };
+
         var live = {};
         data.unitTypes.forEach(function (u) { u.live = true; live[key(u)] = true; });
+
         this.CATALOGUE.forEach(function (u) {
           if (live[key(u)]) return;
           var copy = {};
@@ -1034,10 +1020,14 @@
           copy.vacantCount = null;
           data.unitTypes.push(copy);
         });
-        /* After the merge, not before: a duplicate can be one live unit
-           and one from the rate sheet, and dropping the dearer one only
-           works once both are in the same list. */
-        data.unitTypes = this.dedupe(data.unitTypes);
+
+        /* Smallest first, and within a footprint the lower ceiling
+           first, so the two versions of a room sit together rather
+           than at opposite ends of the list. */
+        data.unitTypes.sort(function (a, b) {
+          return (Number(a.sqft) || 0) - (Number(b.sqft) || 0) ||
+                 (Number(a.height) || 0) - (Number(b.height) || 0);
+        });
         return data;
       },
 
@@ -1054,9 +1044,10 @@
          they would be two different keys and the largest interior unit
          would silently fall back to a generic photo.
 
-         Height is not in the key. The 8ft and 9ft versions of a size
-         are the same floor plan, and one of each pair is dropped by
-         dedupe anyway.
+         Height is not in the key, and both heights of a footprint now
+         appear on the page, so the 5 x 5 x 8 and the 5 x 5 x 9 share
+         one drawing. They are the same room; only the ceiling differs,
+         and a cutaway cannot show that anyway.
 
          Every size the site lists has one. PHOTO_FALLBACK is there for
          a size added later that has not been drawn yet.
@@ -1285,7 +1276,8 @@
         body.innerHTML =
           '<div class="crss-udlg-inner">' +
             '<h2 class="crss-udlg-title" id="crss-udlg-title">' +
-              u.width + ' &times; ' + u.length + ' Unit Information</h2>' +
+              u.width + ' &times; ' + u.length +
+              (u.height ? ' &times; ' + u.height : '') + ' Unit Information</h2>' +
 
             '<div class="crss-udlg-top">' +
               '<div class="crss-udlg-art">' + this.art(u) + '</div>' +
