@@ -6,38 +6,13 @@
      PLACEHOLDER: no specific military discount is stated since none
      was confirmed, copy stays general until that's decided.
      ================================================================ -->
-<div class="crss-audience">
-  <div class="crss-audience-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Military Storage</span>
-    </nav>
-
-    <h1 class="crss-audience-title">Military Storage</h1>
-    <p class="crss-audience-subtitle">Flexible storage for PCS moves, deployments, and everything in between.</p>
-
-    <div class="crss-audience-blocks">
-      <div class="crss-audience-block">
-        <h2>Built for a moving schedule you don't control</h2>
-        <p>PCS orders and deployments don't always leave much lead time. A nearby unit gives you somewhere to store household goods and personal belongings without committing to a long-term lease.</p>
-      </div>
-      <div class="crss-audience-block">
-        <h2>Month-to-month flexibility</h2>
-        <p>Rent for as long as you're away, and stop whenever your situation changes, no long-term contract required.</p>
-      </div>
-      <div class="crss-audience-block">
-        <h2>Ask about military rates</h2>
-        <p>Availability of military discounts varies by location. Check with your nearest CapRock facility for current rates.</p>
-      </div>
-    </div>
-
-    <div class="crss-audience-cta">
-      <p>Find military-friendly storage near you.</p>
-      <a href="/lubbock-2213-n-quaker" class="crss-audience-cta-btn">See Units and Prices</a>
-    </div>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   /* Shared by the three audience landing pages (Vehicle, Student,
      Military). Keep these three <style> blocks identical, they are
@@ -314,3 +289,36 @@
     }
   }
 </style>
+
+<div class="crss-audience">
+  <div class="crss-audience-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Military Storage</span>
+    </nav>
+
+    <h1 class="crss-audience-title">Military Storage</h1>
+    <p class="crss-audience-subtitle">Flexible storage for PCS moves, deployments, and everything in between.</p>
+
+    <div class="crss-audience-blocks">
+      <div class="crss-audience-block">
+        <h2>Built for a moving schedule you don't control</h2>
+        <p>PCS orders and deployments don't always leave much lead time. A nearby unit gives you somewhere to store household goods and personal belongings without committing to a long-term lease.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Month-to-month flexibility</h2>
+        <p>Rent for as long as you're away, and stop whenever your situation changes, no long-term contract required.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Ask about military rates</h2>
+        <p>Availability of military discounts varies by location. Check with your nearest CapRock facility for current rates.</p>
+      </div>
+    </div>
+
+    <div class="crss-audience-cta">
+      <p>Find military-friendly storage near you.</p>
+      <a href="/lubbock-2213-n-quaker" class="crss-audience-cta-btn">See Units and Prices</a>
+    </div>
+  </div>
+</div>
+

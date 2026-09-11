@@ -11,41 +11,13 @@
      here. A calculator that names a unit you cannot rent is worse
      than no calculator.
      ================================================================ -->
-<div class="crss-calc">
-  <div class="crss-calc-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Calculator</span>
-    </nav>
-
-    <h1 class="crss-calc-title">Storage Size Calculator</h1>
-    <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
-
-    <div class="crss-calc-options" id="crss-calc-options">
-      <!-- data-need is the space the contents want, in square feet.
-           The unit that gets recommended for it is looked up live. -->
-      <button type="button" class="crss-calc-option" data-need="25" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
-      <button type="button" class="crss-calc-option" data-need="50" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
-      <button type="button" class="crss-calc-option" data-need="100" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
-      <button type="button" class="crss-calc-option" data-need="150" data-detail="A two to three bedroom home">2 to 3 bedroom<br><span>home</span></button>
-      <button type="button" class="crss-calc-option" data-need="200" data-detail="A three to four bedroom home, or a vehicle plus household items">3 to 4 bedroom<br><span>home</span></button>
-      <button type="button" class="crss-calc-option" data-need="300" data-detail="A large home&rsquo;s full contents, or business inventory">Large home<br><span>or business</span></button>
-    </div>
-
-    <div class="crss-calc-result" id="crss-calc-result">
-      <p class="crss-calc-result-label">Recommended size</p>
-      <p class="crss-calc-result-size" id="crss-calc-result-size"></p>
-      <p class="crss-calc-result-rate" id="crss-calc-result-rate" hidden></p>
-      <p class="crss-calc-result-detail" id="crss-calc-result-detail"></p>
-      <p class="crss-calc-result-note" id="crss-calc-result-note" hidden></p>
-      <div class="crss-calc-result-actions">
-        <a href="/lubbock-2213-n-quaker" class="crss-calc-btn-primary">See Units and Prices</a>
-        <a href="/size-guide" class="crss-calc-btn-secondary">Compare All Sizes</a>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-calc {
     font-family: 'Work Sans', Arial, sans-serif;
@@ -330,6 +302,41 @@
     }
   }
 </style>
+
+<div class="crss-calc">
+  <div class="crss-calc-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Calculator</span>
+    </nav>
+
+    <h1 class="crss-calc-title">Storage Size Calculator</h1>
+    <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
+
+    <div class="crss-calc-options" id="crss-calc-options">
+      <!-- data-need is the space the contents want, in square feet.
+           The unit that gets recommended for it is looked up live. -->
+      <button type="button" class="crss-calc-option" data-need="25" data-detail="A few boxes and small items">A few boxes<br><span>or small items</span></button>
+      <button type="button" class="crss-calc-option" data-need="50" data-detail="A studio or dorm room">Studio<br><span>or dorm room</span></button>
+      <button type="button" class="crss-calc-option" data-need="100" data-detail="A one bedroom apartment">1 bedroom<br><span>apartment</span></button>
+      <button type="button" class="crss-calc-option" data-need="150" data-detail="A two to three bedroom home">2 to 3 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-need="200" data-detail="A three to four bedroom home, or a vehicle plus household items">3 to 4 bedroom<br><span>home</span></button>
+      <button type="button" class="crss-calc-option" data-need="300" data-detail="A large home&rsquo;s full contents, or business inventory">Large home<br><span>or business</span></button>
+    </div>
+
+    <div class="crss-calc-result" id="crss-calc-result">
+      <p class="crss-calc-result-label">Recommended size</p>
+      <p class="crss-calc-result-size" id="crss-calc-result-size"></p>
+      <p class="crss-calc-result-rate" id="crss-calc-result-rate" hidden></p>
+      <p class="crss-calc-result-detail" id="crss-calc-result-detail"></p>
+      <p class="crss-calc-result-note" id="crss-calc-result-note" hidden></p>
+      <div class="crss-calc-result-actions">
+        <a href="/lubbock-2213-n-quaker" class="crss-calc-btn-primary">See Units and Prices</a>
+        <a href="/size-guide" class="crss-calc-btn-secondary">Compare All Sizes</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   (function () {

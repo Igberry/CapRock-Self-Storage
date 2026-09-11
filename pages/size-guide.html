@@ -14,32 +14,13 @@
      any one competitor. The "best for" descriptions are generic
      starting copy, swap in CapRock's own wording whenever ready.
      ================================================================ -->
-<div class="crss-sizeguide">
-  <div class="crss-sizeguide-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span aria-current="page">Size Guide</span>
-    </nav>
-
-    <h1 class="crss-sg-title">Find the Right Storage Unit Size</h1>
-    <p class="crss-sg-subtitle">The sizes available at CapRock, with current monthly rates. Availability changes, so check the location page before you travel.</p>
-
-    <!-- Rendered from live WebSelfStorage data, not hardcoded.
-         This page used to list nine generic industry sizes; the
-         facility rents four, including an 8x10 that was missing
-         from the nine, while six that were listed are not rented.
-         A visitor could pick a size here and arrive to find it
-         does not exist. -->
-    <div class="crss-sg-grid" data-crss-sizes></div>
-    <p class="crss-sg-state" data-crss-sizes-state>Loading current unit sizes&hellip;</p>
-
-    <div class="crss-sg-cta">
-      <p>Still not sure which size fits?</p>
-      <a href="/lubbock-2213-n-quaker" class="crss-sg-cta-btn">See Units and Prices</a>
-    </div>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-sizeguide {
     font-family: 'Work Sans', Arial, sans-serif;
@@ -355,6 +336,32 @@
     }
   }
 </style>
+
+<div class="crss-sizeguide">
+  <div class="crss-sizeguide-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span aria-current="page">Size Guide</span>
+    </nav>
+
+    <h1 class="crss-sg-title">Find the Right Storage Unit Size</h1>
+    <p class="crss-sg-subtitle">The sizes available at CapRock, with current monthly rates. Availability changes, so check the location page before you travel.</p>
+
+    <!-- Rendered from live WebSelfStorage data, not hardcoded.
+         This page used to list nine generic industry sizes; the
+         facility rents four, including an 8x10 that was missing
+         from the nine, while six that were listed are not rented.
+         A visitor could pick a size here and arrive to find it
+         does not exist. -->
+    <div class="crss-sg-grid" data-crss-sizes></div>
+    <p class="crss-sg-state" data-crss-sizes-state>Loading current unit sizes&hellip;</p>
+
+    <div class="crss-sg-cta">
+      <p>Still not sure which size fits?</p>
+      <a href="/lubbock-2213-n-quaker" class="crss-sg-cta-btn">See Units and Prices</a>
+    </div>
+  </div>
+</div>
 
 <script>
   (function () {

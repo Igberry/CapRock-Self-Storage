@@ -30,127 +30,13 @@
      - Fonts: Fraunces + Work Sans is a starting pairing, swap for
        CapRock's real brand fonts once chosen
      ================================================================ -->
-<header class="crss-header">
-  <div class="crss-header-inner">
-
-    <!-- The artwork is now the whole wordmark; the text version is gone.
-
-         The asset is the full lockup (1774x887) in five bands: mark,
-         CAPROCK, SELF-STORAGE, a divider rule, then the tagline. The
-         link is a fixed window and the image inside is oversized and
-         offset so the crop ENDS AFTER SELF-STORAGE.
-
-         The tagline is dropped deliberately. It is 39px of the 887px
-         artwork, so at header height it renders about 3px tall and
-         reads as a smudge rather than words. The divider goes with it,
-         since a rule with nothing beneath it looks like a mistake.
-         Band positions were measured off the alpha channel, not
-         guessed: the kept region is x=83 y=12 1614x759.
-
-         alt carries the brand name rather than sitting empty, so if the
-         image ever fails the header still says who this is. That is
-         also why the link no longer needs its own aria-label, which
-         would double up with the alt. -->
-    <a href="/home" class="crss-logo">
-      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
-    </a>
-
-    <nav class="crss-nav" aria-label="Primary">
-      <a href="/lubbock-2213-n-quaker" class="crss-nav-link">Our Location</a>
-      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
-      <a href="/help-center" class="crss-nav-link">Help Center</a>
-
-      <div class="crss-dropdown">
-        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
-          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
-        </button>
-        <div class="crss-dropdown-menu">
-          <a href="/storage-calculator">Storage Calculator</a>
-          <a href="/storage-tips">Storage Tips</a>
-          <a href="/vehicle-storage">Vehicle Storage</a>
-          <a href="/student-storage">Student Storage</a>
-          <a href="/military-storage">Military Storage</a>
-        </div>
-      </div>
-
-      <div class="crss-dropdown">
-        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
-          About Us <span class="crss-caret" aria-hidden="true">▾</span>
-        </button>
-        <div class="crss-dropdown-menu">
-          <a href="/about-caprock">About CapRock</a>
-          <a href="/contact-us">Contact Us</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="crss-header-actions">
-      <!-- Phone supplied by CapRock, and it no longer matches the number
-               in the facility record. Correct that record too, or anything
-               else fed by it keeps handing out the old line. -->
-      <a href="tel:+18065891472" class="crss-phone">
-        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        <span>(806) 589-1472</span>
-      </a>
-      <a href="#" class="crss-account-link" aria-label="My Account">
-        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        <span>My Account</span>
-      </a>
-      <!-- Live payment portal for this location, from the
-           WebSelfStorage /paymentPortalUrl endpoint. Hardcoded
-           rather than fetched: it is stable, and fetching it
-           would add a request to all 13 pages to fill one href.
-           Opens in a new tab, since it is a different system
-           and tenants should not lose the site.
-           NOTE: at the time of writing this host resolves but accepts no
-           connection on http or https - 15s timeouts from two separate
-           networks - so the button may hang and then fail. That is
-           U-Haul's host being down, not a fault here. Chase them at
-           ams@uhaul.com; nothing needs changing in this file. -->
-      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
-         class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
-    </div>
-
-    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-
-  <!-- Mobile menu panel -->
-  <div class="crss-mobile-panel">
-    <a href="/lubbock-2213-n-quaker" class="crss-mobile-link">Our Location</a>
-    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
-    <a href="/help-center" class="crss-mobile-link">Help Center</a>
-
-    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
-      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
-    </button>
-    <div class="crss-mobile-accordion-panel">
-      <a href="/storage-calculator">Storage Calculator</a>
-      <a href="/storage-tips">Storage Tips</a>
-      <a href="/vehicle-storage">Vehicle Storage</a>
-      <a href="/student-storage">Student Storage</a>
-      <a href="/military-storage">Military Storage</a>
-    </div>
-
-    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
-      About Us <span class="crss-caret" aria-hidden="true">▾</span>
-    </button>
-    <div class="crss-mobile-accordion-panel">
-      <a href="/about-caprock">About CapRock</a>
-      <a href="/contact-us">Contact Us</a>
-    </div>
-
-    <a href="tel:+18065891472" class="crss-mobile-link">(806) 589-1472</a>
-    <a href="#" class="crss-mobile-link">My Account</a>
-    <!-- Absent before: the desktop utility row is hidden below
-         1180px, so on a phone there was no way to reach the
-         payment portal at all. -->
-    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
-       class="crss-mobile-link" target="_blank" rel="noopener">Pay Your Bill</a>
-  </div>
-</header>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   /* Fonts: placeholder pairing, swap for CapRock's real brand fonts.
      Fraunces is loaded as a variable font (optical size + italic) so
@@ -840,6 +726,127 @@
   }
 </style>
 
+<header class="crss-header">
+  <div class="crss-header-inner">
+
+    <!-- The artwork is now the whole wordmark; the text version is gone.
+
+         The asset is the full lockup (1774x887) in five bands: mark,
+         CAPROCK, SELF-STORAGE, a divider rule, then the tagline. The
+         link is a fixed window and the image inside is oversized and
+         offset so the crop ENDS AFTER SELF-STORAGE.
+
+         The tagline is dropped deliberately. It is 39px of the 887px
+         artwork, so at header height it renders about 3px tall and
+         reads as a smudge rather than words. The divider goes with it,
+         since a rule with nothing beneath it looks like a mistake.
+         Band positions were measured off the alpha channel, not
+         guessed: the kept region is x=83 y=12 1614x759.
+
+         alt carries the brand name rather than sitting empty, so if the
+         image ever fails the header still says who this is. That is
+         also why the link no longer needs its own aria-label, which
+         would double up with the alt. -->
+    <a href="/home" class="crss-logo">
+      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
+    </a>
+
+    <nav class="crss-nav" aria-label="Primary">
+      <a href="/lubbock-2213-n-quaker" class="crss-nav-link">Our Location</a>
+      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
+      <a href="/help-center" class="crss-nav-link">Help Center</a>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/storage-calculator">Storage Calculator</a>
+          <a href="/storage-tips">Storage Tips</a>
+          <a href="/vehicle-storage">Vehicle Storage</a>
+          <a href="/student-storage">Student Storage</a>
+          <a href="/military-storage">Military Storage</a>
+        </div>
+      </div>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          About Us <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/about-caprock">About CapRock</a>
+          <a href="/contact-us">Contact Us</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="crss-header-actions">
+      <!-- Phone supplied by CapRock, and it no longer matches the number
+               in the facility record. Correct that record too, or anything
+               else fed by it keeps handing out the old line. -->
+      <a href="tel:+18065891472" class="crss-phone">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>(806) 589-1472</span>
+      </a>
+      <a href="#" class="crss-account-link" aria-label="My Account">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>My Account</span>
+      </a>
+      <!-- Live payment portal for this location, from the
+           WebSelfStorage /paymentPortalUrl endpoint. Hardcoded
+           rather than fetched: it is stable, and fetching it
+           would add a request to all 13 pages to fill one href.
+           Opens in a new tab, since it is a different system
+           and tenants should not lose the site.
+           NOTE: at the time of writing this host resolves but accepts no
+           connection on http or https - 15s timeouts from two separate
+           networks - so the button may hang and then fail. That is
+           U-Haul's host being down, not a fault here. Chase them at
+           ams@uhaul.com; nothing needs changing in this file. -->
+      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+         class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
+    </div>
+
+    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div class="crss-mobile-panel">
+    <a href="/lubbock-2213-n-quaker" class="crss-mobile-link">Our Location</a>
+    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
+    <a href="/help-center" class="crss-mobile-link">Help Center</a>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/storage-calculator">Storage Calculator</a>
+      <a href="/storage-tips">Storage Tips</a>
+      <a href="/vehicle-storage">Vehicle Storage</a>
+      <a href="/student-storage">Student Storage</a>
+      <a href="/military-storage">Military Storage</a>
+    </div>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      About Us <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/about-caprock">About CapRock</a>
+      <a href="/contact-us">Contact Us</a>
+    </div>
+
+    <a href="tel:+18065891472" class="crss-mobile-link">(806) 589-1472</a>
+    <a href="#" class="crss-mobile-link">My Account</a>
+    <!-- Absent before: the desktop utility row is hidden below
+         1180px, so on a phone there was no way to reach the
+         payment portal at all. -->
+    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+       class="crss-mobile-link" target="_blank" rel="noopener">Pay Your Bill</a>
+  </div>
+</header>
+
 <script>
   (function () {
     /* ---- WebSelfStorage proxy, published for every page ----
@@ -1442,165 +1449,13 @@
      - Whether a cookie consent banner is planned, which would change
        the cookie section.
      ================================================================ -->
-<div class="crss-legal">
-  <div class="crss-legal-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span aria-current="page">Privacy Policy</span>
-    </nav>
-
-    <h1 class="crss-legal-title">Privacy Policy</h1>
-
-    <p class="crss-legal-updated">Effective <time datetime="2026-09-06">6 September 2026</time></p>
-
-    <p class="crss-legal-lede">CapRock Self Storage is committed to protecting your privacy. This policy explains what we collect through this website, how we use it, and the choices you have.</p>
-
-    <!-- The boundary that matters most: this policy covers the
-         website, not the lease. Someone who reads only this box still
-         knows where to look for the rest. -->
-    <div class="crss-legal-callout">
-      <p><strong>This policy covers our website.</strong> It does not cover the additional information we collect when you sign a Rental Agreement, such as your legal name, mailing address, government ID or vehicle details. That information is governed by your signed Rental Agreement.</p>
-    </div>
-
-    <nav class="crss-legal-toc" aria-label="On this page">
-      <p class="crss-legal-toc-head">On this page</p>
-      <ol>
-        <li><a href="#collect">What we collect</a></li>
-        <li><a href="#use">How we use it</a></li>
-        <li><a href="#sms">Text messages</a></li>
-        <li><a href="#optout">Opting out</a></li>
-        <li><a href="#cookies">Cookies</a></li>
-        <li><a href="#third-parties">Third-party services</a></li>
-        <li><a href="#security">Data security</a></li>
-        <li><a href="#retention">How long we keep it</a></li>
-        <li><a href="#your-rights">Your choices and requests</a></li>
-        <li><a href="#changes">Changes to this policy</a></li>
-        <li><a href="#contact">Contact us</a></li>
-      </ol>
-    </nav>
-
-    <div class="crss-legal-body">
-
-      <section id="collect" class="crss-legal-section">
-        <h2>What we collect</h2>
-        <p>We collect information you give us directly when you:</p>
-        <ul>
-          <li>Send an enquiry through a contact form or the chat widget</li>
-          <li>Opt in to receive emails, calls or text messages</li>
-          <li>Give feedback or answer a survey</li>
-          <li>Contact us for support</li>
-        </ul>
-        <p>That may include your name, phone number, email address, messaging preferences, and anything else you choose to tell us.</p>
-        <p>Our website platform also records standard technical information when you visit, including your IP address, the pages you view and the browser you use. We use it to keep the site working and to understand how it is used.</p>
-      </section>
-
-      <section id="use" class="crss-legal-section">
-        <h2>How we use it</h2>
-        <ul>
-          <li>To answer your enquiries and provide support</li>
-          <li>To send messages about your unit, account, payments and facility updates</li>
-          <li>To improve this website and our communications</li>
-        </ul>
-        <p>We do not sell your personal information.</p>
-      </section>
-
-      <section id="sms" class="crss-legal-section">
-        <h2>Text messages</h2>
-        <!-- CONFIRM: this carries carrier-required wording. It should
-             match the text shown on the opt-in itself, word for word,
-             or the two disagree at exactly the point that matters. -->
-        <p>By giving us your mobile number and opting in, you agree to receive text messages from CapRock Self Storage about your account, payment reminders and replies to enquiries you send us. Message frequency varies. Message and data rates may apply. Reply STOP at any time to opt out, or HELP for help.</p>
-        <p><strong>We do not share mobile information with third parties or affiliates for marketing or promotional purposes.</strong> Text messaging opt-in data and consent are excluded from every other category of information we collect, and are not shared with anyone.</p>
-      </section>
-
-      <section id="optout" class="crss-legal-section">
-        <h2>Opting out</h2>
-        <p>You can stop hearing from us at any time by:</p>
-        <ul>
-          <li>Replying STOP to any text message</li>
-          <li>Using the unsubscribe link in any marketing email</li>
-          <li>Changing your preferences in your tenant account</li>
-          <li>Contacting us using the details at the bottom of this page</li>
-        </ul>
-        <p>While your rental is active we will still need to contact you about your account and your unit.</p>
-      </section>
-
-      <section id="cookies" class="crss-legal-section">
-        <h2>Cookies</h2>
-        <p>Cookies are small files stored on your device. This website, its platform and the third-party services listed below may set them in the following categories:</p>
-        <ul>
-          <li><strong>Essential:</strong> needed for the site to work, including submitting a form and keeping the connection secure. The site cannot function without these.</li>
-          <li><strong>Performance:</strong> how visitors use the site, such as pages viewed and loading times.</li>
-          <li><strong>Functional:</strong> remembering preferences, such as details you have already entered.</li>
-          <li><strong>Marketing:</strong> measuring how our promotions perform.</li>
-        </ul>
-        <!-- CONFIRM: the supplied draft said visitors could opt in and
-             out of each category "in the cookie preferences panel".
-             There is no such panel on this site, so that sentence is
-             replaced with what is actually true. If a consent banner
-             is added, rewrite this paragraph to match it. -->
-        <p>You can block or delete cookies through your browser settings, and most browsers let you refuse them by category. Blocking essential cookies will stop parts of this site working as intended. We do not use cookie data to identify you personally, or for any purpose other than those described here.</p>
-      </section>
-
-      <section id="third-parties" class="crss-legal-section">
-        <h2>Third-party services</h2>
-        <!-- Named, not described in the abstract. These are the
-             companies a visitor's browser actually contacts, taken
-             from what the pages load rather than from a template. -->
-        <p>This website relies on services run by other companies, which may receive your IP address and technical details of your visit when a page loads:</p>
-        <ul>
-          <li><strong>GoHighLevel</strong> hosts this website and provides the contact forms and chat widget</li>
-          <li><strong>Google</strong> provides the fonts used across the site, and the map embedded on our location page</li>
-          <li>Our <strong>tenant payment portal</strong>, operated by our facility management provider, handles accounts and payments and is a separate service with its own policy</li>
-        </ul>
-        <p>Those services are governed by their own privacy policies, not this one. Our website also reads unit sizes, rates and availability from a service we operate ourselves; it returns facility information only and collects nothing about you.</p>
-        <p>Where we link to another website, we encourage you to read its privacy policy before sharing information with it. We are not responsible for how other companies handle your data.</p>
-      </section>
-
-      <section id="security" class="crss-legal-section">
-        <h2>Data security</h2>
-        <p>We take reasonable steps to protect your information from unauthorised access or disclosure. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
-      </section>
-
-      <section id="retention" class="crss-legal-section">
-        <h2>How long we keep it</h2>
-        <p>We keep your information for as long as we need it to provide our services, and for as long as applicable law requires. Records connected to a rental are kept for longer than a website enquiry, because your Rental Agreement and the law both require it.</p>
-      </section>
-
-      <section id="your-rights" class="crss-legal-section">
-        <h2>Your choices and requests</h2>
-        <!-- CONFIRM: whether the Texas Data Privacy and Security Act
-             applies to CapRock, and what this section must then say.
-             Written modestly on purpose: it offers a real process
-             without claiming a specific statutory entitlement. -->
-        <p>You can ask us what personal information we hold about you, ask us to correct it, or ask us to delete it. Contact us using the details below and we will respond as quickly as we can. We may need to confirm your identity first, and we may have to keep some records where the law or an active Rental Agreement requires it.</p>
-      </section>
-
-      <section id="changes" class="crss-legal-section">
-        <h2>Changes to this policy</h2>
-        <p>We may update this policy from time to time. Any changes appear on this page, and the effective date at the top shows when it last changed. Continuing to use our website after a change means you accept the updated policy.</p>
-      </section>
-
-      <section id="contact" class="crss-legal-section">
-        <h2>Contact us</h2>
-        <p>For any question about this policy, or to make a request about your information:</p>
-        <dl class="crss-legal-details">
-          <div><dt>Business name</dt><dd>CapRock Self Storage</dd></div>
-          <div><dt>Address</dt><dd>2213 North Quaker Ave, Lubbock, TX 79416</dd></div>
-          <div><dt>Phone</dt><dd><a href="tel:+18065891472">(806) 589-1472</a></dd></div>
-          <div><dt>Email</dt><dd><a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a></dd></div>
-        </dl>
-      </section>
-
-    </div>
-
-    <div class="crss-legal-foot">
-      <p>See also our <a href="/terms-of-use">Terms of Use</a>, which cover the use of this website and the rental of a unit.</p>
-    </div>
-
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-legal {
     font-family: 'Work Sans', Arial, sans-serif;
@@ -1926,6 +1781,166 @@
   }
 </style>
 
+<div class="crss-legal">
+  <div class="crss-legal-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span aria-current="page">Privacy Policy</span>
+    </nav>
+
+    <h1 class="crss-legal-title">Privacy Policy</h1>
+
+    <p class="crss-legal-updated">Effective <time datetime="2026-09-06">6 September 2026</time></p>
+
+    <p class="crss-legal-lede">CapRock Self Storage is committed to protecting your privacy. This policy explains what we collect through this website, how we use it, and the choices you have.</p>
+
+    <!-- The boundary that matters most: this policy covers the
+         website, not the lease. Someone who reads only this box still
+         knows where to look for the rest. -->
+    <div class="crss-legal-callout">
+      <p><strong>This policy covers our website.</strong> It does not cover the additional information we collect when you sign a Rental Agreement, such as your legal name, mailing address, government ID or vehicle details. That information is governed by your signed Rental Agreement.</p>
+    </div>
+
+    <nav class="crss-legal-toc" aria-label="On this page">
+      <p class="crss-legal-toc-head">On this page</p>
+      <ol>
+        <li><a href="#collect">What we collect</a></li>
+        <li><a href="#use">How we use it</a></li>
+        <li><a href="#sms">Text messages</a></li>
+        <li><a href="#optout">Opting out</a></li>
+        <li><a href="#cookies">Cookies</a></li>
+        <li><a href="#third-parties">Third-party services</a></li>
+        <li><a href="#security">Data security</a></li>
+        <li><a href="#retention">How long we keep it</a></li>
+        <li><a href="#your-rights">Your choices and requests</a></li>
+        <li><a href="#changes">Changes to this policy</a></li>
+        <li><a href="#contact">Contact us</a></li>
+      </ol>
+    </nav>
+
+    <div class="crss-legal-body">
+
+      <section id="collect" class="crss-legal-section">
+        <h2>What we collect</h2>
+        <p>We collect information you give us directly when you:</p>
+        <ul>
+          <li>Send an enquiry through a contact form or the chat widget</li>
+          <li>Opt in to receive emails, calls or text messages</li>
+          <li>Give feedback or answer a survey</li>
+          <li>Contact us for support</li>
+        </ul>
+        <p>That may include your name, phone number, email address, messaging preferences, and anything else you choose to tell us.</p>
+        <p>Our website platform also records standard technical information when you visit, including your IP address, the pages you view and the browser you use. We use it to keep the site working and to understand how it is used.</p>
+      </section>
+
+      <section id="use" class="crss-legal-section">
+        <h2>How we use it</h2>
+        <ul>
+          <li>To answer your enquiries and provide support</li>
+          <li>To send messages about your unit, account, payments and facility updates</li>
+          <li>To improve this website and our communications</li>
+        </ul>
+        <p>We do not sell your personal information.</p>
+      </section>
+
+      <section id="sms" class="crss-legal-section">
+        <h2>Text messages</h2>
+        <!-- CONFIRM: this carries carrier-required wording. It should
+             match the text shown on the opt-in itself, word for word,
+             or the two disagree at exactly the point that matters. -->
+        <p>By giving us your mobile number and opting in, you agree to receive text messages from CapRock Self Storage about your account, payment reminders and replies to enquiries you send us. Message frequency varies. Message and data rates may apply. Reply STOP at any time to opt out, or HELP for help.</p>
+        <p><strong>We do not share mobile information with third parties or affiliates for marketing or promotional purposes.</strong> Text messaging opt-in data and consent are excluded from every other category of information we collect, and are not shared with anyone.</p>
+      </section>
+
+      <section id="optout" class="crss-legal-section">
+        <h2>Opting out</h2>
+        <p>You can stop hearing from us at any time by:</p>
+        <ul>
+          <li>Replying STOP to any text message</li>
+          <li>Using the unsubscribe link in any marketing email</li>
+          <li>Changing your preferences in your tenant account</li>
+          <li>Contacting us using the details at the bottom of this page</li>
+        </ul>
+        <p>While your rental is active we will still need to contact you about your account and your unit.</p>
+      </section>
+
+      <section id="cookies" class="crss-legal-section">
+        <h2>Cookies</h2>
+        <p>Cookies are small files stored on your device. This website, its platform and the third-party services listed below may set them in the following categories:</p>
+        <ul>
+          <li><strong>Essential:</strong> needed for the site to work, including submitting a form and keeping the connection secure. The site cannot function without these.</li>
+          <li><strong>Performance:</strong> how visitors use the site, such as pages viewed and loading times.</li>
+          <li><strong>Functional:</strong> remembering preferences, such as details you have already entered.</li>
+          <li><strong>Marketing:</strong> measuring how our promotions perform.</li>
+        </ul>
+        <!-- CONFIRM: the supplied draft said visitors could opt in and
+             out of each category "in the cookie preferences panel".
+             There is no such panel on this site, so that sentence is
+             replaced with what is actually true. If a consent banner
+             is added, rewrite this paragraph to match it. -->
+        <p>You can block or delete cookies through your browser settings, and most browsers let you refuse them by category. Blocking essential cookies will stop parts of this site working as intended. We do not use cookie data to identify you personally, or for any purpose other than those described here.</p>
+      </section>
+
+      <section id="third-parties" class="crss-legal-section">
+        <h2>Third-party services</h2>
+        <!-- Named, not described in the abstract. These are the
+             companies a visitor's browser actually contacts, taken
+             from what the pages load rather than from a template. -->
+        <p>This website relies on services run by other companies, which may receive your IP address and technical details of your visit when a page loads:</p>
+        <ul>
+          <li><strong>GoHighLevel</strong> hosts this website and provides the contact forms and chat widget</li>
+          <li><strong>Google</strong> provides the fonts used across the site, and the map embedded on our location page</li>
+          <li>Our <strong>tenant payment portal</strong>, operated by our facility management provider, handles accounts and payments and is a separate service with its own policy</li>
+        </ul>
+        <p>Those services are governed by their own privacy policies, not this one. Our website also reads unit sizes, rates and availability from a service we operate ourselves; it returns facility information only and collects nothing about you.</p>
+        <p>Where we link to another website, we encourage you to read its privacy policy before sharing information with it. We are not responsible for how other companies handle your data.</p>
+      </section>
+
+      <section id="security" class="crss-legal-section">
+        <h2>Data security</h2>
+        <p>We take reasonable steps to protect your information from unauthorised access or disclosure. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+      </section>
+
+      <section id="retention" class="crss-legal-section">
+        <h2>How long we keep it</h2>
+        <p>We keep your information for as long as we need it to provide our services, and for as long as applicable law requires. Records connected to a rental are kept for longer than a website enquiry, because your Rental Agreement and the law both require it.</p>
+      </section>
+
+      <section id="your-rights" class="crss-legal-section">
+        <h2>Your choices and requests</h2>
+        <!-- CONFIRM: whether the Texas Data Privacy and Security Act
+             applies to CapRock, and what this section must then say.
+             Written modestly on purpose: it offers a real process
+             without claiming a specific statutory entitlement. -->
+        <p>You can ask us what personal information we hold about you, ask us to correct it, or ask us to delete it. Contact us using the details below and we will respond as quickly as we can. We may need to confirm your identity first, and we may have to keep some records where the law or an active Rental Agreement requires it.</p>
+      </section>
+
+      <section id="changes" class="crss-legal-section">
+        <h2>Changes to this policy</h2>
+        <p>We may update this policy from time to time. Any changes appear on this page, and the effective date at the top shows when it last changed. Continuing to use our website after a change means you accept the updated policy.</p>
+      </section>
+
+      <section id="contact" class="crss-legal-section">
+        <h2>Contact us</h2>
+        <p>For any question about this policy, or to make a request about your information:</p>
+        <dl class="crss-legal-details">
+          <div><dt>Business name</dt><dd>CapRock Self Storage</dd></div>
+          <div><dt>Address</dt><dd>2213 North Quaker Ave, Lubbock, TX 79416</dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:+18065891472">(806) 589-1472</a></dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a></dd></div>
+        </dl>
+      </section>
+
+    </div>
+
+    <div class="crss-legal-foot">
+      <p>See also our <a href="/terms-of-use">Terms of Use</a>, which cover the use of this website and the rental of a unit.</p>
+    </div>
+
+  </div>
+</div>
+
+
 <!-- ================================================================
      CapRock Self Storage — Global Footer
      Save this as a SECOND GHL Global Section (alongside the header)
@@ -1957,119 +1972,13 @@
        where it used to sit for how to restore it.
      - (done) Terms of Use and Privacy Policy exist and are linked
      ================================================================ -->
-<footer class="crss-footer">
-  <div class="crss-footer-bar" aria-hidden="true"></div>
-
-  <div class="crss-footer-inner">
-    <div class="crss-footer-cols">
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">Storage Tools</h2>
-        <ul>
-          <li><a href="/storage-calculator">Storage Calculator</a></li>
-          <li><a href="/storage-tips">Storage Tips</a></li>
-          <li><a href="/vehicle-storage">Vehicle Storage</a></li>
-          <li><a href="/student-storage">Student Storage</a></li>
-          <li><a href="/military-storage">Military Storage</a></li>
-          <li><a href="/size-guide">Size Guide</a></li>
-          <li><a href="/help-center">Help Center</a></li>
-        </ul>
-      </div>
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">About CapRock</h2>
-        <ul>
-          <li><a href="/about-caprock">About CapRock</a></li>
-          <li><a href="/contact-us">Contact Us</a></li>
-          <li><a href="/lubbock-2213-n-quaker">Our Location</a></li>
-        </ul>
-      </div>
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">Reach Out</h2>
-        <ul>
-          <!-- Phone supplied by CapRock, and it no longer matches the number
-               in the facility record. Correct that record too, or anything
-               else fed by it keeps handing out the old line. -->
-          <li>
-            <a href="tel:+18065891472" class="crss-footer-contact">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <span>(806) 589-1472</span>
-            </a>
-          </li>
-          <!-- Confirmed, same address as the contact page. -->
-          <li>
-            <a href="mailto:info@caprock-storage.com" class="crss-footer-contact">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 7l8.5 6 8.5-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <span>Email us</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">Follow Us</h2>
-        <!-- PLACEHOLDER: real profile URLs, or delete this column -->
-        <div class="crss-footer-social">
-          <a href="#" aria-label="CapRock Self Storage on Facebook">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 8.5h2.2V5.6c-.4-.05-1.4-.15-2.6-.15-2.6 0-4.3 1.6-4.3 4.5v2.3H7.3v3.2h2.5v8.05h3.3V15.45h2.5l.4-3.2h-2.9v-2c0-.95.25-1.75 1.4-1.75z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="#" aria-label="CapRock Self Storage on Instagram">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg>
-          </a>
-          <a href="#" aria-label="CapRock Self Storage on X">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l7.6 9.9L4.4 20M20 4l-7.3 8M9.8 12.6L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="#" aria-label="CapRock Self Storage on Pinterest">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.3 20l1.9-7.2M9.6 10.6c0-1.7 1.2-3 3-3 1.7 0 2.8 1.1 2.8 2.8 0 2-1 3.6-2.5 3.6-.8 0-1.4-.7-1.2-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="crss-footer-locations">
-      <h2 class="crss-footer-head">Locations</h2>
-      <!-- Grows as facilities are added, one per city. -->
-      <p><a href="/lubbock-2213-n-quaker">Lubbock, TX</a></p>
-    </div>
-
-    <div class="crss-footer-legal">
-      <!-- The disclaimer is out, not blank.
-
-           It was scaffolding from before launch, and it was reading
-           the word PLACEHOLDER in brackets to every customer on every
-           page of a live site. An empty slot is invisible; a slot
-           announcing that it is empty is worse than having no slot,
-           because it tells a visitor the site is unfinished at the
-           exact moment they are deciding whether to trust it.
-
-           Rates, fees, offer terms and lease proration have to come
-           from whoever handles CapRock's terms. When that text exists,
-           restore the paragraph here; .crss-footer-disclaimer is kept
-           in the stylesheet below so it is a one-line change:
-
-             <p class="crss-footer-disclaimer">TEXT</p>            -->
-
-      <div class="crss-footer-baseline">
-        <p>&copy; <span id="crss-footer-year">2026</span> CapRock Self Storage, a DBA of Wasatch Home Buyers Inc. All rights reserved.</p>
-        <p class="crss-footer-legal-links">
-          <!-- Both pages exist, and the label follows the document.
-               It is called Terms of Use and lives at /terms-of-use;
-               a footer calling it Terms of Service is a small way to
-               make a legal page look like it belongs elsewhere. -->
-          <a href="/terms-of-use">Terms of Use</a>
-          <a href="/privacy-policy">Privacy Policy</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<button type="button" class="crss-totop" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-</button>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-footer, .crss-footer *, .crss-footer *::before, .crss-footer *::after {
     box-sizing: border-box;
@@ -2327,6 +2236,119 @@
     }
   }
 </style>
+
+<footer class="crss-footer">
+  <div class="crss-footer-bar" aria-hidden="true"></div>
+
+  <div class="crss-footer-inner">
+    <div class="crss-footer-cols">
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Storage Tools</h2>
+        <ul>
+          <li><a href="/storage-calculator">Storage Calculator</a></li>
+          <li><a href="/storage-tips">Storage Tips</a></li>
+          <li><a href="/vehicle-storage">Vehicle Storage</a></li>
+          <li><a href="/student-storage">Student Storage</a></li>
+          <li><a href="/military-storage">Military Storage</a></li>
+          <li><a href="/size-guide">Size Guide</a></li>
+          <li><a href="/help-center">Help Center</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">About CapRock</h2>
+        <ul>
+          <li><a href="/about-caprock">About CapRock</a></li>
+          <li><a href="/contact-us">Contact Us</a></li>
+          <li><a href="/lubbock-2213-n-quaker">Our Location</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Reach Out</h2>
+        <ul>
+          <!-- Phone supplied by CapRock, and it no longer matches the number
+               in the facility record. Correct that record too, or anything
+               else fed by it keeps handing out the old line. -->
+          <li>
+            <a href="tel:+18065891472" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>(806) 589-1472</span>
+            </a>
+          </li>
+          <!-- Confirmed, same address as the contact page. -->
+          <li>
+            <a href="mailto:info@caprock-storage.com" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 7l8.5 6 8.5-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>Email us</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Follow Us</h2>
+        <!-- PLACEHOLDER: real profile URLs, or delete this column -->
+        <div class="crss-footer-social">
+          <a href="#" aria-label="CapRock Self Storage on Facebook">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 8.5h2.2V5.6c-.4-.05-1.4-.15-2.6-.15-2.6 0-4.3 1.6-4.3 4.5v2.3H7.3v3.2h2.5v8.05h3.3V15.45h2.5l.4-3.2h-2.9v-2c0-.95.25-1.75 1.4-1.75z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Instagram">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on X">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l7.6 9.9L4.4 20M20 4l-7.3 8M9.8 12.6L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Pinterest">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.3 20l1.9-7.2M9.6 10.6c0-1.7 1.2-3 3-3 1.7 0 2.8 1.1 2.8 2.8 0 2-1 3.6-2.5 3.6-.8 0-1.4-.7-1.2-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="crss-footer-locations">
+      <h2 class="crss-footer-head">Locations</h2>
+      <!-- Grows as facilities are added, one per city. -->
+      <p><a href="/lubbock-2213-n-quaker">Lubbock, TX</a></p>
+    </div>
+
+    <div class="crss-footer-legal">
+      <!-- The disclaimer is out, not blank.
+
+           It was scaffolding from before launch, and it was reading
+           the word PLACEHOLDER in brackets to every customer on every
+           page of a live site. An empty slot is invisible; a slot
+           announcing that it is empty is worse than having no slot,
+           because it tells a visitor the site is unfinished at the
+           exact moment they are deciding whether to trust it.
+
+           Rates, fees, offer terms and lease proration have to come
+           from whoever handles CapRock's terms. When that text exists,
+           restore the paragraph here; .crss-footer-disclaimer is kept
+           in the stylesheet below so it is a one-line change:
+
+             <p class="crss-footer-disclaimer">TEXT</p>            -->
+
+      <div class="crss-footer-baseline">
+        <p>&copy; <span id="crss-footer-year">2026</span> CapRock Self Storage, a DBA of Wasatch Home Buyers Inc. All rights reserved.</p>
+        <p class="crss-footer-legal-links">
+          <!-- Both pages exist, and the label follows the document.
+               It is called Terms of Use and lives at /terms-of-use;
+               a footer calling it Terms of Service is a small way to
+               make a legal page look like it belongs elsewhere. -->
+          <a href="/terms-of-use">Terms of Use</a>
+          <a href="/privacy-policy">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button type="button" class="crss-totop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 
 <script>
   (function () {

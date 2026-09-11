@@ -12,52 +12,13 @@
      established in this project (gated access, video surveillance,
      month-to-month leases), not new claims.
      ================================================================ -->
-<div class="crss-about">
-  <div class="crss-about-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">About CapRock</span>
-    </nav>
-
-    <h1 class="crss-about-title">About CapRock Self Storage</h1>
-
-    <!-- "Our Story" is out, not blank.
-
-         It was a block reading the word PLACEHOLDER in brackets to
-         every visitor of a live site, which tells them the company
-         has not finished its own About page. That is worse than
-         having no story section at all, and worse than the story
-         being short.
-
-         Nothing here is invented in its place: a founding story is
-         the one thing on this site that cannot be derived from the
-         facility record or written from general knowledge.
-
-         When CapRock supplies the copy, the block goes back exactly
-         where this comment sits:
-
-           <div class="crss-about-block">
-             <h2>Our Story</h2>
-             <p>TEXT</p>
-           </div>                                                  -->
-
-    <div class="crss-about-block">
-      <h2>What You Can Expect</h2>
-      <ul class="crss-about-list">
-        <li>Gated access for controlled entry</li>
-        <li>Video surveillance throughout the property</li>
-        <li>Clean, well-maintained buildings</li>
-        <li>Month-to-month leases, no long-term commitment</li>
-      </ul>
-    </div>
-
-    <div class="crss-about-cta">
-      <p>Find a CapRock location near you.</p>
-      <a href="/lubbock-2213-n-quaker" class="crss-about-cta-btn">See Units and Prices</a>
-    </div>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-about {
     font-family: 'Work Sans', Arial, sans-serif;
@@ -294,3 +255,50 @@
     }
   }
 </style>
+
+<div class="crss-about">
+  <div class="crss-about-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">About CapRock</span>
+    </nav>
+
+    <h1 class="crss-about-title">About CapRock Self Storage</h1>
+
+    <!-- "Our Story" is out, not blank.
+
+         It was a block reading the word PLACEHOLDER in brackets to
+         every visitor of a live site, which tells them the company
+         has not finished its own About page. That is worse than
+         having no story section at all, and worse than the story
+         being short.
+
+         Nothing here is invented in its place: a founding story is
+         the one thing on this site that cannot be derived from the
+         facility record or written from general knowledge.
+
+         When CapRock supplies the copy, the block goes back exactly
+         where this comment sits:
+
+           <div class="crss-about-block">
+             <h2>Our Story</h2>
+             <p>TEXT</p>
+           </div>                                                  -->
+
+    <div class="crss-about-block">
+      <h2>What You Can Expect</h2>
+      <ul class="crss-about-list">
+        <li>Gated access for controlled entry</li>
+        <li>Video surveillance throughout the property</li>
+        <li>Clean, well-maintained buildings</li>
+        <li>Month-to-month leases, no long-term commitment</li>
+      </ul>
+    </div>
+
+    <div class="crss-about-cta">
+      <p>Find a CapRock location near you.</p>
+      <a href="/lubbock-2213-n-quaker" class="crss-about-cta-btn">See Units and Prices</a>
+    </div>
+  </div>
+</div>
+

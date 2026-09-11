@@ -39,296 +39,13 @@
        was nothing to show and no date by which there would be.
      - The open questions listed in the Storage Faqs panel
      ================================================================ -->
-<div class="crss-location">
-
-  <!-- The pre-launch notice is gone: phone, ZIP, hours and
-       promotions are all confirmed from the facility record now.
-       What is left is a choice rather than a blocker - whether to
-       use the five photos the API returns instead of the single
-       uploaded one - and the APPOINTMENT ONLY question flagged in
-       the Access panel. -->
-
-  <!-- ============ STICKY SUB-NAV ============ -->
-  <nav class="crss-subnav" aria-label="Page sections">
-    <div class="crss-subnav-inner">
-      <a href="#units" class="crss-subnav-link is-active" data-target="units">Units</a>
-      <a href="#features" class="crss-subnav-link" data-target="features">Features</a>
-      <a href="#faqs" class="crss-subnav-link" data-target="faqs">Storage Faqs</a>
-      <a href="#city-info" class="crss-subnav-link" data-target="city-info">City Information</a>
-    </div>
-  </nav>
-
-  <!-- ============ SHELL: INFO CARD + MAIN CONTENT ============ -->
-  <div class="crss-shell">
-
-    <aside class="crss-info-card">
-      <div class="crss-info-photo">
-      </div>
-      <div class="crss-info-body">
-        <!-- LOC: title -->
-        <h1 class="crss-info-title">Lubbock, 2213 N Quaker</h1>
-        <!-- LOC: address -->
-        <p class="crss-info-address">2213 North Quaker Ave<br>Lubbock, TX 79416</p>
-        <!-- LOC: phone — change the tel: href AND the visible number -->
-        <a href="tel:+18065891472" class="crss-info-phone">(806) 589-1472</a>
-        <!-- Down the page to Features: hours, access and what the
-             property offers are all there, and the card is the summary
-             of it. It scrolls with the same header offset as the
-             sub-nav, which is why it carries data-target. -->
-        <a href="#features" data-target="features" class="crss-info-details-link">View Location Details →</a>
-
-        <div class="crss-info-map">
-          <!-- LOC: map-query / map-title
-               Maps Embed API. The key is public by design: it ships in
-               the page source of every visitor. What protects it is the
-               HTTP referrer restriction in Google Cloud, not secrecy,
-               so keep that restriction and add the live domain to it.
-               Requires "Maps Embed API" enabled on the same project. -->
-          <iframe
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD7bbQkgWrqUx0Voz6uJilxl0NdCt7Kbgo&q=CapRock+Self+Storage,+2213+North+Quaker+Ave,+Lubbock,+TX+79416"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Map to CapRock Self Storage, 2213 North Quaker Ave, Lubbock, TX 79416">
-          </iframe>
-        </div>
-      </div>
-    </aside>
-
-    <main class="crss-main">
-      <!-- Units come from WebSelfStorage via the /api/wss proxy, never
-           direct: the API key cannot be exposed to the browser. Rates
-           and availability are live, so nothing here is hardcoded.
-           Set WSS_ENDPOINT in the script below after deploying. -->
-      <section id="units" class="crss-section crss-panel">
-        <h2>Units</h2>
-        <p class="crss-panel-lede">Sizes, rates and availability for this location, live from the facility system.</p>
-
-        <div class="crss-unit-filters" data-crss-unit-filters hidden></div>
-
-        <div data-crss-units>
-          <p class="crss-unit-state">Checking current availability&hellip;</p>
-        </div>
-      </section>
-
-      <!-- Every claim below is one this project already established:
-           the four facility standards from about-caprock.html, the live
-           sizes from the facility record, and the "options vary by location"
-           phrasing from vehicle-storage.html. The three groups with no
-           confirmed facts stay explicitly empty rather than guessing. -->
-      <!-- LOC: features — the six groups below are generic. Only
-           change them if a property genuinely differs. -->
-      <section id="features" class="crss-section crss-panel">
-        <h2>Features</h2>
-        <p class="crss-panel-lede">What this property offers today. Anything not listed here has not been confirmed for this location yet, so ask the office rather than assuming.</p>
-
-        <div class="crss-feature-grid">
-          <div class="crss-feature">
-            <button type="button" class="crss-feature-trigger" aria-expanded="true">
-              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M9.5 9.5v11" stroke="currentColor" stroke-width="1.6"/></svg></span>
-              <span class="crss-feature-label">Unit Features</span>
-              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
-            </button>
-            <div class="crss-feature-panel">
-              <ul>
-                <li data-crss-size-range data-tpl="Unit sizes from a {min} up to a {max}">Unit sizes from a 5&nbsp;&times;&nbsp;5 up to a 10&nbsp;&times;&nbsp;30</li>
-                <li>Drive-up access on the outdoor units</li>
-                <li>Temperature controlled interior units</li>
-                <li>Powered units with electricity</li>
-                <li>Lighted units</li>
-                <li>Compare them side by side in the <a href="/size-guide">Size Guide</a></li>
-                <li>Not sure what fits? Try the <a href="/storage-calculator">Storage Calculator</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="crss-feature">
-            <button type="button" class="crss-feature-trigger" aria-expanded="false">
-              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V7l8-3 8 3v13" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 20v-6h5v6M2.5 20h19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <span class="crss-feature-label">Access</span>
-              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
-            </button>
-            <div class="crss-feature-panel">
-              <ul>
-                <li>Gated access, so entry to the property is controlled</li>
-                <li>Electronic gate access</li>
-                <li data-crss-gate-hours>Gate hours: call the office to confirm</li>
-                <li data-crss-office-hours>Office hours: call the office to confirm</li>
-              </ul>
-              <!-- Worth confirming before launch: the facility record is
-                   flagged "APPOINTMENT ONLY". That may mean office visits
-                   are by appointment, or something broader. Until it is
-                   clear, the line below is true under either reading,
-                   rather than committing to one and being wrong. -->
-              <p class="crss-feature-note">Call ahead before visiting the office.</p>
-            </div>
-          </div>
-
-          <div class="crss-feature">
-            <button type="button" class="crss-feature-trigger" aria-expanded="false">
-              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5l7 3v5.2c0 4.2-2.9 7.6-7 8.8-4.1-1.2-7-4.6-7-8.8V6.5l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2.1 2.1L15.2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <span class="crss-feature-label">Security</span>
-              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
-            </button>
-            <div class="crss-feature-panel">
-              <ul>
-                <li>Gated access for controlled entry</li>
-                <li>Video surveillance throughout the property</li>
-                <li>Clean, well-maintained buildings</li>
-                <li>Fenced and walled perimeter</li>
-                <li>Lighted units</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="crss-feature">
-            <button type="button" class="crss-feature-trigger" aria-expanded="false">
-              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 8.5h17v11a1 1 0 01-1 1h-15a1 1 0 01-1-1v-11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2.5 4.5h19v4h-19zM10 12.5h4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
-              <span class="crss-feature-label">Extras</span>
-              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
-            </button>
-            <div class="crss-feature-panel">
-              <ul>
-                <li>Boxes and moving supplies on site</li>
-                <li>Carts and dollies available</li>
-                <li>Low cost insurance available</li>
-                <li>Deliveries accepted</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="crss-feature">
-            <button type="button" class="crss-feature-trigger" aria-expanded="false">
-              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16.5v-3l2-5.5a2 2 0 011.9-1.3h10.2A2 2 0 0119 8l2 5.5v3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 16.5h18v2.5h-3v-2.5M6 19v-2.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/></svg></span>
-              <span class="crss-feature-label">Parking</span>
-              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
-            </button>
-            <div class="crss-feature-panel">
-              <ul>
-                <li>Vehicle, RV and boat storage options vary by location</li>
-                <li>Ask this office which options they currently offer</li>
-              </ul>
-              <p class="crss-feature-note">More on <a href="/vehicle-storage">vehicle storage</a>.</p>
-            </div>
-          </div>
-
-          <div class="crss-feature">
-            <button type="button" class="crss-feature-trigger" aria-expanded="false">
-              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M20.5 12.5l-8 8-9-9v-8h8l9 9z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg></span>
-              <span class="crss-feature-label">Promotions</span>
-              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
-            </button>
-            <div class="crss-feature-panel">
-              <ul data-crss-coupons>
-                <li>Ask the office about current offers.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Only questions answerable from what this project has already
-           established are answered. Everything that depends on CapRock's
-           actual policy is listed at the bottom as still-open, rather
-           than answered with a plausible guess. -->
-      <section id="faqs" class="crss-section crss-panel">
-        <h2>Storage Faqs</h2>
-
-        <div class="crss-faq-list">
-          <div class="crss-faq">
-            <button type="button" class="crss-faq-q" aria-expanded="false">
-              <span>How long do I have to rent for?</span>
-              <span class="crss-faq-sign" aria-hidden="true"></span>
-            </button>
-            <div class="crss-faq-a">
-              <p>Leases run month to month, with no long-term commitment. Rent for a single season or for years, and give notice when you are ready to move out.</p>
-            </div>
-          </div>
-
-          <div class="crss-faq">
-            <button type="button" class="crss-faq-q" aria-expanded="false">
-              <span>What size unit do I need?</span>
-              <span class="crss-faq-sign" aria-hidden="true"></span>
-            </button>
-            <div class="crss-faq-a">
-              <p><span data-crss-size-range data-tpl="Sizes run from a {min} that holds a few boxes up to a {max} that can take a full household.">Sizes run from a 5&nbsp;&times;&nbsp;5 that holds a few boxes up to a 10&nbsp;&times;&nbsp;30 that can take a full household.</span> The <a href="/size-guide">Size Guide</a> compares them side by side, and the <a href="/storage-calculator">Storage Calculator</a> turns a description of what you are storing into a starting size.</p>
-              <p>If you are between two sizes, the larger one is usually the cheaper mistake.</p>
-            </div>
-          </div>
-
-          <div class="crss-faq">
-            <button type="button" class="crss-faq-q" aria-expanded="false">
-              <span>How is the property secured?</span>
-              <span class="crss-faq-sign" aria-hidden="true"></span>
-            </button>
-            <div class="crss-faq-a">
-              <p>The property is gated, so entry is controlled rather than open to anyone driving past, and video surveillance covers the site. The buildings are kept clean and maintained.</p>
-            </div>
-          </div>
-
-          <div class="crss-faq">
-            <button type="button" class="crss-faq-q" aria-expanded="false">
-              <span>What am I not allowed to store?</span>
-              <span class="crss-faq-sign" aria-hidden="true"></span>
-            </button>
-            <div class="crss-faq-a">
-              <p>Self storage everywhere excludes the same broad categories: flammable, explosive or hazardous materials such as fuel, paint and propane; perishable food; living things, whether plants or animals; and anything illegal. Your signed lease is the authority on the full list.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- PLACEHOLDER: these need CapRock's real answers before launch.
-             They are listed rather than answered because a wrong answer
-             about gate hours, locks or billing creates a support call and
-             a bad first visit. -->
-        <div class="crss-faq-open">
-          <p class="crss-faq-open-head">Still to confirm with CapRock</p>
-          <ul>
-            <li>Gate access hours and office hours</li>
-            <li>Whether you bring your own lock or buy one on site</li>
-            <li>Accepted payment methods and whether autopay is offered</li>
-            <li>Whether tenant insurance or a protection plan is required</li>
-            <li>Whether this property uses Noke smart locks, which the SROA reference page documents for the same building</li>
-          </ul>
-          <p class="crss-faq-open-note">Until these are confirmed, <a href="/contact-us">contact us</a> or call the office and we will answer directly.</p>
-        </div>
-      </section>
-
-      <!-- Local SEO block, following the topic pattern of the SROA
-           reference page for Lubbock (the city, getting around, work and
-           study, things to do, the former air base) but written from
-           scratch. These are widely documented facts about Lubbock rather
-           than claims about CapRock. Worth a read-through by someone who
-           actually knows the city before launch. -->
-      <!-- LOC: city-info — REWRITE ENTIRELY for a new city.
-           Do not reuse Lubbock's copy anywhere else. -->
-      <section id="city-info" class="crss-section crss-panel">
-        <h2>City Information</h2>
-
-        <div class="crss-city">
-          <h3>About Lubbock</h3>
-          <p>Lubbock is the largest city on the South Plains of West Texas and the seat of Lubbock County. It is known as the Hub City because it functions as the commercial, medical and educational centre for a wide stretch of surrounding farmland, pulling in far more people than its own population of roughly a quarter of a million would suggest.</p>
-
-          <h3>Getting around</h3>
-          <p>Interstate 27 runs north to south through the city, Loop 289 rings it, and US&nbsp;84, the Marsha Sharp Freeway, carries traffic out to the west.</p>
-
-          <h3>Work and study</h3>
-          <p>Texas Tech University and the Texas Tech University Health Sciences Center anchor both the local economy and the city's character, and the student population turns over enough each year to keep storage in steady demand. Lubbock Christian University and a Lubbock campus of South Plains College add to that. On the healthcare side, Covenant Health and University Medical Center are among the largest employers in the region.</p>
-          <p>Outside the campuses and hospitals, agriculture still defines the surrounding South Plains, where cotton is the dominant crop. Families moving for a job at the university, the hospitals or in agribusiness make up a good share of the people who need a unit for a few months.</p>
-
-          <h3>Schools and neighbourhoods</h3>
-          <p>Lubbock is served by several districts, principally Lubbock ISD, along with Frenship ISD to the west and Lubbock-Cooper ISD to the south. Households moving between these districts, or in and out of the neighbourhoods around Texas Tech, are a common reason for a short-term unit while a sale or a lease lines up.</p>
-
-          <h3>Things to do</h3>
-          <p>The Buddy Holly Center and the Buddy Holly Hall of Performing Arts and Sciences mark the city's best-known musical export. Texas Tech is home to the National Ranching Heritage Center, and the Lubbock Lake Landmark preserves an archaeological site on the northern edge of town. The Depot District carries much of the city's live music and nightlife, and Lubbock sits at the centre of the Texas High Plains, which grows a large share of the state's wine grapes.</p>
-
-          <h3>Military</h3>
-          <p>Reese Air Force Base, west of the city, closed in 1997, and the site now operates as Reese Technology Center, a research and business park. There is no longer an active installation in Lubbock itself, though service members relocating through the region still store here. See <a href="/military-storage">military storage</a> for how month-to-month terms fit a PCS timeline.</p>
-        </div>
-      </section>
-    </main>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-location, .crss-location *, .crss-location *::before, .crss-location *::after {
     box-sizing: border-box;
@@ -1186,6 +903,296 @@
     }
   }
 </style>
+
+<div class="crss-location">
+
+  <!-- The pre-launch notice is gone: phone, ZIP, hours and
+       promotions are all confirmed from the facility record now.
+       What is left is a choice rather than a blocker - whether to
+       use the five photos the API returns instead of the single
+       uploaded one - and the APPOINTMENT ONLY question flagged in
+       the Access panel. -->
+
+  <!-- ============ STICKY SUB-NAV ============ -->
+  <nav class="crss-subnav" aria-label="Page sections">
+    <div class="crss-subnav-inner">
+      <a href="#units" class="crss-subnav-link is-active" data-target="units">Units</a>
+      <a href="#features" class="crss-subnav-link" data-target="features">Features</a>
+      <a href="#faqs" class="crss-subnav-link" data-target="faqs">Storage Faqs</a>
+      <a href="#city-info" class="crss-subnav-link" data-target="city-info">City Information</a>
+    </div>
+  </nav>
+
+  <!-- ============ SHELL: INFO CARD + MAIN CONTENT ============ -->
+  <div class="crss-shell">
+
+    <aside class="crss-info-card">
+      <div class="crss-info-photo">
+      </div>
+      <div class="crss-info-body">
+        <!-- LOC: title -->
+        <h1 class="crss-info-title">Lubbock, 2213 N Quaker</h1>
+        <!-- LOC: address -->
+        <p class="crss-info-address">2213 North Quaker Ave<br>Lubbock, TX 79416</p>
+        <!-- LOC: phone — change the tel: href AND the visible number -->
+        <a href="tel:+18065891472" class="crss-info-phone">(806) 589-1472</a>
+        <!-- Down the page to Features: hours, access and what the
+             property offers are all there, and the card is the summary
+             of it. It scrolls with the same header offset as the
+             sub-nav, which is why it carries data-target. -->
+        <a href="#features" data-target="features" class="crss-info-details-link">View Location Details →</a>
+
+        <div class="crss-info-map">
+          <!-- LOC: map-query / map-title
+               Maps Embed API. The key is public by design: it ships in
+               the page source of every visitor. What protects it is the
+               HTTP referrer restriction in Google Cloud, not secrecy,
+               so keep that restriction and add the live domain to it.
+               Requires "Maps Embed API" enabled on the same project. -->
+          <iframe
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD7bbQkgWrqUx0Voz6uJilxl0NdCt7Kbgo&q=CapRock+Self+Storage,+2213+North+Quaker+Ave,+Lubbock,+TX+79416"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Map to CapRock Self Storage, 2213 North Quaker Ave, Lubbock, TX 79416">
+          </iframe>
+        </div>
+      </div>
+    </aside>
+
+    <main class="crss-main">
+      <!-- Units come from WebSelfStorage via the /api/wss proxy, never
+           direct: the API key cannot be exposed to the browser. Rates
+           and availability are live, so nothing here is hardcoded.
+           Set WSS_ENDPOINT in the script below after deploying. -->
+      <section id="units" class="crss-section crss-panel">
+        <h2>Units</h2>
+        <p class="crss-panel-lede">Sizes, rates and availability for this location, live from the facility system.</p>
+
+        <div class="crss-unit-filters" data-crss-unit-filters hidden></div>
+
+        <div data-crss-units>
+          <p class="crss-unit-state">Checking current availability&hellip;</p>
+        </div>
+      </section>
+
+      <!-- Every claim below is one this project already established:
+           the four facility standards from about-caprock.html, the live
+           sizes from the facility record, and the "options vary by location"
+           phrasing from vehicle-storage.html. The three groups with no
+           confirmed facts stay explicitly empty rather than guessing. -->
+      <!-- LOC: features — the six groups below are generic. Only
+           change them if a property genuinely differs. -->
+      <section id="features" class="crss-section crss-panel">
+        <h2>Features</h2>
+        <p class="crss-panel-lede">What this property offers today. Anything not listed here has not been confirmed for this location yet, so ask the office rather than assuming.</p>
+
+        <div class="crss-feature-grid">
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="true">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M9.5 9.5v11" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="crss-feature-label">Unit Features</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li data-crss-size-range data-tpl="Unit sizes from a {min} up to a {max}">Unit sizes from a 5&nbsp;&times;&nbsp;5 up to a 10&nbsp;&times;&nbsp;30</li>
+                <li>Drive-up access on the outdoor units</li>
+                <li>Temperature controlled interior units</li>
+                <li>Powered units with electricity</li>
+                <li>Lighted units</li>
+                <li>Compare them side by side in the <a href="/size-guide">Size Guide</a></li>
+                <li>Not sure what fits? Try the <a href="/storage-calculator">Storage Calculator</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V7l8-3 8 3v13" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 20v-6h5v6M2.5 20h19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="crss-feature-label">Access</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Gated access, so entry to the property is controlled</li>
+                <li>Electronic gate access</li>
+                <li data-crss-gate-hours>Gate hours: call the office to confirm</li>
+                <li data-crss-office-hours>Office hours: call the office to confirm</li>
+              </ul>
+              <!-- Worth confirming before launch: the facility record is
+                   flagged "APPOINTMENT ONLY". That may mean office visits
+                   are by appointment, or something broader. Until it is
+                   clear, the line below is true under either reading,
+                   rather than committing to one and being wrong. -->
+              <p class="crss-feature-note">Call ahead before visiting the office.</p>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5l7 3v5.2c0 4.2-2.9 7.6-7 8.8-4.1-1.2-7-4.6-7-8.8V6.5l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2l2.1 2.1L15.2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="crss-feature-label">Security</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Gated access for controlled entry</li>
+                <li>Video surveillance throughout the property</li>
+                <li>Clean, well-maintained buildings</li>
+                <li>Fenced and walled perimeter</li>
+                <li>Lighted units</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 8.5h17v11a1 1 0 01-1 1h-15a1 1 0 01-1-1v-11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2.5 4.5h19v4h-19zM10 12.5h4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+              <span class="crss-feature-label">Extras</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Boxes and moving supplies on site</li>
+                <li>Carts and dollies available</li>
+                <li>Low cost insurance available</li>
+                <li>Deliveries accepted</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16.5v-3l2-5.5a2 2 0 011.9-1.3h10.2A2 2 0 0119 8l2 5.5v3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 16.5h18v2.5h-3v-2.5M6 19v-2.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/></svg></span>
+              <span class="crss-feature-label">Parking</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul>
+                <li>Vehicle, RV and boat storage options vary by location</li>
+                <li>Ask this office which options they currently offer</li>
+              </ul>
+              <p class="crss-feature-note">More on <a href="/vehicle-storage">vehicle storage</a>.</p>
+            </div>
+          </div>
+
+          <div class="crss-feature">
+            <button type="button" class="crss-feature-trigger" aria-expanded="false">
+              <span class="crss-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M20.5 12.5l-8 8-9-9v-8h8l9 9z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <span class="crss-feature-label">Promotions</span>
+              <span class="crss-feature-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="crss-feature-panel">
+              <ul data-crss-coupons>
+                <li>Ask the office about current offers.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Only questions answerable from what this project has already
+           established are answered. Everything that depends on CapRock's
+           actual policy is listed at the bottom as still-open, rather
+           than answered with a plausible guess. -->
+      <section id="faqs" class="crss-section crss-panel">
+        <h2>Storage Faqs</h2>
+
+        <div class="crss-faq-list">
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>How long do I have to rent for?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>Leases run month to month, with no long-term commitment. Rent for a single season or for years, and give notice when you are ready to move out.</p>
+            </div>
+          </div>
+
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>What size unit do I need?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p><span data-crss-size-range data-tpl="Sizes run from a {min} that holds a few boxes up to a {max} that can take a full household.">Sizes run from a 5&nbsp;&times;&nbsp;5 that holds a few boxes up to a 10&nbsp;&times;&nbsp;30 that can take a full household.</span> The <a href="/size-guide">Size Guide</a> compares them side by side, and the <a href="/storage-calculator">Storage Calculator</a> turns a description of what you are storing into a starting size.</p>
+              <p>If you are between two sizes, the larger one is usually the cheaper mistake.</p>
+            </div>
+          </div>
+
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>How is the property secured?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>The property is gated, so entry is controlled rather than open to anyone driving past, and video surveillance covers the site. The buildings are kept clean and maintained.</p>
+            </div>
+          </div>
+
+          <div class="crss-faq">
+            <button type="button" class="crss-faq-q" aria-expanded="false">
+              <span>What am I not allowed to store?</span>
+              <span class="crss-faq-sign" aria-hidden="true"></span>
+            </button>
+            <div class="crss-faq-a">
+              <p>Self storage everywhere excludes the same broad categories: flammable, explosive or hazardous materials such as fuel, paint and propane; perishable food; living things, whether plants or animals; and anything illegal. Your signed lease is the authority on the full list.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLACEHOLDER: these need CapRock's real answers before launch.
+             They are listed rather than answered because a wrong answer
+             about gate hours, locks or billing creates a support call and
+             a bad first visit. -->
+        <div class="crss-faq-open">
+          <p class="crss-faq-open-head">Still to confirm with CapRock</p>
+          <ul>
+            <li>Gate access hours and office hours</li>
+            <li>Whether you bring your own lock or buy one on site</li>
+            <li>Accepted payment methods and whether autopay is offered</li>
+            <li>Whether tenant insurance or a protection plan is required</li>
+            <li>Whether this property uses Noke smart locks, which the SROA reference page documents for the same building</li>
+          </ul>
+          <p class="crss-faq-open-note">Until these are confirmed, <a href="/contact-us">contact us</a> or call the office and we will answer directly.</p>
+        </div>
+      </section>
+
+      <!-- Local SEO block, following the topic pattern of the SROA
+           reference page for Lubbock (the city, getting around, work and
+           study, things to do, the former air base) but written from
+           scratch. These are widely documented facts about Lubbock rather
+           than claims about CapRock. Worth a read-through by someone who
+           actually knows the city before launch. -->
+      <!-- LOC: city-info — REWRITE ENTIRELY for a new city.
+           Do not reuse Lubbock's copy anywhere else. -->
+      <section id="city-info" class="crss-section crss-panel">
+        <h2>City Information</h2>
+
+        <div class="crss-city">
+          <h3>About Lubbock</h3>
+          <p>Lubbock is the largest city on the South Plains of West Texas and the seat of Lubbock County. It is known as the Hub City because it functions as the commercial, medical and educational centre for a wide stretch of surrounding farmland, pulling in far more people than its own population of roughly a quarter of a million would suggest.</p>
+
+          <h3>Getting around</h3>
+          <p>Interstate 27 runs north to south through the city, Loop 289 rings it, and US&nbsp;84, the Marsha Sharp Freeway, carries traffic out to the west.</p>
+
+          <h3>Work and study</h3>
+          <p>Texas Tech University and the Texas Tech University Health Sciences Center anchor both the local economy and the city's character, and the student population turns over enough each year to keep storage in steady demand. Lubbock Christian University and a Lubbock campus of South Plains College add to that. On the healthcare side, Covenant Health and University Medical Center are among the largest employers in the region.</p>
+          <p>Outside the campuses and hospitals, agriculture still defines the surrounding South Plains, where cotton is the dominant crop. Families moving for a job at the university, the hospitals or in agribusiness make up a good share of the people who need a unit for a few months.</p>
+
+          <h3>Schools and neighbourhoods</h3>
+          <p>Lubbock is served by several districts, principally Lubbock ISD, along with Frenship ISD to the west and Lubbock-Cooper ISD to the south. Households moving between these districts, or in and out of the neighbourhoods around Texas Tech, are a common reason for a short-term unit while a sale or a lease lines up.</p>
+
+          <h3>Things to do</h3>
+          <p>The Buddy Holly Center and the Buddy Holly Hall of Performing Arts and Sciences mark the city's best-known musical export. Texas Tech is home to the National Ranching Heritage Center, and the Lubbock Lake Landmark preserves an archaeological site on the northern edge of town. The Depot District carries much of the city's live music and nightlife, and Lubbock sits at the centre of the Texas High Plains, which grows a large share of the state's wine grapes.</p>
+
+          <h3>Military</h3>
+          <p>Reese Air Force Base, west of the city, closed in 1997, and the site now operates as Reese Technology Center, a research and business park. There is no longer an active installation in Lubbock itself, though service members relocating through the region still store here. See <a href="/military-storage">military storage</a> for how month-to-month terms fit a PCS timeline.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
 
 <script>
   (function () {

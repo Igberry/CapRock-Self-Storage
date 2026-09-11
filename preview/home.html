@@ -30,127 +30,13 @@
      - Fonts: Fraunces + Work Sans is a starting pairing, swap for
        CapRock's real brand fonts once chosen
      ================================================================ -->
-<header class="crss-header">
-  <div class="crss-header-inner">
-
-    <!-- The artwork is now the whole wordmark; the text version is gone.
-
-         The asset is the full lockup (1774x887) in five bands: mark,
-         CAPROCK, SELF-STORAGE, a divider rule, then the tagline. The
-         link is a fixed window and the image inside is oversized and
-         offset so the crop ENDS AFTER SELF-STORAGE.
-
-         The tagline is dropped deliberately. It is 39px of the 887px
-         artwork, so at header height it renders about 3px tall and
-         reads as a smudge rather than words. The divider goes with it,
-         since a rule with nothing beneath it looks like a mistake.
-         Band positions were measured off the alpha channel, not
-         guessed: the kept region is x=83 y=12 1614x759.
-
-         alt carries the brand name rather than sitting empty, so if the
-         image ever fails the header still says who this is. That is
-         also why the link no longer needs its own aria-label, which
-         would double up with the alt. -->
-    <a href="/home" class="crss-logo">
-      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
-    </a>
-
-    <nav class="crss-nav" aria-label="Primary">
-      <a href="/lubbock-2213-n-quaker" class="crss-nav-link">Our Location</a>
-      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
-      <a href="/help-center" class="crss-nav-link">Help Center</a>
-
-      <div class="crss-dropdown">
-        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
-          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
-        </button>
-        <div class="crss-dropdown-menu">
-          <a href="/storage-calculator">Storage Calculator</a>
-          <a href="/storage-tips">Storage Tips</a>
-          <a href="/vehicle-storage">Vehicle Storage</a>
-          <a href="/student-storage">Student Storage</a>
-          <a href="/military-storage">Military Storage</a>
-        </div>
-      </div>
-
-      <div class="crss-dropdown">
-        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
-          About Us <span class="crss-caret" aria-hidden="true">▾</span>
-        </button>
-        <div class="crss-dropdown-menu">
-          <a href="/about-caprock">About CapRock</a>
-          <a href="/contact-us">Contact Us</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="crss-header-actions">
-      <!-- Phone supplied by CapRock, and it no longer matches the number
-               in the facility record. Correct that record too, or anything
-               else fed by it keeps handing out the old line. -->
-      <a href="tel:+18065891472" class="crss-phone">
-        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        <span>(806) 589-1472</span>
-      </a>
-      <a href="#" class="crss-account-link" aria-label="My Account">
-        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        <span>My Account</span>
-      </a>
-      <!-- Live payment portal for this location, from the
-           WebSelfStorage /paymentPortalUrl endpoint. Hardcoded
-           rather than fetched: it is stable, and fetching it
-           would add a request to all 13 pages to fill one href.
-           Opens in a new tab, since it is a different system
-           and tenants should not lose the site.
-           NOTE: at the time of writing this host resolves but accepts no
-           connection on http or https - 15s timeouts from two separate
-           networks - so the button may hang and then fail. That is
-           U-Haul's host being down, not a fault here. Chase them at
-           ams@uhaul.com; nothing needs changing in this file. -->
-      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
-         class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
-    </div>
-
-    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-
-  <!-- Mobile menu panel -->
-  <div class="crss-mobile-panel">
-    <a href="/lubbock-2213-n-quaker" class="crss-mobile-link">Our Location</a>
-    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
-    <a href="/help-center" class="crss-mobile-link">Help Center</a>
-
-    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
-      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
-    </button>
-    <div class="crss-mobile-accordion-panel">
-      <a href="/storage-calculator">Storage Calculator</a>
-      <a href="/storage-tips">Storage Tips</a>
-      <a href="/vehicle-storage">Vehicle Storage</a>
-      <a href="/student-storage">Student Storage</a>
-      <a href="/military-storage">Military Storage</a>
-    </div>
-
-    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
-      About Us <span class="crss-caret" aria-hidden="true">▾</span>
-    </button>
-    <div class="crss-mobile-accordion-panel">
-      <a href="/about-caprock">About CapRock</a>
-      <a href="/contact-us">Contact Us</a>
-    </div>
-
-    <a href="tel:+18065891472" class="crss-mobile-link">(806) 589-1472</a>
-    <a href="#" class="crss-mobile-link">My Account</a>
-    <!-- Absent before: the desktop utility row is hidden below
-         1180px, so on a phone there was no way to reach the
-         payment portal at all. -->
-    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
-       class="crss-mobile-link" target="_blank" rel="noopener">Pay Your Bill</a>
-  </div>
-</header>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   /* Fonts: placeholder pairing, swap for CapRock's real brand fonts.
      Fraunces is loaded as a variable font (optical size + italic) so
@@ -840,6 +726,127 @@
   }
 </style>
 
+<header class="crss-header">
+  <div class="crss-header-inner">
+
+    <!-- The artwork is now the whole wordmark; the text version is gone.
+
+         The asset is the full lockup (1774x887) in five bands: mark,
+         CAPROCK, SELF-STORAGE, a divider rule, then the tagline. The
+         link is a fixed window and the image inside is oversized and
+         offset so the crop ENDS AFTER SELF-STORAGE.
+
+         The tagline is dropped deliberately. It is 39px of the 887px
+         artwork, so at header height it renders about 3px tall and
+         reads as a smudge rather than words. The divider goes with it,
+         since a rule with nothing beneath it looks like a mistake.
+         Band positions were measured off the alpha channel, not
+         guessed: the kept region is x=83 y=12 1614x759.
+
+         alt carries the brand name rather than sitting empty, so if the
+         image ever fails the header still says who this is. That is
+         also why the link no longer needs its own aria-label, which
+         would double up with the alt. -->
+    <a href="/home" class="crss-logo">
+      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a970e6ac7069f4fc79f643a.png" alt="CapRock Self Storage">
+    </a>
+
+    <nav class="crss-nav" aria-label="Primary">
+      <a href="/lubbock-2213-n-quaker" class="crss-nav-link">Our Location</a>
+      <a href="/size-guide" class="crss-nav-link">Size Guide</a>
+      <a href="/help-center" class="crss-nav-link">Help Center</a>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/storage-calculator">Storage Calculator</a>
+          <a href="/storage-tips">Storage Tips</a>
+          <a href="/vehicle-storage">Vehicle Storage</a>
+          <a href="/student-storage">Student Storage</a>
+          <a href="/military-storage">Military Storage</a>
+        </div>
+      </div>
+
+      <div class="crss-dropdown">
+        <button type="button" class="crss-nav-link crss-dropdown-trigger" aria-expanded="false">
+          About Us <span class="crss-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="crss-dropdown-menu">
+          <a href="/about-caprock">About CapRock</a>
+          <a href="/contact-us">Contact Us</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="crss-header-actions">
+      <!-- Phone supplied by CapRock, and it no longer matches the number
+               in the facility record. Correct that record too, or anything
+               else fed by it keeps handing out the old line. -->
+      <a href="tel:+18065891472" class="crss-phone">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>(806) 589-1472</span>
+      </a>
+      <a href="#" class="crss-account-link" aria-label="My Account">
+        <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>My Account</span>
+      </a>
+      <!-- Live payment portal for this location, from the
+           WebSelfStorage /paymentPortalUrl endpoint. Hardcoded
+           rather than fetched: it is stable, and fetching it
+           would add a request to all 13 pages to fill one href.
+           Opens in a new tab, since it is a different system
+           and tenants should not lose the site.
+           NOTE: at the time of writing this host resolves but accepts no
+           connection on http or https - 15s timeouts from two separate
+           networks - so the button may hang and then fail. That is
+           U-Haul's host being down, not a fault here. Chase them at
+           ams@uhaul.com; nothing needs changing in this file. -->
+      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+         class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
+    </div>
+
+    <button type="button" class="crss-mobile-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div class="crss-mobile-panel">
+    <a href="/lubbock-2213-n-quaker" class="crss-mobile-link">Our Location</a>
+    <a href="/size-guide" class="crss-mobile-link">Size Guide</a>
+    <a href="/help-center" class="crss-mobile-link">Help Center</a>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      Storage Tools <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/storage-calculator">Storage Calculator</a>
+      <a href="/storage-tips">Storage Tips</a>
+      <a href="/vehicle-storage">Vehicle Storage</a>
+      <a href="/student-storage">Student Storage</a>
+      <a href="/military-storage">Military Storage</a>
+    </div>
+
+    <button type="button" class="crss-mobile-accordion-trigger" aria-expanded="false">
+      About Us <span class="crss-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="crss-mobile-accordion-panel">
+      <a href="/about-caprock">About CapRock</a>
+      <a href="/contact-us">Contact Us</a>
+    </div>
+
+    <a href="tel:+18065891472" class="crss-mobile-link">(806) 589-1472</a>
+    <a href="#" class="crss-mobile-link">My Account</a>
+    <!-- Absent before: the desktop utility row is hidden below
+         1180px, so on a phone there was no way to reach the
+         payment portal at all. -->
+    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+       class="crss-mobile-link" target="_blank" rel="noopener">Pay Your Bill</a>
+  </div>
+</header>
+
 <script>
   (function () {
     /* ---- WebSelfStorage proxy, published for every page ----
@@ -1441,245 +1448,13 @@
      is the only copy now that find-storage.html is gone. It should
      still move to a real data source as locations are added.
      ================================================================ -->
-<div class="crss-home">
-
-  <!-- ============ HERO ============ -->
-  <section class="crss-hero">
-    <div class="crss-hero-media" aria-hidden="true"></div>
-    <div class="crss-hero-inner">
-      <!-- Filled from the facility record. Hidden until a real
-           coupon arrives, so the hero never shows an empty slot or
-           an offer that has since been withdrawn. -->
-      <p class="crss-hero-eyebrow" data-crss-promo hidden></p>
-
-      <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
-      <p class="crss-hero-sub">
-        Gated access, video surveillance, and month-to-month leases.
-        <span data-crss-size-range
-              data-tpl="Unit sizes from a {min} to a {max} drive-up space.">Unit sizes from a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30 drive-up space.</span>
-      </p>
-
-      <!-- This was a search: a city or ZIP field, a storage type, a
-           unit size, and a Find Units button that carried all three to
-           the Find Storage page.
-
-           That page is gone, and with one facility there is nothing
-           left for a search to do. A box that returns Lubbock whatever
-           you type into it is worse than no box: someone types
-           "Amarillo", lands on a Lubbock page, and concludes the site
-           is broken rather than that we have one location. So the hero
-           goes straight to the units instead.
-
-           Bring the search back when there is a second facility. -->
-      <div class="crss-hero-actions">
-        <a href="/lubbock-2213-n-quaker" class="crss-hero-cta">See Units and Prices</a>
-        <a href="tel:+18065891472" class="crss-hero-phone">(806) 589-1472</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ TRUST STRIP ============ -->
-  <section class="crss-trust">
-    <!-- The badge band is out, not empty.
-
-         Three dashed circles reading ACCREDITATION PLACEHOLDER sat
-         directly under the hero on a live site, which is the worst
-         place on the page to tell a visitor the site is unfinished.
-
-         When CapRock holds something real, the band goes back exactly
-         here. Only marks the company has actually earned: the BBB,
-         Shopper Approved and Reputation.com badges in the SROA
-         reference are SROA's own accreditations, and reproducing
-         someone else's is both a false claim and a trademark problem.
-
-           <div class="crss-trust-band">
-             <div class="crss-trust-badges">
-               <img class="crss-trust-badge" src="..." alt="...">
-             </div>
-           </div>
-
-         The three rules those classes need went with them. They are in
-         git rather than left dead in the stylesheet, because unlike the
-         footer disclaimer this is a whole band of layout, not one
-         paragraph. Recover them with:
-
-           git log --oneline -- pages/home.html
-           git show <commit>:pages/home.html                        -->
-
-    <div class="crss-trust-copy">
-      <p class="crss-home-eyebrow">Dedicated to straightforward service</p>
-      <div class="crss-trust-prose">
-        <p>Storage should be the easy part of a hard week. Whether you are moving, downsizing, or just out of room at home, the job is the same: a clean unit, a lease you can leave when you are ready, and someone who can answer a question about it.</p>
-        <p>Every CapRock property is gated, monitored by video surveillance, and kept clean and well maintained. Leases run month to month, so you are never signing up for longer than you need.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FIND FACILITIES ============ -->
-  <section class="crss-facilities crss-facilities-tint">
-    <div class="crss-home-inner">
-      <header class="crss-sec-head">
-        <div class="crss-sec-meta">
-          <span class="crss-sec-num">01</span>
-          <p class="crss-home-eyebrow">Move in this week</p>
-        </div>
-        <h2 class="crss-home-h2">Our Lubbock facility</h2>
-      </header>
-      <div class="crss-fac-grid" data-crss-facilities></div>
-      <p class="crss-fac-note">More CapRock locations are on the way.</p>
-    </div>
-  </section>
-
-  <!-- ============ 3 SIMPLE STEPS ============ -->
-  <section class="crss-steps">
-    <div class="crss-home-inner">
-      <header class="crss-sec-head">
-        <div class="crss-sec-meta">
-          <span class="crss-sec-num">02</span>
-          <p class="crss-home-eyebrow">Finding storage is easy</p>
-        </div>
-        <h2 class="crss-home-h2">Three simple steps</h2>
-      </header>
-
-      <ol class="crss-steps-grid">
-        <li class="crss-step">
-          <span class="crss-step-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Check availability</h3>
-          <p>See what is open right now at our Lubbock property.</p>
-        </li>
-        <li class="crss-step">
-          <span class="crss-step-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5l4.5 4.5L19.5 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Pick your size</h3>
-          <p><span data-crss-size-range data-tpl="Sizes from a {min} to a {max}.">Sizes from a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30.</span> Not sure? The <a href="/storage-calculator">calculator</a> will narrow it down.</p>
-        </li>
-        <li class="crss-step">
-          <span class="crss-step-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 10h17M8 3.5v4M16 3.5v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Reserve or move in</h3>
-          <p>Call the location or stop by the office to get set up.</p>
-        </li>
-      </ol>
-
-      <div>
-        <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">Let&rsquo;s get started</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ LONG-FORM COPY ============ -->
-  <section class="crss-longcopy">
-    <div class="crss-home-inner crss-home-inner-prose">
-
-      <h2 class="crss-home-h2">Storage for life&rsquo;s big and small moments</h2>
-      <p>Most people do not rent a storage unit because they want to. They rent one because a lease ended, a house sold, a kid came home for the summer, or the garage finally lost. Whatever put you here, the unit itself should be the simplest part.</p>
-      <p>That is why leases run month to month. Take the space for a season or for a few years, and hand back the keys when you are done. If you are not sure how much room you need, the <a href="/size-guide">size guide</a> lays out every size side by side, and the <a href="/storage-calculator">storage calculator</a> turns a rough description of what you are storing into a starting size.</p>
-
-      <h2 class="crss-home-h2">Why customers choose CapRock</h2>
-      <p>No long contracts, no guessing about who can get onto the property, and no mystery about what you are renting.</p>
-      <ul class="crss-value-list">
-        <li><strong>Month-to-month leases.</strong> No long-term commitment, so you can leave when your situation changes.</li>
-        <li><strong>Gated access.</strong> Entry to the property is controlled, not open to anyone who drives past.</li>
-        <li><strong>Video surveillance.</strong> Cameras cover the property.</li>
-        <li><strong>Clean, well-maintained buildings.</strong> The grounds and units are looked after.</li>
-        <li><strong>A size that fits.</strong> <span data-crss-size-range data-tpl="From a {min} up to a {max}">From a 5&nbsp;&times;&nbsp;5 up to a 10&nbsp;&times;&nbsp;30</span>, so you are not paying for space you will not use.</li>
-        <li><strong>Vehicle and RV parking.</strong> Options vary by location, so ask your nearest facility what they currently offer.</li>
-      </ul>
-      <p class="crss-longcopy-close">If you know roughly what you need, <a href="/lubbock-2213-n-quaker">see what is available in Lubbock</a> and give the office a call.</p>
-    </div>
-  </section>
-
-  <!-- ============ FEATURES GRID ============ -->
-  <section class="crss-features">
-    <div class="crss-home-inner">
-      <header class="crss-sec-head crss-sec-head-split">
-        <div class="crss-sec-meta">
-          <span class="crss-sec-num">03</span>
-          <p class="crss-home-eyebrow">Storage features</p>
-        </div>
-        <h2 class="crss-home-h2">What you get</h2>
-        <p class="crss-sec-aside">Every item below is a standard this project has already committed to. Climate control, drive-up access, and autopay are deliberately absent until CapRock confirms them.</p>
-      </header>
-
-      <div class="crss-feat-grid">
-        <div class="crss-feat">
-          <span class="crss-feat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V7l8-3 8 3v13" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 20v-6h5v6M2.5 20h19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Gated access</h3>
-          <p>Entry to the property is controlled.</p>
-        </div>
-
-        <div class="crss-feat">
-          <span class="crss-feat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
-          </span>
-          <h3>Video surveillance</h3>
-          <p>Cameras cover the property.</p>
-        </div>
-
-        <div class="crss-feat">
-          <span class="crss-feat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V8a4 4 0 118 0v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Month-to-month leases</h3>
-          <p>No long-term commitment required.</p>
-        </div>
-
-        <div class="crss-feat">
-          <span class="crss-feat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M9.5 9.5v11" stroke="currentColor" stroke-width="1.6"/></svg>
-          </span>
-          <h3>A range of sizes</h3>
-          <p><span data-crss-size-range data-tpl="From a {min} to a {max}.">From a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30.</span></p>
-        </div>
-
-        <div class="crss-feat">
-          <span class="crss-feat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M3 16.5v-3l2-5.5a2 2 0 011.9-1.3h10.2A2 2 0 0119 8l2 5.5v3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 16.5h18v2.5h-3v-2.5M6 19v-2.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/></svg>
-          </span>
-          <h3>Vehicle &amp; RV parking</h3>
-          <p>Options vary by location. Ask your facility.</p>
-        </div>
-
-        <div class="crss-feat">
-          <span class="crss-feat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M5 21V9.5l7-5.5 7 5.5V21" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 21v-5a2.5 2.5 0 015 0v5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Clean, maintained buildings</h3>
-          <p>The grounds and units are looked after.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ CLOSING CALL TO ACTION ============
-       This was a second copy of the facility grid. The SROA layout
-       repeats that block because it lists hundreds of locations and
-       the reader has scrolled a long way from the first one. CapRock
-       has one facility, so it showed the same card twice on one page.
-
-       The conversion moment at the end of the page is worth keeping;
-       the duplication is not. When there are several locations, the
-       card grid can come back here in place of this. -->
-  <section class="crss-close">
-    <div class="crss-home-inner">
-      <p class="crss-home-eyebrow crss-is-centered">Ready when you are</p>
-      <h2 class="crss-home-h2 crss-is-centered">Storage in Lubbock, when you need it</h2>
-      <p class="crss-close-lede">Month-to-month leases, gated access, and someone on the end of the phone who can answer a question about it.</p>
-      <div class="crss-close-actions">
-        <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">View the Lubbock facility</a>
-        <a href="tel:+18065891472" class="crss-close-phone">(806) 589-1472</a>
-      </div>
-    </div>
-  </section>
-
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-home {
     font-family: 'Work Sans', Arial, sans-serif;
@@ -2379,6 +2154,245 @@
   }
 </style>
 
+<div class="crss-home">
+
+  <!-- ============ HERO ============ -->
+  <section class="crss-hero">
+    <div class="crss-hero-media" aria-hidden="true"></div>
+    <div class="crss-hero-inner">
+      <!-- Filled from the facility record. Hidden until a real
+           coupon arrives, so the hero never shows an empty slot or
+           an offer that has since been withdrawn. -->
+      <p class="crss-hero-eyebrow" data-crss-promo hidden></p>
+
+      <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
+      <p class="crss-hero-sub">
+        Gated access, video surveillance, and month-to-month leases.
+        <span data-crss-size-range
+              data-tpl="Unit sizes from a {min} to a {max} drive-up space.">Unit sizes from a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30 drive-up space.</span>
+      </p>
+
+      <!-- This was a search: a city or ZIP field, a storage type, a
+           unit size, and a Find Units button that carried all three to
+           the Find Storage page.
+
+           That page is gone, and with one facility there is nothing
+           left for a search to do. A box that returns Lubbock whatever
+           you type into it is worse than no box: someone types
+           "Amarillo", lands on a Lubbock page, and concludes the site
+           is broken rather than that we have one location. So the hero
+           goes straight to the units instead.
+
+           Bring the search back when there is a second facility. -->
+      <div class="crss-hero-actions">
+        <a href="/lubbock-2213-n-quaker" class="crss-hero-cta">See Units and Prices</a>
+        <a href="tel:+18065891472" class="crss-hero-phone">(806) 589-1472</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRUST STRIP ============ -->
+  <section class="crss-trust">
+    <!-- The badge band is out, not empty.
+
+         Three dashed circles reading ACCREDITATION PLACEHOLDER sat
+         directly under the hero on a live site, which is the worst
+         place on the page to tell a visitor the site is unfinished.
+
+         When CapRock holds something real, the band goes back exactly
+         here. Only marks the company has actually earned: the BBB,
+         Shopper Approved and Reputation.com badges in the SROA
+         reference are SROA's own accreditations, and reproducing
+         someone else's is both a false claim and a trademark problem.
+
+           <div class="crss-trust-band">
+             <div class="crss-trust-badges">
+               <img class="crss-trust-badge" src="..." alt="...">
+             </div>
+           </div>
+
+         The three rules those classes need went with them. They are in
+         git rather than left dead in the stylesheet, because unlike the
+         footer disclaimer this is a whole band of layout, not one
+         paragraph. Recover them with:
+
+           git log --oneline -- pages/home.html
+           git show <commit>:pages/home.html                        -->
+
+    <div class="crss-trust-copy">
+      <p class="crss-home-eyebrow">Dedicated to straightforward service</p>
+      <div class="crss-trust-prose">
+        <p>Storage should be the easy part of a hard week. Whether you are moving, downsizing, or just out of room at home, the job is the same: a clean unit, a lease you can leave when you are ready, and someone who can answer a question about it.</p>
+        <p>Every CapRock property is gated, monitored by video surveillance, and kept clean and well maintained. Leases run month to month, so you are never signing up for longer than you need.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIND FACILITIES ============ -->
+  <section class="crss-facilities crss-facilities-tint">
+    <div class="crss-home-inner">
+      <header class="crss-sec-head">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">01</span>
+          <p class="crss-home-eyebrow">Move in this week</p>
+        </div>
+        <h2 class="crss-home-h2">Our Lubbock facility</h2>
+      </header>
+      <div class="crss-fac-grid" data-crss-facilities></div>
+      <p class="crss-fac-note">More CapRock locations are on the way.</p>
+    </div>
+  </section>
+
+  <!-- ============ 3 SIMPLE STEPS ============ -->
+  <section class="crss-steps">
+    <div class="crss-home-inner">
+      <header class="crss-sec-head">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">02</span>
+          <p class="crss-home-eyebrow">Finding storage is easy</p>
+        </div>
+        <h2 class="crss-home-h2">Three simple steps</h2>
+      </header>
+
+      <ol class="crss-steps-grid">
+        <li class="crss-step">
+          <span class="crss-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <h3>Check availability</h3>
+          <p>See what is open right now at our Lubbock property.</p>
+        </li>
+        <li class="crss-step">
+          <span class="crss-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5l4.5 4.5L19.5 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <h3>Pick your size</h3>
+          <p><span data-crss-size-range data-tpl="Sizes from a {min} to a {max}.">Sizes from a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30.</span> Not sure? The <a href="/storage-calculator">calculator</a> will narrow it down.</p>
+        </li>
+        <li class="crss-step">
+          <span class="crss-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 10h17M8 3.5v4M16 3.5v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <h3>Reserve or move in</h3>
+          <p>Call the location or stop by the office to get set up.</p>
+        </li>
+      </ol>
+
+      <div>
+        <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">Let&rsquo;s get started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LONG-FORM COPY ============ -->
+  <section class="crss-longcopy">
+    <div class="crss-home-inner crss-home-inner-prose">
+
+      <h2 class="crss-home-h2">Storage for life&rsquo;s big and small moments</h2>
+      <p>Most people do not rent a storage unit because they want to. They rent one because a lease ended, a house sold, a kid came home for the summer, or the garage finally lost. Whatever put you here, the unit itself should be the simplest part.</p>
+      <p>That is why leases run month to month. Take the space for a season or for a few years, and hand back the keys when you are done. If you are not sure how much room you need, the <a href="/size-guide">size guide</a> lays out every size side by side, and the <a href="/storage-calculator">storage calculator</a> turns a rough description of what you are storing into a starting size.</p>
+
+      <h2 class="crss-home-h2">Why customers choose CapRock</h2>
+      <p>No long contracts, no guessing about who can get onto the property, and no mystery about what you are renting.</p>
+      <ul class="crss-value-list">
+        <li><strong>Month-to-month leases.</strong> No long-term commitment, so you can leave when your situation changes.</li>
+        <li><strong>Gated access.</strong> Entry to the property is controlled, not open to anyone who drives past.</li>
+        <li><strong>Video surveillance.</strong> Cameras cover the property.</li>
+        <li><strong>Clean, well-maintained buildings.</strong> The grounds and units are looked after.</li>
+        <li><strong>A size that fits.</strong> <span data-crss-size-range data-tpl="From a {min} up to a {max}">From a 5&nbsp;&times;&nbsp;5 up to a 10&nbsp;&times;&nbsp;30</span>, so you are not paying for space you will not use.</li>
+        <li><strong>Vehicle and RV parking.</strong> Options vary by location, so ask your nearest facility what they currently offer.</li>
+      </ul>
+      <p class="crss-longcopy-close">If you know roughly what you need, <a href="/lubbock-2213-n-quaker">see what is available in Lubbock</a> and give the office a call.</p>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES GRID ============ -->
+  <section class="crss-features">
+    <div class="crss-home-inner">
+      <header class="crss-sec-head crss-sec-head-split">
+        <div class="crss-sec-meta">
+          <span class="crss-sec-num">03</span>
+          <p class="crss-home-eyebrow">Storage features</p>
+        </div>
+        <h2 class="crss-home-h2">What you get</h2>
+        <p class="crss-sec-aside">Every item below is a standard this project has already committed to. Climate control, drive-up access, and autopay are deliberately absent until CapRock confirms them.</p>
+      </header>
+
+      <div class="crss-feat-grid">
+        <div class="crss-feat">
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V7l8-3 8 3v13" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 20v-6h5v6M2.5 20h19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <h3>Gated access</h3>
+          <p>Entry to the property is controlled.</p>
+        </div>
+
+        <div class="crss-feat">
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <h3>Video surveillance</h3>
+          <p>Cameras cover the property.</p>
+        </div>
+
+        <div class="crss-feat">
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V8a4 4 0 118 0v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <h3>Month-to-month leases</h3>
+          <p>No long-term commitment required.</p>
+        </div>
+
+        <div class="crss-feat">
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M9.5 9.5v11" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <h3>A range of sizes</h3>
+          <p><span data-crss-size-range data-tpl="From a {min} to a {max}.">From a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30.</span></p>
+        </div>
+
+        <div class="crss-feat">
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 16.5v-3l2-5.5a2 2 0 011.9-1.3h10.2A2 2 0 0119 8l2 5.5v3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 16.5h18v2.5h-3v-2.5M6 19v-2.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/></svg>
+          </span>
+          <h3>Vehicle &amp; RV parking</h3>
+          <p>Options vary by location. Ask your facility.</p>
+        </div>
+
+        <div class="crss-feat">
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 21V9.5l7-5.5 7 5.5V21" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 21v-5a2.5 2.5 0 015 0v5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </span>
+          <h3>Clean, maintained buildings</h3>
+          <p>The grounds and units are looked after.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING CALL TO ACTION ============
+       This was a second copy of the facility grid. The SROA layout
+       repeats that block because it lists hundreds of locations and
+       the reader has scrolled a long way from the first one. CapRock
+       has one facility, so it showed the same card twice on one page.
+
+       The conversion moment at the end of the page is worth keeping;
+       the duplication is not. When there are several locations, the
+       card grid can come back here in place of this. -->
+  <section class="crss-close">
+    <div class="crss-home-inner">
+      <p class="crss-home-eyebrow crss-is-centered">Ready when you are</p>
+      <h2 class="crss-home-h2 crss-is-centered">Storage in Lubbock, when you need it</h2>
+      <p class="crss-close-lede">Month-to-month leases, gated access, and someone on the end of the phone who can answer a question about it.</p>
+      <div class="crss-close-actions">
+        <a href="/lubbock-2213-n-quaker" class="crss-btn-primary">View the Lubbock facility</a>
+        <a href="tel:+18065891472" class="crss-close-phone">(806) 589-1472</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
 <script>
   (function () {
     var home = document.querySelector('.crss-home');
@@ -2536,119 +2550,13 @@
        where it used to sit for how to restore it.
      - (done) Terms of Use and Privacy Policy exist and are linked
      ================================================================ -->
-<footer class="crss-footer">
-  <div class="crss-footer-bar" aria-hidden="true"></div>
-
-  <div class="crss-footer-inner">
-    <div class="crss-footer-cols">
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">Storage Tools</h2>
-        <ul>
-          <li><a href="/storage-calculator">Storage Calculator</a></li>
-          <li><a href="/storage-tips">Storage Tips</a></li>
-          <li><a href="/vehicle-storage">Vehicle Storage</a></li>
-          <li><a href="/student-storage">Student Storage</a></li>
-          <li><a href="/military-storage">Military Storage</a></li>
-          <li><a href="/size-guide">Size Guide</a></li>
-          <li><a href="/help-center">Help Center</a></li>
-        </ul>
-      </div>
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">About CapRock</h2>
-        <ul>
-          <li><a href="/about-caprock">About CapRock</a></li>
-          <li><a href="/contact-us">Contact Us</a></li>
-          <li><a href="/lubbock-2213-n-quaker">Our Location</a></li>
-        </ul>
-      </div>
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">Reach Out</h2>
-        <ul>
-          <!-- Phone supplied by CapRock, and it no longer matches the number
-               in the facility record. Correct that record too, or anything
-               else fed by it keeps handing out the old line. -->
-          <li>
-            <a href="tel:+18065891472" class="crss-footer-contact">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <span>(806) 589-1472</span>
-            </a>
-          </li>
-          <!-- Confirmed, same address as the contact page. -->
-          <li>
-            <a href="mailto:info@caprock-storage.com" class="crss-footer-contact">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 7l8.5 6 8.5-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <span>Email us</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="crss-footer-col">
-        <h2 class="crss-footer-head">Follow Us</h2>
-        <!-- PLACEHOLDER: real profile URLs, or delete this column -->
-        <div class="crss-footer-social">
-          <a href="#" aria-label="CapRock Self Storage on Facebook">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 8.5h2.2V5.6c-.4-.05-1.4-.15-2.6-.15-2.6 0-4.3 1.6-4.3 4.5v2.3H7.3v3.2h2.5v8.05h3.3V15.45h2.5l.4-3.2h-2.9v-2c0-.95.25-1.75 1.4-1.75z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="#" aria-label="CapRock Self Storage on Instagram">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg>
-          </a>
-          <a href="#" aria-label="CapRock Self Storage on X">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l7.6 9.9L4.4 20M20 4l-7.3 8M9.8 12.6L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="#" aria-label="CapRock Self Storage on Pinterest">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.3 20l1.9-7.2M9.6 10.6c0-1.7 1.2-3 3-3 1.7 0 2.8 1.1 2.8 2.8 0 2-1 3.6-2.5 3.6-.8 0-1.4-.7-1.2-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="crss-footer-locations">
-      <h2 class="crss-footer-head">Locations</h2>
-      <!-- Grows as facilities are added, one per city. -->
-      <p><a href="/lubbock-2213-n-quaker">Lubbock, TX</a></p>
-    </div>
-
-    <div class="crss-footer-legal">
-      <!-- The disclaimer is out, not blank.
-
-           It was scaffolding from before launch, and it was reading
-           the word PLACEHOLDER in brackets to every customer on every
-           page of a live site. An empty slot is invisible; a slot
-           announcing that it is empty is worse than having no slot,
-           because it tells a visitor the site is unfinished at the
-           exact moment they are deciding whether to trust it.
-
-           Rates, fees, offer terms and lease proration have to come
-           from whoever handles CapRock's terms. When that text exists,
-           restore the paragraph here; .crss-footer-disclaimer is kept
-           in the stylesheet below so it is a one-line change:
-
-             <p class="crss-footer-disclaimer">TEXT</p>            -->
-
-      <div class="crss-footer-baseline">
-        <p>&copy; <span id="crss-footer-year">2026</span> CapRock Self Storage, a DBA of Wasatch Home Buyers Inc. All rights reserved.</p>
-        <p class="crss-footer-legal-links">
-          <!-- Both pages exist, and the label follows the document.
-               It is called Terms of Use and lives at /terms-of-use;
-               a footer calling it Terms of Service is a small way to
-               make a legal page look like it belongs elsewhere. -->
-          <a href="/terms-of-use">Terms of Use</a>
-          <a href="/privacy-policy">Privacy Policy</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<button type="button" class="crss-totop" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-</button>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-footer, .crss-footer *, .crss-footer *::before, .crss-footer *::after {
     box-sizing: border-box;
@@ -2906,6 +2814,119 @@
     }
   }
 </style>
+
+<footer class="crss-footer">
+  <div class="crss-footer-bar" aria-hidden="true"></div>
+
+  <div class="crss-footer-inner">
+    <div class="crss-footer-cols">
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Storage Tools</h2>
+        <ul>
+          <li><a href="/storage-calculator">Storage Calculator</a></li>
+          <li><a href="/storage-tips">Storage Tips</a></li>
+          <li><a href="/vehicle-storage">Vehicle Storage</a></li>
+          <li><a href="/student-storage">Student Storage</a></li>
+          <li><a href="/military-storage">Military Storage</a></li>
+          <li><a href="/size-guide">Size Guide</a></li>
+          <li><a href="/help-center">Help Center</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">About CapRock</h2>
+        <ul>
+          <li><a href="/about-caprock">About CapRock</a></li>
+          <li><a href="/contact-us">Contact Us</a></li>
+          <li><a href="/lubbock-2213-n-quaker">Our Location</a></li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Reach Out</h2>
+        <ul>
+          <!-- Phone supplied by CapRock, and it no longer matches the number
+               in the facility record. Correct that record too, or anything
+               else fed by it keeps handing out the old line. -->
+          <li>
+            <a href="tel:+18065891472" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>(806) 589-1472</span>
+            </a>
+          </li>
+          <!-- Confirmed, same address as the contact page. -->
+          <li>
+            <a href="mailto:info@caprock-storage.com" class="crss-footer-contact">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 7l8.5 6 8.5-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              <span>Email us</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="crss-footer-col">
+        <h2 class="crss-footer-head">Follow Us</h2>
+        <!-- PLACEHOLDER: real profile URLs, or delete this column -->
+        <div class="crss-footer-social">
+          <a href="#" aria-label="CapRock Self Storage on Facebook">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 8.5h2.2V5.6c-.4-.05-1.4-.15-2.6-.15-2.6 0-4.3 1.6-4.3 4.5v2.3H7.3v3.2h2.5v8.05h3.3V15.45h2.5l.4-3.2h-2.9v-2c0-.95.25-1.75 1.4-1.75z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Instagram">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on X">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l7.6 9.9L4.4 20M20 4l-7.3 8M9.8 12.6L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" aria-label="CapRock Self Storage on Pinterest">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.3 20l1.9-7.2M9.6 10.6c0-1.7 1.2-3 3-3 1.7 0 2.8 1.1 2.8 2.8 0 2-1 3.6-2.5 3.6-.8 0-1.4-.7-1.2-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="crss-footer-locations">
+      <h2 class="crss-footer-head">Locations</h2>
+      <!-- Grows as facilities are added, one per city. -->
+      <p><a href="/lubbock-2213-n-quaker">Lubbock, TX</a></p>
+    </div>
+
+    <div class="crss-footer-legal">
+      <!-- The disclaimer is out, not blank.
+
+           It was scaffolding from before launch, and it was reading
+           the word PLACEHOLDER in brackets to every customer on every
+           page of a live site. An empty slot is invisible; a slot
+           announcing that it is empty is worse than having no slot,
+           because it tells a visitor the site is unfinished at the
+           exact moment they are deciding whether to trust it.
+
+           Rates, fees, offer terms and lease proration have to come
+           from whoever handles CapRock's terms. When that text exists,
+           restore the paragraph here; .crss-footer-disclaimer is kept
+           in the stylesheet below so it is a one-line change:
+
+             <p class="crss-footer-disclaimer">TEXT</p>            -->
+
+      <div class="crss-footer-baseline">
+        <p>&copy; <span id="crss-footer-year">2026</span> CapRock Self Storage, a DBA of Wasatch Home Buyers Inc. All rights reserved.</p>
+        <p class="crss-footer-legal-links">
+          <!-- Both pages exist, and the label follows the document.
+               It is called Terms of Use and lives at /terms-of-use;
+               a footer calling it Terms of Service is a small way to
+               make a legal page look like it belongs elsewhere. -->
+          <a href="/terms-of-use">Terms of Use</a>
+          <a href="/privacy-policy">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button type="button" class="crss-totop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 
 <script>
   (function () {

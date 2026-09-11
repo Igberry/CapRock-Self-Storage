@@ -37,52 +37,13 @@
      Phone and email are confirmed and shared with the header and
      footer.
      ================================================================ -->
-<div class="crss-contact">
-  <div class="crss-contact-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Contact Us</span>
-    </nav>
-
-    <h1 class="crss-contact-title">Contact Us</h1>
-    <p class="crss-contact-subtitle">Have a general question? Send us a message. For questions about a specific unit or move-in, find your nearest location instead.</p>
-
-    <!-- Filled from the query string when someone arrives from an
-         Enquire button on the location page, and hidden otherwise.
-
-         It exists because the form below is GHL's own element, in its
-         own iframe, which this code cannot reach into. Showing the
-         unit here at least means the visitor can see it was carried
-         over, and has the size and price in front of them while they
-         type rather than scrolling back to find it.
-
-         Getting it INTO the form is a GHL setting, not code: give the
-         message field a query key of "message" in the form builder and
-         GHL prefills it from the same URL this button already sends. -->
-    <div class="crss-enquiry" data-crss-enquiry hidden>
-      <p class="crss-enquiry-label">You are enquiring about</p>
-      <p class="crss-enquiry-unit" data-crss-enquiry-unit></p>
-      <p class="crss-enquiry-note" data-crss-enquiry-note></p>
-    </div>
-
-    <div class="crss-contact-info">
-      <div class="crss-contact-info-row">
-        <span class="crss-contact-label">Phone</span>
-        <a href="tel:+18065891472">(806) 589-1472</a>
-      </div>
-      <div class="crss-contact-info-row">
-        <span class="crss-contact-label">Email</span>
-        <a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a>
-      </div>
-      <a href="/lubbock-2213-n-quaker" class="crss-contact-location-link">See our Lubbock facility &rarr;</a>
-    </div>
-
-    <!-- The GHL native Forms element goes here, directly below this
-         Custom Code block. It is not part of this file: only GHL's own
-         form element reaches the CRM. -->
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   .crss-contact {
     font-family: 'Work Sans', Arial, sans-serif;
@@ -300,6 +261,52 @@
     }
   }
 </style>
+
+<div class="crss-contact">
+  <div class="crss-contact-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span>About Us</span><span>/</span><span aria-current="page">Contact Us</span>
+    </nav>
+
+    <h1 class="crss-contact-title">Contact Us</h1>
+    <p class="crss-contact-subtitle">Have a general question? Send us a message. For questions about a specific unit or move-in, find your nearest location instead.</p>
+
+    <!-- Filled from the query string when someone arrives from an
+         Enquire button on the location page, and hidden otherwise.
+
+         It exists because the form below is GHL's own element, in its
+         own iframe, which this code cannot reach into. Showing the
+         unit here at least means the visitor can see it was carried
+         over, and has the size and price in front of them while they
+         type rather than scrolling back to find it.
+
+         Getting it INTO the form is a GHL setting, not code: give the
+         message field a query key of "message" in the form builder and
+         GHL prefills it from the same URL this button already sends. -->
+    <div class="crss-enquiry" data-crss-enquiry hidden>
+      <p class="crss-enquiry-label">You are enquiring about</p>
+      <p class="crss-enquiry-unit" data-crss-enquiry-unit></p>
+      <p class="crss-enquiry-note" data-crss-enquiry-note></p>
+    </div>
+
+    <div class="crss-contact-info">
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Phone</span>
+        <a href="tel:+18065891472">(806) 589-1472</a>
+      </div>
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Email</span>
+        <a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a>
+      </div>
+      <a href="/lubbock-2213-n-quaker" class="crss-contact-location-link">See our Lubbock facility &rarr;</a>
+    </div>
+
+    <!-- The GHL native Forms element goes here, directly below this
+         Custom Code block. It is not part of this file: only GHL's own
+         form element reaches the CRM. -->
+  </div>
+</div>
 
 <script>
   (function () {

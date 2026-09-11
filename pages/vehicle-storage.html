@@ -11,52 +11,13 @@
      spaces are absent from the /movein feed and there is nothing to
      read live. They will not correct themselves.
      ================================================================ -->
-<div class="crss-audience">
-  <div class="crss-audience-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Vehicle Storage</span>
-    </nav>
-
-    <h1 class="crss-audience-title">Vehicle Storage</h1>
-    <p class="crss-audience-subtitle">A secure place to park your car, motorcycle, RV, or boat when you don't have room for it at home.</p>
-
-    <div class="crss-audience-blocks">
-      <div class="crss-audience-block">
-        <h2>Why store your vehicle with CapRock</h2>
-        <p>Street and driveway parking leaves vehicles exposed to weather and passersby. A dedicated storage space keeps a car, motorcycle, RV, or boat off your property and under watch, without tying up space you need at home.</p>
-      </div>
-      <!-- This block used to say options "vary by location" and to ask
-           the office, because nothing had been confirmed. CapRock's
-           rate sheet settles it, so it says what is actually here.
-
-           Prices are written in rather than read live: the parking
-           spaces are not in the /movein feed, so there is nothing to
-           read. Check them against the rate sheet when rates change.
-           Confirmed 7 September 2026. -->
-      <div class="crss-audience-block">
-        <h2>What is available in Lubbock</h2>
-        <p>Two uncovered outdoor spaces, both $50 a month:</p>
-        <ul class="crss-park-list">
-          <li><span class="crss-park-size">10 &times; 30</span> outside, drive-through</li>
-          <li><span class="crss-park-size">10 &times; 40</span> outside, ADA accessible</li>
-        </ul>
-        <p>If you would rather keep a vehicle under cover, the drive-up units go up to a 20&nbsp;&times;&nbsp;40 and several are long enough for a car, a boat or a small RV. Sizes and current rates are on the <a href="/lubbock-2213-n-quaker">Lubbock page</a>.</p>
-        <p>There is one of each parking space, so they go quickly. Call the office on <a href="tel:+18065891472">(806)&nbsp;589&#8209;1472</a> before you travel.</p>
-      </div>
-      <div class="crss-audience-block">
-        <h2>Flexible, month-to-month</h2>
-        <p>Storage terms run month-to-month, so you're not locked into a long-term contract for something you might only need seasonally.</p>
-      </div>
-    </div>
-
-    <div class="crss-audience-cta">
-      <p>Find vehicle storage near you.</p>
-      <a href="/lubbock-2213-n-quaker" class="crss-audience-cta-btn">See Units and Prices</a>
-    </div>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   /* Shared by the three audience landing pages (Vehicle, Student,
      Military). Keep these three <style> blocks identical, they are
@@ -333,3 +294,50 @@
     }
   }
 </style>
+
+<div class="crss-audience">
+  <div class="crss-audience-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Vehicle Storage</span>
+    </nav>
+
+    <h1 class="crss-audience-title">Vehicle Storage</h1>
+    <p class="crss-audience-subtitle">A secure place to park your car, motorcycle, RV, or boat when you don't have room for it at home.</p>
+
+    <div class="crss-audience-blocks">
+      <div class="crss-audience-block">
+        <h2>Why store your vehicle with CapRock</h2>
+        <p>Street and driveway parking leaves vehicles exposed to weather and passersby. A dedicated storage space keeps a car, motorcycle, RV, or boat off your property and under watch, without tying up space you need at home.</p>
+      </div>
+      <!-- This block used to say options "vary by location" and to ask
+           the office, because nothing had been confirmed. CapRock's
+           rate sheet settles it, so it says what is actually here.
+
+           Prices are written in rather than read live: the parking
+           spaces are not in the /movein feed, so there is nothing to
+           read. Check them against the rate sheet when rates change.
+           Confirmed 7 September 2026. -->
+      <div class="crss-audience-block">
+        <h2>What is available in Lubbock</h2>
+        <p>Two uncovered outdoor spaces, both $50 a month:</p>
+        <ul class="crss-park-list">
+          <li><span class="crss-park-size">10 &times; 30</span> outside, drive-through</li>
+          <li><span class="crss-park-size">10 &times; 40</span> outside, ADA accessible</li>
+        </ul>
+        <p>If you would rather keep a vehicle under cover, the drive-up units go up to a 20&nbsp;&times;&nbsp;40 and several are long enough for a car, a boat or a small RV. Sizes and current rates are on the <a href="/lubbock-2213-n-quaker">Lubbock page</a>.</p>
+        <p>There is one of each parking space, so they go quickly. Call the office on <a href="tel:+18065891472">(806)&nbsp;589&#8209;1472</a> before you travel.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Flexible, month-to-month</h2>
+        <p>Storage terms run month-to-month, so you're not locked into a long-term contract for something you might only need seasonally.</p>
+      </div>
+    </div>
+
+    <div class="crss-audience-cta">
+      <p>Find vehicle storage near you.</p>
+      <a href="/lubbock-2213-n-quaker" class="crss-audience-cta-btn">See Units and Prices</a>
+    </div>
+  </div>
+</div>
+

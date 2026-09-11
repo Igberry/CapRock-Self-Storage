@@ -6,38 +6,13 @@
      PLACEHOLDER: no specific student discount is stated since none
      was confirmed, copy stays general until that's decided.
      ================================================================ -->
-<div class="crss-audience">
-  <div class="crss-audience-inner">
-
-    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Student Storage</span>
-    </nav>
-
-    <h1 class="crss-audience-title">Student Storage</h1>
-    <p class="crss-audience-subtitle">Store your dorm or apartment items over summer break, or between semesters, without hauling everything home.</p>
-
-    <div class="crss-audience-blocks">
-      <div class="crss-audience-block">
-        <h2>Skip the trip home and back</h2>
-        <p>Moving a dorm room's worth of belongings home for a few months, then back again in the fall, is a lot of effort for a short break. A nearby storage unit lets you pack up and pick up on your own schedule.</p>
-      </div>
-      <div class="crss-audience-block">
-        <h2>Right-sized for a dorm or shared apartment</h2>
-        <p>A small unit is usually enough for a dorm room's furniture and boxes. Check the <a href="/size-guide" style="color:var(--crss-terracotta, #A44A23); font-weight:600;">Size Guide</a> for a side-by-side comparison.</p>
-      </div>
-      <div class="crss-audience-block">
-        <h2>Month-to-month, no long lease</h2>
-        <p>Rent for exactly as long as you need, whether that's a summer break or a full semester abroad.</p>
-      </div>
-    </div>
-
-    <div class="crss-audience-cta">
-      <p>Find student storage near campus.</p>
-      <a href="/lubbock-2213-n-quaker" class="crss-audience-cta-btn">See Units and Prices</a>
-    </div>
-  </div>
-</div>
-
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
 <style>
   /* Shared by the three audience landing pages (Vehicle, Student,
      Military). Keep these three <style> blocks identical, they are
@@ -314,3 +289,36 @@
     }
   }
 </style>
+
+<div class="crss-audience">
+  <div class="crss-audience-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Student Storage</span>
+    </nav>
+
+    <h1 class="crss-audience-title">Student Storage</h1>
+    <p class="crss-audience-subtitle">Store your dorm or apartment items over summer break, or between semesters, without hauling everything home.</p>
+
+    <div class="crss-audience-blocks">
+      <div class="crss-audience-block">
+        <h2>Skip the trip home and back</h2>
+        <p>Moving a dorm room's worth of belongings home for a few months, then back again in the fall, is a lot of effort for a short break. A nearby storage unit lets you pack up and pick up on your own schedule.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Right-sized for a dorm or shared apartment</h2>
+        <p>A small unit is usually enough for a dorm room's furniture and boxes. Check the <a href="/size-guide" style="color:var(--crss-terracotta, #A44A23); font-weight:600;">Size Guide</a> for a side-by-side comparison.</p>
+      </div>
+      <div class="crss-audience-block">
+        <h2>Month-to-month, no long lease</h2>
+        <p>Rent for exactly as long as you need, whether that's a summer break or a full semester abroad.</p>
+      </div>
+    </div>
+
+    <div class="crss-audience-cta">
+      <p>Find student storage near campus.</p>
+      <a href="/lubbock-2213-n-quaker" class="crss-audience-cta-btn">See Units and Prices</a>
+    </div>
+  </div>
+</div>
+
