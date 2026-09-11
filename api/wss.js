@@ -85,8 +85,9 @@ const RESOURCES = {
   images:        (id) => `/location/${id}/images`,
   // Customer reviews.
   reviews:       (id) => `/location/${id}/reviews`,
-  // Tenant-facing payment portal link, for "Pay Your Bill".
-  paymentPortal: (id) => `/paymentPortalUrl/${id}`,
+  /* No paymentPortal. U-Haul say their /paymentPortalUrl endpoint does
+     not work and to use the URL from the key document instead, which
+     the header carries. Nothing on the site called this resource. */
 };
 
 /* Case-insensitive field read. Responses are PascalCase
@@ -267,9 +268,6 @@ const SHAPE = {
       })),
     };
   },
-  paymentPortal: (v) => ({
-    url: typeof v === 'string' ? v : pick(v, 'url', 'paymentPortalUrl'),
-  }),
 };
 
 function applyCors(req, res) {

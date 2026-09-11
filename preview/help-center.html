@@ -792,18 +792,18 @@
         <svg class="crss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         <span>My Account</span>
       </a>
-      <!-- Live payment portal for this location, from the
-           WebSelfStorage /paymentPortalUrl endpoint. Hardcoded
-           rather than fetched: it is stable, and fetching it
-           would add a request to all 13 pages to fill one href.
-           Opens in a new tab, since it is a different system
+      <!-- Tenant payment portal for this location. The URL is the one
+           in the API key document U-Haul issued, hardcoded because
+           their own /paymentPortalUrl endpoint does not work and
+           they say to use this instead (Affiliate Marketing Services,
+           11 Sept 2026). Opens in a new tab: it is a different system
            and tenants should not lose the site.
-           NOTE: at the time of writing this host resolves but accepts no
-           connection on http or https - 15s timeouts from two separate
-           networks - so the button may hang and then fail. That is
-           U-Haul's host being down, not a fault here. Chase them at
-           ams@uhaul.com; nothing needs changing in this file. -->
-      <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+
+           The host is storageaffiliatePAYMENTS.com. It was typed
+           without the s for two weeks, which is a host that does not
+           exist, and every "portal is down" note written in that time
+           was describing a typo. -->
+      <a href="https://storageaffiliatepayments.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
          class="crss-paybill-btn" target="_blank" rel="noopener">Pay Your Bill</a>
     </div>
 
@@ -842,7 +842,7 @@
     <!-- Absent before: the desktop utility row is hidden below
          1180px, so on a phone there was no way to reach the
          payment portal at all. -->
-    <a href="https://storageaffiliatepayment.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
+    <a href="https://storageaffiliatepayments.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44"
        class="crss-mobile-link" target="_blank" rel="noopener">Pay Your Bill</a>
   </div>
 </header>
@@ -899,8 +899,19 @@
          site updates when it changes in WebSelfStorage; these do not.
          Anything the feed returns always wins, so a price is only
          ever taken from here when there is no live one for that size.
-         Worth asking WebSelfStorage why the feed is short, because
-         the answer would let this list be deleted.
+
+         WHY THE FEED IS SHORT (U-Haul Affiliate Marketing Services,
+         11 Sept 2026). A size code is returned only when all three
+         hold, judged per size code and not for the facility:
+           1. it is marked reservable in Room Sizes & Rates
+           2. it has at least 6 units vacant
+           3. it is under 95% occupied
+         So the ten sizes below are missing because they are nearly
+         full or built in small numbers, which is a fact about the
+         property and not a fault anywhere. A size that comes to
+         satisfy all three appears in the feed on its own and its
+         live entry replaces the one here. A size with fewer than six
+         units built can never appear, and stays here for good.
 
          Vacancy is deliberately absent. The sheet had counts, but a
          count copied out of a spreadsheet is a claim about today that
@@ -1862,7 +1873,7 @@
           <dd>A late fee applies once payment has not been received for the period set out in your Rental Agreement. The fee schedule attached to that agreement is the authority on the amount.</dd>
 
           <dt>How can I pay?</dt>
-          <dd>Online through the tenant payment portal, or by calling the office. <strong>The portal is currently unreachable</strong> while the company that runs it works on it, so the office is the reliable route today.</dd>
+          <dd>Online through the <a href="https://storageaffiliatepayments.com/?locationId=73904ddc-b42a-4de0-8df3-26e6b3123b44" target="_blank" rel="noopener">tenant payment portal</a>, which opens in a new tab, or by calling the office.</dd>
 
           <dt>Which payment methods do you take, and is there autopay?</dt>
           <dd>Please call the office on <a href="tel:+18065891472">(806)&nbsp;589&#8209;1472</a>. We would rather you heard the current answer than read one here that has changed.</dd>
