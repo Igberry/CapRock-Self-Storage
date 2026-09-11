@@ -1415,13 +1415,12 @@
      the sub-nav, Features, Storage Faqs, the CSS and the JS are all
      generic and should be copied unchanged.
 
-     The nine values to change:
+     The eight values to change:
 
        LOC: title        card heading, "City, Street" form
        LOC: address      street on line 1, "City, ST ZIP" on line 2
        LOC: phone        BOTH the tel: href and the visible number
        LOC: office-note  where the office for this property is
-       LOC: details-url  the "View Location Details" destination
        LOC: map-query    the address in the Maps Embed URL
        LOC: map-title    the iframe title, for screen readers
        LOC: features     any facility-specific feature copy
@@ -1438,7 +1437,6 @@
      - Reviews: the section is removed until there is somewhere real
        to read them from. The feed returns an empty list, so there
        was nothing to show and no date by which there would be.
-     - "View Location Details" still points at nothing
      - The open questions listed in the Storage Faqs panel
      ================================================================ -->
 <div class="crss-location">
@@ -1473,8 +1471,11 @@
         <p class="crss-info-address">2213 North Quaker Ave<br>Lubbock, TX 79416</p>
         <!-- LOC: phone — change the tel: href AND the visible number -->
         <a href="tel:+18065891472" class="crss-info-phone">(806) 589-1472</a>
-        <!-- LOC: details-url -->
-        <a href="#" class="crss-info-details-link">View Location Details →</a>
+        <!-- Down the page to Features: hours, access and what the
+             property offers are all there, and the card is the summary
+             of it. It scrolls with the same header offset as the
+             sub-nav, which is why it carries data-target. -->
+        <a href="#features" data-target="features" class="crss-info-details-link">View Location Details →</a>
 
         <div class="crss-info-map">
           <!-- LOC: map-query / map-title
@@ -2655,7 +2656,7 @@
 
     /* ---- Smooth scroll to anchors, offset for the sticky header + subnav ---- */
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    loc.querySelectorAll('.crss-subnav-link').forEach(function (link) {
+    loc.querySelectorAll('.crss-subnav-link, .crss-info-details-link').forEach(function (link) {
       link.addEventListener('click', function (e) {
         var targetId = link.getAttribute('data-target');
         var target = document.getElementById(targetId);
