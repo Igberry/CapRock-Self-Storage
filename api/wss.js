@@ -292,6 +292,8 @@ function applyCors(req, res) {
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  /* JSON only, and say so, so a browser never guesses otherwise. */
+  res.setHeader('X-Content-Type-Options', 'nosniff');
 
   /* Cache deliberately rather than by accident. Rates and vacancy do
      change, so a minute is the most staleness worth trading for the
@@ -328,6 +330,15 @@ module.exports = async function handler(req, res) {
        that should be cleaned up at the source. */
     console.warn('WSS_API_KEY had surrounding whitespace; trimmed');
   }
+
+  /* Only the two parameters the page sends. The edge caches by full
+     URL, so a request with anything extra on it (&x=1, &x=2, ...) is
+     a cache miss every time, and each miss is a call to U-Haul on
+     CapRock's key and a function invocation on the bill. Refusing
+     here, before the fetch, makes that trick cost nothing but a 400.
+     The page sends facility and resource and nothing else. */
+  const extra = Object.keys(req.query).filter((k) => k !== 'facility' && k !== 'resource');
+  if (extra.length) return res.status(400).json({ error: 'unknown_parameter' });
 
   const entity = FACILITIES[String(req.query.facility || '')];
   if (!entity) return res.status(400).json({ error: 'unknown_facility' });
