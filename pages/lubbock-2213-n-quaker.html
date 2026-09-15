@@ -38,6 +38,9 @@
        to read them from. The feed returns an empty list, so there
        was nothing to show and no date by which there would be.
      - The open questions listed in the Storage Faqs panel
+     - Rent Now and Reserve go to CapRock's page on uhaul.com, where
+       the customer picks the size again. U-Haul's buttons are form
+       posts, so there is no per-size link to send them to.
      ================================================================ -->
 <!-- The stylesheet sits above the markup on purpose.
      GHL serves this block inline in the body of a page that runs to
@@ -734,36 +737,30 @@
     color: var(--crss-taupe, #7F6C5D);
     margin-top: 3px;
   }
-  .crss-unit-avail {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-    color: var(--crss-taupe, #7F6C5D);
-    margin-top: 8px;
-  }
-  /* Selector carries the panel, and it has to.
+  /* The buttons are the shared .crss-act set from the header, but
      `.crss-panel a` is (0,1,1) and beats a lone class at (0,1,0), so
-     it was painting this button terracotta with an underline on a
-     charcoal ground: about 2:1 contrast, which is the same trap that
-     caught the buttons across the site earlier. Matching the active
-     filter pill above it, which is the same shape doing the same job. */
-  .crss-panel .crss-unit-cta {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 11px 22px;
-    background: var(--crss-charcoal, #292724);
-    color: var(--crss-cream, #F1E3CC);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
+     inside this panel it was painting them terracotta with an
+     underline. The same trap caught the old Enquire button. Each
+     colour is restated at panel specificity. */
+  .crss-panel .crss-act {
     text-decoration: none;
-    transition: background .22s ease, color .22s ease;
   }
-  .crss-panel .crss-unit-cta:hover {
-    background: var(--crss-terracotta, #A44A23);
+  .crss-panel .crss-act-primary {
+    color: var(--crss-cream, #F1E3CC);
+  }
+  .crss-panel .crss-act-primary:hover {
     color: var(--crss-white, #FFFFFF);
+  }
+  .crss-panel .crss-act-secondary,
+  .crss-panel .crss-act-secondary:hover {
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-panel .crss-act-wait,
+  .crss-panel .crss-act-wait:hover {
+    color: var(--crss-white, #FFFFFF);
+  }
+  .crss-unit-right .crss-actions {
+    justify-content: flex-end;
   }
 
   /* Loading, error and empty all share one restrained treatment: none
@@ -834,8 +831,8 @@
     .crss-unit-right {
       text-align: left;
     }
-    .crss-unit-cta {
-      margin-top: 12px;
+    .crss-unit-right .crss-actions {
+      justify-content: flex-start;
     }
     .crss-shell {
       padding: 36px 26px 80px;
@@ -1399,33 +1396,6 @@
       return 'A full house or business inventory';
     }
 
-    /* Read off the info card rather than written again here, so this
-       page has one phone number in it. Cloning the page for another
-       facility already means changing that link; it should not also
-       mean finding a second copy buried in the script. */
-    var telLink = loc.querySelector('.crss-info-phone');
-    var TEL = (telLink && telLink.getAttribute('href')) || '/contact-us';
-
-    /* The contact form is GHL's own element in its own iframe, so this
-       page cannot type into it. What it can do is put the unit in the
-       URL: the contact page shows it back to the visitor, and GHL
-       fills the message field itself once that field is given a query
-       key of "message" in the form builder.
-
-       "message" is written as a full sentence rather than a code, so
-       whatever reads it - the form, the CRM, or a person glancing at
-       the address bar - gets something meaningful. */
-    function enquiryHref(u, rate) {
-      var size = u.width + ' x ' + u.length;
-      var msg = 'I would like to enquire about a ' + size + ' unit' +
-                (rate ? ' at ' + rate + ' per month' : '') + '.';
-      return '/contact-us' +
-        '?unit=' + encodeURIComponent(size) +
-        (u.height ? '&h=' + encodeURIComponent(u.height) : '') +
-        (rate ? '&rate=' + encodeURIComponent(rate) : '') +
-        '&message=' + encodeURIComponent(msg);
-    }
-
     function renderUnits(list) {
       shown = list;
       if (!list.length) {
@@ -1454,35 +1424,15 @@
           '<ul class="crss-unit-attrs">' + attrs + '</ul>' +
 
           '<div class="crss-unit-right">' +
-            (rate ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' : '') +
-            /* The status line states, the button acts. "Call to check"
-               was sitting in the status line, which made it look like
-               a button that did nothing: it is an instruction, and an
-               instruction that cannot be followed by pressing it is
-               worse than no instruction.
-
-               So the status says what is known, and the button carries
-               whatever the right next step is for that row. Sizes the
-               live feed does not return have a price from CapRock's
-               rate sheet but no trustworthy count, and "Waitlist"
-               there would turn a gap in the data into a claim that the
-               unit is full. */
-            '<div class="crss-unit-avail">' +
-              (u.live === false ? 'Availability on request'
-                                : (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist')) +
-            '</div>' +
-            /* Enquire, not Reserve. The facility system has Rent Now
-               and Reserve buttons because it can take the money; this
-               site has no booking flow, and a Reserve button that only
-               opens a contact form is a promise it cannot keep.
-
-               The link carries the unit with it. Without that, someone
-               spends five minutes choosing a 10 x 30 and lands on a
-               blank form asking how it can help, having to describe
-               from memory what they were just looking at. */
-            (u.live === false
-              ? '<a class="crss-unit-cta" href="' + TEL + '">Call to check</a>'
-              : '<a class="crss-unit-cta" href="' + enquiryHref(u, rate) + '">Enquire</a>') +
+            /* No price on a full unit: nothing can be bought at it,
+               and the only figure to hand would be a typed-in one
+               that has already been caught disagreeing with the
+               feed. What is shown instead is the state, in red, and
+               the one thing worth doing about it. */
+            (u.live !== false && rate
+              ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' : '') +
+            window.CRSS_WSS.availabilityHtml(u) +
+            window.CRSS_WSS.actions(u) +
           '</div>' +
         '</div>';
       }).join('');

@@ -26,6 +26,7 @@ pages/
   about-caprock.html              Company about page (has open placeholder).  /about-caprock
   careers.html                    Careers page, empty-state openings.      /careers
   contact-us.html                 Contact page with a form (see note below). /contact-us
+  waiting-list.html               Waiting list page, same form arrangement as contact-us. /waiting-list
   lubbock-2213-n-quaker.html      The Lubbock location page. Also the TEMPLATE for new locations, search it for "LOC:".
 ```
 

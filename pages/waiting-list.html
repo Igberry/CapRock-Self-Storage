@@ -1,0 +1,315 @@
+<!-- ================================================================
+     CapRock Self Storage — Waiting List page
+     Body content only. Header Global Section above, footer below.
+     Path: /waiting-list
+
+     Where "Join the waiting list" sends people. Every unit row, size
+     guide card and details panel shows that button when a size has
+     nothing free, and puts the size in the URL:
+
+       /waiting-list?unit=10%20x%2010%20x%208&message=Please%20add...
+
+     THE FORM IS NOT IN THIS FILE. It is the same arrangement as the
+     contact page: this block is a Custom Code element, and a native
+     GHL Forms element sits directly below it, because only GHL's own
+     form writes into the CRM. Build that form with:
+
+       name, phone, email        required
+       unit size                 a text field with query key "unit",
+                                 so GHL prefills it from the URL
+       message                   query key "message", same reason
+       a hidden field or a tag   "waiting-list", so these requests
+                                 are told apart from general contact
+
+     and a notification to the office on submit, so a request is
+     seen the day it arrives rather than found in the CRM later.
+
+     Styling for the native form is the same as contact-us.html; see
+     the values listed there.
+     ================================================================ -->
+<!-- The stylesheet sits above the markup on purpose.
+     GHL serves this block inline in the body of a page that runs to
+     a quarter of a megabyte, and the browser paints what it has
+     parsed so far rather than waiting for the end. With the styles
+     after the markup, that first paint was half a second of bare
+     HTML on every page. Put first, the rules are in place before
+     the browser meets the first element they apply to. -->
+<style>
+  .crss-waitlist {
+    font-family: 'Work Sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+  }
+  .crss-waitlist, .crss-waitlist *, .crss-waitlist *::before, .crss-waitlist *::after {
+    box-sizing: border-box;
+  }
+  .crss-waitlist :where(h1, p) {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-waitlist :where(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  .crss-waitlist :focus-visible {
+    outline: 2px solid var(--crss-terracotta, #A44A23);
+    outline-offset: 3px;
+    border-radius: 0;
+  }
+
+  .crss-waitlist-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 64px 32px 104px;
+  }
+
+  /* ============ BREADCRUMB ============ */
+  .crss-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 30px;
+  }
+  .crss-breadcrumb a {
+    transition: color .2s ease;
+  }
+  .crss-breadcrumb a:hover {
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-breadcrumb [aria-current="page"] {
+    color: var(--crss-charcoal, #292724);
+  }
+
+  /* ============ PAGE HEAD ============ */
+  .crss-waitlist-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-waitlist-title::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--crss-rule-ink, #C4B49B);
+    margin: 24px 0 22px;
+  }
+  .crss-waitlist-subtitle {
+    font-size: 18px;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 60ch;
+    line-height: 1.65;
+    margin-bottom: 48px;
+  }
+
+  /* ---- Carried-over size ----
+     Terracotta edge rather than another bordered card: it is a note
+     about why you are here, not a second panel of contact details. */
+  .crss-chosen {
+    background: var(--crss-cream, #F1E3CC);
+    border-left: 3px solid var(--crss-terracotta, #A44A23);
+    padding: 20px 24px 22px;
+    margin-bottom: 32px;
+  }
+  .crss-chosen-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 8px;
+  }
+  .crss-chosen-unit {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-chosen-note {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+    margin-top: 8px;
+  }
+
+  /* ============ CONTACT DETAILS ============
+     A horizontal band, not a sidebar. The form is a separate GHL
+     element below this block rather than a column beside it, so these
+     details read as an introduction to it. */
+  .crss-waitlist-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 40px;
+    align-items: flex-start;
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 0;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .crss-waitlist-info-row {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  .crss-waitlist-label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 7px;
+  }
+  .crss-waitlist-info-row a {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--crss-charcoal, #292724);
+    word-break: break-word;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(164, 74, 35, 0.32);
+    transition: color .22s ease, text-decoration-color .22s ease;
+  }
+  .crss-waitlist-info-row a:hover {
+    color: var(--crss-terracotta, #A44A23);
+    text-decoration-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-waitlist-location-link {
+    flex: 1 1 100%;
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: var(--crss-terracotta, #A44A23);
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
+  }
+  .crss-waitlist-location-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
+  }
+
+
+  /* ---- Full-bleed inside GHL ----
+     GHL wraps a Custom Code element in its own centred, max-width row,
+     so a full-width band stops short and leaves gutters either side.
+     Margin cannot escape a parent's max-width; negative margins can.
+
+     Deliberately pure CSS. An earlier version sized this from a
+     JS-published viewport width, but that value goes stale whenever the
+     viewport changes without firing a resize listener (device-preview
+     iframes, orientation changes), leaving every wrapper sized for the
+     wrong viewport - which on a phone looks exactly like a page that is
+     not responsive. 50vw is always current.
+
+     50vw includes the scrollbar, so the breakout overshoots by its
+     width. overflow-x: clip on the root absorbs that. clip, not hidden:
+     hidden creates a scroll container and breaks the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+  .crss-waitlist {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  @media (max-width: 768px) {
+    .crss-waitlist-inner {
+      padding: 48px 26px 80px;
+    }
+  }
+  @media (max-width: 560px) {
+    .crss-waitlist-inner {
+      padding: 44px 20px 72px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .crss-waitlist *, .crss-waitlist *::before, .crss-waitlist *::after {
+      transition: none !important;
+    }
+    .crss-waitlist-location-link:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<div class="crss-waitlist">
+  <div class="crss-waitlist-inner">
+
+    <nav class="crss-breadcrumb" aria-label="Breadcrumb">
+      <a href="/home">Home</a><span>/</span><a href="/lubbock-2213-n-quaker">Our Location</a><span>/</span><span aria-current="page">Waiting List</span>
+    </nav>
+
+    <h1 class="crss-waitlist-title">Waiting List</h1>
+    <p class="crss-waitlist-subtitle">That size is full right now. Leave your details and the office will call you the moment one comes free, before it goes back on the website.</p>
+
+    <!-- Filled from the query string the waiting list button sends,
+         and hidden if someone arrives here with no size, which is
+         fine: the form still works, they just type it.
+
+         The form below is GHL's own element in its own iframe, which
+         this code cannot reach into. Showing the size here means the
+         visitor can see it was carried over. Getting it INTO the form
+         is a GHL setting: give the unit field a query key of "unit"
+         and the message field "message" in the form builder. -->
+    <div class="crss-chosen" data-crss-chosen hidden>
+      <p class="crss-chosen-label">You are joining the list for</p>
+      <p class="crss-chosen-unit" data-crss-chosen-unit></p>
+      <p class="crss-chosen-note" data-crss-chosen-note></p>
+    </div>
+
+    <div class="crss-waitlist-info">
+      <div class="crss-waitlist-info-row">
+        <span class="crss-waitlist-label">Phone</span>
+        <a href="tel:+18065891472">(806) 589-1472</a>
+      </div>
+      <div class="crss-waitlist-info-row">
+        <span class="crss-waitlist-label">Email</span>
+        <a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a>
+      </div>
+      <a href="/lubbock-2213-n-quaker#units" class="crss-waitlist-location-link">Back to the unit list &rarr;</a>
+    </div>
+
+    <!-- The GHL native Forms element goes here, directly below this
+         Custom Code block. It is not part of this file: only GHL's own
+         form element reaches the CRM. -->
+  </div>
+</div>
+
+<script>
+  (function () {
+    var host = document.querySelector('[data-crss-chosen]');
+    if (!host) return;
+
+    /* Read with URLSearchParams and write with textContent, so nothing
+       from the query string is ever parsed as HTML. Anyone can put
+       anything in a URL and send someone the link. */
+    var unit = new URLSearchParams(window.location.search).get('unit');
+    if (!unit) return;
+
+    host.querySelector('[data-crss-chosen-unit]').textContent = unit.replace(/ x /g, ' \u00D7 ') + ' unit';
+    host.querySelector('[data-crss-chosen-note]').textContent =
+      'If the form below has not picked the size up, type it in the message. ' +
+      'We will confirm the rate when we call, as rates can change before a unit comes free.';
+    host.hidden = false;
+  })();
+</script>

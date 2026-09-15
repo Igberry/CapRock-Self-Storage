@@ -82,6 +82,11 @@
     --crss-rule: #E7DECD;
     --crss-rule-ink: #C4B49B;
 
+    /* The one red on the site. Only stock warnings use it: "Only 2
+       left" and "Currently full". Nothing else is allowed to, so
+       that when it appears it still means something. */
+    --crss-alert: #B42318;
+
     /* Live sticky heights, re-published by JS at runtime */
     --crss-header-h: 88px;  /* 84px inner + 3px top rule + 1px hairline */
     --crss-subnav-h: 50px;
@@ -614,23 +619,71 @@
     color: var(--crss-taupe, #7F6C5D);
     margin-left: 5px;
   }
-  .crss-udlg-btn {
-    display: inline-block;
+  .crss-udlg-foot .crss-actions {
+    margin-top: 0;
     margin-left: auto;
-    padding: 14px 28px;
-    background: var(--crss-terracotta, #A44A23);
-    color: var(--crss-white, #FFFFFF);
-    font-size: 11.5px;
+  }
+  /* ============ AVAILABILITY AND ACTIONS ============
+     Under every price on the site: the location rows, the size
+     guide cards and the details panel. Defined once, here, so all
+     three say the same thing about the same unit. */
+  .crss-avail {
+    margin: 8px 0 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-alert, #B42318);
+  }
+  .crss-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .crss-act {
+    display: inline-block;
+    padding: 11px 20px;
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.11em;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background .22s ease;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: background .22s ease, color .22s ease, border-color .22s ease;
   }
-  .crss-udlg-btn:hover {
-    background: var(--crss-terracotta-dark, #863B1A);
+  .crss-act-primary {
+    background: var(--crss-charcoal, #292724);
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-cream, #F1E3CC);
+  }
+  .crss-act-primary:hover {
+    background: var(--crss-terracotta, #A44A23);
+    border-color: var(--crss-terracotta, #A44A23);
     color: var(--crss-white, #FFFFFF);
   }
+  .crss-act-secondary {
+    background: transparent;
+    border-color: var(--crss-border, #D9CDB9);
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-act-secondary:hover {
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-act-wait {
+    background: var(--crss-alert, #B42318);
+    border-color: var(--crss-alert, #B42318);
+    color: var(--crss-white, #FFFFFF);
+  }
+  .crss-act-wait:hover {
+    background: #8F1D13;
+    border-color: #8F1D13;
+    color: var(--crss-white, #FFFFFF);
+  }
+
   @media (max-width: 1280px) {
     .crss-header-inner {
       gap: 20px;
@@ -679,7 +732,7 @@
     .crss-udlg-inner {
       padding: 28px 22px 30px;
     }
-    .crss-udlg-btn {
+    .crss-udlg-foot .crss-actions {
       margin-left: 0;
     }
     /* 50px lockup: scale = 50/759 */
@@ -869,6 +922,25 @@
        proxy URL. The credential lives in Vercel. */
     window.CRSS_WSS = {
       endpoint: 'https://cap-rock-self-storage.vercel.app/api/wss',
+
+      /* Where Rent Now and Reserve go. CapRock's page on uhaul.com
+         carries both buttons on every size with a real checkout
+         behind them, run by U-Haul from the same WebSelfStorage data
+         this site reads. Their buttons are form posts, not links, so
+         a size cannot be deep-linked: the customer picks it again
+         there. One extra click, in exchange for this site never
+         holding a card number or a customer's details. */
+      RENT_URL: 'https://www.uhaul.com/Locations/Self-Storage-near-Lubbock-TX-79416/1030298/',
+
+      /* The waiting list is a GHL form on its own page, the same
+         arrangement as Contact Us: the request lands in the CRM where
+         the office can see it and act on it. */
+      WAITLIST_URL: '/waiting-list',
+
+      /* At or below this many vacant, the count is shown in red.
+         Above it nothing is shown: "18 available" is not a reason
+         to hurry and reads as clutter. */
+      LOW_STOCK: 3,
       facility: 'lubbock-2213-n-quaker',
 
       /* Small helper so five pages do not each reinvent the fetch,
@@ -890,44 +962,29 @@
           });
       },
 
-      /* ---- The rest of the rate sheet ----
-         The /movein feed returns five unit types. CapRock rents
-         fifteen, plus two parking spaces. The feed appears to carry
-         only part of what is on the books, and /location has no unit
-         data at all, so there is nowhere else to read the rest from.
+      /* ---- Sizes the feed can leave out ----
+         Since 15 September the feed returns every size with at least
+         one vacant unit (U-Haul lowered the threshold from six for
+         this account). So a size missing from it has none free, or
+         is not reservable, and would otherwise simply vanish from
+         the page. This list is what stops that: a size that goes
+         full still appears, marked full, with a waiting list button,
+         which is the moment a waiting list is for.
 
-         These are the ones the feed leaves out, transcribed from
-         CapRock's Room Sizes & Rates screen, last read 9 September
-         2026. Four of the five prices below had already drifted from
-         the sheet they were first taken from two days earlier: the
-         16 x 10 was out by $25 and the 10 x 10 by $20, both under.
-         Re-check them whenever anyone is in that screen anyway.
+         The prices here are NOT displayed. A full unit has no price
+         to quote, and these were transcribed from the Room Sizes &
+         Rates screen on 9 September and have already been caught
+         disagreeing with the live feed. They stay only so the entry
+         is complete if the display rule ever changes.
 
-         THIS LIST CANNOT CORRECT ITSELF. Every other price on the
-         site updates when it changes in WebSelfStorage; these do not.
-         Anything the feed returns always wins, so a price is only
-         ever taken from here when there is no live one for that size.
-
-         WHY THE FEED IS SHORT (U-Haul Affiliate Marketing Services,
-         11 Sept 2026). A size code is returned only when all three
-         hold, judged per size code and not for the facility:
-           1. it is marked reservable in Room Sizes & Rates
-           2. it has at least 6 units vacant
-           3. it is under 95% occupied
-         So the ten sizes below are missing because they are nearly
-         full or built in small numbers, which is a fact about the
-         property and not a fault anywhere. A size that comes to
-         satisfy all three appears in the feed on its own and its
-         live entry replaces the one here. A size with fewer than six
-         units built can never appear, and stays here for good.
-
-         Vacancy is deliberately absent. The sheet had counts, but a
-         count copied out of a spreadsheet is a claim about today that
-         will be wrong by next week, so these say "call to check"
-         rather than inventing a number.
+         Live data always wins: anything the feed returns replaces
+         the entry here for that footprint.
 
          The 7 x 10 on the sheet is not here: it has zero units built,
-         so it is a price for something that does not exist yet. */
+         so it is a price for something that does not exist yet. The
+         20 x 30 is here on the strength of the sheet alone; it has
+         never appeared in the feed or on uhaul.com, and if it turns
+         out not to exist either, delete it. */
       CATALOGUE: [
         { size: '5 x 7',   width: 5,  length: 7,  height: 8, sqft: 35,  rate: 47,
           driveUp: false, climate: true,  ada: true,  electricity: false,
@@ -1016,8 +1073,8 @@
           var copy = {};
           for (var f in u) { if (Object.prototype.hasOwnProperty.call(u, f)) copy[f] = u[f]; }
           copy.live = false;
-          copy.available = null;
-          copy.vacantCount = null;
+          copy.available = false;
+          copy.vacantCount = 0;
           data.unitTypes.push(copy);
         });
 
@@ -1262,11 +1319,9 @@
         var band = this.bandFor(u);
         var rate = this.money(u.rate);
         var cubic = (Number(u.sqft) || 0) * (Number(u.height) || 0);
-        /* "Check availability" sends the reader to the unit list.
-           On the page that already is the unit list it would send
-           them to where they are standing, so there it is left off
-           and the panel simply closes. */
-        var onList = !!document.querySelector('[data-crss-units]');
+        /* No price on a full unit: there is nothing to buy at it, and
+           the only figure available would be a typed-in one. */
+        var live = u.live !== false;
         var list = function (items) {
           return '<ul>' + items.map(function (x) {
             return '<li>' + x + '</li>';
@@ -1313,18 +1368,67 @@
             '<h3>How big is a ' + u.width + ' &times; ' + u.length + '?</h3>' +
             '<p class="crss-udlg-prose">' + band.prose + '</p>' +
 
-            /* Nothing to put in it means no rule across the bottom
-               of the panel with empty space under it. */
-            ((rate || !onList)
-              ? '<div class="crss-udlg-foot">' +
-                  (rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' : '') +
-                  (onList ? '' : '<a class="crss-udlg-btn" href="/lubbock-2213-n-quaker#units">Check availability</a>') +
-                '</div>'
-              : '') +
+            '<div class="crss-udlg-foot">' +
+              '<div>' +
+                (live && rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' : '') +
+                this.availabilityHtml(u) +
+              '</div>' +
+              this.actions(u) +
+            '</div>' +
           '</div>';
 
         dlg.showModal();
       },
+      /* ---- Availability, and the buttons under a price ----
+         Three states. "full" is a size the feed did not return, or
+         returned with nothing free. "low" is at or under LOW_STOCK.
+         "ok" shows nothing at all: the count is hidden on purpose
+         above the threshold. */
+      availability: function (u) {
+        var n = Number(u && u.vacantCount) || 0;
+        if (!u || u.live === false || n <= 0) {
+          return { state: 'full', text: 'Currently full' };
+        }
+        if (n <= this.LOW_STOCK) {
+          return { state: 'low', text: n === 1 ? 'Only 1 left' : 'Only ' + n + ' left' };
+        }
+        return { state: 'ok', text: '' };
+      },
+
+      availabilityHtml: function (u) {
+        var a = this.availability(u);
+        return a.text ? '<p class="crss-avail crss-avail-' + a.state + '">' + a.text + '</p>' : '';
+      },
+
+      /* The waiting list page shows the size back and GHL prefills
+         the form from the same query string, once the message field
+         is given a query key of "message" in the form builder. Built
+         from the numeric dimensions only, never the feed's free text. */
+      waitlistHref: function (u) {
+        var size = Number(u.width) + ' x ' + Number(u.length) +
+                   (u.height ? ' x ' + Number(u.height) : '');
+        return this.WAITLIST_URL +
+          '?unit=' + encodeURIComponent(size) +
+          '&message=' + encodeURIComponent('Please add me to the waiting list for a ' + size + ' unit.');
+      },
+
+      /* Rent Now and Reserve when there is something to rent; the
+         waiting list when there is not. Both rental buttons go to the
+         same page because that is where both flows live; the labels
+         are U-Haul's own, so what a customer presses here is what
+         they find there. */
+      actions: function (u) {
+        if (this.availability(u).state === 'full') {
+          return '<div class="crss-actions">' +
+            '<a class="crss-act crss-act-wait" href="' + this.waitlistHref(u) + '">Join the waiting list</a>' +
+          '</div>';
+        }
+        return '<div class="crss-actions">' +
+          '<a class="crss-act crss-act-primary" href="' + this.RENT_URL + '" target="_blank" rel="noopener">Rent Now</a>' +
+          '<a class="crss-act crss-act-secondary" href="' + this.RENT_URL + '" target="_blank" rel="noopener">Reserve</a>' +
+        '</div>';
+      },
+
       money: function (v) {
         var num = Number(v);
         if (!isFinite(num)) return null;
@@ -1456,6 +1560,9 @@
        to read them from. The feed returns an empty list, so there
        was nothing to show and no date by which there would be.
      - The open questions listed in the Storage Faqs panel
+     - Rent Now and Reserve go to CapRock's page on uhaul.com, where
+       the customer picks the size again. U-Haul's buttons are form
+       posts, so there is no per-size link to send them to.
      ================================================================ -->
 <!-- The stylesheet sits above the markup on purpose.
      GHL serves this block inline in the body of a page that runs to
@@ -2152,36 +2259,30 @@
     color: var(--crss-taupe, #7F6C5D);
     margin-top: 3px;
   }
-  .crss-unit-avail {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-    color: var(--crss-taupe, #7F6C5D);
-    margin-top: 8px;
-  }
-  /* Selector carries the panel, and it has to.
+  /* The buttons are the shared .crss-act set from the header, but
      `.crss-panel a` is (0,1,1) and beats a lone class at (0,1,0), so
-     it was painting this button terracotta with an underline on a
-     charcoal ground: about 2:1 contrast, which is the same trap that
-     caught the buttons across the site earlier. Matching the active
-     filter pill above it, which is the same shape doing the same job. */
-  .crss-panel .crss-unit-cta {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 11px 22px;
-    background: var(--crss-charcoal, #292724);
-    color: var(--crss-cream, #F1E3CC);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
+     inside this panel it was painting them terracotta with an
+     underline. The same trap caught the old Enquire button. Each
+     colour is restated at panel specificity. */
+  .crss-panel .crss-act {
     text-decoration: none;
-    transition: background .22s ease, color .22s ease;
   }
-  .crss-panel .crss-unit-cta:hover {
-    background: var(--crss-terracotta, #A44A23);
+  .crss-panel .crss-act-primary {
+    color: var(--crss-cream, #F1E3CC);
+  }
+  .crss-panel .crss-act-primary:hover {
     color: var(--crss-white, #FFFFFF);
+  }
+  .crss-panel .crss-act-secondary,
+  .crss-panel .crss-act-secondary:hover {
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-panel .crss-act-wait,
+  .crss-panel .crss-act-wait:hover {
+    color: var(--crss-white, #FFFFFF);
+  }
+  .crss-unit-right .crss-actions {
+    justify-content: flex-end;
   }
 
   /* Loading, error and empty all share one restrained treatment: none
@@ -2252,8 +2353,8 @@
     .crss-unit-right {
       text-align: left;
     }
-    .crss-unit-cta {
-      margin-top: 12px;
+    .crss-unit-right .crss-actions {
+      justify-content: flex-start;
     }
     .crss-shell {
       padding: 36px 26px 80px;
@@ -2817,33 +2918,6 @@
       return 'A full house or business inventory';
     }
 
-    /* Read off the info card rather than written again here, so this
-       page has one phone number in it. Cloning the page for another
-       facility already means changing that link; it should not also
-       mean finding a second copy buried in the script. */
-    var telLink = loc.querySelector('.crss-info-phone');
-    var TEL = (telLink && telLink.getAttribute('href')) || '/contact-us';
-
-    /* The contact form is GHL's own element in its own iframe, so this
-       page cannot type into it. What it can do is put the unit in the
-       URL: the contact page shows it back to the visitor, and GHL
-       fills the message field itself once that field is given a query
-       key of "message" in the form builder.
-
-       "message" is written as a full sentence rather than a code, so
-       whatever reads it - the form, the CRM, or a person glancing at
-       the address bar - gets something meaningful. */
-    function enquiryHref(u, rate) {
-      var size = u.width + ' x ' + u.length;
-      var msg = 'I would like to enquire about a ' + size + ' unit' +
-                (rate ? ' at ' + rate + ' per month' : '') + '.';
-      return '/contact-us' +
-        '?unit=' + encodeURIComponent(size) +
-        (u.height ? '&h=' + encodeURIComponent(u.height) : '') +
-        (rate ? '&rate=' + encodeURIComponent(rate) : '') +
-        '&message=' + encodeURIComponent(msg);
-    }
-
     function renderUnits(list) {
       shown = list;
       if (!list.length) {
@@ -2872,35 +2946,15 @@
           '<ul class="crss-unit-attrs">' + attrs + '</ul>' +
 
           '<div class="crss-unit-right">' +
-            (rate ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' : '') +
-            /* The status line states, the button acts. "Call to check"
-               was sitting in the status line, which made it look like
-               a button that did nothing: it is an instruction, and an
-               instruction that cannot be followed by pressing it is
-               worse than no instruction.
-
-               So the status says what is known, and the button carries
-               whatever the right next step is for that row. Sizes the
-               live feed does not return have a price from CapRock's
-               rate sheet but no trustworthy count, and "Waitlist"
-               there would turn a gap in the data into a claim that the
-               unit is full. */
-            '<div class="crss-unit-avail">' +
-              (u.live === false ? 'Availability on request'
-                                : (u.vacantCount > 0 ? u.vacantCount + ' available' : 'Waitlist')) +
-            '</div>' +
-            /* Enquire, not Reserve. The facility system has Rent Now
-               and Reserve buttons because it can take the money; this
-               site has no booking flow, and a Reserve button that only
-               opens a contact form is a promise it cannot keep.
-
-               The link carries the unit with it. Without that, someone
-               spends five minutes choosing a 10 x 30 and lands on a
-               blank form asking how it can help, having to describe
-               from memory what they were just looking at. */
-            (u.live === false
-              ? '<a class="crss-unit-cta" href="' + TEL + '">Call to check</a>'
-              : '<a class="crss-unit-cta" href="' + enquiryHref(u, rate) + '">Enquire</a>') +
+            /* No price on a full unit: nothing can be bought at it,
+               and the only figure to hand would be a typed-in one
+               that has already been caught disagreeing with the
+               feed. What is shown instead is the state, in red, and
+               the one thing worth doing about it. */
+            (u.live !== false && rate
+              ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' : '') +
+            window.CRSS_WSS.availabilityHtml(u) +
+            window.CRSS_WSS.actions(u) +
           '</div>' +
         '</div>';
       }).join('');

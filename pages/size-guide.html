@@ -447,7 +447,8 @@
             '<div class="crss-size-sqft">' + (u.sqft || '') + ' sq ft</div>' +
             '<p class="crss-size-fits">' + describe(u) + '</p>' +
             (flags ? '<p class="crss-size-flags">' + flags + '</p>' : '') +
-            (rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
+            (u.live !== false && rate ? '<p class="crss-size-rate">' + rate + ' <span>/mo</span></p>' : '') +
+            window.CRSS_WSS.availabilityHtml(u) +
             '<span class="crss-size-more">Unit details</span>' +
           '</div>' +
         '</button>';

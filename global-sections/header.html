@@ -69,6 +69,11 @@
     --crss-rule: #E7DECD;
     --crss-rule-ink: #C4B49B;
 
+    /* The one red on the site. Only stock warnings use it: "Only 2
+       left" and "Currently full". Nothing else is allowed to, so
+       that when it appears it still means something. */
+    --crss-alert: #B42318;
+
     /* Live sticky heights, re-published by JS at runtime */
     --crss-header-h: 88px;  /* 84px inner + 3px top rule + 1px hairline */
     --crss-subnav-h: 50px;
@@ -601,23 +606,71 @@
     color: var(--crss-taupe, #7F6C5D);
     margin-left: 5px;
   }
-  .crss-udlg-btn {
-    display: inline-block;
+  .crss-udlg-foot .crss-actions {
+    margin-top: 0;
     margin-left: auto;
-    padding: 14px 28px;
-    background: var(--crss-terracotta, #A44A23);
-    color: var(--crss-white, #FFFFFF);
-    font-size: 11.5px;
+  }
+  /* ============ AVAILABILITY AND ACTIONS ============
+     Under every price on the site: the location rows, the size
+     guide cards and the details panel. Defined once, here, so all
+     three say the same thing about the same unit. */
+  .crss-avail {
+    margin: 8px 0 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-alert, #B42318);
+  }
+  .crss-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .crss-act {
+    display: inline-block;
+    padding: 11px 20px;
+    font-family: 'Work Sans', Arial, sans-serif;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.11em;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background .22s ease;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: background .22s ease, color .22s ease, border-color .22s ease;
   }
-  .crss-udlg-btn:hover {
-    background: var(--crss-terracotta-dark, #863B1A);
+  .crss-act-primary {
+    background: var(--crss-charcoal, #292724);
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-cream, #F1E3CC);
+  }
+  .crss-act-primary:hover {
+    background: var(--crss-terracotta, #A44A23);
+    border-color: var(--crss-terracotta, #A44A23);
     color: var(--crss-white, #FFFFFF);
   }
+  .crss-act-secondary {
+    background: transparent;
+    border-color: var(--crss-border, #D9CDB9);
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-act-secondary:hover {
+    border-color: var(--crss-charcoal, #292724);
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-act-wait {
+    background: var(--crss-alert, #B42318);
+    border-color: var(--crss-alert, #B42318);
+    color: var(--crss-white, #FFFFFF);
+  }
+  .crss-act-wait:hover {
+    background: #8F1D13;
+    border-color: #8F1D13;
+    color: var(--crss-white, #FFFFFF);
+  }
+
   @media (max-width: 1280px) {
     .crss-header-inner {
       gap: 20px;
@@ -666,7 +719,7 @@
     .crss-udlg-inner {
       padding: 28px 22px 30px;
     }
-    .crss-udlg-btn {
+    .crss-udlg-foot .crss-actions {
       margin-left: 0;
     }
     /* 50px lockup: scale = 50/759 */
@@ -856,6 +909,25 @@
        proxy URL. The credential lives in Vercel. */
     window.CRSS_WSS = {
       endpoint: 'https://cap-rock-self-storage.vercel.app/api/wss',
+
+      /* Where Rent Now and Reserve go. CapRock's page on uhaul.com
+         carries both buttons on every size with a real checkout
+         behind them, run by U-Haul from the same WebSelfStorage data
+         this site reads. Their buttons are form posts, not links, so
+         a size cannot be deep-linked: the customer picks it again
+         there. One extra click, in exchange for this site never
+         holding a card number or a customer's details. */
+      RENT_URL: 'https://www.uhaul.com/Locations/Self-Storage-near-Lubbock-TX-79416/1030298/',
+
+      /* The waiting list is a GHL form on its own page, the same
+         arrangement as Contact Us: the request lands in the CRM where
+         the office can see it and act on it. */
+      WAITLIST_URL: '/waiting-list',
+
+      /* At or below this many vacant, the count is shown in red.
+         Above it nothing is shown: "18 available" is not a reason
+         to hurry and reads as clutter. */
+      LOW_STOCK: 3,
       facility: 'lubbock-2213-n-quaker',
 
       /* Small helper so five pages do not each reinvent the fetch,
@@ -877,44 +949,29 @@
           });
       },
 
-      /* ---- The rest of the rate sheet ----
-         The /movein feed returns five unit types. CapRock rents
-         fifteen, plus two parking spaces. The feed appears to carry
-         only part of what is on the books, and /location has no unit
-         data at all, so there is nowhere else to read the rest from.
+      /* ---- Sizes the feed can leave out ----
+         Since 15 September the feed returns every size with at least
+         one vacant unit (U-Haul lowered the threshold from six for
+         this account). So a size missing from it has none free, or
+         is not reservable, and would otherwise simply vanish from
+         the page. This list is what stops that: a size that goes
+         full still appears, marked full, with a waiting list button,
+         which is the moment a waiting list is for.
 
-         These are the ones the feed leaves out, transcribed from
-         CapRock's Room Sizes & Rates screen, last read 9 September
-         2026. Four of the five prices below had already drifted from
-         the sheet they were first taken from two days earlier: the
-         16 x 10 was out by $25 and the 10 x 10 by $20, both under.
-         Re-check them whenever anyone is in that screen anyway.
+         The prices here are NOT displayed. A full unit has no price
+         to quote, and these were transcribed from the Room Sizes &
+         Rates screen on 9 September and have already been caught
+         disagreeing with the live feed. They stay only so the entry
+         is complete if the display rule ever changes.
 
-         THIS LIST CANNOT CORRECT ITSELF. Every other price on the
-         site updates when it changes in WebSelfStorage; these do not.
-         Anything the feed returns always wins, so a price is only
-         ever taken from here when there is no live one for that size.
-
-         WHY THE FEED IS SHORT (U-Haul Affiliate Marketing Services,
-         11 Sept 2026). A size code is returned only when all three
-         hold, judged per size code and not for the facility:
-           1. it is marked reservable in Room Sizes & Rates
-           2. it has at least 6 units vacant
-           3. it is under 95% occupied
-         So the ten sizes below are missing because they are nearly
-         full or built in small numbers, which is a fact about the
-         property and not a fault anywhere. A size that comes to
-         satisfy all three appears in the feed on its own and its
-         live entry replaces the one here. A size with fewer than six
-         units built can never appear, and stays here for good.
-
-         Vacancy is deliberately absent. The sheet had counts, but a
-         count copied out of a spreadsheet is a claim about today that
-         will be wrong by next week, so these say "call to check"
-         rather than inventing a number.
+         Live data always wins: anything the feed returns replaces
+         the entry here for that footprint.
 
          The 7 x 10 on the sheet is not here: it has zero units built,
-         so it is a price for something that does not exist yet. */
+         so it is a price for something that does not exist yet. The
+         20 x 30 is here on the strength of the sheet alone; it has
+         never appeared in the feed or on uhaul.com, and if it turns
+         out not to exist either, delete it. */
       CATALOGUE: [
         { size: '5 x 7',   width: 5,  length: 7,  height: 8, sqft: 35,  rate: 47,
           driveUp: false, climate: true,  ada: true,  electricity: false,
@@ -1003,8 +1060,8 @@
           var copy = {};
           for (var f in u) { if (Object.prototype.hasOwnProperty.call(u, f)) copy[f] = u[f]; }
           copy.live = false;
-          copy.available = null;
-          copy.vacantCount = null;
+          copy.available = false;
+          copy.vacantCount = 0;
           data.unitTypes.push(copy);
         });
 
@@ -1249,11 +1306,9 @@
         var band = this.bandFor(u);
         var rate = this.money(u.rate);
         var cubic = (Number(u.sqft) || 0) * (Number(u.height) || 0);
-        /* "Check availability" sends the reader to the unit list.
-           On the page that already is the unit list it would send
-           them to where they are standing, so there it is left off
-           and the panel simply closes. */
-        var onList = !!document.querySelector('[data-crss-units]');
+        /* No price on a full unit: there is nothing to buy at it, and
+           the only figure available would be a typed-in one. */
+        var live = u.live !== false;
         var list = function (items) {
           return '<ul>' + items.map(function (x) {
             return '<li>' + x + '</li>';
@@ -1300,18 +1355,67 @@
             '<h3>How big is a ' + u.width + ' &times; ' + u.length + '?</h3>' +
             '<p class="crss-udlg-prose">' + band.prose + '</p>' +
 
-            /* Nothing to put in it means no rule across the bottom
-               of the panel with empty space under it. */
-            ((rate || !onList)
-              ? '<div class="crss-udlg-foot">' +
-                  (rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' : '') +
-                  (onList ? '' : '<a class="crss-udlg-btn" href="/lubbock-2213-n-quaker#units">Check availability</a>') +
-                '</div>'
-              : '') +
+            '<div class="crss-udlg-foot">' +
+              '<div>' +
+                (live && rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' : '') +
+                this.availabilityHtml(u) +
+              '</div>' +
+              this.actions(u) +
+            '</div>' +
           '</div>';
 
         dlg.showModal();
       },
+      /* ---- Availability, and the buttons under a price ----
+         Three states. "full" is a size the feed did not return, or
+         returned with nothing free. "low" is at or under LOW_STOCK.
+         "ok" shows nothing at all: the count is hidden on purpose
+         above the threshold. */
+      availability: function (u) {
+        var n = Number(u && u.vacantCount) || 0;
+        if (!u || u.live === false || n <= 0) {
+          return { state: 'full', text: 'Currently full' };
+        }
+        if (n <= this.LOW_STOCK) {
+          return { state: 'low', text: n === 1 ? 'Only 1 left' : 'Only ' + n + ' left' };
+        }
+        return { state: 'ok', text: '' };
+      },
+
+      availabilityHtml: function (u) {
+        var a = this.availability(u);
+        return a.text ? '<p class="crss-avail crss-avail-' + a.state + '">' + a.text + '</p>' : '';
+      },
+
+      /* The waiting list page shows the size back and GHL prefills
+         the form from the same query string, once the message field
+         is given a query key of "message" in the form builder. Built
+         from the numeric dimensions only, never the feed's free text. */
+      waitlistHref: function (u) {
+        var size = Number(u.width) + ' x ' + Number(u.length) +
+                   (u.height ? ' x ' + Number(u.height) : '');
+        return this.WAITLIST_URL +
+          '?unit=' + encodeURIComponent(size) +
+          '&message=' + encodeURIComponent('Please add me to the waiting list for a ' + size + ' unit.');
+      },
+
+      /* Rent Now and Reserve when there is something to rent; the
+         waiting list when there is not. Both rental buttons go to the
+         same page because that is where both flows live; the labels
+         are U-Haul's own, so what a customer presses here is what
+         they find there. */
+      actions: function (u) {
+        if (this.availability(u).state === 'full') {
+          return '<div class="crss-actions">' +
+            '<a class="crss-act crss-act-wait" href="' + this.waitlistHref(u) + '">Join the waiting list</a>' +
+          '</div>';
+        }
+        return '<div class="crss-actions">' +
+          '<a class="crss-act crss-act-primary" href="' + this.RENT_URL + '" target="_blank" rel="noopener">Rent Now</a>' +
+          '<a class="crss-act crss-act-secondary" href="' + this.RENT_URL + '" target="_blank" rel="noopener">Reserve</a>' +
+        '</div>';
+      },
+
       money: function (v) {
         var num = Number(v);
         if (!isFinite(num)) return null;
