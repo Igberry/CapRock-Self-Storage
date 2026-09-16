@@ -34,6 +34,8 @@
      GHL_API_KEY           Private Integration token, see _gate/ghl.js
      GHL_LOCATION_ID
      GATE_TEXTING          "on" to actually send; anything else rehearses
+     GATE_TEXT_ONLY        comma-separated phones; when set, only these
+                           are texted (the first-real-message safety)
      OFFICE_PHONE          ten digits, texted "please key this in"
      OFFICE_EMAIL          or emailed; either or both
      SUSPEND_AFTER_DAYS    default 30

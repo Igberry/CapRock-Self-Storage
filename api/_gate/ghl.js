@@ -27,6 +27,16 @@ function on() {
   return process.env.GATE_TEXTING === 'on';
 }
 
+/* GATE_TEXT_ONLY, when set, is a comma-separated list of ten-digit
+   numbers and only those are ever texted; everyone else is logged as
+   skipped. It exists for one purpose: the first real message goes to
+   one phone, gets read, and only then does the list come off. */
+function allowed(phone) {
+  const only = String(process.env.GATE_TEXT_ONLY || '').replace(/[^\d,]/g, '');
+  if (!only) return true;
+  return only.split(',').filter(Boolean).some((n) => n.slice(-10) === phone);
+}
+
 async function call(method, path, body) {
   const res = await fetch(BASE + path, {
     method,
@@ -84,6 +94,7 @@ async function sms(contactId, message) {
 async function text({ customerName, phone, message, tags }) {
   if (!configured()) return { sent: false, reason: 'ghl_not_configured' };
   if (!on()) return { sent: false, reason: 'texting_off' };
+  if (!allowed(phone)) return { sent: false, reason: 'not_in_text_only_list' };
   try {
     const contactId = await upsertContact({ customerName, phone, tags });
     await sms(contactId, message);
