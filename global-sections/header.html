@@ -934,11 +934,19 @@
          the error handling and the JSON parse. Resolves to null on
          any failure rather than rejecting, so callers can simply
          fall back to their static content. */
+      /* One request per resource per page. The footer now reads the
+         facility record on every page, and the location page, help
+         centre and terms already did, so without this a page could
+         fetch the same record two or three times. The promise is kept,
+         not the data, so callers that arrive mid-flight share it. */
+      _inflight: {},
+
       get: function (resource) {
         var self = this;
+        if (this._inflight[resource]) return this._inflight[resource];
         var url = this.endpoint + '?facility=' + encodeURIComponent(this.facility) +
                   '&resource=' + encodeURIComponent(resource);
-        return fetch(url)
+        this._inflight[resource] = fetch(url)
           .then(function (r) { return r.ok ? r.json() : null; })
           .then(function (data) {
             return resource === 'movein' ? self.mergeCatalogue(data) : data;
@@ -947,6 +955,7 @@
             console.error('CRSS_WSS ' + resource + ' failed:', e);
             return null;
           });
+        return this._inflight[resource];
       },
 
       /* ---- Sizes the feed can leave out ----

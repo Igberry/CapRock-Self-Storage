@@ -947,11 +947,19 @@
          the error handling and the JSON parse. Resolves to null on
          any failure rather than rejecting, so callers can simply
          fall back to their static content. */
+      /* One request per resource per page. The footer now reads the
+         facility record on every page, and the location page, help
+         centre and terms already did, so without this a page could
+         fetch the same record two or three times. The promise is kept,
+         not the data, so callers that arrive mid-flight share it. */
+      _inflight: {},
+
       get: function (resource) {
         var self = this;
+        if (this._inflight[resource]) return this._inflight[resource];
         var url = this.endpoint + '?facility=' + encodeURIComponent(this.facility) +
                   '&resource=' + encodeURIComponent(resource);
-        return fetch(url)
+        this._inflight[resource] = fetch(url)
           .then(function (r) { return r.ok ? r.json() : null; })
           .then(function (data) {
             return resource === 'movein' ? self.mergeCatalogue(data) : data;
@@ -960,6 +968,7 @@
             console.error('CRSS_WSS ' + resource + ' failed:', e);
             return null;
           });
+        return this._inflight[resource];
       },
 
       /* ---- Sizes the feed can leave out ----
@@ -2265,6 +2274,15 @@
   .crss-footer-contact:hover svg {
     color: var(--crss-terracotta, #A44A23);
   }
+  .crss-footer-hours {
+    font-size: 15px;
+    color: var(--crss-ink-soft, #5F564C);
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  .crss-footer-hours svg {
+    margin-top: 3px;
+  }
 
   /* ---- Social ---- */
   .crss-footer-social {
@@ -2490,6 +2508,25 @@
               <span>Email us</span>
             </a>
           </li>
+          <!-- Address and hours, so every page carries the three
+               things a customer rings about. Hours are read from the
+               facility record on load, same as the location page and
+               the help centre, so the footer cannot disagree with
+               them; the markup holds today's values for when the
+               record does not answer. -->
+          <li>
+            <a href="https://www.google.com/maps/dir/?api=1&amp;destination=2213+North+Quaker+Ave,+Lubbock,+TX+79416"
+               class="crss-footer-contact" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+              <span>2213 North Quaker Ave, Lubbock, TX 79416</span>
+            </a>
+          </li>
+          <li>
+            <span class="crss-footer-contact crss-footer-hours">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Office <span data-crss-office-hours>Mon-Sat 10am - 5pm, Sun 1pm - 5pm</span></span>
+            </span>
+          </li>
         </ul>
       </div>
 
@@ -2561,6 +2598,14 @@
     /* ---- Copyright year, so this never goes stale ---- */
     var year = document.getElementById('crss-footer-year');
     if (year) year.textContent = new Date().getFullYear();
+
+    /* ---- Office hours, from the facility record ---- */
+    var hours = document.querySelector('.crss-footer [data-crss-office-hours]');
+    if (hours && window.CRSS_WSS) {
+      window.CRSS_WSS.get('location').then(function (d) {
+        if (d && d.officeHours) hours.textContent = d.officeHours;
+      });
+    }
 
     /* ---- Scroll-to-top ---- */
     var btn = document.querySelector('.crss-totop');

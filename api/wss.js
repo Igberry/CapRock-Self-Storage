@@ -214,8 +214,14 @@ const SHAPE = {
         if (last && last.text === r.text) last.end = r.label;
         else out.push({ start: r.label, end: null, text: r.text });
       }
-      return out
-        .filter((g) => g.text)
+      const groups = out.filter((g) => g.text);
+      /* Closed all seven days is not a schedule, it is a record nobody
+         has filled in. The gate hours came back "Mon-Sun Closed" on 16
+         September and three pages printed it to customers as fact.
+         Returning nothing leaves each page on its own fallback, which
+         says to call the office. */
+      if (groups.length && groups.every((g) => g.text === 'Closed')) return null;
+      return groups
         .map((g) => `${g.start}${g.end ? '-' + g.end : ''} ${g.text}`)
         .join(', ');
     };

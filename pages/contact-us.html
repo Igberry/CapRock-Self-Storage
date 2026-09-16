@@ -201,6 +201,12 @@
     color: var(--crss-terracotta, #A44A23);
     text-decoration-color: var(--crss-terracotta, #A44A23);
   }
+  .crss-contact-text {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--crss-charcoal, #292724);
+  }
   .crss-contact-location-link {
     flex: 1 1 100%;
     display: inline-flex;
@@ -299,6 +305,22 @@
         <span class="crss-contact-label">Email</span>
         <a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a>
       </div>
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Address</span>
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=2213+North+Quaker+Ave,+Lubbock,+TX+79416" target="_blank" rel="noopener">2213 North Quaker Ave, Lubbock, TX 79416</a>
+      </div>
+      <!-- Hours are read from the facility record on load, the same
+           record the location page and the help centre read, so this
+           page cannot quote a different opening time. The markup holds
+           today's values for when the record does not answer. -->
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Office hours</span>
+        <p class="crss-contact-text" data-crss-office-hours>Mon-Sat 10am - 5pm, Sun 1pm - 5pm</p>
+      </div>
+      <div class="crss-contact-info-row">
+        <span class="crss-contact-label">Gate hours</span>
+        <p class="crss-contact-text" data-crss-gate-hours>Call the office to confirm</p>
+      </div>
       <a href="/lubbock-2213-n-quaker" class="crss-contact-location-link">See our Lubbock facility &rarr;</a>
     </div>
 
@@ -310,6 +332,17 @@
 
 <script>
   (function () {
+    /* ---- Hours, from the facility record ---- */
+    if (window.CRSS_WSS) {
+      window.CRSS_WSS.get('location').then(function (d) {
+        if (!d) return;
+        var office = document.querySelector('.crss-contact [data-crss-office-hours]');
+        if (office && d.officeHours) office.textContent = d.officeHours;
+        var gate = document.querySelector('.crss-contact [data-crss-gate-hours]');
+        if (gate && d.gateHours) gate.textContent = d.gateHours;
+      });
+    }
+
     var host = document.querySelector('[data-crss-enquiry]');
     if (!host) return;
 
