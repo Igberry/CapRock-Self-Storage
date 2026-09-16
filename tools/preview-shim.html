@@ -1,0 +1,58 @@
+<script>
+/* ================================================================
+   PREVIEW-ONLY navigation shim. Not part of any GHL page.
+
+   The source files link to real site paths ("/size-guide"), which is
+   correct for GHL but means nothing to a static dev server, so Live
+   Server answers "Cannot GET /size-guide". This maps those paths onto
+   the flat preview/*.html files at click time.
+
+   Handled in the capture phase so it also catches links the page
+   builds with JS (the facility cards) and beats the hero search's own
+   submit handler.
+   ================================================================ */
+(function () {
+  var MAP = {
+    '/': 'home.html',
+    '/caprock-self-service': 'home.html',
+    '/size-guide': 'size-guide.html',
+    '/help-center': 'help-center.html',
+    '/storage-calculator': 'storage-calculator.html',
+    '/storage-tips': 'storage-tips.html',
+    '/vehicle-storage': 'vehicle-storage.html',
+    '/student-storage': 'student-storage.html',
+    '/military-storage': 'military-storage.html',
+    '/about-caprock': 'about-caprock.html',
+    '/contact-us': 'contact-us.html',
+    '/lubbock-2213-n-quaker': 'lubbock-2213-n-quaker.html',
+    '/waiting-list': 'waiting-list.html',
+    '/terms-of-use': 'terms-of-use.html',
+    '/privacy-policy': 'privacy-policy.html'
+  };
+
+  function resolve(href) {
+    if (!href) return null;
+    var path = href.replace(/[?#].*$/, '').replace(/\/+$/, '');
+    if (path === '') path = '/';
+    return MAP[path] || null;
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
+    if (!a) return;
+    var file = resolve(a.getAttribute('href'));
+    if (!file) return;
+    e.preventDefault();
+    window.location.href = file;
+  }, true);
+
+  /* The hero search sets window.location itself, so intercept before it. */
+  document.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'crss-hero-search') {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = "lubbock-2213-n-quaker.html";
+    }
+  }, true);
+})();
+</script>

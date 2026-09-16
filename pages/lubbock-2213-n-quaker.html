@@ -693,6 +693,72 @@
   .crss-unit-guide:hover {
     color: var(--crss-terracotta-dark, #863B1A);
   }
+  /* Size Guide and Promotions sit side by side under the size. The
+     Promotions link is in the markup of every row but only shown
+     once the facility record has arrived with at least one offer,
+     by a class on the page root: the rows and the offers load
+     separately, and a row re-renders on every filter press, so a
+     class the row reads at paint time beats patching rows later. */
+  .crss-unit-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    margin-top: 10px;
+  }
+  .crss-unit-links .crss-unit-guide {
+    margin-top: 0;
+  }
+  .crss-unit-promos {
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .crss-unit-promos svg {
+    width: 13px;
+    height: 13px;
+  }
+  .crss-location.has-promos .crss-unit-promos {
+    display: inline-flex;
+  }
+  /* The offers, in the same dialog the Size Guide uses. The dialog
+     is appended to body, outside .crss-location, so these are not
+     scoped under it. */
+  .crss-promo-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .crss-promo-list li {
+    padding: 16px 0;
+    border-top: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-promo-list li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .crss-promo-offer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-promo-offer svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-promo-cond {
+    margin: 6px 0 0 26px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--crss-ink-soft, #5F564C);
+  }
   .crss-unit-attrs {
     list-style: none;
     margin: 0;
@@ -1325,6 +1391,9 @@
         if (!btn) return;
         window.CRSS_WSS.openUnit(shown[Number(btn.getAttribute('data-crss-unit'))]);
       });
+      unitsHost.addEventListener('click', function (e) {
+        if (e.target.closest('[data-crss-promos]')) openPromos();
+      });
     }
 
     var filterHost = loc.querySelector('[data-crss-unit-filters]');
@@ -1357,6 +1426,56 @@
         if (!tpl) return;
         el.innerHTML = tpl.replace('{min}', min).replace('{max}', max);
       });
+    }
+
+    /* ---- Promotions ----
+       The facility record carries the current offers, and the same
+       offers apply to every size, which is why one link per row opens
+       one list rather than each row carrying its own. They open in
+       the dialog the Size Guide link uses, so the page has one panel
+       rather than two kinds of pop-up.
+
+       Conditions are shown with the offer, never separately: "10%
+       off" without "no refunds for early move out" is not the offer
+       the customer would actually be signing up to. */
+    var PROMOS = [];
+    var TAG = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 12.5l-8 8-9-9v-8h8l9 9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg>';
+
+    function sentence(s) {
+      s = String(s || '').trim();
+      return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
+    }
+
+    function openPromos() {
+      if (!PROMOS.length || !window.CRSS_WSS || !window.CRSS_WSS.dialog) return;
+      var dlg = window.CRSS_WSS.dialog();
+      if (!dlg || typeof dlg.showModal !== 'function') return;
+      var phone = loc.querySelector('.crss-info-phone');
+      var body = dlg.querySelector('[data-crss-udlg-body]');
+      body.innerHTML =
+        '<div class="crss-udlg-inner">' +
+          '<h2 class="crss-udlg-title" id="crss-udlg-title">Current promotions</h2>' +
+          '<ul class="crss-promo-list">' +
+            PROMOS.map(function (c) {
+              return '<li>' +
+                '<p class="crss-promo-offer">' + TAG + '<span></span></p>' +
+                (c.conditions ? '<p class="crss-promo-cond"></p>' : '') +
+              '</li>';
+            }).join('') +
+          '</ul>' +
+          '<p class="crss-udlg-note" style="margin-top:22px">Applied at move-in. Mention the offer when you rent or reserve' +
+            (phone ? ', or ask the office on <a href="' + phone.getAttribute('href') + '">' + phone.textContent + '</a>' : '') +
+          '.</p>' +
+        '</div>';
+      /* Offer text is written with textContent, after the markup, so
+         nothing from the feed is ever parsed as HTML. */
+      var items = body.querySelectorAll('.crss-promo-list li');
+      PROMOS.forEach(function (c, k) {
+        items[k].querySelector('.crss-promo-offer span').textContent = c.description;
+        var cond = items[k].querySelector('.crss-promo-cond');
+        if (cond) cond.textContent = sentence(c.conditions);
+      });
+      dlg.showModal();
     }
 
     function unitState(html) {
@@ -1418,7 +1537,10 @@
             '<p class="crss-unit-band">' + window.CRSS_WSS.band(u) + '</p>' +
             '<p class="crss-unit-dims">' + dims + '</p>' +
             '<p class="crss-unit-fits">' + fits(u) + '</p>' +
-            '<button type="button" class="crss-unit-guide" data-crss-unit="' + i + '">Size Guide</button>' +
+            '<div class="crss-unit-links">' +
+              '<button type="button" class="crss-unit-guide" data-crss-unit="' + i + '">Size Guide</button>' +
+              '<button type="button" class="crss-unit-guide crss-unit-promos" data-crss-promos>' + TAG + 'Promotions</button>' +
+            '</div>' +
           '</div>' +
 
           '<ul class="crss-unit-attrs">' + attrs + '</ul>' +
@@ -1511,6 +1633,9 @@
 
         var office = loc.querySelector('[data-crss-office-hours]');
         if (office && d.officeHours) office.textContent = 'Office hours: ' + d.officeHours;
+
+        PROMOS = (d.coupons || []).filter(function (c) { return c && c.description; });
+        if (PROMOS.length) loc.classList.add('has-promos');
 
         var coupons = loc.querySelector('[data-crss-coupons]');
         if (coupons && d.coupons && d.coupons.length) {

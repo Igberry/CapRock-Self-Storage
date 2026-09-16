@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview: Storage Tips</title>
+<title>Preview: Waiting List</title>
 <style>
   /* Preview-only reset. In GHL the page builder supplies this. */
   html, body { margin: 0; padding: 0; }
@@ -1521,11 +1521,33 @@
 
 
 <!-- ================================================================
-     CapRock Self Storage — Storage Tips page
-     Body content only, header Global Section goes above this.
-     Path suggestion: /storage-tips
-     Generic, industry-standard packing/storage advice, no company-
-     specific claims.
+     CapRock Self Storage — Waiting List page
+     Body content only. Header Global Section above, footer below.
+     Path: /waiting-list
+
+     Where "Join the waiting list" sends people. Every unit row, size
+     guide card and details panel shows that button when a size has
+     nothing free, and puts the size in the URL:
+
+       /waiting-list?unit=10%20x%2010%20x%208&message=Please%20add...
+
+     THE FORM IS NOT IN THIS FILE. It is the same arrangement as the
+     contact page: this block is a Custom Code element, and a native
+     GHL Forms element sits directly below it, because only GHL's own
+     form writes into the CRM. Build that form with:
+
+       name, phone, email        required
+       unit size                 a text field with query key "unit",
+                                 so GHL prefills it from the URL
+       message                   query key "message", same reason
+       a hidden field or a tag   "waiting-list", so these requests
+                                 are told apart from general contact
+
+     and a notification to the office on submit, so a request is
+     seen the day it arrives rather than found in the CRM later.
+
+     Styling for the native form is the same as contact-us.html; see
+     the values listed there.
      ================================================================ -->
 <!-- The stylesheet sits above the markup on purpose.
      GHL serves this block inline in the body of a page that runs to
@@ -1535,31 +1557,31 @@
      HTML on every page. Put first, the rules are in place before
      the browser meets the first element they apply to. -->
 <style>
-  .crss-tips {
+  .crss-waitlist {
     font-family: 'Work Sans', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     color: var(--crss-charcoal, #292724);
     background: var(--crss-bone, #FAF7F1);
   }
-  .crss-tips, .crss-tips *, .crss-tips *::before, .crss-tips *::after {
+  .crss-waitlist, .crss-waitlist *, .crss-waitlist *::before, .crss-waitlist *::after {
     box-sizing: border-box;
   }
-  .crss-tips :where(h1, h3, p) {
+  .crss-waitlist :where(h1, p) {
     margin: 0;
     padding: 0;
   }
-  .crss-tips :where(a) {
+  .crss-waitlist :where(a) {
     text-decoration: none;
     color: inherit;
   }
-  .crss-tips :focus-visible {
+  .crss-waitlist :focus-visible {
     outline: 2px solid var(--crss-terracotta, #A44A23);
     outline-offset: 3px;
     border-radius: 0;
   }
 
-  .crss-tips-inner {
-    max-width: 820px;
+  .crss-waitlist-inner {
+    max-width: 920px;
     margin: 0 auto;
     padding: 64px 32px 104px;
   }
@@ -1588,7 +1610,7 @@
   }
 
   /* ============ PAGE HEAD ============ */
-  .crss-tips-title {
+  .crss-waitlist-title {
     font-family: 'Fraunces', Georgia, serif;
     font-optical-sizing: auto;
     font-weight: 500;
@@ -1597,7 +1619,7 @@
     letter-spacing: -0.02em;
     color: var(--crss-charcoal, #292724);
   }
-  .crss-tips-title::after {
+  .crss-waitlist-title::after {
     content: '';
     display: block;
     width: 100%;
@@ -1605,116 +1627,109 @@
     background: var(--crss-rule-ink, #C4B49B);
     margin: 24px 0 22px;
   }
-  .crss-tips-subtitle {
+  .crss-waitlist-subtitle {
     font-size: 18px;
-    line-height: 1.65;
     color: var(--crss-ink-soft, #5F564C);
-    max-width: 58ch;
+    max-width: 60ch;
+    line-height: 1.65;
     margin-bottom: 48px;
   }
 
-  /* ============ NUMBERED LIST ============ */
-  /* The list is pulled slightly wider than the text column so the row
-     hover tint has breathing room around the copy. The bleed lives on
-     the list, not on each row, so the top rule and every row rule stay
-     flush with one another. */
-  .crss-tips-list {
-    display: flex;
-    flex-direction: column;
-    margin: 0 -16px 0 -12px;
-    border-top: 1px solid var(--crss-rule, #E7DECD);
+  /* ---- Carried-over size ----
+     Terracotta edge rather than another bordered card: it is a note
+     about why you are here, not a second panel of contact details. */
+  .crss-chosen {
+    background: var(--crss-cream, #F1E3CC);
+    border-left: 3px solid var(--crss-terracotta, #A44A23);
+    padding: 20px 24px 22px;
+    margin-bottom: 32px;
   }
-  .crss-tip {
-    display: flex;
-    gap: 28px;
-    padding: 30px 16px 30px 12px;
-    border-bottom: 1px solid var(--crss-rule, #E7DECD);
-    border-radius: 0;
-    transition: background .28s ease;
-  }
-  .crss-tip:hover {
-    background: rgba(241, 227, 204, 0.42);
-  }
-  .crss-tip-num {
-    font-family: 'Fraunces', Georgia, serif;
-    font-optical-sizing: auto;
-    font-size: 28px;
-    font-weight: 500;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    font-variant-numeric: tabular-nums;
-    color: rgba(164, 74, 35, 0.42);
-    flex-shrink: 0;
-    width: 48px;
-    transition: color .28s ease;
-  }
-  .crss-tip:hover .crss-tip-num {
-    color: var(--crss-terracotta, #A44A23);
-  }
-  .crss-tip h3 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-optical-sizing: auto;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1.3;
-    letter-spacing: -0.012em;
+  .crss-chosen-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
     margin-bottom: 8px;
+  }
+  .crss-chosen-unit {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
     color: var(--crss-charcoal, #292724);
   }
-  .crss-tip p {
-    font-size: 16px;
-    line-height: 1.7;
+  .crss-chosen-note {
+    font-size: 14.5px;
+    line-height: 1.6;
     color: var(--crss-ink-soft, #5F564C);
+    margin-top: 8px;
   }
 
-  /* ============ CLOSING CTA ============ */
-  .crss-tips-cta {
-    position: relative;
-    overflow: hidden;
-    margin-top: 72px;
-    padding: 54px 40px;
-    background: var(--crss-charcoal, #292724);
+  /* ============ CONTACT DETAILS ============
+     A horizontal band, not a sidebar. The form is a separate GHL
+     element below this block rather than a column beside it, so these
+     details read as an introduction to it. */
+  .crss-waitlist-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 40px;
+    align-items: flex-start;
+    background: var(--crss-white, #FFFFFF);
+    border: 1px solid var(--crss-rule, #E7DECD);
     border-radius: 0;
-    text-align: center;
+    padding: 28px 32px;
+    margin-bottom: 40px;
   }
-  .crss-tips-cta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: radial-gradient(120% 100% at 50% 0%, rgba(164, 74, 35, 0.30), transparent 62%);
-    pointer-events: none;
+  .crss-waitlist-info-row {
+    flex: 1 1 200px;
+    min-width: 0;
   }
-  .crss-tips-cta p {
-    position: relative;
-    font-family: 'Fraunces', Georgia, serif;
-    font-optical-sizing: auto;
-    font-size: clamp(21px, 2.6vw, 27px);
-    font-weight: 500;
-    line-height: 1.32;
-    letter-spacing: -0.01em;
-    color: var(--crss-cream, #F1E3CC);
-    margin-bottom: 26px;
-  }
-  .crss-tips-cta-btn {
-    position: relative;
-    display: inline-block;
-    background: var(--crss-terracotta, #A44A23);
-    color: var(--crss-white, #FFFFFF);
+
+  .crss-waitlist-label {
+    display: block;
+    font-size: 10.5px;
     font-weight: 600;
-    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+    margin-bottom: 7px;
+  }
+  .crss-waitlist-info-row a {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--crss-charcoal, #292724);
+    word-break: break-word;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(164, 74, 35, 0.32);
+    transition: color .22s ease, text-decoration-color .22s ease;
+  }
+  .crss-waitlist-info-row a:hover {
+    color: var(--crss-terracotta, #A44A23);
+    text-decoration-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-waitlist-location-link {
+    flex: 1 1 100%;
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 600;
     letter-spacing: 0.11em;
     text-transform: uppercase;
-    padding: 16px 34px;
-    border-radius: 0;
-    transition: background .26s ease, transform .26s cubic-bezier(.4, 0, .2, 1), box-shadow .26s ease;
+    line-height: 1.5;
+    color: var(--crss-terracotta, #A44A23);
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
   }
-  .crss-tips-cta-btn:hover {
-    background: var(--crss-terracotta-dark, #863B1A);
-    transform: translateY(-2px);
+  .crss-waitlist-location-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
   }
+
 
   /* ---- Full-bleed inside GHL ----
      GHL wraps a Custom Code element in its own centred, max-width row,
@@ -1734,73 +1749,92 @@
   html {
     overflow-x: clip;
   }
-  .crss-tips {
+  .crss-waitlist {
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
   }
 
   @media (max-width: 768px) {
-    .crss-tips-inner {
+    .crss-waitlist-inner {
       padding: 48px 26px 80px;
     }
   }
   @media (max-width: 560px) {
-    .crss-tips-inner {
+    .crss-waitlist-inner {
       padding: 44px 20px 72px;
-    }
-    .crss-tips-list {
-      margin: 0 -12px 0 -10px;
-    }
-    .crss-tip {
-      gap: 18px;
-      padding: 24px 12px 24px 10px;
-    }
-    .crss-tip-num {
-      width: 38px;
-      font-size: 23px;
-    }
-    .crss-tips-cta {
-      padding: 42px 24px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .crss-tips *, .crss-tips *::before, .crss-tips *::after {
+    .crss-waitlist *, .crss-waitlist *::before, .crss-waitlist *::after {
       transition: none !important;
     }
-    .crss-tips-cta-btn:hover {
+    .crss-waitlist-location-link:hover {
       transform: none;
     }
   }
 </style>
 
-<div class="crss-tips">
-  <div class="crss-tips-inner">
+<div class="crss-waitlist">
+  <div class="crss-waitlist-inner">
 
     <nav class="crss-breadcrumb" aria-label="Breadcrumb">
-      <a href="/home">Home</a><span>/</span><span>Storage Tools</span><span>/</span><span aria-current="page">Storage Tips</span>
+      <a href="/home">Home</a><span>/</span><a href="/lubbock-2213-n-quaker">Our Location</a><span>/</span><span aria-current="page">Waiting List</span>
     </nav>
 
-    <h1 class="crss-tips-title">Storage Tips</h1>
-    <p class="crss-tips-subtitle">A few habits that make packing, storing, and finding things later a lot easier.</p>
+    <h1 class="crss-waitlist-title">Waiting List</h1>
+    <p class="crss-waitlist-subtitle">That size is full right now. Leave your details and the office will call you the moment one comes free, before it goes back on the website.</p>
 
-    <div class="crss-tips-list">
-      <div class="crss-tip"><span class="crss-tip-num">01</span><div><h3>Label every box</h3><p>Write the room and a few contents on at least two sides of each box, so you can read it no matter how it's stacked.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">02</span><div><h3>Use uniform box sizes where you can</h3><p>Same-sized boxes stack more securely and use space more efficiently than a mix of odd shapes.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">03</span><div><h3>Heavier items on the bottom</h3><p>Stack heavier, sturdier boxes first and lighter or fragile items on top to avoid crushing.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">04</span><div><h3>Leave a walkway</h3><p>Plan an aisle down the middle of your unit so you can reach items in the back without unstacking everything.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">05</span><div><h3>Cover furniture with breathable covers</h3><p>Cloth sheets or moving blankets protect from dust while still letting air circulate. Plastic can trap moisture.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">06</span><div><h3>Keep items off the floor</h3><p>Pallets or a few spare boards under boxes and furniture help protect against ground moisture.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">07</span><div><h3>Disassemble large furniture</h3><p>Bed frames, tables, and shelving units usually store more compactly, and safely, taken apart.</p></div></div>
-      <div class="crss-tip"><span class="crss-tip-num">08</span><div><h3>Keep an inventory</h3><p>A simple list or a few photos of what's in each box can save a lot of guesswork later.</p></div></div>
+    <!-- Filled from the query string the waiting list button sends,
+         and hidden if someone arrives here with no size, which is
+         fine: the form still works, they just type it.
+
+         The form below is GHL's own element in its own iframe, which
+         this code cannot reach into. Showing the size here means the
+         visitor can see it was carried over. Getting it INTO the form
+         is a GHL setting: give the unit field a query key of "unit"
+         and the message field "message" in the form builder. -->
+    <div class="crss-chosen" data-crss-chosen hidden>
+      <p class="crss-chosen-label">You are joining the list for</p>
+      <p class="crss-chosen-unit" data-crss-chosen-unit></p>
+      <p class="crss-chosen-note" data-crss-chosen-note></p>
     </div>
 
-    <div class="crss-tips-cta">
-      <p>Ready to find a unit?</p>
-      <a href="/lubbock-2213-n-quaker" class="crss-tips-cta-btn">See Units and Prices</a>
+    <div class="crss-waitlist-info">
+      <div class="crss-waitlist-info-row">
+        <span class="crss-waitlist-label">Phone</span>
+        <a href="tel:+18065891472">(806) 589-1472</a>
+      </div>
+      <div class="crss-waitlist-info-row">
+        <span class="crss-waitlist-label">Email</span>
+        <a href="mailto:info@caprock-storage.com">info@caprock-storage.com</a>
+      </div>
+      <a href="/lubbock-2213-n-quaker#units" class="crss-waitlist-location-link">Back to the unit list &rarr;</a>
     </div>
+
+    <!-- The GHL native Forms element goes here, directly below this
+         Custom Code block. It is not part of this file: only GHL's own
+         form element reaches the CRM. -->
   </div>
 </div>
 
+<script>
+  (function () {
+    var host = document.querySelector('[data-crss-chosen]');
+    if (!host) return;
+
+    /* Read with URLSearchParams and write with textContent, so nothing
+       from the query string is ever parsed as HTML. Anyone can put
+       anything in a URL and send someone the link. */
+    var unit = new URLSearchParams(window.location.search).get('unit');
+    if (!unit) return;
+
+    host.querySelector('[data-crss-chosen-unit]').textContent = unit.replace(/ x /g, ' \u00D7 ') + ' unit';
+    host.querySelector('[data-crss-chosen-note]').textContent =
+      'If the form below has not picked the size up, type it in the message. ' +
+      'We will confirm the rate when we call, as rates can change before a unit comes free.';
+    host.hidden = false;
+  })();
+</script>
 
 <!-- ================================================================
      CapRock Self Storage — Global Footer
