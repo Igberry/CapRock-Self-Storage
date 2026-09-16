@@ -164,11 +164,22 @@ async function run() {
     const plan = [];
     for (const p of people.values()) {
       const c = existingCodes.get(p.tenant_key);
-      if (!c || c.status === 'revoked') plan.push({ kind: 'issue', who: p.customer_name, rooms: p.rooms });
+      if (!c || c.status === 'revoked') plan.push({ kind: delinquent(p.contracts) ? 'issue_suspended' : 'issue', who: p.customer_name, rooms: p.rooms });
       else if (delinquent(p.contracts) && c.status === 'active') plan.push({ kind: 'suspend', who: p.customer_name });
       else if (!delinquent(p.contracts) && c.status === 'suspended') plan.push({ kind: 'reinstate', who: p.customer_name });
     }
     for (const [k, c] of existingCodes) if (!people.has(k) && c.status !== 'revoked') plan.push({ kind: 'revoke', who: c.customer_name });
+    /* Recorded as counts, so a rehearsal can be read from the
+       database without the endpoint's secret, and without writing
+       tenant names anywhere a dry run should not. */
+    const counts = {};
+    for (const step of plan) counts[step.kind] = (counts[step.kind] || 0) + 1;
+    counts.people = people.size;
+    counts.no_phone = [...people.values()].filter((p) => !p.phone).length;
+    await db.insert('sync_runs', [{
+      started_at: now, finished_at: new Date().toISOString(), ok: true, dry_run: true,
+      tenants_seen: stats.tenants_seen, plan: { ...counts, departed: departed.length },
+    }]).catch((e) => console.error('dry run record failed:', e.message));
     return { dry_run: true, stats, departed: departed.length, plan };
   }
 
