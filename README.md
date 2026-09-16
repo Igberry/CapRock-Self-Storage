@@ -243,3 +243,36 @@ an address taken from the SROA reference page that turned out to be
 address belongs to before using one from a competitor page.
 
 Layout reference: https://www.sroa.com/find-storage/texas/lubbock/5839-49th-street
+
+## Gate codes (`api/gate-sync.js`)
+
+WebSelfStorage cannot push gate codes to CapRock's controllers, so the
+codes are issued here: one four-digit code per person, stored in the
+Supabase project **CapRock Gate Codes**, texted to the tenant through
+GHL, and handed to the controller through `api/_gate/alarm.js` (a stub
+until Alarm.com access exists; meanwhile the office is texted what to
+key in). A Vercel cron calls the endpoint every five minutes; each run
+reads the rentroll, issues codes for new tenants, suspends anyone more
+than `SUSPEND_AFTER_DAYS` behind with a balance, reinstates on payment,
+and revokes at move-out. Every change is written to `events`.
+
+Settings, all in the Vercel project:
+
+| Variable | Purpose |
+|---|---|
+| `CRON_SECRET` | Vercel sends it with each cron call; the endpoint refuses anything else |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | the gate-codes project; service role, never anon |
+| `WSS_API_KEY` | already set for the price proxy; the rentroll uses the same key |
+| `GHL_API_KEY`, `GHL_LOCATION_ID` | Private Integration token with `contacts.write` and `conversations/message.write` |
+| `GATE_TEXTING` | `on` to send texts; anything else rehearses and logs |
+| `OFFICE_PHONE` | ten digits; receives "ADD code 4821 for ..." while the controller is manual |
+| `SUSPEND_AFTER_DAYS` | grace period before a balance suspends a code (default 30) |
+| `GATE_DRY_RUN` | `1` returns the plan and writes nothing |
+
+First run: set `GATE_DRY_RUN=1`, call the endpoint, read the plan. Then
+unset it with `GATE_TEXTING` still off and check `office_list` in
+Supabase. Only then turn texting on, and do it on a day the office can
+handle the calls: every existing tenant gets a text at once.
+
+`node tools/gate-sync-test.js` runs the whole state machine against an
+in-memory database. Run it after any change to the sync.

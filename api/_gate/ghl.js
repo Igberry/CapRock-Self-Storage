@@ -1,0 +1,96 @@
+/* Texting through GHL.
+
+   The tenant is upserted as a contact first, because GHL sends
+   messages to contacts, not to numbers. That is also useful in itself:
+   every tenant ends up in the CRM with a phone, a name and a
+   "gate-code" tag, which the office can use for anything else later.
+
+   Needs, in Vercel:
+     GHL_API_KEY      a Private Integration token for the CapRock
+                      location, with contacts.write and
+                      conversations/message.write
+     GHL_LOCATION_ID  the location id the token belongs to
+
+   With GATE_TEXTING set to anything other than "on", nothing is sent
+   and every call is logged as skipped. That is how the first run,
+   which issues a code to every existing tenant, is rehearsed. */
+'use strict';
+
+const BASE = 'https://services.leadconnectorhq.com';
+const VERSION = '2021-07-28';
+
+function configured() {
+  return Boolean(process.env.GHL_API_KEY && process.env.GHL_LOCATION_ID);
+}
+
+function on() {
+  return process.env.GATE_TEXTING === 'on';
+}
+
+async function call(method, path, body) {
+  const res = await fetch(BASE + path, {
+    method,
+    headers: {
+      Authorization: `Bearer ${process.env.GHL_API_KEY}`,
+      Version: VERSION,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(`ghl ${method} ${path} -> ${res.status} ${data ? JSON.stringify(data).slice(0, 200) : ''}`);
+  }
+  return data;
+}
+
+/* "SURNAME, First" is how the rentroll writes names. */
+function splitName(customerName) {
+  const s = String(customerName || '').trim();
+  const comma = s.indexOf(',');
+  if (comma > -1) {
+    return { lastName: s.slice(0, comma).trim(), firstName: s.slice(comma + 1).trim() };
+  }
+  const parts = s.split(/\s+/);
+  return { firstName: parts[0] || '', lastName: parts.slice(1).join(' ') };
+}
+
+async function upsertContact({ customerName, phone, tags }) {
+  const name = splitName(customerName);
+  const data = await call('POST', '/contacts/upsert', {
+    locationId: process.env.GHL_LOCATION_ID,
+    phone: '+1' + phone,
+    firstName: name.firstName,
+    lastName: name.lastName,
+    tags: tags || ['gate-code'],
+    source: 'gate-code-sync',
+  });
+  const id = data && data.contact && data.contact.id;
+  if (!id) throw new Error('ghl upsert returned no contact id');
+  return id;
+}
+
+async function sms(contactId, message) {
+  return call('POST', '/conversations/messages', {
+    type: 'SMS',
+    contactId,
+    message,
+  });
+}
+
+/* Returns { sent, reason }. Never throws: a text failing is an event
+   to record, not a reason to abandon the rest of the run. */
+async function text({ customerName, phone, message, tags }) {
+  if (!configured()) return { sent: false, reason: 'ghl_not_configured' };
+  if (!on()) return { sent: false, reason: 'texting_off' };
+  try {
+    const contactId = await upsertContact({ customerName, phone, tags });
+    await sms(contactId, message);
+    return { sent: true, contactId };
+  } catch (e) {
+    return { sent: false, reason: e.message };
+  }
+}
+
+module.exports = { configured, on, text };

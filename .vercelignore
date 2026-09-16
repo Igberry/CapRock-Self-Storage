@@ -16,3 +16,6 @@ preview/
 *.png
 *.jpg
 *.jpeg
+
+# Dev tooling is for the repo, not the deployment.
+tools/
