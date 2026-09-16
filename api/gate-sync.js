@@ -27,6 +27,7 @@
    second time. That is what makes a five-minute schedule safe.
 
    SETTINGS (Vercel environment)
+     GATE_ENABLED          "on" or the sync does nothing at all
      GATE_SYNC_SECRET      required; the scheduler sends it as a Bearer
      SUPABASE_URL          required
      SUPABASE_SERVICE_KEY  required; service role, never the anon key
@@ -268,6 +269,14 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: 'unauthorized' });
   }
   if (!db.configured()) return res.status(503).json({ error: 'supabase_not_configured' });
+
+  /* Paused unless GATE_ENABLED is exactly "on". Added 16 September
+     after the first live run sent 38 texts two steps ahead of the
+     plan: from now on the sync does nothing at all, scheduler or not,
+     until someone sets this deliberately. */
+  if (process.env.GATE_ENABLED !== 'on') {
+    return res.status(200).json({ paused: true, reason: 'GATE_ENABLED is not on' });
+  }
 
   const started = new Date().toISOString();
   let runId = null;

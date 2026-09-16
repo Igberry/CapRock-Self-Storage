@@ -1,5 +1,3 @@
 {
-  "crons": [
-    { "path": "/api/gate-sync", "schedule": "*/5 * * * *" }
-  ]
+  "crons": []
 }

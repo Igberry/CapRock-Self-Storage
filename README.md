@@ -260,6 +260,7 @@ Settings, all in the Vercel project:
 
 | Variable | Purpose |
 |---|---|
+| `GATE_ENABLED` | `on` or the sync does nothing at all; the master switch |
 | `CRON_SECRET` | Vercel sends it with each cron call; the endpoint refuses anything else |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | the gate-codes project; service role, never anon |
 | `WSS_API_KEY` | already set for the price proxy; the rentroll uses the same key |

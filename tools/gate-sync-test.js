@@ -70,6 +70,7 @@ require.cache[require.resolve(path.join(root, '_gate/alarm.js'))] = { exports: f
 require.cache[require.resolve(path.join(root, '_gate/rentroll.js'))] = { exports: fakeRentroll, loaded: true, id: 'rr' };
 
 process.env.GATE_SYNC_SECRET = 'test';
+process.env.GATE_ENABLED = 'on';
 process.env.OFFICE_PHONE = '8065550000';
 const handler = require(path.join(root, 'gate-sync.js'));
 
