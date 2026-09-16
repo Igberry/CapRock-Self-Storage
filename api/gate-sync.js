@@ -34,7 +34,8 @@
      GHL_API_KEY           Private Integration token, see _gate/ghl.js
      GHL_LOCATION_ID
      GATE_TEXTING          "on" to actually send; anything else rehearses
-     OFFICE_PHONE          ten digits; where "please key this in" goes
+     OFFICE_PHONE          ten digits, texted "please key this in"
+     OFFICE_EMAIL          or emailed; either or both
      SUSPEND_AFTER_DAYS    default 30
      GATE_DRY_RUN          "1": read and report, write nothing at all
 
@@ -128,17 +129,10 @@ async function pushToController(kind, code, person, stats) {
     return;
   }
   await db.event(person.tenant_key, 'alarm_failed', { kind, code, reason: r.reason });
-  /* Not connected yet: the office keys it in. One text per change. */
-  if (process.env.OFFICE_PHONE) {
-    const sent = await ghl.text({
-      customerName: 'CapRock Office',
-      phone: String(process.env.OFFICE_PHONE).replace(/\D/g, '').slice(-10),
-      message: officeMessage(kind, person, code),
-      tags: ['gate-office'],
-    });
-    await db.event(person.tenant_key, sent.sent ? 'office_notified' : 'office_notify_failed',
-      { kind, code, reason: sent.reason });
-  }
+  /* Not connected yet: the office keys it in. One message per change. */
+  const sent = await ghl.office(officeMessage(kind, person, code));
+  await db.event(person.tenant_key, sent.sent ? 'office_notified' : 'office_notify_failed',
+    { kind, code, reason: sent.reason });
   stats.pending++;
 }
 

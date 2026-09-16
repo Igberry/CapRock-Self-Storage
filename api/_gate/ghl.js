@@ -93,4 +93,38 @@ async function text({ customerName, phone, message, tags }) {
   }
 }
 
-module.exports = { configured, on, text };
+/* Where "please key this in" goes while the controller is manual.
+   OFFICE_PHONE sends a text; OFFICE_EMAIL sends an email; both set
+   sends both. Email is the safer default when the office line is the
+   same number GHL sends from, which cannot text itself. */
+async function office(message) {
+  if (!configured()) return { sent: false, reason: 'ghl_not_configured' };
+  if (!on()) return { sent: false, reason: 'texting_off' };
+  const phone = String(process.env.OFFICE_PHONE || '').replace(/\D/g, '').slice(-10);
+  const email = String(process.env.OFFICE_EMAIL || '').trim();
+  if (!phone && !email) return { sent: false, reason: 'no_office_contact' };
+  try {
+    const data = await call('POST', '/contacts/upsert', {
+      locationId: process.env.GHL_LOCATION_ID,
+      ...(phone ? { phone: '+1' + phone } : {}),
+      ...(email ? { email } : {}),
+      firstName: 'CapRock',
+      lastName: 'Office',
+      tags: ['gate-office'],
+      source: 'gate-code-sync',
+    });
+    const contactId = data && data.contact && data.contact.id;
+    if (!contactId) throw new Error('ghl upsert returned no contact id');
+    if (phone) await sms(contactId, message);
+    if (email) {
+      await call('POST', '/conversations/messages', {
+        type: 'Email', contactId, subject: message.slice(0, 78), html: '<p>' + message + '</p>',
+      });
+    }
+    return { sent: true };
+  } catch (e) {
+    return { sent: false, reason: e.message };
+  }
+}
+
+module.exports = { configured, on, text, office };

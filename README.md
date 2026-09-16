@@ -265,7 +265,7 @@ Settings, all in the Vercel project:
 | `WSS_API_KEY` | already set for the price proxy; the rentroll uses the same key |
 | `GHL_API_KEY`, `GHL_LOCATION_ID` | Private Integration token with `contacts.write` and `conversations/message.write` |
 | `GATE_TEXTING` | `on` to send texts; anything else rehearses and logs |
-| `OFFICE_PHONE` | ten digits; receives "ADD code 4821 for ..." while the controller is manual |
+| `OFFICE_PHONE`, `OFFICE_EMAIL` | where "ADD code 4821 for ..." goes while the controller is manual; either or both. Use email if the office number is the one GHL sends from |
 | `SUSPEND_AFTER_DAYS` | grace period before a balance suspends a code (default 30) |
 | `GATE_DRY_RUN` | `1` returns the plan and writes nothing |
 

@@ -57,6 +57,7 @@ const fakeDb = {
 const fakeGhl = {
   configured: () => true, on: () => true,
   async text(t) { texts.push(t); return { sent: true, contactId: 'c_' + t.phone }; },
+  async office(message) { texts.push({ phone: 'office', message, tags: ['gate-office'] }); return { sent: true }; },
 };
 const fakeAlarm = { configured: () => false, add: async () => ({ ok: false, reason: 'not_configured' }), suspend: async () => ({ ok: false, reason: 'not_configured' }), remove: async () => ({ ok: false, reason: 'not_configured' }) };
 let feed = [];
