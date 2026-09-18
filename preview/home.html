@@ -2221,60 +2221,100 @@
   }
 
   /* ============ THE PROPERTY, PHOTOGRAPHED ============
-     One large picture and two smaller, in a grid with a hairline
-     gutter, between the prose and the feature list. It is the only
-     place on the home page where the facility is shown rather than
-     described, and it sits where a reader has just been told what
-     CapRock is like. */
+     An editorial spread rather than a grid of thumbnails. The
+     heading sits inside the composition, in the top-left cell, so
+     the words and the pictures read as one layout; the tall
+     interior stands beside it, and the wide row of doors runs
+     across the bottom with the office tucked into the corner.
+     Captions sit on the pictures, on a soft dark wash, so nothing
+     hangs below a frame to break the rhythm. */
   .crss-gallery {
     background: var(--crss-white, #FFFFFF);
     border-top: 1px solid var(--crss-rule, #E7DECD);
     border-bottom: 1px solid var(--crss-rule, #E7DECD);
   }
   .crss-gallery .crss-home-inner {
-    padding-top: 72px;
-    padding-bottom: 72px;
+    padding-top: 80px;
+    padding-bottom: 80px;
   }
-  .crss-gallery-grid {
+  .crss-spread {
     display: grid;
-    grid-template-columns: 3fr 2fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 18px;
-    margin-top: 36px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto 420px;
+    gap: 20px;
   }
-  .crss-gallery-grid .crss-photo-lead {
-    grid-row: 1 / 3;
+  .crss-spread-copy {
+    grid-column: 1 / 8;
+    grid-row: 1;
+    align-self: end;
+    padding: 0 40px 28px 0;
   }
-  .crss-gallery-grid .crss-photo img {
-    aspect-ratio: 4 / 3;
+  .crss-spread-copy .crss-home-h2 {
+    margin-bottom: 18px;
   }
-  .crss-gallery-grid .crss-photo-lead img {
-    aspect-ratio: auto;
-    height: calc(100% - 28px);
+  .crss-spread-copy p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 46ch;
   }
+  .crss-spread-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 22px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1), color .22s ease;
+  }
+  .crss-spread-link:hover {
+    color: var(--crss-terracotta-dark, #863B1A);
+    transform: translateX(3px);
+  }
+  .crss-spread-tall  { grid-column: 8 / 13; grid-row: 1; aspect-ratio: 5 / 6; }
+  .crss-spread-small { grid-column: 1 / 5;  grid-row: 2; }
+  .crss-spread-wide  { grid-column: 5 / 13; grid-row: 2; }
+
   /* ---- Photographs ----
-     Real pictures of the property, framed as plainly as possible:
-     no rounded corners, no drop shadow, a hairline caption in the
-     eyebrow style. The photograph does the work. */
-  .crss-gallery .crss-photo {
+     Soft corners, no drop shadow, the caption laid on the picture
+     over a wash that fades in from the bottom edge. A slow scale
+     on hover, clipped by the frame, is the only movement. */
+  .crss-spread .crss-photo {
+    position: relative;
     margin: 0;
     padding: 0;
-  }
-  .crss-gallery .crss-photo img {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+    overflow: hidden;
+    border-radius: 16px;
     background: var(--crss-sand, #EFE7DA);
   }
-  .crss-gallery .crss-photo figcaption {
-    padding-top: 10px;
+  .crss-spread .crss-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    transition: transform .9s cubic-bezier(.2, .6, .2, 1);
+  }
+  .crss-spread .crss-photo:hover img {
+    transform: scale(1.035);
+  }
+  .crss-spread .crss-photo figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 56px 22px 18px;
     font-size: 10.5px;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--crss-taupe, #7F6C5D);
+    color: var(--crss-cream, #F1E3CC);
+    background: linear-gradient(to top, rgba(41, 39, 36, 0.72), rgba(41, 39, 36, 0));
+    pointer-events: none;
   }
+  .crss-spread-tall img { object-position: 30% center; }
 
   @media (max-width: 900px) {
     .crss-sec-head-split {
@@ -2292,17 +2332,20 @@
     }
   }
   @media (max-width: 768px) {
-    .crss-gallery-grid {
+    .crss-spread {
       grid-template-columns: 1fr;
       grid-template-rows: auto;
     }
-    .crss-gallery-grid .crss-photo-lead {
+    .crss-spread-copy, .crss-spread-tall, .crss-spread-small, .crss-spread-wide {
+      grid-column: 1;
       grid-row: auto;
     }
-    .crss-gallery-grid .crss-photo-lead img {
-      aspect-ratio: 4 / 3;
-      height: auto;
+    .crss-spread-copy {
+      padding: 0 0 8px;
     }
+    .crss-spread-tall  { aspect-ratio: 4 / 3; }
+    .crss-spread-small { aspect-ratio: 4 / 3; }
+    .crss-spread-wide  { aspect-ratio: 16 / 9; }
     .crss-home-inner {
       padding: 72px 26px;
     }
@@ -2499,20 +2542,24 @@
   <!-- ============ THE PROPERTY ============ -->
   <section class="crss-gallery">
     <div class="crss-home-inner">
-      <p class="crss-home-eyebrow">The property</p>
-      <h2 class="crss-home-h2">2213 North Quaker, as it is</h2>
-      <div class="crss-gallery-grid">
-        <figure class="crss-photo crss-photo-lead">
-          <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6864.jpg" alt="A row of red drive-up storage unit doors at CapRock Self Storage in Lubbock" loading="lazy" decoding="async">
-          <figcaption>Drive-up units</figcaption>
-        </figure>
-        <figure class="crss-photo">
+      <div class="crss-spread">
+        <div class="crss-spread-copy">
+          <p class="crss-home-eyebrow">The property</p>
+          <h2 class="crss-home-h2">2213 North Quaker, as it is</h2>
+          <p>Drive-up rows under camera, a temperature controlled building with its own entrance, and an office on the road where someone answers the phone. Photographed in September, not rendered.</p>
+          <a href="/lubbock-2213-n-quaker" class="crss-spread-link">See the units and prices &rarr;</a>
+        </div>
+        <figure class="crss-photo crss-spread-tall">
           <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6865.jpg" alt="Interior hallway of temperature controlled units with a wall thermostat" loading="lazy" decoding="async">
           <figcaption>Temperature controlled interior</figcaption>
         </figure>
-        <figure class="crss-photo">
+        <figure class="crss-photo crss-spread-small">
           <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad127aff484614db27b897.jpg" alt="The CapRock Self Storage office on North Quaker Avenue, red awning and banner" loading="lazy" decoding="async">
           <figcaption>The office on North Quaker</figcaption>
+        </figure>
+        <figure class="crss-photo crss-spread-wide">
+          <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6864.jpg" alt="A row of red drive-up storage unit doors at CapRock Self Storage in Lubbock" loading="lazy" decoding="async">
+          <figcaption>Drive-up units</figcaption>
         </figure>
       </div>
     </div>
