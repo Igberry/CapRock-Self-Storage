@@ -93,6 +93,39 @@
   }
 
   /* ============ CONTENT BLOCKS ============ */
+  .crss-about-photos {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 18px;
+    margin-bottom: 44px;
+  }
+  .crss-about-photos .crss-photo img {
+    aspect-ratio: 4 / 3;
+  }
+  /* ---- Photographs ----
+     Real pictures of the property, framed as plainly as possible:
+     no rounded corners, no drop shadow, a hairline caption in the
+     eyebrow style. The photograph does the work. */
+  .crss-about-photos .crss-photo {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-about-photos .crss-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+  }
+  .crss-about-photos .crss-photo figcaption {
+    padding-top: 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+
   .crss-about-block {
     background: var(--crss-white, #FFFFFF);
     border: 1px solid var(--crss-rule, #E7DECD);
@@ -228,6 +261,9 @@
   }
 
   @media (max-width: 768px) {
+    .crss-about-photos {
+      grid-template-columns: 1fr;
+    }
     .crss-about-inner {
       padding: 48px 26px 80px;
     }
@@ -279,6 +315,17 @@
 
          When CapRock supplies the copy, the block goes back exactly
          where this comment sits:
+
+    <div class="crss-about-photos">
+      <figure class="crss-photo">
+        <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad1295ff484614db27bad3.jpg" alt="CapRock Self Storage office building on North Quaker Avenue with its red roller door and gate" loading="lazy" decoding="async">
+        <figcaption>North Quaker Avenue, Lubbock</figcaption>
+      </figure>
+      <figure class="crss-photo">
+        <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124d30b0f957cc6ac1a1.jpg" alt="The CapRock Self Storage banner on the facility wall" loading="lazy" decoding="async">
+        <figcaption>Local. Reliable. Here for Lubbock.</figcaption>
+      </figure>
+    </div>
 
            <div class="crss-about-block">
              <h2>Our Story</h2>

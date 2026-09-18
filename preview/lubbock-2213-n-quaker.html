@@ -1671,16 +1671,14 @@
     border-radius: 0;
     overflow: hidden;
   }
-  /* Facility photo.
-     The photo is 2073x758, far wider than these panels, so cover crops
-     it hard. The vertical anchor keeps the building band in frame
-     rather than centring on empty sky or tarmac. */
+  /* Facility photo: the office from the road. Cover crops it to the
+     card; the anchor keeps the roofline and banner in frame. */
   .crss-info-photo {
     height: 196px;
     background-color: var(--crss-taupe, #7F6C5D);
-    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ec591a2de8f8e8fbb6441.jpg');
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad127aff484614db27b897.jpg');
     background-size: cover;
-    background-position: center 50%;
+    background-position: center 45%;
     background-repeat: no-repeat;
   }
   .crss-info-body {
@@ -1834,6 +1832,41 @@
   }
 
   /* ---- Feature accordion grid ---- */
+  /* Three photographs above the feature cards, so the list below is
+     describing something the reader has just seen. */
+  .crss-feature-photos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+  .crss-feature-photos .crss-photo img {
+    aspect-ratio: 4 / 3;
+  }
+  /* ---- Photographs ----
+     Real pictures of the property, framed as plainly as possible:
+     no rounded corners, no drop shadow, a hairline caption in the
+     eyebrow style. The photograph does the work. */
+  .crss-feature-photos .crss-photo {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-feature-photos .crss-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+  }
+  .crss-feature-photos .crss-photo figcaption {
+    padding-top: 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+
   .crss-feature-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -2437,6 +2470,9 @@
     .crss-panel {
       padding: 32px 28px 34px;
     }
+    .crss-feature-photos {
+      grid-template-columns: 1fr;
+    }
     .crss-feature-grid {
       grid-template-columns: 1fr;
     }
@@ -2579,6 +2615,21 @@
       <section id="features" class="crss-section crss-panel">
         <h2>Features</h2>
         <p class="crss-panel-lede">What this property offers today. Anything not listed here has not been confirmed for this location yet, so ask the office rather than assuming.</p>
+
+        <div class="crss-feature-photos">
+          <figure class="crss-photo">
+            <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dff484614db27b39e.jpg" alt="Drive-up units 113 to 119 with a security camera on the corner of the building" loading="lazy" decoding="async">
+            <figcaption>Drive-up, under camera</figcaption>
+          </figure>
+          <figure class="crss-photo">
+            <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6865.jpg" alt="Temperature controlled interior units with a wall thermostat" loading="lazy" decoding="async">
+            <figcaption>Temperature controlled</figcaption>
+          </figure>
+          <figure class="crss-photo">
+            <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6855.jpg" alt="The climate controlled building with its air conditioning units and accessible entrance" loading="lazy" decoding="async">
+            <figcaption>The climate building</figcaption>
+          </figure>
+        </div>
 
         <div class="crss-feature-grid">
           <div class="crss-feature">

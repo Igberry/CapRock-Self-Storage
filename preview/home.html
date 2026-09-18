@@ -1752,9 +1752,9 @@
         rgba(41, 39, 36, 0.60) 68%,
         rgba(41, 39, 36, 0.48) 100%),
       radial-gradient(90% 130% at 90% 8%, rgba(164, 74, 35, 0.30), transparent 62%),
-      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ec591a2de8f8e8fbb6441.jpg');
+      url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad1273de8ed1c29f506e87.jpg');
     background-size: cover;
-    background-position: center 50%;
+    background-position: center 62%;
     background-repeat: no-repeat;
   }
 
@@ -1930,15 +1930,14 @@
     transform: translateY(-4px);
     border-color: rgba(164, 74, 35, 0.28);
   }
-  /* Facility photo. The photo is 2073x758, far wider than this panel,
-     so cover crops it hard. The vertical anchor keeps the building band
-     in frame rather than centring on sky or tarmac. */
+  /* Facility card: the office from the road, awning and banner. Cover
+     crops it to the card; the anchor keeps the roofline in frame. */
   .crss-fac-photo {
     height: 178px;
     background-color: var(--crss-taupe, #7F6C5D);
-    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6a9ec591a2de8f8e8fbb6441.jpg');
+    background-image: url('https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad127aff484614db27b897.jpg');
     background-size: cover;
-    background-position: center 50%;
+    background-position: center 45%;
     background-repeat: no-repeat;
   }
   .crss-fac-body {
@@ -2221,6 +2220,62 @@
     margin-right: calc(50% - 50vw);
   }
 
+  /* ============ THE PROPERTY, PHOTOGRAPHED ============
+     One large picture and two smaller, in a grid with a hairline
+     gutter, between the prose and the feature list. It is the only
+     place on the home page where the facility is shown rather than
+     described, and it sits where a reader has just been told what
+     CapRock is like. */
+  .crss-gallery {
+    background: var(--crss-white, #FFFFFF);
+    border-top: 1px solid var(--crss-rule, #E7DECD);
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
+  }
+  .crss-gallery .crss-home-inner {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+  .crss-gallery-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 18px;
+    margin-top: 36px;
+  }
+  .crss-gallery-grid .crss-photo-lead {
+    grid-row: 1 / 3;
+  }
+  .crss-gallery-grid .crss-photo img {
+    aspect-ratio: 4 / 3;
+  }
+  .crss-gallery-grid .crss-photo-lead img {
+    aspect-ratio: auto;
+    height: calc(100% - 28px);
+  }
+  /* ---- Photographs ----
+     Real pictures of the property, framed as plainly as possible:
+     no rounded corners, no drop shadow, a hairline caption in the
+     eyebrow style. The photograph does the work. */
+  .crss-gallery .crss-photo {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-gallery .crss-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+  }
+  .crss-gallery .crss-photo figcaption {
+    padding-top: 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+
   @media (max-width: 900px) {
     .crss-sec-head-split {
       display: block;
@@ -2237,6 +2292,17 @@
     }
   }
   @media (max-width: 768px) {
+    .crss-gallery-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+    .crss-gallery-grid .crss-photo-lead {
+      grid-row: auto;
+    }
+    .crss-gallery-grid .crss-photo-lead img {
+      aspect-ratio: 4 / 3;
+      height: auto;
+    }
     .crss-home-inner {
       padding: 72px 26px;
     }
@@ -2427,6 +2493,28 @@
         <li><strong>Vehicle and RV parking.</strong> Options vary by location, so ask your nearest facility what they currently offer.</li>
       </ul>
       <p class="crss-longcopy-close">If you know roughly what you need, <a href="/lubbock-2213-n-quaker">see what is available in Lubbock</a> and give the office a call.</p>
+    </div>
+  </section>
+
+  <!-- ============ THE PROPERTY ============ -->
+  <section class="crss-gallery">
+    <div class="crss-home-inner">
+      <p class="crss-home-eyebrow">The property</p>
+      <h2 class="crss-home-h2">2213 North Quaker, as it is</h2>
+      <div class="crss-gallery-grid">
+        <figure class="crss-photo crss-photo-lead">
+          <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6864.jpg" alt="A row of red drive-up storage unit doors at CapRock Self Storage in Lubbock" loading="lazy" decoding="async">
+          <figcaption>Drive-up units</figcaption>
+        </figure>
+        <figure class="crss-photo">
+          <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6865.jpg" alt="Interior hallway of temperature controlled units with a wall thermostat" loading="lazy" decoding="async">
+          <figcaption>Temperature controlled interior</figcaption>
+        </figure>
+        <figure class="crss-photo">
+          <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad127aff484614db27b897.jpg" alt="The CapRock Self Storage office on North Quaker Avenue, red awning and banner" loading="lazy" decoding="async">
+          <figcaption>The office on North Quaker</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 

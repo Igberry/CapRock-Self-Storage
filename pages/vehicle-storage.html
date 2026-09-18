@@ -104,6 +104,36 @@
   }
 
   /* ============ CONTENT BLOCKS ============ */
+  /* ---- Photographs ----
+     Real pictures of the property, framed as plainly as possible:
+     no rounded corners, no drop shadow, a hairline caption in the
+     eyebrow style. The photograph does the work. */
+  .crss-audience-inner .crss-photo {
+    margin: 0;
+    padding: 0;
+  }
+  .crss-audience-inner .crss-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: var(--crss-sand, #EFE7DA);
+  }
+  .crss-audience-inner .crss-photo figcaption {
+    padding-top: 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-audience-inner .crss-audience-photo {
+    margin-bottom: 40px;
+  }
+  .crss-audience-inner .crss-audience-photo img {
+    aspect-ratio: 21 / 9;
+  }
+
   .crss-audience-blocks {
     display: flex;
     flex-direction: column;
@@ -304,6 +334,11 @@
 
     <h1 class="crss-audience-title">Vehicle Storage</h1>
     <p class="crss-audience-subtitle">A secure place to park your car, motorcycle, RV, or boat when you don't have room for it at home.</p>
+
+    <figure class="crss-photo crss-audience-photo">
+      <img src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad124dbdaa5e26a91b6864.jpg" alt="Drive-up storage units with wide red doors at CapRock Self Storage" loading="lazy" decoding="async">
+      <figcaption>Drive-up units, wide doors</figcaption>
+    </figure>
 
     <div class="crss-audience-blocks">
       <div class="crss-audience-block">
