@@ -314,3 +314,18 @@ to anyone; workflows on the `tenant` tag are the office's to build.
 Settings: `GHL_TENANTS_ENABLED=on`, and `GHL_API_KEY` with
 `locations/customFields.readonly` and `locations/customFields.write`
 added (it already has the contact scopes).
+
+## Rent Now / Reserve requests (`api/request.js`)
+
+Both buttons open a form in the shared dialog (header, `openRequest`)
+and post to `/api/request`, which creates the customer as a GHL
+contact tagged `rent-request` or `reserve-request` with the unit and
+date in custom fields (created on first run), adds a note, alerts the
+office (`OFFICE_PHONE` / `OFFICE_EMAIL`), and texts the customer a
+confirmation if they ticked the consent box. WebSelfStorage is not
+written to: its reservation and move-in endpoints require the card
+number itself. The office completes the rental in WebSelfStorage.
+
+Settings: `REQUESTS_ENABLED=on`; the form falls back to "call us"
+while it is off. Uses the same GHL token and scopes as the tenant
+sync.

@@ -38,9 +38,11 @@
        to read them from. The feed returns an empty list, so there
        was nothing to show and no date by which there would be.
      - The open questions listed in the Storage Faqs panel
-     - Rent Now and Reserve go to CapRock's page on uhaul.com, where
-       the customer picks the size again. U-Haul's buttons are form
-       posts, so there is no per-size link to send them to.
+     - Rent Now and Reserve open a request form on this site (the
+       header's openRequest, posting to api/request.js). The office
+       completes the rental in WebSelfStorage; the API's move-in
+       endpoint needs the card number itself, which this site does
+       not handle.
      ================================================================ -->
 <!-- The stylesheet sits above the markup on purpose.
      GHL serves this block inline in the body of a page that runs to

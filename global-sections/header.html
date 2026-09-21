@@ -647,6 +647,8 @@
     margin-top: 14px;
   }
   .crss-act {
+    appearance: none;
+    cursor: pointer;
     display: inline-block;
     padding: 11px 20px;
     font-family: 'Work Sans', Arial, sans-serif;
@@ -689,6 +691,105 @@
     color: var(--crss-white, #FFFFFF);
   }
 
+  /* ============ RENT NOW / RESERVE FORM ============
+     Shares the details dialog. Fields follow the contact page
+     styling notes so the two forms on the site look like one. */
+  .crss-req-unit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 18px;
+    padding: 16px 18px;
+    margin-bottom: 26px;
+    background: var(--crss-sand, #EFE7DA);
+  }
+  .crss-req-unit strong {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-req-unit span {
+    font-size: 13.5px;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-req-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+  }
+  .crss-req-grid .crss-req-full {
+    grid-column: 1 / -1;
+  }
+  .crss-req-label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-req-input {
+    display: block;
+    width: 100%;
+    padding: 13px 14px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--crss-charcoal, #292724);
+    background: var(--crss-bone, #FAF7F1);
+    border: 1px solid var(--crss-border, #D9CDB9);
+    border-radius: 5px;
+    transition: border-color .22s ease;
+  }
+  .crss-req-input:focus {
+    outline: none;
+    border-color: var(--crss-terracotta, #A44A23);
+  }
+  textarea.crss-req-input {
+    min-height: 84px;
+    resize: vertical;
+  }
+  .crss-req-consent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-req-consent input {
+    margin-top: 3px;
+    accent-color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-req-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    margin-top: 26px;
+  }
+  .crss-req-error {
+    font-size: 13.5px;
+    color: var(--crss-alert, #B42318);
+  }
+  .crss-req-done {
+    padding: 8px 0 4px;
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--crss-ink-soft, #5F564C);
+    max-width: 60ch;
+  }
+  /* The one field a person never sees. */
+  .crss-req-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
   @media (max-width: 1280px) {
     .crss-header-inner {
       gap: 20px;
@@ -726,6 +827,9 @@
     }
   }
   @media (max-width: 768px) {
+    .crss-req-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
     .crss-udlg-top,
     .crss-udlg-facts,
     .crss-udlg-cols {
@@ -928,14 +1032,11 @@
     window.CRSS_WSS = {
       endpoint: 'https://cap-rock-self-storage.vercel.app/api/wss',
 
-      /* Where Rent Now and Reserve go. CapRock's page on uhaul.com
-         carries both buttons on every size with a real checkout
-         behind them, run by U-Haul from the same WebSelfStorage data
-         this site reads. Their buttons are form posts, not links, so
-         a size cannot be deep-linked: the customer picks it again
-         there. One extra click, in exchange for this site never
-         holding a card number or a customer's details. */
-      RENT_URL: 'https://www.uhaul.com/Locations/Self-Storage-near-Lubbock-TX-79416/1030298/',
+      /* CapRock's listing on uhaul.com. Rent Now and Reserve used to
+         send people here; since 21 Sept 2026 they open the request
+         form on this site instead (see openRequest). Kept as a
+         reference, not linked from anywhere. */
+      UHAUL_LISTING: 'https://www.uhaul.com/Locations/Self-Storage-near-Lubbock-TX-79416/1030298/',
 
       /* The waiting list is a GHL form on its own page, the same
          arrangement as Contact Us: the request lands in the CRM where
@@ -1003,7 +1104,8 @@
         this._inflight[resource] = fetch(url)
           .then(function (r) { return r.ok ? r.json() : null; })
           .then(function (data) {
-            return resource === 'movein' ? self.mergeCatalogue(data) : data;
+            if (resource === 'movein') { data = self.mergeCatalogue(data); self.UNITS = (data && data.unitTypes) || []; }
+            return data;
           })
           .catch(function (e) {
             console.error('CRSS_WSS ' + resource + ' failed:', e);
@@ -1472,16 +1574,118 @@
          same page because that is where both flows live; the labels
          are U-Haul's own, so what a customer presses here is what
          they find there. */
+      /* Rent Now and Reserve open the request form on this site. They
+         used to go to uhaul.com, where the ID verification step is
+         failing (Sept 2026). The form goes to the office, which
+         completes the rental in WebSelfStorage; see api/request.js. */
       actions: function (u) {
         if (this.availability(u).state === 'full') {
           return '<div class="crss-actions">' +
             '<a class="crss-act crss-act-wait" href="' + this.waitlistHref(u) + '">Join the waiting list</a>' +
           '</div>';
         }
+        var key = this.unitKey(u);
         return '<div class="crss-actions">' +
-          '<a class="crss-act crss-act-primary" href="' + this.RENT_URL + '" target="_blank" rel="noopener">Rent Now</a>' +
-          '<a class="crss-act crss-act-secondary" href="' + this.RENT_URL + '" target="_blank" rel="noopener">Reserve</a>' +
+          '<button type="button" class="crss-act crss-act-primary" data-crss-request="rent" data-crss-unit-key="' + key + '">Rent Now</button>' +
+          '<button type="button" class="crss-act crss-act-secondary" data-crss-request="reserve" data-crss-unit-key="' + key + '">Reserve</button>' +
         '</div>';
+      },
+
+      unitKey: function (u) {
+        return [u.width, u.length, u.height, u.climate ? 'c' : 'd'].join('x');
+      },
+      unitByKey: function (key) {
+        var self = this;
+        return (this.UNITS || []).filter(function (u) { return self.unitKey(u) === key; })[0] || null;
+      },
+
+      /* ---- The request form ---- */
+      openRequest: function (u, kind) {
+        var dlg = this.dialog();
+        if (!dlg || typeof dlg.showModal !== 'function' || !u) return;
+        var self = this;
+        var rent = kind === 'rent';
+        var rate = this.money(u.rate);
+        var size = u.width + ' x ' + u.length + (u.height ? ' x ' + u.height : '');
+        var type = u.climate ? 'Temperature controlled' : 'Drive-up';
+        var today = new Date();
+        var iso = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+        var body = dlg.querySelector('[data-crss-udlg-body]');
+        body.innerHTML =
+          '<div class="crss-udlg-inner">' +
+            '<h2 class="crss-udlg-title" id="crss-udlg-title">' + (rent ? 'Rent this unit' : 'Reserve this unit') + '</h2>' +
+            '<div class="crss-req-unit">' +
+              '<strong>' + u.width + ' &times; ' + u.length + (u.height ? ' &times; ' + u.height : '') + '</strong>' +
+              '<span>' + type + (rate ? ' &middot; ' + rate + ' per month' : '') + (this.PRICE_LOCK.enabled ? ' &middot; ' + this.PRICE_LOCK.short : '') + '</span>' +
+            '</div>' +
+            '<form class="crss-req" novalidate>' +
+              '<div class="crss-req-grid">' +
+                '<label><span class="crss-req-label">First name</span><input class="crss-req-input" name="first" autocomplete="given-name" required></label>' +
+                '<label><span class="crss-req-label">Last name</span><input class="crss-req-input" name="last" autocomplete="family-name" required></label>' +
+                '<label><span class="crss-req-label">Mobile phone</span><input class="crss-req-input" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></label>' +
+                '<label><span class="crss-req-label">Email</span><input class="crss-req-input" name="email" type="email" autocomplete="email" required></label>' +
+                '<label><span class="crss-req-label">' + (rent ? 'Move-in date' : 'Planned move-in date') + '</span><input class="crss-req-input" name="date" type="date" min="' + iso + '" value="' + iso + '" required></label>' +
+                '<label class="crss-req-full"><span class="crss-req-label">Anything we should know (optional)</span><textarea class="crss-req-input" name="message" maxlength="600"></textarea></label>' +
+                '<label class="crss-req-hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>' +
+                '<label class="crss-req-consent crss-req-full"><input type="checkbox" name="consent"> ' +
+                  '<span>It is OK for CapRock to text me about this request.</span></label>' +
+              '</div>' +
+              '<div class="crss-req-foot">' +
+                '<button type="submit" class="crss-act crss-act-primary">' + (rent ? 'Request this unit' : 'Reserve this unit') + '</button>' +
+                '<span class="crss-req-error" data-crss-req-error hidden></span>' +
+              '</div>' +
+            '</form>' +
+            '<p class="crss-udlg-note" style="margin-top:18px">' +
+              (rent ? 'The office will call you to confirm the unit and take payment, and you can move in the same day during office hours.'
+                    : 'The office will call you to confirm the reservation. Nothing is charged until you move in.') +
+            '</p>' +
+          '</div>';
+
+        var form = body.querySelector('form');
+        var err = body.querySelector('[data-crss-req-error]');
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          err.hidden = true;
+          var fd = new FormData(form);
+          var missing = ['first', 'last', 'phone', 'email', 'date'].filter(function (n) { return !String(fd.get(n) || '').trim(); });
+          var phone = String(fd.get('phone') || '').replace(/\D/g, '');
+          if (missing.length || phone.length < 10) {
+            err.textContent = missing.length ? 'Please fill in every field.' : 'Please check the phone number.';
+            err.hidden = false;
+            return;
+          }
+          var btn = form.querySelector('button[type="submit"]');
+          btn.disabled = true;
+          btn.textContent = 'Sending\u2026';
+          fetch(self.endpoint.replace(/\/wss$/, '/request'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              kind: kind,
+              unit: { size: size, rate: rate || '', kind: type },
+              customer: { first: fd.get('first'), last: fd.get('last'), phone: phone, email: fd.get('email'), date: fd.get('date'), message: fd.get('message') },
+              consent: Boolean(fd.get('consent')),
+              website: fd.get('website') || ''
+            })
+          }).then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+            .then(function () {
+              body.innerHTML =
+                '<div class="crss-udlg-inner">' +
+                  '<h2 class="crss-udlg-title" id="crss-udlg-title">' + (rent ? 'Request received' : 'Reservation received') + '</h2>' +
+                  '<p class="crss-req-done">Thank you. The office will call you' + (rent ? ' to confirm the unit and arrange payment.' : ' to confirm your reservation.') +
+                  ' If you need it sooner, call <a href="tel:+18065891472">(806) 589-1472</a> during office hours.</p>' +
+                '</div>';
+            })
+            .catch(function () {
+              btn.disabled = false;
+              btn.textContent = rent ? 'Request this unit' : 'Reserve this unit';
+              err.textContent = 'That did not go through. Please try again, or call (806) 589-1472.';
+              err.hidden = false;
+            });
+        });
+        dlg.showModal();
+        var first = body.querySelector('input[name="first"]');
+        if (first) first.focus();
       },
 
       money: function (v) {
@@ -1490,6 +1694,16 @@
         return '$' + (num % 1 === 0 ? num.toFixed(0) : num.toFixed(2));
       }
     };
+
+    /* Rent Now and Reserve, wherever they are rendered: the location
+       rows, the details panel, anything later. One delegated
+       listener finds the unit by the key on the button. */
+    document.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest ? e.target.closest('[data-crss-request]') : null;
+      if (!btn) return;
+      var u = window.CRSS_WSS.unitByKey(btn.getAttribute('data-crss-unit-key'));
+      if (u) window.CRSS_WSS.openRequest(u, btn.getAttribute('data-crss-request'));
+    });
 
     /* ---- Safety net: ensure a viewport meta tag exists ----
        Without <meta name="viewport" content="width=device-width">, a

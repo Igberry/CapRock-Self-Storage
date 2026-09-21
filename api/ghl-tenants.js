@@ -76,21 +76,7 @@ function usDate(iso) {
   return `${Number(m)}/${Number(d)}/${y}`;
 }
 
-async function ensureFields() {
-  const data = await ghl.call('GET', `/locations/${LOC()}/customFields?model=contact`);
-  const have = new Map((data.customFields || []).map((f) => [String(f.name).toLowerCase(), f.id]));
-  const ids = {};
-  for (const [name, dataType] of FIELDS) {
-    let id = have.get(name.toLowerCase());
-    if (!id) {
-      const made = await ghl.call('POST', `/locations/${LOC()}/customFields`, { name, dataType, model: 'contact' });
-      id = made && made.customField && made.customField.id;
-      if (!id) throw new Error(`could not create custom field ${name}`);
-    }
-    ids[name] = id;
-  }
-  return ids;
-}
+const ensureFields = () => ghl.ensureContactFields(FIELDS);
 
 /* Every contact currently tagged as a tenant, by phone. This is how a
    move-out is noticed: tagged, but no longer in the rentroll. */

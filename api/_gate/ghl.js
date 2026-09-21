@@ -108,9 +108,11 @@ async function text({ customerName, phone, message, tags }) {
    OFFICE_PHONE sends a text; OFFICE_EMAIL sends an email; both set
    sends both. Email is the safer default when the office line is the
    same number GHL sends from, which cannot text itself. */
-async function office(message) {
+async function office(message, opts) {
   if (!configured()) return { sent: false, reason: 'ghl_not_configured' };
-  if (!on()) return { sent: false, reason: 'texting_off' };
+  /* force: a customer request the office must hear about regardless
+     of the gate-code texting switch, which governs tenant texts. */
+  if (!on() && !(opts && opts.force)) return { sent: false, reason: 'texting_off' };
   const phone = String(process.env.OFFICE_PHONE || '').replace(/\D/g, '').slice(-10);
   const email = String(process.env.OFFICE_EMAIL || '').trim();
   if (!phone && !email) return { sent: false, reason: 'no_office_contact' };
@@ -138,4 +140,30 @@ async function office(message) {
   }
 }
 
-module.exports = { configured, on, text, office, call };
+/* One text to a contact that already exists, outside the gate-code
+   switches: the customer asked for it on a form they just filled in. */
+async function sendSms(contactId, message) {
+  if (!configured()) return { sent: false, reason: 'ghl_not_configured' };
+  try { await sms(contactId, message); return { sent: true }; }
+  catch (e) { return { sent: false, reason: e.message }; }
+}
+
+/* Contact custom fields by name, created if missing. Returns
+   { name: id }. Shared by anything that writes to a contact. */
+async function ensureContactFields(list) {
+  const data = await call('GET', `/locations/${process.env.GHL_LOCATION_ID}/customFields?model=contact`);
+  const have = new Map((data.customFields || []).map((f) => [String(f.name).toLowerCase(), f.id]));
+  const ids = {};
+  for (const [name, dataType] of list) {
+    let id = have.get(name.toLowerCase());
+    if (!id) {
+      const made = await call('POST', `/locations/${process.env.GHL_LOCATION_ID}/customFields`, { name, dataType, model: 'contact' });
+      id = made && made.customField && made.customField.id;
+      if (!id) throw new Error(`could not create custom field ${name}`);
+    }
+    ids[name] = id;
+  }
+  return ids;
+}
+
+module.exports = { configured, on, text, office, call, sendSms, ensureContactFields };
