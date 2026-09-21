@@ -1,5 +1,6 @@
 {
   "crons": [
-    { "path": "/api/ghl-availability", "schedule": "*/15 * * * *" }
+    { "path": "/api/ghl-availability", "schedule": "*/15 * * * *" },
+    { "path": "/api/ghl-tenants",      "schedule": "7,22,37,52 * * * *" }
   ]
 }

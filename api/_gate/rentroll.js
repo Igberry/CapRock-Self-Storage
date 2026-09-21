@@ -27,6 +27,12 @@ function shape(r) {
     paid_thru: r.paidThru ? String(r.paidThru).slice(0, 10) : null,
     balance: Number(r.balance) || 0,
     street_rate: r.streetRate == null ? null : Number(r.streetRate),
+    /* The postal address, for the CRM record only. The gate sync
+       ignores these; ghl-tenants writes them to the contact. */
+    address: [String(r.address1 || '').trim(), String(r.apartment || '').trim()].filter(Boolean).join(' #'),
+    city: String(r.city || '').trim(),
+    state: String(r.stateName || '').trim(),
+    zip: String(r.zip || '').trim(),
   };
 }
 

@@ -298,3 +298,19 @@ In a voice agent prompt: `{{ custom_values.avail_summary }}`.
 Settings: `GHL_AVAIL_ENABLED=on` (or nothing is written), `CRON_SECRET`,
 and `GHL_API_KEY` with `locations/customValues.readonly` and
 `locations/customValues.write` added to its scopes.
+
+## Tenants into GHL (`api/ghl-tenants.js`)
+
+Tenants who sign up through uhaul.com exist only in WebSelfStorage.
+Every fifteen minutes this reads the rentroll and makes sure each
+current tenant is a GHL contact: name, phone, postal address, the tag
+`tenant`, and contact custom fields it creates itself on first run
+(Unit Numbers, Move-In Date, Paid Through, Balance Owed, Tenant
+Status, Gate Code, WSS Contract IDs). A contact tagged `tenant` who is
+no longer in the rentroll is retagged `former-tenant`. Gate Code is
+filled from the gate-code database when one exists. Nothing is sent
+to anyone; workflows on the `tenant` tag are the office's to build.
+
+Settings: `GHL_TENANTS_ENABLED=on`, and `GHL_API_KEY` with
+`locations/customFields.readonly` and `locations/customFields.write`
+added (it already has the contact scopes).
