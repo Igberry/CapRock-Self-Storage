@@ -627,6 +627,24 @@
      Under every price on the site: the location rows, the size
      guide cards and the details panel. Defined once, here, so all
      three say the same thing about the same unit. */
+  /* The price lock badge: quiet, one line, a small padlock. It sits
+     under a price wherever one is shown. */
+  .crss-lock {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0 0;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-lock svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
   .crss-avail {
     margin: 8px 0 0;
     font-size: 11px;
@@ -941,6 +959,42 @@
          Above it nothing is shown: "18 available" is not a reason
          to hurry and reads as clutter. */
       LOW_STOCK: 3,
+
+      /* ---- The price lock ----
+         CapRock's own promise: the monthly rate a tenant moves in at
+         does not go up for the first PRICE_LOCK.months. Stated here
+         once and drawn from here by every place that shows a price
+         (the unit rows, the details panel, the home page, the Help
+         Center), so changing the term, or withdrawing the promise,
+         is one edit. Set enabled to false and every mention of it
+         disappears from the site on the next load.
+
+         This is not U-Haul's "1-Year Price Lock". That programme
+         covers U-Haul owned and managed stores; CapRock is an
+         affiliate, and the promise on this site is CapRock's to
+         honour. It therefore also has to be in the Rental Agreement
+         (see the CONFIRM note in terms-of-use.html).
+
+         CONFIRM with CapRock: 12 months from move-in; base rent only;
+         new rentals and additional units both qualify; 30 days'
+         written notice before any later increase. */
+      PRICE_LOCK: {
+        enabled: true,
+        months: 12,
+        short: '12-month price lock',
+        line: 'Your monthly rate will not go up for the first 12 months.',
+        detail: 'The rate you move in at is locked for 12 months from your move-in date. ' +
+                'That covers the base monthly rent only, not insurance, fees or extras. ' +
+                'After the first year we give at least 30 days\' written notice before any change.',
+      },
+
+      /* A small badge, or nothing at all when the promise is off. */
+      priceLockBadge: function () {
+        if (!this.PRICE_LOCK.enabled) return '';
+        return '<p class="crss-lock" title="' + this.PRICE_LOCK.line + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>' +
+          this.PRICE_LOCK.short + '</p>';
+      },
       facility: 'lubbock-2213-n-quaker',
 
       /* Small helper so five pages do not each reinvent the fetch,
@@ -1365,6 +1419,11 @@
                   '<p class="crss-udlg-note" style="margin-top:0">' +
                     this.attributes(u).join(', ') + '</p>' +
                 '</div>' +
+                (this.PRICE_LOCK.enabled ?
+                  '<div>' +
+                    '<p class="crss-udlg-label">Your rate</p>' +
+                    '<p class="crss-udlg-note" style="margin-top:0">' + this.PRICE_LOCK.detail + '</p>' +
+                  '</div>' : '') +
               '</div>' +
             '</div>' +
 
@@ -1379,7 +1438,7 @@
 
             '<div class="crss-udlg-foot">' +
               '<div>' +
-                (live && rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' : '') +
+                (live && rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' + this.priceLockBadge() : '') +
                 this.availabilityHtml(u) +
               '</div>' +
               this.actions(u) +
@@ -2625,6 +2684,16 @@
           <h3>Clean, maintained buildings</h3>
           <p>The grounds and units are looked after.</p>
         </div>
+
+        <!-- Text comes from CRSS_WSS.PRICE_LOCK in the header; the
+             card hides itself if the promise is switched off. -->
+        <div class="crss-feat" data-crss-pricelock hidden>
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10.5" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <h3 data-crss-pricelock-title>12-month price lock</h3>
+          <p data-crss-pricelock-line>Your monthly rate will not go up for the first 12 months.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -2710,6 +2779,19 @@
 
        Built from the numeric width and length, never the free-text
        description, so nothing from the API reaches innerHTML. */
+    /* ---- Price lock card ----
+       Shown only while the promise is switched on in the header, and
+       worded from there, so the home page cannot keep advertising a
+       lock that has been withdrawn. */
+    (function () {
+      var card = document.querySelector('[data-crss-pricelock]');
+      var lock = window.CRSS_WSS && window.CRSS_WSS.PRICE_LOCK;
+      if (!card || !lock || !lock.enabled) return;
+      card.querySelector('[data-crss-pricelock-title]').textContent = lock.short.charAt(0).toUpperCase() + lock.short.slice(1);
+      card.querySelector('[data-crss-pricelock-line]').textContent = lock.line;
+      card.hidden = false;
+    })();
+
     function fillSizeRange(unitTypes) {
       var els = document.querySelectorAll('[data-crss-size-range]');
       if (!els.length || !unitTypes || !unitTypes.length) return;

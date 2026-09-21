@@ -1605,7 +1605,7 @@
                feed. What is shown instead is the state, in red, and
                the one thing worth doing about it. */
             (u.live !== false && rate
-              ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' : '') +
+              ? '<div class="crss-unit-rate">' + rate + ' <span>per month</span></div>' + window.CRSS_WSS.priceLockBadge() : '') +
             window.CRSS_WSS.availabilityHtml(u) +
             window.CRSS_WSS.actions(u) +
           '</div>' +

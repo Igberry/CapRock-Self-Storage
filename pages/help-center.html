@@ -451,6 +451,12 @@
           <dt>When is rent due?</dt>
           <dd>In advance, on the due day stated in your Rental Agreement, without us needing to invoice you. Leases run month to month.</dd>
 
+          <!-- Worded from CRSS_WSS.PRICE_LOCK on load; hidden if the
+               promise is switched off. The markup carries today's
+               wording for when scripts do not run. -->
+          <dt data-crss-pricelock>Will my rent go up?</dt>
+          <dd data-crss-pricelock data-crss-pricelock-detail>The rate you move in at is locked for 12 months from your move-in date. That covers the base monthly rent only, not insurance, fees or extras. After the first year we give at least 30 days' written notice before any change.</dd>
+
           <dt>What happens if I pay late?</dt>
           <dd>A late fee applies once payment has not been received for the period set out in your Rental Agreement. The fee schedule attached to that agreement is the authority on the amount.</dd>
 
@@ -581,6 +587,16 @@
        three different opening times. The markup carries today's values,
        so the answers are right with JavaScript off, and failure is
        silent for the same reason. */
+    /* Price lock: worded from the header, or removed if withdrawn. */
+    (function () {
+      var lock = window.CRSS_WSS && window.CRSS_WSS.PRICE_LOCK;
+      var els = document.querySelectorAll('[data-crss-pricelock]');
+      if (!els.length) return;
+      if (!lock || !lock.enabled) { els.forEach(function (el) { el.remove(); }); return; }
+      var d = document.querySelector('[data-crss-pricelock-detail]');
+      if (d) d.textContent = lock.detail;
+    })();
+
     if (window.CRSS_WSS) {
       window.CRSS_WSS.get("location").then(function (d) {
         if (!d) return;

@@ -1094,6 +1094,16 @@
           <h3>Clean, maintained buildings</h3>
           <p>The grounds and units are looked after.</p>
         </div>
+
+        <!-- Text comes from CRSS_WSS.PRICE_LOCK in the header; the
+             card hides itself if the promise is switched off. -->
+        <div class="crss-feat" data-crss-pricelock hidden>
+          <span class="crss-feat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10.5" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <h3 data-crss-pricelock-title>12-month price lock</h3>
+          <p data-crss-pricelock-line>Your monthly rate will not go up for the first 12 months.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1179,6 +1189,19 @@
 
        Built from the numeric width and length, never the free-text
        description, so nothing from the API reaches innerHTML. */
+    /* ---- Price lock card ----
+       Shown only while the promise is switched on in the header, and
+       worded from there, so the home page cannot keep advertising a
+       lock that has been withdrawn. */
+    (function () {
+      var card = document.querySelector('[data-crss-pricelock]');
+      var lock = window.CRSS_WSS && window.CRSS_WSS.PRICE_LOCK;
+      if (!card || !lock || !lock.enabled) return;
+      card.querySelector('[data-crss-pricelock-title]').textContent = lock.short.charAt(0).toUpperCase() + lock.short.slice(1);
+      card.querySelector('[data-crss-pricelock-line]').textContent = lock.line;
+      card.hidden = false;
+    })();
+
     function fillSizeRange(unitTypes) {
       var els = document.querySelectorAll('[data-crss-size-range]');
       if (!els.length || !unitTypes || !unitTypes.length) return;
