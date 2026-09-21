@@ -278,3 +278,23 @@ handle the calls: every existing tenant gets a text at once.
 
 `node tools/gate-sync-test.js` runs the whole state machine against an
 in-memory database. Run it after any change to the sync.
+
+## Availability into GHL (`api/ghl-availability.js`)
+
+Every fifteen minutes a Vercel cron reads the same WebSelfStorage
+feed the website reads and writes it into GHL **Custom Values**
+(Settings > Custom Values) so the voice agent and the office answer
+from the same numbers the site shows:
+
+| Custom Value | Holds |
+|---|---|
+| `avail_summary` | one spoken paragraph: every size with a unit free, its rate, how many; then the sizes that are full |
+| `avail_updated` | when, Lubbock time |
+| `avail_full` | size codes with nothing free |
+| `avail_5x5x8` etc. | one per size code: count, rate, type, and the unit numbers |
+
+In a voice agent prompt: `{{ custom_values.avail_summary }}`.
+
+Settings: `GHL_AVAIL_ENABLED=on` (or nothing is written), `CRON_SECRET`,
+and `GHL_API_KEY` with `locations/customValues.readonly` and
+`locations/customValues.write` added to its scopes.

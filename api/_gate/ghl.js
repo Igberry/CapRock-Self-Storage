@@ -138,4 +138,4 @@ async function office(message) {
   }
 }
 
-module.exports = { configured, on, text, office };
+module.exports = { configured, on, text, office, call };
