@@ -42,13 +42,22 @@ const ALLOWED_ORIGINS = [
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'email-features-1';
+const BUILD = 'history-1';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
   ['Requested Move-In', 'TEXT'],
   ['Request Type', 'TEXT'],
+  /* The three fields above hold the latest request, because that is
+     what the office and the voice agent want at a glance. They are
+     overwritten every time. This one is appended to, so a customer
+     who rents a second unit does not erase the first. */
+  ['Request History', 'LARGE_TEXT'],
 ];
+
+/* Roughly thirty entries. A custom field is not a database, and an
+   unbounded one eventually breaks the contact record. */
+const HISTORY_MAX = 4000;
 
 /* A few per address per ten minutes. Memory only, per instance, so it
    is a speed bump rather than a wall; the honeypot below does more. */
@@ -107,6 +116,14 @@ function validate(body) {
   return { out, problems };
 }
 
+/* "25 Sep 2026, 2:31 pm" in Lubbock time, for the history entry. */
+function stamp() {
+  return new Date().toLocaleString('en-US', {
+    timeZone: 'America/Chicago', day: 'numeric', month: 'short', year: 'numeric',
+    hour: 'numeric', minute: '2-digit',
+  });
+}
+
 function usDate(iso) {
   const [y, m, d] = iso.split('-');
   return `${Number(m)}/${Number(d)}/${y}`;
@@ -154,6 +171,31 @@ module.exports = async function handler(req, res) {
     });
     const contactId = data && data.contact && data.contact.id;
     if (!contactId) throw new Error('upsert returned no contact id');
+
+    /* Append, never replace. Read what is there, put this request on
+       top, and keep the newest entries if it has grown long. */
+    try {
+      const entry = `${stamp()} - ${verb} - ${unitLine}` +
+                    (featureLine ? ` (${featureLine})` : '') +
+                    ` - move-in ${usDate(out.date)}`;
+      const existing = await ghl.call('GET', `/contacts/${contactId}`);
+      const prior = ((existing && existing.contact && existing.contact.customFields) || [])
+        .filter((f) => f.id === fields['Request History'])
+        .map((f) => f.value || f.fieldValue || '')[0] || '';
+      const NL = String.fromCharCode(10);
+      let history = prior ? entry + NL + prior : entry;
+      if (history.length > HISTORY_MAX) {
+        /* Trim to a whole entry rather than mid-line. */
+        history = history.slice(0, HISTORY_MAX);
+        history = history.slice(0, history.lastIndexOf(NL));
+      }
+      await ghl.call('PUT', `/contacts/${contactId}`, {
+        customFields: [{ id: fields['Request History'], field_value: history }],
+      });
+    } catch (e) {
+      /* History is a convenience; the note below is the record. */
+      console.error('request history not updated:', e.message);
+    }
 
     await ghl.call('POST', `/contacts/${contactId}/notes`, {
       body: `${verb} request from the website\nUnit: ${unitLine}\nMove-in: ${usDate(out.date)}\n` +

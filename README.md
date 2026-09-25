@@ -337,6 +337,20 @@ confirmation if they ticked the consent box. WebSelfStorage is not
 written to: its reservation and move-in endpoints require the card
 number itself. The office completes the rental in WebSelfStorage.
 
+On the contact: the tag, plus **Requested Unit**, **Requested Move-In**
+and **Request Type** holding the latest request, and **Request
+History**, which is appended to so a customer who rents a second unit
+does not erase the first. Every submission alerts the office, new
+customer or returning; the alert does not depend on the tag, which a
+GHL workflow trigger would.
+
+On the contact: the tag, plus **Requested Unit**, **Requested Move-In**
+and **Request Type** holding the latest request, and **Request
+History**, which is appended to so a customer who rents a second unit
+does not erase the first. Every submission alerts the office, returning
+customers included; the alert does not depend on the tag, which a GHL
+workflow trigger would.
+
 Settings: `REQUESTS_ENABLED=on`; the form falls back to "call us"
 while it is off. Uses the same GHL token and scopes as the tenant
 sync.
