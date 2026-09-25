@@ -42,6 +42,12 @@ const ALLOWED_ORIGINS = [
    read the page. If the promise changes, change both. */
 const PRICE_LOCK_SHORT = '12-month price lock';
 
+/* Returned with every response so a deploy can be told apart from the
+   one before it. Without this there is no way to know whether a test
+   hit the new code or the old, and I twice reported a fix working
+   that was not deployed yet. Bump it with any change worth verifying. */
+const BUILD = 'email-4fields-1';
+
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
   ['Requested Move-In', 'TEXT'],
@@ -109,7 +115,9 @@ function usDate(iso) {
 module.exports = async function handler(req, res) {
   cors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method === 'GET' && req.query && req.query.build !== undefined) return res.status(200).json({ build: BUILD });
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST, OPTIONS'); return res.status(405).json({ error: 'method_not_allowed' }); }
+  if (req.query && req.query.build !== undefined) return res.status(200).json({ build: BUILD });
   if (process.env.REQUESTS_ENABLED !== 'on' || !ghl.configured()) return res.status(503).json({ error: 'not_available' });
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
@@ -172,7 +180,7 @@ module.exports = async function handler(req, res) {
        the response so it can be read from the browser's network tab
        instead of from the server log. */
     if (!office.sent) console.error('office alert failed:', office.reason);
-    return res.status(200).json({ ok: true, office_notified: office.sent, office_sms: office.sms, office_email: office.email, office_reason: office.reason || null, thanked });
+    return res.status(200).json({ ok: true, build: BUILD, office_notified: office.sent, office_sms: office.sms, office_email: office.email, office_reason: office.reason || null, thanked });
   } catch (err) {
     console.error('request failed:', err);
     return res.status(500).json({ error: 'failed' });
