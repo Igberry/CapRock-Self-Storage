@@ -104,59 +104,62 @@ async function text({ customerName, phone, message, tags }) {
   }
 }
 
-/* Where "please key this in" goes while the controller is manual.
-   OFFICE_PHONE sends a text; OFFICE_EMAIL sends an email; both set
-   sends both. Email is the safer default when the office line is the
-   same number GHL sends from, which cannot text itself. */
+/* Where "please key this in", and every Rent Now / Reserve request,
+   goes. OFFICE_PHONE texts; OFFICE_EMAIL emails; both set does both.
+
+   Each channel looks its own contact up: the text by phone, the email
+   by email address, never one contact carrying both. GHL treats an
+   email address as a unique identifier, so an address already held by
+   another contact cannot be added to a second one, and it then
+   refuses to send ("CONVERSATIONS_MSG_NO_EMAIL"). Looking the address
+   up on its own matches whichever contact owns it and sends there. */
+async function officeContact(fields) {
+  const data = await call('POST', '/contacts/upsert', {
+    locationId: process.env.GHL_LOCATION_ID,
+    ...fields,
+    firstName: 'CapRock',
+    lastName: 'Office',
+    tags: ['gate-office'],
+    source: 'caprock-website',
+  });
+  const id = data && data.contact && data.contact.id;
+  if (!id) throw new Error('upsert returned no contact id');
+  return id;
+}
+
 async function office(message, opts) {
   if (!configured()) return { sent: false, reason: 'ghl_not_configured' };
   /* force: a customer request the office must hear about regardless
      of the gate-code texting switch, which governs tenant texts. */
   if (!on() && !(opts && opts.force)) return { sent: false, reason: 'texting_off' };
-  const phone = String(process.env.OFFICE_PHONE || '').replace(/\D/g, '').slice(-10);
+  const phone = String(process.env.OFFICE_PHONE || '').replace(/D/g, '').slice(-10);
   const email = String(process.env.OFFICE_EMAIL || '').trim();
   if (!phone && !email) return { sent: false, reason: 'no_office_contact' };
-  try {
-    const data = await call('POST', '/contacts/upsert', {
-      locationId: process.env.GHL_LOCATION_ID,
-      ...(phone ? { phone: '+1' + phone } : {}),
-      ...(email ? { email } : {}),
-      firstName: 'CapRock',
-      lastName: 'Office',
-      tags: ['gate-office'],
-      source: 'gate-code-sync',
-    });
-    const contactId = data && data.contact && data.contact.id;
-    if (!contactId) throw new Error('ghl upsert returned no contact id');
 
-    /* Upsert matches an existing contact by phone and will not always
-       write the email onto it, and GHL refuses to send an email to a
-       contact that has none ("CONVERSATIONS_MSG_NO_EMAIL"). So set it
-       explicitly before sending. */
-    if (email) {
-      try { await call('PUT', `/contacts/${contactId}`, { email }); }
-      catch (e) { /* the send below reports it if this was the problem */ }
-    }
+  const out = { sent: false, sms: null, email: null };
+  const problems = [];
 
-    const problems = [];
-    if (phone) {
-      try { await sms(contactId, message); }
-      catch (e) { problems.push('sms: ' + e.message); }
-    }
-    if (email) {
-      try {
-        await call('POST', '/conversations/messages', {
-          type: 'Email', contactId, subject: message.slice(0, 78), html: '<p>' + message + '</p>',
-        });
-      } catch (e) { problems.push('email: ' + e.message); }
-    }
-    /* One channel arriving is enough to have told the office. */
-    const wanted = (phone ? 1 : 0) + (email ? 1 : 0);
-    if (problems.length >= wanted) return { sent: false, reason: problems.join(' | ') };
-    return { sent: true, reason: problems.length ? problems.join(' | ') : undefined };
-  } catch (e) {
-    return { sent: false, reason: e.message };
+  if (phone) {
+    try {
+      await sms(await officeContact({ phone: '+1' + phone }), message);
+      out.sms = 'sent';
+    } catch (e) { out.sms = 'failed'; problems.push('sms: ' + e.message); }
   }
+  if (email) {
+    try {
+      await call('POST', '/conversations/messages', {
+        type: 'Email',
+        contactId: await officeContact({ email }),
+        subject: message.slice(0, 78),
+        html: '<p>' + message + '</p>',
+      });
+      out.email = 'sent';
+    } catch (e) { out.email = 'failed'; problems.push('email: ' + e.message); }
+  }
+
+  out.sent = out.sms === 'sent' || out.email === 'sent';
+  if (problems.length) out.reason = problems.join(' | ');
+  return out;
 }
 
 /* One text to a contact that already exists, outside the gate-code

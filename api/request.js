@@ -167,7 +167,7 @@ module.exports = async function handler(req, res) {
        the response so it can be read from the browser's network tab
        instead of from the server log. */
     if (!office.sent) console.error('office alert failed:', office.reason);
-    return res.status(200).json({ ok: true, office_notified: office.sent, office_reason: office.reason || null, thanked });
+    return res.status(200).json({ ok: true, office_notified: office.sent, office_sms: office.sms, office_email: office.email, office_reason: office.reason || null, thanked });
   } catch (err) {
     console.error('request failed:', err);
     return res.status(500).json({ error: 'failed' });
