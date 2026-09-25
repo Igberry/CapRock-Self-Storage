@@ -347,7 +347,7 @@ module.exports = async function handler(req, res) {
   const entity = FACILITIES[String(req.query.facility || '')];
   if (!entity) return res.status(400).json({ error: 'unknown_facility' });
 
-  const resourceName = Smftring(req.query.resource || 'movein');
+  const resourceName = String(req.query.resource || 'movein');
   const buildPath = RESOURCES[resourceName];
   if (!buildPath) return res.status(400).json({ error: 'unknown_resource' });
 
