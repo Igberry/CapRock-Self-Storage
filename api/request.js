@@ -25,6 +25,14 @@
      REQUESTS_ENABLED   "on", or the form tells the customer to call
      GHL_API_KEY, GHL_LOCATION_ID
      OFFICE_PHONE and/or OFFICE_EMAIL   where the alert goes
+     GHL_REQUEST_WEBHOOK  optional. A GHL Inbound Webhook URL. Every
+                          request is posted to it, so a workflow can
+                          notify the team inside GHL, assign a task,
+                          or open an opportunity. It fires on every
+                          submission, which a "Contact Tag" trigger
+                          does not: adding a tag a contact already has
+                          triggers nothing, so a returning customer's
+                          second request would notify no one.
    ================================================================ */
 'use strict';
 
@@ -42,7 +50,7 @@ const ALLOWED_ORIGINS = [
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'history-1';
+const BUILD = 'webhook-1';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
@@ -222,6 +230,41 @@ module.exports = async function handler(req, res) {
       { force: true, subject: mail.subject, html: mail.html }
     );
 
+    /* A workflow's turn. Fire and forget: the request is already
+       recorded and the office already told, so a webhook that is slow
+       or missing must not hold up the customer's thank-you. */
+    let workflow = null;
+    if (process.env.GHL_REQUEST_WEBHOOK) {
+      try {
+        const r = await fetch(process.env.GHL_REQUEST_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contact_id: contactId,
+            request_type: verb,
+            first_name: out.first,
+            last_name: out.last,
+            full_name: `${out.first} ${out.last}`,
+            phone: '+1' + out.phone,
+            email: out.email,
+            unit_size: out.unit.size,
+            unit_type: out.unit.kind,
+            unit_features: featureLine,
+            price: out.unit.rate ? out.unit.rate + ' per month' : '',
+            move_in_date: usDate(out.date),
+            date_label: out.kind === 'rent' ? 'Move In Date' : 'Reserved Date',
+            customer_message: out.message,
+            texts_ok: out.consent ? 'Yes' : 'No',
+            summary: mail.text,
+          }),
+        });
+        workflow = r.ok ? 'sent' : 'failed ' + r.status;
+      } catch (e) {
+        workflow = 'failed';
+        console.error('request webhook failed:', e.message);
+      }
+    }
+
     let thanked = false;
     if (out.consent) {
       const r = await ghl.sendSms(contactId,
@@ -235,7 +278,7 @@ module.exports = async function handler(req, res) {
        the response so it can be read from the browser's network tab
        instead of from the server log. */
     if (!office.sent) console.error('office alert failed:', office.reason);
-    return res.status(200).json({ ok: true, build: BUILD, office_notified: office.sent, office_sms: office.sms, office_email: office.email, office_reason: office.reason || null, thanked });
+    return res.status(200).json({ ok: true, build: BUILD, office_notified: office.sent, office_sms: office.sms, office_email: office.email, office_reason: office.reason || null, workflow, thanked });
   } catch (err) {
     console.error('request failed:', err);
     return res.status(500).json({ error: 'failed' });
