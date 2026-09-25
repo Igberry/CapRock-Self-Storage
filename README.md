@@ -279,6 +279,17 @@ handle the calls: every existing tenant gets a text at once.
 `node tools/gate-sync-test.js` runs the whole state machine against an
 in-memory database. Run it after any change to the sync.
 
+## Checks
+
+- `node tools/check.js` guards the HTML blocks: scripts parse, braces
+  balance, breakpoints descend, classes are styled, no dashes in copy.
+- `node tools/api-smoke.js` calls every endpoint's handler with a fake
+  request and asserts it answers instead of throwing. `node --check`
+  cannot catch a call to a function that does not exist; on 16
+  September `String` became `Smftring` in the proxy and the unit list
+  was missing from the website for nine days. Run both before pushing.
+- `bash tools/build-preview.sh` rebuilds `preview/` from the blocks.
+
 ## Availability into GHL (`api/ghl-availability.js`)
 
 Every fifteen minutes a Vercel cron reads the same WebSelfStorage
