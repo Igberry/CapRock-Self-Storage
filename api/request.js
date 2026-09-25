@@ -29,6 +29,7 @@
 'use strict';
 
 const ghl = require('./_gate/ghl');
+const { requestEmail } = require('./_gate/email');
 
 const ALLOWED_ORIGINS = [
   'https://sites.leadconnectorhq.com',
@@ -36,6 +37,10 @@ const ALLOWED_ORIGINS = [
   'https://www.caprock-storage.com',
   ...(process.env.CRSS_SITE_ORIGINS || '').split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean),
 ];
+
+/* Repeated from the header's PRICE_LOCK for the email, which cannot
+   read the page. If the promise changes, change both. */
+const PRICE_LOCK_SHORT = '12-month price lock';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],

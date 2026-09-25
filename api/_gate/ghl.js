@@ -150,8 +150,10 @@ async function office(message, opts) {
       await call('POST', '/conversations/messages', {
         type: 'Email',
         contactId: await officeContact({ email }),
-        subject: message.slice(0, 78),
-        html: '<p>' + message + '</p>',
+        /* A designed email when the caller has one; the plain line
+           otherwise, which is what the gate alerts send. */
+        subject: (opts && opts.subject) || message.slice(0, 78),
+        html: (opts && opts.html) || '<p>' + message + '</p>',
       });
       out.email = 'sent';
     } catch (e) { out.email = 'failed'; problems.push('email: ' + e.message); }
