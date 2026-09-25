@@ -128,13 +128,32 @@ async function office(message, opts) {
     });
     const contactId = data && data.contact && data.contact.id;
     if (!contactId) throw new Error('ghl upsert returned no contact id');
-    if (phone) await sms(contactId, message);
+
+    /* Upsert matches an existing contact by phone and will not always
+       write the email onto it, and GHL refuses to send an email to a
+       contact that has none ("CONVERSATIONS_MSG_NO_EMAIL"). So set it
+       explicitly before sending. */
     if (email) {
-      await call('POST', '/conversations/messages', {
-        type: 'Email', contactId, subject: message.slice(0, 78), html: '<p>' + message + '</p>',
-      });
+      try { await call('PUT', `/contacts/${contactId}`, { email }); }
+      catch (e) { /* the send below reports it if this was the problem */ }
     }
-    return { sent: true };
+
+    const problems = [];
+    if (phone) {
+      try { await sms(contactId, message); }
+      catch (e) { problems.push('sms: ' + e.message); }
+    }
+    if (email) {
+      try {
+        await call('POST', '/conversations/messages', {
+          type: 'Email', contactId, subject: message.slice(0, 78), html: '<p>' + message + '</p>',
+        });
+      } catch (e) { problems.push('email: ' + e.message); }
+    }
+    /* One channel arriving is enough to have told the office. */
+    const wanted = (phone ? 1 : 0) + (email ? 1 : 0);
+    if (problems.length >= wanted) return { sent: false, reason: problems.join(' | ') };
+    return { sent: true, reason: problems.length ? problems.join(' | ') : undefined };
   } catch (e) {
     return { sent: false, reason: e.message };
   }
