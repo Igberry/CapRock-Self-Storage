@@ -46,7 +46,7 @@ const PRICE_LOCK_SHORT = '12-month price lock';
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'email-4fields-1';
+const BUILD = 'email-4fields-2';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],

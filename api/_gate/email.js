@@ -66,41 +66,29 @@ function requestEmail(r) {
     row(dateLabel, r.date, true),
   ].join('');
 
-  const html = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(subject)}</title>
-</head>
-<body style="margin:0;padding:0;background-color:${C.bone};">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(name)}, ${esc(unit)}, ${esc(price)}, ${esc(r.date)}</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${C.bone};">
-    <tr>
-      <td align="center" style="padding:28px 16px 40px;">
-        <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px;max-width:100%;background-color:${C.white};border:1px solid ${C.rule};">
-
-          <tr><td style="height:4px;background-color:${C.terracotta};font-size:0;line-height:0;">&nbsp;</td></tr>
-
-          <tr>
-            <td style="padding:32px 36px 4px;">
-              <h1 style="margin:0;font-family:${SERIF};font-size:27px;line-height:34px;font-weight:500;letter-spacing:-0.3px;color:${C.ink};">${esc(heading)}</h1>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:0 36px 34px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rows}
-              </table>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
+  /* A fragment, not a document. GHL accepted a full
+     <!doctype html> document and then delivered nothing; its sender
+     wants body-level HTML, which it wraps itself. */
+  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${C.bone};">
+  <tr>
+    <td align="center" style="padding:24px 12px 32px;">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px;max-width:100%;background-color:${C.white};border:1px solid ${C.rule};">
+        <tr><td style="height:4px;background-color:${C.terracotta};font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr>
+          <td style="padding:30px 34px 2px;">
+            <h1 style="margin:0;font-family:${SERIF};font-size:26px;line-height:32px;font-weight:500;color:${C.ink};">${esc(heading)}</h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 34px 30px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rows}
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`;
 
   return { subject, html, text };
 }
