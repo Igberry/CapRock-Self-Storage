@@ -38,15 +38,11 @@ const ALLOWED_ORIGINS = [
   ...(process.env.CRSS_SITE_ORIGINS || '').split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean),
 ];
 
-/* Repeated from the header's PRICE_LOCK for the email, which cannot
-   read the page. If the promise changes, change both. */
-const PRICE_LOCK_SHORT = '12-month price lock';
-
 /* Returned with every response so a deploy can be told apart from the
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'email-4fields-2';
+const BUILD = 'email-4fields-3';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
@@ -160,11 +156,22 @@ module.exports = async function handler(req, res) {
             `Consent to text: ${out.consent ? 'yes' : 'no'}`,
     });
 
+    /* The text is one line, because a text is. The email is the four
+       fields the office asked for, built in _gate/email.js. */
+    const mail = requestEmail({
+      kind: out.kind,
+      first: out.first,
+      last: out.last,
+      date: usDate(out.date),
+      unitSize: out.unit.size,
+      unitType: out.unit.kind,
+      rate: out.unit.rate,
+    });
     const office = await ghl.office(
       `${verb.toUpperCase()} request: ${out.first} ${out.last}, ${unitLine}, move-in ${usDate(out.date)}. ` +
       `Call ${out.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}.` +
       (out.message ? ` Note: ${out.message}` : ''),
-      { force: true }
+      { force: true, subject: mail.subject, html: mail.html }
     );
 
     let thanked = false;
