@@ -42,7 +42,7 @@ const ALLOWED_ORIGINS = [
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'email-4fields-3';
+const BUILD = 'email-features-1';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
@@ -90,6 +90,10 @@ function validate(body) {
       size: clean(u.size, 20),
       rate: clean(u.rate, 12),
       kind: clean(u.kind, 30),
+      /* The page's own feature list. Capped so a crafted request
+         cannot post a thousand lines into an email. */
+      features: (Array.isArray(u.features) ? u.features : [])
+        .slice(0, 8).map((f) => clean(f, 40)).filter(Boolean),
     },
   };
   const problems = [];
@@ -130,6 +134,7 @@ module.exports = async function handler(req, res) {
 
   const verb = out.kind === 'rent' ? 'Rent Now' : 'Reserve';
   const unitLine = `${out.unit.size}${out.unit.kind ? ', ' + out.unit.kind : ''}${out.unit.rate ? ', ' + out.unit.rate + ' per month' : ''}`;
+  const featureLine = out.unit.features.length ? out.unit.features.join(', ') : '';
 
   try {
     const fields = await ghl.ensureContactFields(FIELDS);
@@ -142,7 +147,7 @@ module.exports = async function handler(req, res) {
       source: 'website',
       tags: [out.kind === 'rent' ? 'rent-request' : 'reserve-request'],
       customFields: [
-        { id: fields['Requested Unit'], field_value: unitLine },
+        { id: fields['Requested Unit'], field_value: unitLine + (featureLine ? ' (' + featureLine + ')' : '') },
         { id: fields['Requested Move-In'], field_value: usDate(out.date) },
         { id: fields['Request Type'], field_value: verb },
       ],
@@ -165,6 +170,7 @@ module.exports = async function handler(req, res) {
       date: usDate(out.date),
       unitSize: out.unit.size,
       unitType: out.unit.kind,
+      features: out.unit.features,
       rate: out.unit.rate,
     });
     const office = await ghl.office(

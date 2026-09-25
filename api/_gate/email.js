@@ -14,7 +14,8 @@
    no phone number, no email address, no message, no footer. Everything
    the customer typed is on their contact in the CRM, which is where
    the office rings them from. Adding a row here means adding it in
-   one place, below. */
+   one place, below. The features come from the page, so the office
+   reads exactly what the customer read. */
 'use strict';
 
 const C = {
@@ -31,13 +32,13 @@ const SANS = "'Work Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-ser
 const esc = (v) => String(v == null ? '' : v)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-function row(label, value, last) {
+function row(label, value, last, raw) {
   const pad = last ? '16px 0 0' : '16px 0';
   const border = last ? '' : `border-bottom:1px solid ${C.rule};`;
   return `
               <tr>
                 <td style="padding:${pad};${border}width:170px;vertical-align:top;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:${C.taupe};">${esc(label)}</td>
-                <td style="padding:${pad};${border}vertical-align:top;font-family:${SANS};font-size:17px;line-height:26px;color:${C.ink};">${esc(value)}</td>
+                <td style="padding:${pad};${border}vertical-align:top;font-family:${SANS};font-size:17px;line-height:26px;color:${C.ink};">${raw ? value : esc(value)}</td>
               </tr>`;
 }
 
@@ -48,7 +49,10 @@ function requestEmail(r) {
   const heading = rent ? 'RENT NOW REQUEST' : 'RESERVE REQUEST';
   const dateLabel = rent ? 'Move In Date' : 'Reserved Date';
   const name = `${r.first} ${r.last}`.trim();
-  const unit = r.unitType ? `${r.unitSize}, ${r.unitType}` : r.unitSize;
+  const unit = r.unitSize;
+  /* Everything the page said about this unit, in the page's own
+     words, so the office is looking at what the customer read. */
+  const features = Array.isArray(r.features) ? r.features.filter(Boolean) : [];
   const price = r.rate ? `${r.rate} per month` : 'Not quoted';
 
   const subject = `${heading}: ${name}, ${r.unitSize}`;
@@ -56,12 +60,14 @@ function requestEmail(r) {
   const text = `${heading}\n\n` +
     `Full Name: ${name}\n` +
     `Unit Requested: ${unit}\n` +
+    (features.length ? `Features: ${features.join(', ')}\n` : '') +
     `Price: ${price}\n` +
     `${dateLabel}: ${r.date}\n`;
 
   const rows = [
     row('Full Name', name),
     row('Unit Requested', unit),
+    features.length ? row('Features', features.map(esc).join('<br>'), false, true) : '',
     row('Price', price),
     row(dateLabel, r.date, true),
   ].join('');

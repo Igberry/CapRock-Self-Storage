@@ -1662,7 +1662,9 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               kind: kind,
-              unit: { size: size, rate: rate || '', kind: type },
+              /* The attribute list the row and the details panel show,
+                 so the office reads exactly what the customer read. */
+              unit: { size: size, rate: rate || '', kind: type, features: self.attributes(u) },
               customer: { first: fd.get('first'), last: fd.get('last'), phone: phone, email: fd.get('email'), date: fd.get('date'), message: fd.get('message') },
               consent: Boolean(fd.get('consent')),
               website: fd.get('website') || ''
