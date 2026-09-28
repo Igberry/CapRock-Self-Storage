@@ -627,6 +627,57 @@
      Under every price on the site: the location rows, the size
      guide cards and the details panel. Defined once, here, so all
      three say the same thing about the same unit. */
+  /* The list price, where an offer beats it: struck through, small
+     and quiet, so the eye lands on what it costs today without the
+     original being hidden. Sized in em so it follows whichever of
+     the three price slots it is sitting in. */
+  .crss-was {
+    margin-right: 9px;
+    font-size: 0.62em;
+    font-weight: 500;
+    color: var(--crss-taupe, #7F6C5D);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+  /* The offer itself, filled rather than outlined, because it is the
+     one thing next to a price that is temporary. */
+  /* white-space is normal on all three because the unit rows set
+     nowrap on the whole right-hand column, which is fine for a price
+     and a two-word availability note but would push a wordier
+     coupon straight out of the row. */
+  .crss-offer {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 8px 0 0;
+    padding: 3px 9px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    line-height: 1.6;
+    text-transform: uppercase;
+    white-space: normal;
+    color: var(--crss-white, #FFFFFF);
+    background: var(--crss-terracotta, #A44A23);
+  }
+  /* What the rate goes back to. Plain type, because a customer who
+     reads only the big figure has still been told. */
+  .crss-then {
+    margin: 6px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: normal;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  /* A prepay offer is a condition, not a rate, so it sits below the
+     price in ordinary type where it cannot be read as one. */
+  .crss-offer-cond {
+    margin: 6px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: normal;
+    color: var(--crss-ink-soft, #5F564C);
+  }
   /* The price lock badge: quiet, one line, a small padlock. It sits
      under a price wherever one is shown. */
   .crss-lock {
@@ -1118,6 +1169,7 @@
           .then(function (r) { return r.ok ? r.json() : null; })
           .then(function (data) {
             if (resource === 'movein') { data = self.mergeCatalogue(data); self.UNITS = (data && data.unitTypes) || []; }
+            if (resource === 'location') { self.OFFERS = (data && data.coupons) || []; }
             return data;
           })
           .catch(function (e) {
@@ -1540,7 +1592,7 @@
 
             '<div class="crss-udlg-foot">' +
               '<div>' +
-                (live && rate ? '<p class="crss-udlg-rate">' + rate + '<span>per month</span></p>' + this.priceLockBadge() : '') +
+                (live && rate ? this.priceHtml(u, { cls: 'crss-udlg-rate' }) : '') +
                 this.availabilityHtml(u) +
               '</div>' +
               this.actions(u) +
@@ -1619,6 +1671,14 @@
         var self = this;
         var rent = kind === 'rent';
         var rate = this.money(u.rate);
+        var p = this.pricing(u) || { list: rate, now: null, label: '', then: '' };
+        /* What the row said, in one line: the price they pressed,
+           then the offer, then what it returns to. */
+        var quoted = [
+          (p.now || p.list) ? (p.now || p.list) + ' per month' : '',
+          p.label,
+          p.then,
+        ].filter(Boolean).join(' &middot; ');
         var size = u.width + ' x ' + u.length + (u.height ? ' x ' + u.height : '');
         var type = u.climate ? 'Temperature controlled' : 'Drive-up';
         var today = new Date();
@@ -1629,7 +1689,7 @@
             '<h2 class="crss-udlg-title" id="crss-udlg-title">' + (rent ? 'Rent this unit' : 'Reserve this unit') + '</h2>' +
             '<div class="crss-req-unit">' +
               '<strong>' + u.width + ' &times; ' + u.length + (u.height ? ' &times; ' + u.height : '') + '</strong>' +
-              '<span>' + type + (rate ? ' &middot; ' + rate + ' per month' : '') + (this.PRICE_LOCK.enabled ? ' &middot; ' + this.PRICE_LOCK.short : '') + '</span>' +
+              '<span>' + type + (quoted ? ' &middot; ' + quoted : '') + (this.PRICE_LOCK.enabled ? ' &middot; ' + this.PRICE_LOCK.short : '') + '</span>' +
             '</div>' +
             '<form class="crss-req" novalidate>' +
               '<div class="crss-req-grid">' +
@@ -1677,7 +1737,18 @@
               kind: kind,
               /* The attribute list the row and the details panel show,
                  so the office reads exactly what the customer read. */
-              unit: { size: size, rate: rate || '', kind: type, features: self.attributes(u) },
+              unit: {
+                size: size,
+                rate: rate || '',
+                /* What the website showed, when an offer moved it.
+                   Null when the price on the page was the list
+                   price, so the email says nothing rather than
+                   repeating the same figure twice. */
+                promoRate: p.now || null,
+                promo: [p.label, p.then].filter(Boolean).join(', ') || null,
+                kind: type,
+                features: self.attributes(u)
+              },
               customer: { first: fd.get('first'), last: fd.get('last'), phone: phone, email: fd.get('email'), date: fd.get('date'), message: fd.get('message') },
               consent: Boolean(fd.get('consent')),
               website: fd.get('website') || ''
@@ -1701,6 +1772,165 @@
         dlg.showModal();
         var first = body.querySelector('input[name="first"]');
         if (first) first.focus();
+      },
+
+      /* ---- What a unit actually costs today ----
+         The facility record carries the current offers as free text
+         ("50% Off First 2 Months", "10% Off 3 Mos Advance Rent"),
+         so this reads them and works out what belongs where the
+         price goes. OFFERS is filled by get('location') above; until
+         that resolves it is empty and every price shows list, which
+         is the right thing to show when the offer is unknown.
+
+         Two rules keep the figure honest, and both matter more than
+         the discount itself:
+
+         A PREPAY OFFER NEVER MOVES THE HEADLINE. "10% off 3 months
+         advance rent" is not $40.50 a month. It is $45 a month, less
+         ten per cent, if you pay three months up front. Printing the
+         lower number advertises a rate most callers cannot get, and
+         the office would spend its day explaining the difference.
+         Those are shown as what they are: a condition.
+
+         A DISCOUNT THAT ENDS SAYS WHEN IT ENDS. The current offer is
+         half off the first two months, so the page shows $34.50 with
+         $69 struck through AND "then $69 per month". The discounted
+         figure is what was asked for; the second line is what stops
+         it being a promise CapRock has to honour in month three. */
+      OFFERS: [],
+
+      /* One coupon, read. Returns kind, how much, how long, and
+         whether it is conditional on paying ahead. */
+      parseOffer: function (c) {
+        var text = String((c && c.description) || '').trim();
+        var conditions = String((c && c.conditions) || '').trim();
+        if (!text) return null;
+        var all = (text + ' ' + conditions).toLowerCase();
+
+        /* Any mention of paying ahead makes it conditional. */
+        var prepay = /advance rent|advanced rent|prepay|pre-pay|paid in advance|mos\.? advance|months? advance/.test(all);
+
+        /* How many months it runs for, when it says. "First 2
+           Months", "3 Mos", "1 Month". Nothing found means it is
+           open ended, which is rare, and is left as 0. */
+        var WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, twelve: 12 };
+        var span = /(\d+|one|two|three|four|five|six|twelve)\s*(?:months?|mos?)\b/i.exec(all);
+        var months = 0;
+        if (span) {
+          var w = String(span[1]).toLowerCase();
+          months = WORDS[w] !== undefined ? WORDS[w] : Number(w);
+          if (!isFinite(months) || months < 0) months = 0;
+        }
+
+        var base = { prepay: prepay, months: months, text: text, conditions: conditions };
+
+        /* Free months first: "1 month free" also carries a number and
+           a month, so a later rule would misread it as an amount. */
+        if (/\bfree\b/.test(all) && months > 0) {
+          base.kind = 'free-months';
+          base.value = months;
+          return base;
+        }
+        var pct = /(\d+(?:\.\d+)?)\s*%/.exec(text);
+        if (pct) { base.kind = 'percent'; base.value = Number(pct[1]); return base; }
+        var amt = /\$\s*(\d+(?:\.\d+)?)/.exec(text);
+        if (amt) { base.kind = 'amount'; base.value = Number(amt[1]); return base; }
+
+        base.kind = 'other';
+        base.value = 0;
+        return base;
+      },
+
+      /* The offer that changes what someone pays, if there is one.
+         Where two could apply, the one worth most over its own run,
+         so half off two months beats ten per cent off six. */
+      bestOffer: function (rate) {
+        var self = this;
+        var num = Number(rate);
+        var best = null;
+        (this.OFFERS || []).forEach(function (c) {
+          var o = self.parseOffer(c);
+          if (!o || o.prepay || o.kind === 'other') return;
+          var run = o.months || 1;
+          var worth = o.kind === 'percent' ? (num * o.value / 100) * run
+                    : o.kind === 'amount' ? o.value * run
+                    : num * o.value;              /* a free month is a month */
+          if (!isFinite(worth) || worth <= 0) return;
+          if (!best || worth > best.worth) { o.worth = worth; best = o; }
+        });
+        return best;
+      },
+
+      /* Offers that cannot move the headline but should still be
+         read: anything conditional on paying in advance. */
+      conditionalOffers: function () {
+        var self = this;
+        return (this.OFFERS || []).map(function (c) { return self.parseOffer(c); })
+          .filter(function (o) { return o && o.prepay; });
+      },
+
+      /* Everything a price slot needs for one unit.
+           list  what the facility charges, always
+           now   what it costs with the offer, or null when the
+                 offer does not change the monthly figure
+           label the offer in a few words
+           then  what it goes back to, when the offer runs out
+           note  a prepay condition, in the offer's own words */
+      pricing: function (u) {
+        /* No rate, or a rate of nothing, prices nothing. Number(null)
+           is 0 and Number('') is 0, so testing isFinite alone would
+           quietly turn a missing rate into "$0 per month". */
+        var raw = u ? u.rate : null;
+        if (raw === null || raw === undefined || raw === '') return null;
+        var num = Number(raw);
+        if (!isFinite(num) || num <= 0) return null;
+        var out = { list: this.money(num), now: null, label: '', then: '', note: '' };
+        var o = this.bestOffer(num);
+        var run = o && o.months ? (o.months === 1 ? 'first month' : 'first ' + o.months + ' months') : '';
+
+        if (o && (o.kind === 'percent' || o.kind === 'amount')) {
+          var cut = o.kind === 'percent' ? num * (1 - o.value / 100) : Math.max(0, num - o.value);
+          /* Round to the cent. Half of $69 is $34.50, and floating
+             point will happily make that $34.499999999999996. */
+          out.now = this.money(Math.round(cut * 100) / 100);
+          out.label = (o.kind === 'percent' ? o.value + '% off' : this.money(o.value) + ' off') +
+                      (run ? ' ' + run : '');
+          if (run) out.then = 'then ' + out.list + ' per month';
+        } else if (o && o.kind === 'free-months') {
+          /* Nobody is quoted $0 a month. A free period is a period,
+             so the headline stays at the rate that follows it. */
+          out.label = o.value === 1 ? 'First month free' : 'First ' + o.value + ' months free';
+        }
+
+        var cond = this.conditionalOffers();
+        if (cond.length) out.note = cond.map(function (c) { return c.text; }).join('. ');
+        return out;
+      },
+
+      /* The whole price slot, rendered. The three places that show a
+         price (the unit rows, the size guide cards, the details
+         panel) each keep their own class and their own wording for
+         the period, and share everything below the figure.
+
+         o = { cls, per, tag, lock } */
+      priceHtml: function (u, o) {
+        var p = this.pricing(u);
+        if (!p) return '';
+        var tag = (o && o.tag) || 'p';
+        var cls = (o && o.cls) || '';
+        var per = (o && o.per) || 'per month';
+        /* <s>, not <span>: two of the three slots style their own
+           span, one of them display:block, and a struck price that
+           inherited that would break the line. <s> also says what
+           this is, a figure no longer in force. */
+        var figure = p.now
+          ? '<s class="crss-was">' + p.list + '</s>' + p.now
+          : p.list;
+        return '<' + tag + ' class="' + cls + '">' + figure + ' <span>' + per + '</span></' + tag + '>' +
+          (p.label ? '<p class="crss-offer">' + p.label + '</p>' : '') +
+          (p.then ? '<p class="crss-then">' + p.then + '</p>' : '') +
+          (p.note ? '<p class="crss-offer-cond">' + p.note + '</p>' : '') +
+          (o && o.lock === false ? '' : this.priceLockBadge());
       },
 
       money: function (v) {

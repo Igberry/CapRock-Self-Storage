@@ -53,7 +53,16 @@ function requestEmail(r) {
   /* Everything the page said about this unit, in the page's own
      words, so the office is looking at what the customer read. */
   const features = Array.isArray(r.features) ? r.features.filter(Boolean) : [];
+  /* Still one Price row, because the office asked for four fields
+     and meant it. But the site now shows a discounted figure when
+     there is an offer, and the office would otherwise be reading a
+     number the customer never saw. So: the list rate, which is what
+     goes into WebSelfStorage, and underneath it what the page
+     quoted, in the page's own words. */
   const price = r.rate ? `${r.rate} per month` : 'Not quoted';
+  const quoted = r.promoRate && r.promoRate !== r.rate
+    ? `Website showed ${r.promoRate}${r.promo ? ` (${r.promo})` : ''}`
+    : (r.promo || '');
 
   const subject = `${heading}: ${name}, ${r.unitSize}`;
 
@@ -61,14 +70,16 @@ function requestEmail(r) {
     `Full Name: ${name}\n` +
     `Unit Requested: ${unit}\n` +
     (features.length ? `Features: ${features.join(', ')}\n` : '') +
-    `Price: ${price}\n` +
+    `Price: ${price}${quoted ? `\n       ${quoted}` : ''}\n` +
     `${dateLabel}: ${r.date}\n`;
 
   const rows = [
     row('Full Name', name),
     row('Unit Requested', unit),
     features.length ? row('Features', features.map(esc).join('<br>'), false, true) : '',
-    row('Price', price),
+    row('Price', quoted
+      ? `${esc(price)}<span style="display:block;margin-top:3px;font-size:13px;color:${C.taupe};">${esc(quoted)}</span>`
+      : price, false, Boolean(quoted)),
     row(dateLabel, r.date, true),
   ].join('');
 

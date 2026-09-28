@@ -50,7 +50,7 @@ const ALLOWED_ORIGINS = [
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'webhook-1';
+const BUILD = 'promo-1';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
@@ -106,6 +106,12 @@ function validate(body) {
     unit: {
       size: clean(u.size, 20),
       rate: clean(u.rate, 12),
+      /* What the website quoted after the current offer, and the
+         offer in words. Both come from the page rather than being
+         recomputed here, so the email shows what the customer saw
+         even if the offer changes between the click and the send. */
+      promoRate: clean(u.promoRate, 12),
+      promo: clean(u.promo, 80),
       kind: clean(u.kind, 30),
       /* The page's own feature list. Capped so a crafted request
          cannot post a thousand lines into an email. */
@@ -222,6 +228,8 @@ module.exports = async function handler(req, res) {
       unitType: out.unit.kind,
       features: out.unit.features,
       rate: out.unit.rate,
+      promoRate: out.unit.promoRate,
+      promo: out.unit.promo,
     });
     const office = await ghl.office(
       `${verb.toUpperCase()} request: ${out.first} ${out.last}, ${unitLine}, move-in ${usDate(out.date)}. ` +
