@@ -50,7 +50,7 @@ const ALLOWED_ORIGINS = [
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'promo-1';
+const BUILD = 'promo-2';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
@@ -166,6 +166,12 @@ module.exports = async function handler(req, res) {
   const verb = out.kind === 'rent' ? 'Rent Now' : 'Reserve';
   const unitLine = `${out.unit.size}${out.unit.kind ? ', ' + out.unit.kind : ''}${out.unit.rate ? ', ' + out.unit.rate + ' per month' : ''}`;
   const featureLine = out.unit.features.length ? out.unit.features.join(', ') : '';
+  /* What the website quoted, in one line, offer and all. Built here
+     rather than in the webhook block so the same sentence is
+     available to anything else that needs it later. */
+  const priceQuoted = out.unit.promoRate
+    ? `${out.unit.promoRate} per month${out.unit.promo ? ` (${out.unit.promo})` : ''}`
+    : (out.unit.rate ? `${out.unit.rate} per month` : '');
 
   try {
     const fields = await ghl.ensureContactFields(FIELDS);
@@ -258,7 +264,18 @@ module.exports = async function handler(req, res) {
             unit_size: out.unit.size,
             unit_type: out.unit.kind,
             unit_features: featureLine,
+            /* Two prices, because there are two. price is the list
+               rate, which is what the office keys into
+               WebSelfStorage. price_quoted is what the website
+               actually showed after the current offer, which is what
+               the customer will say on the phone. GHL has no
+               conditionals in a notification body, so price_quoted is
+               always a complete sentence and falls back to the list
+               rate when no offer applies: a workflow can print it
+               without checking anything. */
             price: out.unit.rate ? out.unit.rate + ' per month' : '',
+            price_quoted: priceQuoted,
+            promo: out.unit.promo || '',
             move_in_date: usDate(out.date),
             date_label: out.kind === 'rent' ? 'Move In Date' : 'Reserved Date',
             customer_message: out.message,
