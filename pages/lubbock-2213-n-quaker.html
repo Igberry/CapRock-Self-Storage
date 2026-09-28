@@ -904,6 +904,78 @@
     margin-right: calc(50% - 50vw);
   }
 
+  /* ---- The rows size to their column, not to the window ----
+     Between about 770px and 960px the sidebar still takes its full
+     348px while the unit row still has four columns, so each column
+     was around 100px and the words broke one letter per line. A
+     media query cannot see that, because the window is wide; only
+     the column is narrow. A container query can.
+
+     Everything that lays out inside .crss-main is measured against
+     .crss-main's own width, so the rows behave the same whether the
+     window is small or the sidebar is simply taking the room. The
+     @supports block below repeats the wide-enough-window version for
+     browsers without container queries. */
+  .crss-main {
+    container-type: inline-size;
+    container-name: crss-main;
+  }
+  @container crss-main (max-width: 640px) {
+    .crss-unit {
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 14px 18px;
+    }
+    .crss-unit-art .crss-unit-photo {
+      width: 112px;
+    }
+    .crss-unit-attrs,
+    .crss-unit-right {
+      grid-column: 2;
+    }
+    .crss-unit-right {
+      text-align: left;
+    }
+    .crss-unit-right .crss-actions {
+      justify-content: flex-start;
+    }
+    .crss-feature-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .crss-feature-photos {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  /* Narrower still: the drawing goes above the words rather than
+     beside them, because 112px beside 150px is two columns of
+     wrapping. */
+  @container crss-main (max-width: 400px) {
+    .crss-unit {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .crss-unit-attrs,
+    .crss-unit-right {
+      grid-column: 1;
+    }
+  }
+  @supports not (container-type: inline-size) {
+    @media (max-width: 1100px) {
+      .crss-unit {
+        grid-template-columns: 112px minmax(0, 1fr);
+        gap: 14px 18px;
+      }
+      .crss-unit-attrs,
+      .crss-unit-right {
+        grid-column: 2;
+      }
+      .crss-unit-right {
+        text-align: left;
+      }
+      .crss-feature-grid,
+      .crss-feature-photos {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
   @media (max-width: 960px) {
     .crss-shell {
       grid-template-columns: 1fr;
