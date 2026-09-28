@@ -50,7 +50,7 @@ const ALLOWED_ORIGINS = [
    one before it. Without this there is no way to know whether a test
    hit the new code or the old, and I twice reported a fix working
    that was not deployed yet. Bump it with any change worth verifying. */
-const BUILD = 'promo-2';
+const BUILD = 'promo-3';
 
 const FIELDS = [
   ['Requested Unit', 'TEXT'],
@@ -255,6 +255,12 @@ module.exports = async function handler(req, res) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contact_id: contactId,
+            /* The same subject the office email carries, so a person
+               who gets both the Gmail alert and the GHL notification
+               sees one event and not two. Sent rather than rebuilt in
+               the workflow editor, so the two cannot drift apart the
+               next time the format changes. */
+            subject: mail.subject,
             request_type: verb,
             first_name: out.first,
             last_name: out.last,
