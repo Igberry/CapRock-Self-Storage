@@ -22,7 +22,11 @@ const stripComments = (s) => s.replace(/<!--[\s\S]*?-->/g, '').replace(/\/\*[\s\
 for (const f of files) {
   const src = fs.readFileSync(path.join(root, f), 'utf8');
   const styles = [...src.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => m[1]);
-  const scripts = [...src.matchAll(/<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+  const blocks = [...src.matchAll(/<script(?![^>]*src=)([^>]*)>([\s\S]*?)<\/script>/g)]
+    .map((m) => ({ type: /type\s*=\s*"([^"]*)"/.exec(m[1]), code: m[2] }))
+    .map((b) => ({ type: b.type ? b.type[1].toLowerCase() : 'text/javascript', code: b.code }));
+  const scripts = blocks.filter((b) => !/json/.test(b.type)).map((b) => b.code);
+  const jsonLd = blocks.filter((b) => /json/.test(b.type)).map((b) => b.code);
 
   /* 1. Every <script> parses. A comment that swallows a function
         still parses, so the delimiter count below is separate. */
@@ -31,6 +35,18 @@ for (const f of files) {
     const open = (code.match(/\/\*/g) || []).length;
     const close = (code.match(/\*\//g) || []).length;
     if (open !== close) note(f, `unbalanced block comments in <script> (${open} open / ${close} close)`);
+  });
+
+  /* 1b. Structured data is JSON, not JavaScript, so it is parsed as
+         JSON and must carry an @type. A malformed block is worse than
+         no block: a search engine discards the whole thing rather
+         than the broken part of it, so this is worth failing on. */
+  jsonLd.forEach((code, i) => {
+    let doc;
+    try { doc = JSON.parse(code); }
+    catch (e) { return note(f, `JSON-LD block ${i + 1} is not valid JSON: ${e.message}`); }
+    if (!doc || !doc['@type']) note(f, `JSON-LD block ${i + 1} has no @type`);
+    if (!doc || !doc['@context']) note(f, `JSON-LD block ${i + 1} has no @context`);
   });
 
   /* 2. Braces balance in CSS. */

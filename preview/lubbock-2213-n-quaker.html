@@ -952,6 +952,86 @@
   }
 </style>
 
+<!-- ================================================================
+     WHO THIS IS, FOR MACHINES
+
+     The same facts the page states in prose, in the form search
+     engines and assistants read: address, hours, phone, position.
+     This sits in the header so it is on every page, and so there is
+     one copy of it rather than fourteen.
+
+     SelfStorage is a real schema.org type, under LocalBusiness, so
+     it says what the business does as well as where it is.
+
+     Every value here is taken from the facility record in
+     WebSelfStorage or from the footer. Nothing is invented. When the
+     office hours change in WebSelfStorage they must be changed here
+     too: this is deliberately static, because a machine reading a
+     page should not have to wait for a fetch, and because hours that
+     appear only after JavaScript runs are hours that half the
+     crawlers never see.
+
+     CHECK WHEN THEY CHANGE: openingHours, telephone, address.
+     ================================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SelfStorage",
+  "@id": "https://caprock-storage.com/#business",
+  "name": "CapRock Self Storage",
+  "legalName": "Wasatch Home Buyers Inc",
+  "description": "Drive-up and temperature controlled self storage in northwest Lubbock, Texas, with gated electronic access, video surveillance and month to month leases.",
+  "url": "https://caprock-storage.com",
+  "telephone": "+1-806-589-1472",
+  "image": "https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad95be30b0f957cc778a42.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "2213 North Quaker Avenue",
+    "addressLocality": "Lubbock",
+    "addressRegion": "TX",
+    "postalCode": "79416",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 33.6235733,
+    "longitude": -101.90579224
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "10:00",
+      "closes": "17:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "13:00",
+      "closes": "17:00"
+    }
+  ],
+  "areaServed": {
+    "@type": "City",
+    "name": "Lubbock",
+    "containedInPlace": { "@type": "State", "name": "Texas" }
+  },
+  "amenityFeature": [
+    { "@type": "LocationFeatureSpecification", "name": "Drive-up access", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Temperature controlled units", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Electronic gate access", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Video surveillance", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Lighted units", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Powered units", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Ground level access", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Carts and dollies", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Fenced and walled perimeter", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Online payments", "value": true }
+  ],
+  "sameAs": ["https://www.facebook.com/profile.php?id=61594352916112"]
+}
+</script>
+
 <header class="crss-header">
   <div class="crss-header-inner">
 
@@ -2857,6 +2937,48 @@
     text-align: right;
     white-space: nowrap;
   }
+  /* ---- The catalogue, as plain HTML ----
+     A snapshot of every size and rate, shipped in the markup and
+     replaced by the live list the moment it arrives. A visitor with
+     scripts never sees it for more than a blink.
+
+     It is here for the readers that cannot run scripts. Googlebot
+     renders JavaScript; the crawlers behind the answer engines
+     largely do not, so until this table existed the page told
+     GPTBot, ClaudeBot and Perplexity nothing at all about sizes or
+     prices. Regenerate it with tools/build-static-units.js whenever
+     rates change. */
+  .crss-unit-static {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 15px;
+  }
+  .crss-unit-static caption {
+    text-align: left;
+    padding-bottom: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-unit-static th,
+  .crss-unit-static td {
+    padding: 13px 16px 13px 0;
+    border-bottom: 1px solid var(--crss-rule, #E7DECD);
+    vertical-align: top;
+  }
+  .crss-unit-static thead th {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-unit-static tbody th {
+    font-weight: 600;
+    color: var(--crss-charcoal, #292724);
+    white-space: nowrap;
+  }
   .crss-unit-rate {
     font-family: 'Fraunces', Georgia, serif;
     font-optical-sizing: auto;
@@ -3182,7 +3304,29 @@
         <div class="crss-unit-filters" data-crss-unit-filters hidden></div>
 
         <div data-crss-units>
-          <p class="crss-unit-state">Checking current availability&hellip;</p>
+          <!-- BEGIN STATIC UNITS: generated by tools/build-static-units.js, do not hand edit -->
+          <table class="crss-unit-static">
+            <caption>Unit sizes and monthly rates at CapRock Self Storage, 2213 North Quaker Avenue, Lubbock, Texas. Rates confirmed 30 September 2026. Live availability replaces this table when it loads.</caption>
+            <thead>
+              <tr><th scope="col">Size</th><th scope="col">Area</th><th scope="col">Type</th><th scope="col">Rate</th></tr>
+            </thead>
+            <tbody>
+            <tr><th scope="row">5 × 5 × 9 ft</th><td>25 sq ft</td><td>Temperature controlled</td><td>$36 per month</td></tr>
+            <tr><th scope="row">5 × 5 × 8 ft</th><td>25 sq ft</td><td>Temperature controlled</td><td>$36 per month</td></tr>
+            <tr><th scope="row">5 × 7 × 9 ft</th><td>35 sq ft</td><td>Temperature controlled</td><td>$47 per month</td></tr>
+            <tr><th scope="row">5 × 10 × 9 ft</th><td>50 sq ft</td><td>Temperature controlled</td><td>$69 per month</td></tr>
+            <tr><th scope="row">5 × 10 × 8 ft</th><td>50 sq ft</td><td>Temperature controlled</td><td>$69 per month</td></tr>
+            <tr><th scope="row">8 × 10 × 8 ft</th><td>80 sq ft</td><td>Drive-up</td><td>$60 per month</td></tr>
+            <tr><th scope="row">10 × 10 × 8 ft</th><td>100 sq ft</td><td>Temperature controlled</td><td>$109 per month</td></tr>
+            <tr><th scope="row">16 × 10 × 8 ft</th><td>160 sq ft</td><td>Drive-up</td><td>$100 per month</td></tr>
+            <tr><th scope="row">10 × 24 × 8 ft</th><td>240 sq ft</td><td>Drive-up</td><td>$80 per month</td></tr>
+            <tr><th scope="row">10 × 30 × 8 ft</th><td>300 sq ft</td><td>Drive-up</td><td>$83 per month</td></tr>
+            <tr><th scope="row">10 × 40 × 8 ft</th><td>400 sq ft</td><td>Drive-up</td><td>$99 per month</td></tr>
+            <tr><th scope="row">20 × 30 × 8 ft</th><td>600 sq ft</td><td>Drive-up</td><td>$119 per month</td></tr>
+            <tr><th scope="row">20 × 40 × 8 ft</th><td>800 sq ft</td><td>Drive-up</td><td>$159 per month</td></tr>
+            </tbody>
+          </table>
+          <!-- END STATIC UNITS -->
         </div>
       </section>
 
@@ -3542,6 +3686,9 @@
        in step, and it will always be the one nobody remembers. */
 
     var unitsHost = loc.querySelector('[data-crss-units]');
+    /* The catalogue as shipped. Kept so a failed fetch can fall back
+       to it rather than replacing real prices with an apology. */
+    var SNAPSHOT = unitsHost ? unitsHost.innerHTML : '';
 
     /* The rows on screen right now. The list is re-rendered every
        time a filter is pressed, so the click handler is delegated to
@@ -3758,7 +3905,9 @@
     if (!unitsHost) {
       /* nothing to do */
     } else if (!window.CRSS_WSS) {
-      unitState('Live availability is not connected yet. ' + FALLBACK);
+      unitsHost.innerHTML =
+        '<p class="crss-unit-state">Live availability is not connected yet, so the sizes and rates below are the last confirmed. ' +
+        FALLBACK + '</p>' + SNAPSHOT;
     } else {
       Promise.all([window.CRSS_WSS.get('movein'), window.CRSS_WSS.get('location')])
         .then(function (both) {
@@ -3775,7 +3924,12 @@
         .catch(function (err) {
           /* Never show a stack trace or a raw status to a customer. */
           console.error('units fetch failed:', err);
-          unitState('Availability could not be loaded just now. ' + FALLBACK);
+          /* The snapshot is still the right prices, just not the
+             right availability, so it stays and the caveat goes
+             above it. */
+          unitsHost.innerHTML =
+            '<p class="crss-unit-state">Live availability could not be loaded just now, so the sizes and rates below are the last confirmed. ' +
+            FALLBACK + '</p>' + SNAPSHOT;
         });
     }
 
@@ -3817,6 +3971,363 @@
     }
   })();
 </script>
+
+<!-- BEGIN SCHEMA: generated by tools/build-schema.js, do not hand edit -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "OfferCatalog",
+  "@id": "https://caprock-storage.com/lubbock-2213-n-quaker#units",
+  "name": "Storage unit sizes and rates, CapRock Self Storage, Lubbock",
+  "provider": {
+    "@id": "https://caprock-storage.com/#business"
+  },
+  "itemListElement": [
+    {
+      "@type": "Offer",
+      "position": 1,
+      "name": "5 x 5 x 9 ft temperature controlled storage unit",
+      "price": 36,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 36,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "5 x 5 x 9 ft storage unit",
+        "category": "Temperature controlled self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 25,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 2,
+      "name": "5 x 5 x 8 ft temperature controlled storage unit",
+      "price": 36,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 36,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "5 x 5 x 8 ft storage unit",
+        "category": "Temperature controlled self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 25,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 3,
+      "name": "5 x 7 x 9 ft temperature controlled storage unit",
+      "price": 47,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 47,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "5 x 7 x 9 ft storage unit",
+        "category": "Temperature controlled self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 35,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 4,
+      "name": "5 x 10 x 9 ft temperature controlled storage unit",
+      "price": 69,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 69,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "5 x 10 x 9 ft storage unit",
+        "category": "Temperature controlled self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 50,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 5,
+      "name": "5 x 10 x 8 ft temperature controlled storage unit",
+      "price": 69,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 69,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "5 x 10 x 8 ft storage unit",
+        "category": "Temperature controlled self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 50,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 6,
+      "name": "8 x 10 x 8 ft drive-up storage unit",
+      "price": 60,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 60,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "8 x 10 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 80,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 7,
+      "name": "10 x 10 x 8 ft temperature controlled storage unit",
+      "price": 109,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 109,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "10 x 10 x 8 ft storage unit",
+        "category": "Temperature controlled self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 100,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 8,
+      "name": "16 x 10 x 8 ft drive-up storage unit",
+      "price": 100,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 100,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "16 x 10 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 160,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 9,
+      "name": "10 x 24 x 8 ft drive-up storage unit",
+      "price": 80,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 80,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "10 x 24 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 240,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 10,
+      "name": "10 x 30 x 8 ft drive-up storage unit",
+      "price": 83,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 83,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "10 x 30 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 300,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 11,
+      "name": "10 x 40 x 8 ft drive-up storage unit",
+      "price": 99,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 99,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "10 x 40 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 400,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 12,
+      "name": "20 x 30 x 8 ft drive-up storage unit",
+      "price": 119,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 119,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "20 x 30 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 600,
+          "unitCode": "FTK"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "position": 13,
+      "name": "20 x 40 x 8 ft drive-up storage unit",
+      "price": 159,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": 159,
+        "priceCurrency": "USD",
+        "unitCode": "MON",
+        "billingDuration": 1
+      },
+      "itemOffered": {
+        "@type": "Product",
+        "name": "20 x 40 x 8 ft storage unit",
+        "category": "Drive-up self storage",
+        "additionalProperty": {
+          "@type": "PropertyValue",
+          "name": "Floor area",
+          "value": 800,
+          "unitCode": "FTK"
+        }
+      }
+    }
+  ],
+  "lowPrice": 36,
+  "highPrice": 159,
+  "priceCurrency": "USD"
+}
+</script>
+<!-- END SCHEMA -->
 
 <!-- ================================================================
      CapRock Self Storage — Global Footer

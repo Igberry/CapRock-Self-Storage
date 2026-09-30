@@ -939,6 +939,86 @@
   }
 </style>
 
+<!-- ================================================================
+     WHO THIS IS, FOR MACHINES
+
+     The same facts the page states in prose, in the form search
+     engines and assistants read: address, hours, phone, position.
+     This sits in the header so it is on every page, and so there is
+     one copy of it rather than fourteen.
+
+     SelfStorage is a real schema.org type, under LocalBusiness, so
+     it says what the business does as well as where it is.
+
+     Every value here is taken from the facility record in
+     WebSelfStorage or from the footer. Nothing is invented. When the
+     office hours change in WebSelfStorage they must be changed here
+     too: this is deliberately static, because a machine reading a
+     page should not have to wait for a fetch, and because hours that
+     appear only after JavaScript runs are hours that half the
+     crawlers never see.
+
+     CHECK WHEN THEY CHANGE: openingHours, telephone, address.
+     ================================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SelfStorage",
+  "@id": "https://caprock-storage.com/#business",
+  "name": "CapRock Self Storage",
+  "legalName": "Wasatch Home Buyers Inc",
+  "description": "Drive-up and temperature controlled self storage in northwest Lubbock, Texas, with gated electronic access, video surveillance and month to month leases.",
+  "url": "https://caprock-storage.com",
+  "telephone": "+1-806-589-1472",
+  "image": "https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad95be30b0f957cc778a42.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "2213 North Quaker Avenue",
+    "addressLocality": "Lubbock",
+    "addressRegion": "TX",
+    "postalCode": "79416",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 33.6235733,
+    "longitude": -101.90579224
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "10:00",
+      "closes": "17:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "13:00",
+      "closes": "17:00"
+    }
+  ],
+  "areaServed": {
+    "@type": "City",
+    "name": "Lubbock",
+    "containedInPlace": { "@type": "State", "name": "Texas" }
+  },
+  "amenityFeature": [
+    { "@type": "LocationFeatureSpecification", "name": "Drive-up access", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Temperature controlled units", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Electronic gate access", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Video surveillance", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Lighted units", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Powered units", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Ground level access", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Carts and dollies", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Fenced and walled perimeter", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Online payments", "value": true }
+  ],
+  "sameAs": ["https://www.facebook.com/profile.php?id=61594352916112"]
+}
+</script>
+
 <header class="crss-header">
   <div class="crss-header-inner">
 
