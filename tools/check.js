@@ -47,6 +47,26 @@ for (const f of files) {
     catch (e) { return note(f, `JSON-LD block ${i + 1} is not valid JSON: ${e.message}`); }
     if (!doc || !doc['@type']) note(f, `JSON-LD block ${i + 1} has no @type`);
     if (!doc || !doc['@context']) note(f, `JSON-LD block ${i + 1} has no @context`);
+
+    /* Every Product must carry its own price. Google rejects a
+       Product with no offers, review or aggregateRating, and it
+       rejects it silently as far as this repository is concerned:
+       nothing here noticed that thirteen units had been published
+       with the Product nested inside the Offer instead of the other
+       way round, and all thirteen were invalid on the live site
+       until the Rich Results Test said so. Caught here now. */
+    const products = [];
+    (function walk(node) {
+      if (!node || typeof node !== 'object') return;
+      if (Array.isArray(node)) return node.forEach(walk);
+      if (node['@type'] === 'Product') products.push(node);
+      Object.values(node).forEach(walk);
+    })(doc);
+    products.forEach((p) => {
+      if (!p.offers && !p.review && !p.aggregateRating) {
+        note(f, `JSON-LD Product "${p.name || '(unnamed)'}" has no offers, review or aggregateRating, so Google will reject it`);
+      }
+    });
   });
 
   /* 2. Braces balance in CSS. */

@@ -108,6 +108,9 @@ function faq() {
 
    No sums happen here. bestOffer and pricing come out of the header
    through _wss.js, so this cannot drift from what visitors see. */
+const PAGE = 'https://caprock-storage.com/lubbock-2213-n-quaker';
+const PHOTO = 'https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6aad95be30b0f957cc778a42.jpg';
+
 async function catalogue() {
   const { wss, units } = await loadPriced();
   if (!units.length) throw new Error('the feed returned no priced unit types');
@@ -118,10 +121,10 @@ async function catalogue() {
 
   const doc = {
     '@context': 'https://schema.org',
-    '@type': 'OfferCatalog',
-    '@id': 'https://caprock-storage.com/lubbock-2213-n-quaker#units',
+    '@type': 'ItemList',
+    '@id': PAGE + '#units',
     name: 'Storage unit sizes and rates, CapRock Self Storage, Lubbock',
-    provider: { '@id': BUSINESS },
+    numberOfItems: units.length,
     itemListElement: units.map((u, i) => {
       const n = numbers(wss, u);
       const p = wss.pricing(u);
@@ -150,39 +153,63 @@ async function catalogue() {
         });
       }
 
-      return Object.assign({
-        '@type': 'Offer',
-        position: i + 1,
+      const product = Object.assign({
+        '@type': 'Product',
+        '@id': PAGE + '#unit-' + size(u).replace(/ /g, ''),
         name: size(u) + ' ft ' + (u.climate ? 'temperature controlled' : 'drive-up') + ' storage unit',
-      }, terms ? { description: terms } : {}, {
-        price: n.now,
-        priceCurrency: 'USD',
-        availability: Number(u.vacantCount) > 0
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
-        priceSpecification: spec,
-        itemOffered: Object.assign({
-          '@type': 'Product',
-          name: size(u) + ' ft storage unit',
-          category: u.climate ? 'Temperature controlled self storage' : 'Drive-up self storage',
-        }, u.sqft ? { additionalProperty: {
+        image: PHOTO,
+        category: u.climate ? 'Temperature controlled self storage' : 'Drive-up self storage',
+      }, terms ? { description: terms } : {}, u.sqft ? {
+        additionalProperty: {
           '@type': 'PropertyValue', name: 'Floor area', value: Number(u.sqft), unitCode: 'FTK',
-        } } : {}),
+        },
+      } : {}, {
+        /* The offer hangs off the product, not the other way round.
+           Nested the other way this validated as thirteen Products
+           with no price on any of them, and Google rejected all
+           thirteen: a Product has to carry offers, review or
+           aggregateRating, and itemOffered does not count. */
+        offers: {
+          '@type': 'Offer',
+          url: PAGE + '#units',
+          price: n.now,
+          priceCurrency: 'USD',
+          availability: Number(u.vacantCount) > 0
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          seller: { '@id': BUSINESS },
+          priceSpecification: spec,
+        },
       });
+
+      return { '@type': 'ListItem', position: i + 1, item: product };
     }),
-    lowPrice: Math.min.apply(null, charged),
-    highPrice: Math.max.apply(null, charged),
-    priceCurrency: 'USD',
   };
   writeBlock('pages/lubbock-2213-n-quaker.html', JSON.stringify(doc, null, 2));
-  return { count: units.length, low: doc.lowPrice, high: doc.highPrice };
+  return {
+    count: units.length,
+    low: Math.min.apply(null, charged),
+    high: Math.max.apply(null, charged),
+  };
 }
 
 (async () => {
   const n = faq();
   console.log('help-center.html      FAQPage, ' + n + ' questions');
   const c = await catalogue();
-  console.log('lubbock-...html       OfferCatalog, ' + c.count + ' offers, $' + c.low + ' to $' + c.high);
+  console.log('lubbock-...html       ItemList, ' + c.count + ' products, 
+  console.log('\nNow: bash tools/build-preview.sh && node tools/check.js');
+})().catch((e) => {
+  console.error('failed:', e.message);
+  process.exit(1);
+});
+ + c.low + ' to 
+  console.log('\nNow: bash tools/build-preview.sh && node tools/check.js');
+})().catch((e) => {
+  console.error('failed:', e.message);
+  process.exit(1);
+});
+ + c.high);
   console.log('\nNow: bash tools/build-preview.sh && node tools/check.js');
 })().catch((e) => {
   console.error('failed:', e.message);
