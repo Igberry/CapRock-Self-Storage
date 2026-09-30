@@ -72,6 +72,32 @@
   }
 
   /* ============ PAGE HEAD ============ */
+  /* ---- The answer, before the tool ----
+     Both pages used to open with a control: a grid of cards here, a
+     row of buttons on the calculator. That is the right thing for
+     someone who has already decided to browse, and the wrong thing
+     for someone who arrived from a search box asking how big a 10 x
+     10 is. It is also the wrong thing for an answer engine, which
+     reads the top of a page looking for a sentence it can quote and
+     found a button.
+
+     So: the answer in prose, then the tool. The figures come from the
+     live feed on load, and the markup carries today's numbers for the
+     readers that cannot run scripts. */
+  .crss-answer {
+    max-width: 62ch;
+    margin: 0 0 34px;
+    font-size: 17px;
+    line-height: 1.68;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-answer strong {
+    font-weight: 600;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-answer p + p {
+    margin-top: 14px;
+  }
   .crss-calc-title {
     font-family: 'Fraunces', Georgia, serif;
     font-optical-sizing: auto;
@@ -312,6 +338,24 @@
 
     <h1 class="crss-calc-title">Storage Size Calculator</h1>
     <p class="crss-calc-subtitle">Select what best describes what you're storing, and we'll recommend a starting size.</p>
+
+    <!-- The answer before the tool, for the reader who arrived from a
+         search box rather than from the menu. Sizes named here are
+         sizes CapRock rents; do not add a 10 x 15 or a 10 x 20 to
+         this list, because we do not have them and a visitor who
+         picks one arrives to find it does not exist. -->
+    <div class="crss-answer">
+      <p>
+        As a rough guide, allow about <strong>50 square feet of storage for each bedroom</strong>
+        you are clearing. A studio fits a <strong>5 &times; 10</strong>, a one to two bedroom home
+        a <strong>10 &times; 10</strong>, and a three to four bedroom home a <strong>10 &times; 24</strong>.
+        A few boxes and seasonal things fit a <strong>5 &times; 5</strong>.
+      </p>
+      <p>
+        If you are between two sizes, take the larger one. A few dollars more a month costs less
+        than a second trip, and a unit packed to the ceiling is a unit you cannot get into.
+      </p>
+    </div>
 
     <div class="crss-calc-options" id="crss-calc-options">
       <!-- data-need is the space the contents want, in square feet.

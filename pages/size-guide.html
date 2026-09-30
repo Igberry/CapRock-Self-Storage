@@ -249,6 +249,32 @@
     color: var(--crss-charcoal, #292724);
     white-space: nowrap;
   }
+  /* ---- The answer, before the tool ----
+     Both pages used to open with a control: a grid of cards here, a
+     row of buttons on the calculator. That is the right thing for
+     someone who has already decided to browse, and the wrong thing
+     for someone who arrived from a search box asking how big a 10 x
+     10 is. It is also the wrong thing for an answer engine, which
+     reads the top of a page looking for a sentence it can quote and
+     found a button.
+
+     So: the answer in prose, then the tool. The figures come from the
+     live feed on load, and the markup carries today's numbers for the
+     readers that cannot run scripts. */
+  .crss-answer {
+    max-width: 62ch;
+    margin: 0 0 34px;
+    font-size: 17px;
+    line-height: 1.68;
+    color: var(--crss-ink-soft, #5F564C);
+  }
+  .crss-answer strong {
+    font-weight: 600;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-answer p + p {
+    margin-top: 14px;
+  }
   .crss-size-rate {
     font-family: 'Fraunces', Georgia, serif;
     font-optical-sizing: auto;
@@ -403,6 +429,24 @@
     <h1 class="crss-sg-title">Find the Right Storage Unit Size</h1>
     <p class="crss-sg-subtitle">The sizes available at CapRock, with current monthly rates. Availability changes, so check the location page before you travel.</p>
 
+    <!-- The sizes and the range are rewritten from the live feed on
+         load. The numbers in the markup are today's, so this reads
+         correctly before the fetch lands and for anything that never
+         runs it. -->
+    <div class="crss-answer">
+      <p>
+        Most people need less space than they expect. A <strong>5 &times; 10</strong> holds a studio
+        or a dorm room. A <strong>10 &times; 10</strong> holds a one to two bedroom home including the
+        larger furniture. A <strong>10 &times; 24</strong> or bigger holds a full house or business
+        stock, and takes a vehicle.
+      </p>
+      <p data-crss-answer-range>
+        CapRock rents <strong>13 sizes</strong> in Lubbock, from 5 &times; 5 up to 20 &times; 40,
+        at <strong>$18 to $79.50 a month</strong> with the current offer. Every size below is one we
+        actually rent, priced from the facility system rather than a list.
+      </p>
+    </div>
+
     <!-- Rendered from live WebSelfStorage data, not hardcoded.
          This page used to list nine generic industry sizes; the
          facility rents four, including an 8x10 that was missing
@@ -541,6 +585,35 @@
         '</button>';
       }).join('');
 
+      /* ---- The answer paragraph keeps up with the feed ----
+         The sentence above the cards quotes a count and a price
+         range. Those move, so they are rewritten here from the
+         same list the cards are built from, priced through the
+         same helper. The markup carries the figures that were true
+         when the page was generated, for readers that never run
+         this. */
+      (function () {
+        var el = document.querySelector('[data-crss-answer-range]');
+        if (!el || !list.length) return;
+        var W = window.CRSS_WSS;
+        var paid = list.map(function (u) {
+          var p = W.pricing(u);
+          /* The figure someone actually pays: the offer price when
+             there is one, the list price when there is not. */
+          return Number(String((p && (p.now || p.list)) || '').replace(/[^0-9.]/g, ''));
+        }).filter(function (n) { return isFinite(n) && n > 0; });
+        if (!paid.length) return;
+        var small = list[0], large = list[list.length - 1];
+        var dim = function (u) { return Number(u.width) + ' × ' + Number(u.length); };
+        var offer = W.pricing(list[0]);
+        el.innerHTML =
+          'CapRock rents <strong>' + list.length + ' sizes</strong> in Lubbock, from ' +
+          dim(small) + ' up to ' + dim(large) + ', at <strong>' +
+          W.money(Math.min.apply(null, paid)) + ' to ' + W.money(Math.max.apply(null, paid)) +
+          ' a month</strong>' + (offer && offer.label ? ' with the current offer' : '') +
+          '. Every size below is one we actually rent, priced from the facility system ' +
+          'rather than a list.';
+      })();
       state.hidden = true;
       /* The cards say everything the table said, so the table goes.
          Removed rather than hidden: hidden text on a page is a
