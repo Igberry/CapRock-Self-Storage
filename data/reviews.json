@@ -1,0 +1,57 @@
+{
+  "_comment": [
+    "Reviews left on CapRock's Google Business Profile, copied here word",
+    "for word. This file is the only place they are written down;",
+    "tools/build-reviews.js puts them into the pages.",
+    "",
+    "RULES, and they matter more than the copy:",
+    "",
+    "1. Never write a review nobody left. These are real people and the",
+    "   text is theirs. Copy it exactly, including the odd phrasing.",
+    "2. Only reviews that were shown in full. Google truncates long ones",
+    "   behind 'View full review'; four of the nine were truncated on 30",
+    "   September and are left out rather than guessed at.",
+    "3. These do NOT go into the structured data as an aggregateRating.",
+    "   Google disallows self-serving reviews, meaning reviews about a",
+    "   business published on that business's own site, and would ignore",
+    "   or penalise them. They count where they already are, on the",
+    "   Business Profile. Here they are for the answer engines, which",
+    "   read this site and not our Google listing.",
+    "4. profileUrl is the public Google reviews link. Until it is set,",
+    "   the 'read them all' line does not render, because a dead link is",
+    "   worse than no link."
+  ],
+  "profileUrl": "",
+  "reviews": [
+    {
+      "name": "Lisa Moore",
+      "stars": 5,
+      "when": "September 2026",
+      "text": "The new management team is great. The facility looks amazing, security cameras, and clean units!"
+    },
+    {
+      "name": "Diana Abalos",
+      "stars": 5,
+      "when": "September 2026",
+      "text": "Great storage facility under new management! Clean, secure, and great customer service. The staff are friendly and helpful."
+    },
+    {
+      "name": "Craig Madsen",
+      "stars": 5,
+      "when": "September 2026",
+      "text": "Manager is helping out whenever needed. Safe and secure."
+    },
+    {
+      "name": "Zasha Smith",
+      "stars": 5,
+      "when": "September 2026",
+      "text": "This place has done a full 360 with the new renovations!"
+    },
+    {
+      "name": "Mo Alhareb",
+      "stars": 5,
+      "when": "September 2026",
+      "text": "Great location, love the new management."
+    }
+  ]
+}
