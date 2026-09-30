@@ -2280,83 +2280,32 @@
   }
 
   /* ---- The price lock seal ----
-     CapRock's own promise, drawn in CapRock's own language: bone on
-     the dark hero so it reads as a stamp pressed into the
-     photograph, and so it does not compete with the terracotta
-     button beside it.
+     Supplied artwork, hosted in the GHL media library, placed on
+     David's instruction (30 September).
 
-     This is deliberately NOT U-Haul's "1-Year Price Lock Guarantee"
-     badge. That programme covers U-Haul owned and managed stores and
-     the mark is U-Haul's; CapRock is an affiliate. The artwork
-     supplied on 30 September was that badge with a rectangle painted
-     over the U-HAUL wordmark, which leaves the mark in the file and
-     claims a programme this store is not part of. This says the
-     thing CapRock can honour, in the words the rest of the site
-     already uses, and the term is read from PRICE_LOCK in the header
-     so there is still exactly one place to change it. */
+     Two things about this file are worth knowing before it is
+     changed or reused. It is U-Haul's "1-Year Price Lock Guarantee"
+     badge: the navy ribbon, the wording and the layout are theirs,
+     and the U-HAUL wordmark and its registered mark are still in the
+     file as vector paths, hidden under a terracotta rectangle at
+     x=49 y=22.5 with CAPROCK typed over the top. Remove that
+     rectangle and the mark is visible again.
+
+     It also reads "1-YEAR", which it cannot take from PRICE_LOCK the
+     way the rest of the site does. Twelve months and one year agree
+     today. If the term ever changes, this needs new artwork, and the
+     script below removes the seal rather than let the picture
+     contradict the page.
+
+     No frame and no background: the badge carries its own outline.
+     drop-shadow follows the artwork's shape, which a box-shadow
+     would not, so it lifts off the photograph without a rectangle
+     appearing around it. */
   .crss-hero-seal {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 196px;
-    height: 196px;
-    border-radius: 50%;
-    background: var(--crss-bone, #FAF7F1);
-    text-align: center;
-    /* Wide and soft. A hard shadow would read as a sticker sitting
-       on the page rather than a seal pressed into it. */
-    box-shadow: 0 18px 44px rgba(20, 16, 12, 0.34);
-  }
-  /* A seal has two rules, not one. */
-  .crss-hero-seal::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    bottom: 8px;
-    left: 8px;
-    border: 1px solid var(--crss-rule, #E7DECD);
-    border-radius: 50%;
-  }
-  .crss-hero-seal svg {
-    width: 17px;
-    height: 17px;
-    margin-bottom: 8px;
-    color: var(--crss-terracotta, #A44A23);
-  }
-  .crss-hero-seal-term {
-    font-family: 'Fraunces', Georgia, serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-size: 42px;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-    color: var(--crss-charcoal, #292724);
-  }
-  .crss-hero-seal-unit {
-    margin-top: 5px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--crss-taupe, #7F6C5D);
-  }
-  .crss-hero-seal-rule {
     display: block;
-    width: 34px;
-    height: 1px;
-    margin: 11px 0 10px;
-    background: var(--crss-rule, #E7DECD);
-  }
-  .crss-hero-seal-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--crss-terracotta, #A44A23);
+    width: 232px;
+    height: auto;
+    filter: drop-shadow(0 14px 32px rgba(20, 16, 12, 0.5));
   }
   .crss-hero-eyebrow {
     font-size: 11px;
@@ -2954,11 +2903,7 @@
       gap: 40px;
     }
     .crss-hero-seal {
-      width: 156px;
-      height: 156px;
-    }
-    .crss-hero-seal-term {
-      font-size: 34px;
+      width: 188px;
     }
     .crss-trust-copy {
       padding: 60px 26px 72px;
@@ -2977,11 +2922,7 @@
       gap: 34px;
     }
     .crss-hero-seal {
-      width: 140px;
-      height: 140px;
-    }
-    .crss-hero-seal-term {
-      font-size: 30px;
+      width: 168px;
     }
     .crss-trust-copy {
       padding: 56px 20px 64px;
@@ -3040,18 +2981,14 @@
         </div>
       </div>
 
-      <!-- The term is written here as well as read from PRICE_LOCK
-           below, so the seal is right on the first paint and stays
-           right if the term ever changes. The padlock is the same one
-           the badge under every price uses. -->
-      <div class="crss-hero-seal" data-crss-seal
+      <!-- width and height are the file's own proportions
+           (151.11 x 112.71), given so the hero does not reflow while
+           the badge loads. -->
+      <img class="crss-hero-seal" data-crss-seal
+           src="https://assets.cdn.filesafe.space/Al1OnFCjf6Mtgmi0CTtF/media/6abd3c3a1b644080e371fc9b.svg"
+           width="232" height="173"
+           alt="CapRock Self-Storage 1-Year Price Lock Guarantee"
            title="Your monthly rate will not go up for the first 12 months.">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        <p class="crss-hero-seal-term" data-crss-seal-term>12</p>
-        <p class="crss-hero-seal-unit" data-crss-seal-unit>Months</p>
-        <span class="crss-hero-seal-rule" aria-hidden="true"></span>
-        <p class="crss-hero-seal-label">Price Lock</p>
-      </div>
     </div>
   </section>
 
@@ -3406,24 +3343,25 @@
     }
 
     /* ---- The price lock seal ----
-       PRICE_LOCK in the header is the single statement of this
-       promise. The seal reads it rather than restating it, so
-       changing the term is still one edit, and withdrawing the
-       promise removes the seal along with every other mention of it
-       on the site. */
+       The badge is a fixed picture reading "1-YEAR", so unlike every
+       other mention of the price lock it cannot follow PRICE_LOCK.
+       This is the next best thing: it takes the seal down if the
+       promise is withdrawn, and also if the term is changed to
+       anything that is not twelve months, because the picture would
+       then be promising something the rest of the page denies. A
+       shorter term needs new artwork, not a code change. */
+    var SEAL_MONTHS = 12;
     (function () {
       var seal = document.querySelector('[data-crss-seal]');
       if (!seal) return;
       var lock = window.CRSS_WSS && window.CRSS_WSS.PRICE_LOCK;
-      /* No header, no helper, no promise: leave the seal as the
-         markup has it rather than removing something the page was
-         built to show. Only an explicit "off" takes it away. */
+      /* No header, no helper, no opinion: leave the seal as the
+         markup has it rather than removing what the page was built
+         to show. Only a definite answer takes it away. */
       if (!lock) return;
-      if (!lock.enabled) { seal.parentNode.removeChild(seal); return; }
-      var months = Number(lock.months);
-      if (isFinite(months) && months > 0) {
-        seal.querySelector('[data-crss-seal-term]').textContent = months;
-        seal.querySelector('[data-crss-seal-unit]').textContent = months === 1 ? 'Month' : 'Months';
+      if (!lock.enabled || Number(lock.months) !== SEAL_MONTHS) {
+        seal.parentNode.removeChild(seal);
+        return;
       }
       if (lock.line) seal.setAttribute('title', lock.line);
     })();
