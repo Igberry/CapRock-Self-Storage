@@ -9,11 +9,12 @@
                     reads, and editing one cannot silently leave the
                     other behind.
 
-     Offer catalogue  every size and rate on the location page, read
-                    from the live feed, the same source the visible
-                    table comes from.
+     OfferCatalog   every size and rate on the location page, read
+                    from the live feed and priced by the site's own
+                    helper, so the price a search engine quotes is the
+                    price the page shows.
 
-   RUN IT after editing the Help Center, or when rates change:
+   RUN IT after editing the Help Center, or when rates or offers change:
      node tools/build-schema.js
 
    It rewrites only what is between the BEGIN and END markers. */
@@ -21,9 +22,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const { loadPriced, numbers } = require('./_wss');
 
-const ENDPOINT = 'https://cap-rock-self-storage.vercel.app/api/wss';
-const FACILITY = 'lubbock-2213-n-quaker';
 const ROOT = path.join(__dirname, '..');
 const BUSINESS = 'https://caprock-storage.com/#business';
 
@@ -53,7 +53,7 @@ function plain(html) {
 
 function writeBlock(file, json) {
   const p = path.join(ROOT, file);
-  let text = fs.readFileSync(p, 'utf8');
+  const text = fs.readFileSync(p, 'utf8');
   const a = text.indexOf(BEGIN);
   const b = text.indexOf(END);
   if (a < 0 || b < 0) throw new Error('markers not found in ' + file);
@@ -62,7 +62,6 @@ function writeBlock(file, json) {
   JSON.parse(json);
   const block = BEGIN + '\n<script type="application/ld+json">\n' + json + '\n</script>\n' + END;
   fs.writeFileSync(p, text.slice(0, a) + block + text.slice(b + END.length));
-  return p;
 }
 
 /* ---- the Help Center's own questions ---- */
@@ -95,19 +94,27 @@ function faq() {
   return pairs.length;
 }
 
-/* ---- every size, from the feed the page itself reads ---- */
+/* ---- every size, priced the way the page prices it ----
+   Offer.price is what a customer would be quoted today, because that
+   is the figure on the page, and a search result that contradicts the
+   page is worse than no search result at all.
+
+   The list price is not thrown away. It rides along as a second
+   priceSpecification tagged ListPrice, which is schema.org's own way
+   of saying "this was the price", and the promotion's length goes in
+   referenceQuantity. So an engine that quotes the low number has the
+   terms attached to it, rather than having to assume a promotional
+   rate lasts forever.
+
+   No sums happen here. bestOffer and pricing come out of the header
+   through _wss.js, so this cannot drift from what visitors see. */
 async function catalogue() {
-  const url = ENDPOINT + '?facility=' + encodeURIComponent(FACILITY) + '&resource=movein';
-  const r = await fetch(url);
-  if (!r.ok) throw new Error('movein returned ' + r.status);
-  const units = (((await r.json()) || {}).unitTypes || [])
-    .filter((u) => u && u.width && u.length && Number(u.rate) > 0)
-    .sort((a, b) => (Number(a.sqft) || 0) - (Number(b.sqft) || 0));
+  const { wss, units } = await loadPriced();
   if (!units.length) throw new Error('the feed returned no priced unit types');
 
-  const rates = units.map((u) => Number(u.rate));
   const size = (u) => [u.width, u.length].map(Number).join(' x ') +
     (u.height ? ' x ' + Number(u.height) : '');
+  const charged = units.map((u) => numbers(wss, u).now);
 
   const doc = {
     '@context': 'https://schema.org',
@@ -115,46 +122,67 @@ async function catalogue() {
     '@id': 'https://caprock-storage.com/lubbock-2213-n-quaker#units',
     name: 'Storage unit sizes and rates, CapRock Self Storage, Lubbock',
     provider: { '@id': BUSINESS },
-    itemListElement: units.map((u, i) => ({
-      '@type': 'Offer',
-      position: i + 1,
-      name: size(u) + ' ft ' + (u.climate ? 'temperature controlled' : 'drive-up') + ' storage unit',
-      price: Number(u.rate),
-      priceCurrency: 'USD',
-      availability: Number(u.vacantCount) > 0
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      /* Rent is monthly and the leases are month to month, so the
-         price is a unit price with a month as its reference. */
-      priceSpecification: {
+    itemListElement: units.map((u, i) => {
+      const n = numbers(wss, u);
+      const p = wss.pricing(u);
+      const terms = p ? [p.label, p.then].filter(Boolean).join(', ') : '';
+
+      /* What is charged today, first. */
+      const spec = [Object.assign({
         '@type': 'UnitPriceSpecification',
-        price: Number(u.rate),
+        price: n.now,
         priceCurrency: 'USD',
         unitCode: 'MON',
         billingDuration: 1,
-      },
-      itemOffered: {
-        '@type': 'Product',
-        name: size(u) + ' ft storage unit',
-        category: u.climate ? 'Temperature controlled self storage' : 'Drive-up self storage',
-        ...(u.sqft ? { additionalProperty: {
+      }, n.discounted && n.months
+        ? { referenceQuantity: { '@type': 'QuantitativeValue', value: n.months, unitCode: 'MON' } }
+        : {})];
+
+      /* And what it was, and returns to. */
+      if (n.discounted) {
+        spec.push({
+          '@type': 'UnitPriceSpecification',
+          priceType: 'https://schema.org/ListPrice',
+          price: n.list,
+          priceCurrency: 'USD',
+          unitCode: 'MON',
+          billingDuration: 1,
+        });
+      }
+
+      return Object.assign({
+        '@type': 'Offer',
+        position: i + 1,
+        name: size(u) + ' ft ' + (u.climate ? 'temperature controlled' : 'drive-up') + ' storage unit',
+      }, terms ? { description: terms } : {}, {
+        price: n.now,
+        priceCurrency: 'USD',
+        availability: Number(u.vacantCount) > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+        priceSpecification: spec,
+        itemOffered: Object.assign({
+          '@type': 'Product',
+          name: size(u) + ' ft storage unit',
+          category: u.climate ? 'Temperature controlled self storage' : 'Drive-up self storage',
+        }, u.sqft ? { additionalProperty: {
           '@type': 'PropertyValue', name: 'Floor area', value: Number(u.sqft), unitCode: 'FTK',
         } } : {}),
-      },
-    })),
-    lowPrice: Math.min(...rates),
-    highPrice: Math.max(...rates),
+      });
+    }),
+    lowPrice: Math.min.apply(null, charged),
+    highPrice: Math.max.apply(null, charged),
     priceCurrency: 'USD',
   };
   writeBlock('pages/lubbock-2213-n-quaker.html', JSON.stringify(doc, null, 2));
-  return units.length;
+  return { count: units.length, low: doc.lowPrice, high: doc.highPrice };
 }
 
 (async () => {
   const n = faq();
   console.log('help-center.html      FAQPage, ' + n + ' questions');
-  const m = await catalogue();
-  console.log('lubbock-...html       OfferCatalog, ' + m + ' sizes');
+  const c = await catalogue();
+  console.log('lubbock-...html       OfferCatalog, ' + c.count + ' offers, $' + c.low + ' to $' + c.high);
   console.log('\nNow: bash tools/build-preview.sh && node tools/check.js');
 })().catch((e) => {
   console.error('failed:', e.message);

@@ -12,59 +12,11 @@
    node tools/pricing-test.js */
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const vm = require('vm');
+const { loadHelper } = require('./_wss');
 
-const header = fs.readFileSync(
-  path.join(__dirname, '..', 'global-sections', 'header.html'), 'utf8');
-
-/* The helper is one object literal in the header. Take it from its
-   opening brace to the matching close, by counting braces, so this
-   keeps working when methods are added above or below. */
-function liftHelper(src) {
-  const start = src.indexOf('window.CRSS_WSS = {');
-  if (start < 0) throw new Error('CRSS_WSS not found in header.html');
-  let i = src.indexOf('{', start);
-  let depth = 0;
-  let inStr = null;
-  let inComment = null;
-  for (let j = i; j < src.length; j++) {
-    const c = src[j];
-    const next = src[j + 1];
-    if (inComment === 'line') { if (c === '\n') inComment = null; continue; }
-    if (inComment === 'block') { if (c === '*' && next === '/') { inComment = null; j++; } continue; }
-    if (inStr) {
-      if (c === '\\') { j++; continue; }
-      if (c === inStr) inStr = null;
-      continue;
-    }
-    if (c === '/' && next === '/') { inComment = 'line'; j++; continue; }
-    if (c === '/' && next === '*') { inComment = 'block'; j++; continue; }
-    /* A regex literal, which in this object always follows = or ( */
-    if (c === '/') {
-      const before = src.slice(Math.max(0, j - 40), j).replace(/\s+$/, '');
-      if (/[=(,:|&!?]$/.test(before)) {
-        for (let k = j + 1; k < src.length; k++) {
-          if (src[k] === '\\') { k++; continue; }
-          if (src[k] === '[') { while (k < src.length && src[k] !== ']') { if (src[k] === '\\') k++; k++; } continue; }
-          if (src[k] === '/') { j = k; break; }
-          if (src[k] === '\n') break;
-        }
-        continue;
-      }
-    }
-    if (c === '"' || c === "'" || c === '`') { inStr = c; continue; }
-    if (c === '{') depth++;
-    else if (c === '}') { depth--; if (depth === 0) return src.slice(i, j + 1); }
-  }
-  throw new Error('unbalanced braces reading CRSS_WSS');
-}
-
-const sandbox = { console, document: { addEventListener() {} }, window: {}, fetch: () => Promise.resolve(null) };
-sandbox.window = sandbox;
-vm.createContext(sandbox);
-const WSS = vm.runInContext('(' + liftHelper(header) + ')', sandbox);
+/* The real helper, lifted out of header.html, so these cases run
+   against the code that ships rather than a copy of it. */
+const WSS = loadHelper();
 
 /* ---- the cases ---- */
 const UNIT = { rate: 69 };          /* the live 5 x 10 */
