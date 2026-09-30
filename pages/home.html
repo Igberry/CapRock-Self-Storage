@@ -231,6 +231,96 @@
     max-width: 1240px;
     margin: 0 auto;
     padding: 112px 32px 116px;
+    /* The copy takes what it needs and the seal takes its own width
+       beside it. auto rather than a fraction, so the seal never
+       stretches and the headline never loses room to it. */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 48px;
+  }
+  .crss-hero-copy {
+    min-width: 0;
+  }
+
+  /* ---- The price lock seal ----
+     CapRock's own promise, drawn in CapRock's own language: bone on
+     the dark hero so it reads as a stamp pressed into the
+     photograph, and so it does not compete with the terracotta
+     button beside it.
+
+     This is deliberately NOT U-Haul's "1-Year Price Lock Guarantee"
+     badge. That programme covers U-Haul owned and managed stores and
+     the mark is U-Haul's; CapRock is an affiliate. The artwork
+     supplied on 30 September was that badge with a rectangle painted
+     over the U-HAUL wordmark, which leaves the mark in the file and
+     claims a programme this store is not part of. This says the
+     thing CapRock can honour, in the words the rest of the site
+     already uses, and the term is read from PRICE_LOCK in the header
+     so there is still exactly one place to change it. */
+  .crss-hero-seal {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 196px;
+    height: 196px;
+    border-radius: 50%;
+    background: var(--crss-bone, #FAF7F1);
+    text-align: center;
+    /* Wide and soft. A hard shadow would read as a sticker sitting
+       on the page rather than a seal pressed into it. */
+    box-shadow: 0 18px 44px rgba(20, 16, 12, 0.34);
+  }
+  /* A seal has two rules, not one. */
+  .crss-hero-seal::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    border: 1px solid var(--crss-rule, #E7DECD);
+    border-radius: 50%;
+  }
+  .crss-hero-seal svg {
+    width: 17px;
+    height: 17px;
+    margin-bottom: 8px;
+    color: var(--crss-terracotta, #A44A23);
+  }
+  .crss-hero-seal-term {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 42px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--crss-charcoal, #292724);
+  }
+  .crss-hero-seal-unit {
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--crss-taupe, #7F6C5D);
+  }
+  .crss-hero-seal-rule {
+    display: block;
+    width: 34px;
+    height: 1px;
+    margin: 11px 0 10px;
+    background: var(--crss-rule, #E7DECD);
+  }
+  .crss-hero-seal-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--crss-terracotta, #A44A23);
   }
   .crss-hero-eyebrow {
     font-size: 11px;
@@ -820,6 +910,19 @@
     }
     .crss-hero-inner {
       padding: 88px 26px 88px;
+      /* Under the copy, not beside it. Left aligned with the
+         headline, because a centred seal under left-aligned text
+         reads as a mistake. */
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: start;
+      gap: 40px;
+    }
+    .crss-hero-seal {
+      width: 156px;
+      height: 156px;
+    }
+    .crss-hero-seal-term {
+      font-size: 34px;
     }
     .crss-trust-copy {
       padding: 60px 26px 72px;
@@ -835,6 +938,14 @@
     }
     .crss-hero-inner {
       padding: 76px 20px 80px;
+      gap: 34px;
+    }
+    .crss-hero-seal {
+      width: 140px;
+      height: 140px;
+    }
+    .crss-hero-seal-term {
+      font-size: 30px;
     }
     .crss-trust-copy {
       padding: 56px 20px 64px;
@@ -862,33 +973,48 @@
   <section class="crss-hero">
     <div class="crss-hero-media" aria-hidden="true"></div>
     <div class="crss-hero-inner">
-      <!-- Filled from the facility record. Hidden until a real
-           coupon arrives, so the hero never shows an empty slot or
-           an offer that has since been withdrawn. -->
-      <p class="crss-hero-eyebrow" data-crss-promo hidden></p>
+      <div class="crss-hero-copy">
+        <!-- Filled from the facility record. Hidden until a real
+             coupon arrives, so the hero never shows an empty slot or
+             an offer that has since been withdrawn. -->
+        <p class="crss-hero-eyebrow" data-crss-promo hidden></p>
 
-      <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
-      <p class="crss-hero-sub">
-        Gated access, video surveillance, and month-to-month leases.
-        <span data-crss-size-range
-              data-tpl="Unit sizes from a {min} to a {max} drive-up space.">Unit sizes from a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30 drive-up space.</span>
-      </p>
+        <h1 class="crss-hero-title">Simple, secure self storage in Lubbock.</h1>
+        <p class="crss-hero-sub">
+          Gated access, video surveillance, and month-to-month leases.
+          <span data-crss-size-range
+                data-tpl="Unit sizes from a {min} to a {max} drive-up space.">Unit sizes from a 5&nbsp;&times;&nbsp;5 to a 10&nbsp;&times;&nbsp;30 drive-up space.</span>
+        </p>
 
-      <!-- This was a search: a city or ZIP field, a storage type, a
-           unit size, and a Find Units button that carried all three to
-           the Find Storage page.
+        <!-- This was a search: a city or ZIP field, a storage type, a
+             unit size, and a Find Units button that carried all three to
+             the Find Storage page.
 
-           That page is gone, and with one facility there is nothing
-           left for a search to do. A box that returns Lubbock whatever
-           you type into it is worse than no box: someone types
-           "Amarillo", lands on a Lubbock page, and concludes the site
-           is broken rather than that we have one location. So the hero
-           goes straight to the units instead.
+             That page is gone, and with one facility there is nothing
+             left for a search to do. A box that returns Lubbock whatever
+             you type into it is worse than no box: someone types
+             "Amarillo", lands on a Lubbock page, and concludes the site
+             is broken rather than that we have one location. So the hero
+             goes straight to the units instead.
 
-           Bring the search back when there is a second facility. -->
-      <div class="crss-hero-actions">
-        <a href="/lubbock-2213-n-quaker" class="crss-hero-cta">See Units and Prices</a>
-        <a href="tel:+18065891472" class="crss-hero-phone">(806) 589-1472</a>
+             Bring the search back when there is a second facility. -->
+        <div class="crss-hero-actions">
+          <a href="/lubbock-2213-n-quaker" class="crss-hero-cta">See Units and Prices</a>
+          <a href="tel:+18065891472" class="crss-hero-phone">(806) 589-1472</a>
+        </div>
+      </div>
+
+      <!-- The term is written here as well as read from PRICE_LOCK
+           below, so the seal is right on the first paint and stays
+           right if the term ever changes. The padlock is the same one
+           the badge under every price uses. -->
+      <div class="crss-hero-seal" data-crss-seal
+           title="Your monthly rate will not go up for the first 12 months.">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <p class="crss-hero-seal-term" data-crss-seal-term>12</p>
+        <p class="crss-hero-seal-unit" data-crss-seal-unit>Months</p>
+        <span class="crss-hero-seal-rule" aria-hidden="true"></span>
+        <p class="crss-hero-seal-label">Price Lock</p>
       </div>
     </div>
   </section>
@@ -1242,6 +1368,29 @@
         });
       });
     }
+
+    /* ---- The price lock seal ----
+       PRICE_LOCK in the header is the single statement of this
+       promise. The seal reads it rather than restating it, so
+       changing the term is still one edit, and withdrawing the
+       promise removes the seal along with every other mention of it
+       on the site. */
+    (function () {
+      var seal = document.querySelector('[data-crss-seal]');
+      if (!seal) return;
+      var lock = window.CRSS_WSS && window.CRSS_WSS.PRICE_LOCK;
+      /* No header, no helper, no promise: leave the seal as the
+         markup has it rather than removing something the page was
+         built to show. Only an explicit "off" takes it away. */
+      if (!lock) return;
+      if (!lock.enabled) { seal.parentNode.removeChild(seal); return; }
+      var months = Number(lock.months);
+      if (isFinite(months) && months > 0) {
+        seal.querySelector('[data-crss-seal-term]').textContent = months;
+        seal.querySelector('[data-crss-seal-unit]').textContent = months === 1 ? 'Month' : 'Months';
+      }
+      if (lock.line) seal.setAttribute('title', lock.line);
+    })();
 
     /* ---- Live promotion in the hero ----
        Offers come and go, so this is read rather than written in. The
