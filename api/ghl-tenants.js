@@ -230,6 +230,12 @@ async function fieldInventory() {
   }).sort(function (x, y) { return x.name < y.name ? -1 : 1; });
 }
 
+function stripPhone(row) {
+  const out = {};
+  Object.keys(row).forEach(function (k) { if (k !== 'full_phone') out[k] = row[k]; });
+  return out;
+}
+
 async function gateCodes() {
   if (!db.configured()) return new Map();
   try {
@@ -356,6 +362,7 @@ module.exports = async function handler(req, res) {
         plan[existing ? 'update' : 'create'].push({
           initials: (name.firstName.charAt(0) + '.' + name.lastName.charAt(0) + '.').toUpperCase(),
           phone_last4: p.phone.slice(-4),
+          full_phone: p.phone,
           units: p.rooms.length,
           balance_owed: p.balance ? '$' + p.balance.toFixed(2) : '$0.00',
           has_gate_code: Boolean(codes.get(p.phone)),
@@ -514,8 +521,45 @@ module.exports = async function handler(req, res) {
           custom_fields_to_create: missing,
         },
         /* Enough to recognise a record, not enough to be a leak. */
-        sample_create: plan.create.slice(0, 5),
-        sample_update: plan.update.slice(0, 5),
+        /* ---- Who to rehearse on ----
+           Picking a subject by hand means reading fifty five rows
+           and holding three rules in your head, and the cost of
+           getting it wrong is a real tenant receiving a welcome
+           email. So it picks.
+
+           Wanted: Status would be Current, so Chris's workflow
+           actually triggers and the whole path gets exercised; a
+           move-in date outside the fourteen day window, so the
+           branch fails and nothing sends; and an update rather
+           than a create, because fifty four of the fifty five are
+           updates and that is the path worth watching.
+
+           This one carries the full number, because it is the one
+           thing the operator has to type into Vercel and looking
+           it up by last four digits is friction for no gain. */
+        rehearsal_suggestion: (function () {
+          const safe = plan.update.filter(function (x) {
+            return x.status_would_be === 'Current' && !x.move_in_is_in_next_14_days;
+          });
+          const pick = safe[0] || plan.create.filter(function (x) {
+            return x.status_would_be === 'Current' && !x.move_in_is_in_next_14_days;
+          })[0];
+          if (!pick) {
+            return { found: false,
+              why: 'no tenant is both Current and outside the fourteen day window' };
+          }
+          return {
+            found: true,
+            initials: pick.initials,
+            phone: pick.full_phone,
+            why: 'Current, so the workflow triggers. Moved in ' + pick.move_in_date +
+              ', so the email branch fails and nothing sends.',
+          };
+        })(),
+        /* The samples are de-identified on purpose: they get pasted
+           into chat windows. Only the one suggested number is full. */
+        sample_create: plan.create.slice(0, 5).map(stripPhone),
+        sample_update: plan.update.slice(0, 5).map(stripPhone),
         sample_former: plan.mark_former.slice(0, 5),
       });
     }
