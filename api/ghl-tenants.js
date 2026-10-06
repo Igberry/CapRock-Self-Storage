@@ -469,6 +469,12 @@ module.exports = async function handler(req, res) {
         wrote_nothing: true,
         enabled: process.env.GHL_TENANTS_ENABLED === 'on',
         limited_to_phones: only.length || null,
+        /* How many of those numbers are actually tenants. Zero means
+           the rehearsal would touch nobody, which reads as success
+           and proves nothing: the usual cause is picking a number
+           that belongs to someone who works here rather than someone
+           who rents here. */
+        limited_matched_tenants: only.length ? (stats.limited_to || 0) : null,
         rentroll: {
           contracts: stats.contracts,
           people_with_a_phone: stats.people,
