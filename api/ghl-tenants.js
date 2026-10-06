@@ -537,6 +537,34 @@ module.exports = async function handler(req, res) {
            This one carries the full number, because it is the one
            thing the operator has to type into Vercel and looking
            it up by last four digits is friction for no gain. */
+        /* ---- How many would reach the SMS ----
+           On 6 October a rehearsal on one tenant sent a real text.
+           The email beside it was skipped only because that
+           contact had no address, so the date branch had passed
+           when it should not have: existing tenants moved in long
+           ago.
+
+           Samples of five cannot answer how many of the fifty five
+           would do the same, and that is the only number that
+           decides whether the rest can be released. So it counts
+           all of them. */
+        would_reach_the_welcome_sms: (function () {
+          const all = plan.create.concat(plan.update);
+          const live = all.filter(function (x) {
+            return x.status_would_be === 'Current';
+          });
+          const inWindow = live.filter(function (x) { return x.move_in_is_in_next_14_days; });
+          const noDate = all.filter(function (x) { return !x.move_in_date; });
+          return {
+            tenants_total: all.length,
+            status_current: live.length,
+            move_in_within_14_days: inWindow.length,
+            no_move_in_date_at_all: noDate.length,
+            sample_in_window: inWindow.slice(0, 10).map(function (x) {
+              return x.initials + ' moved in ' + x.move_in_date;
+            }),
+          };
+        })(),
         rehearsal_suggestion: (function () {
           const safe = plan.update.filter(function (x) {
             return x.status_would_be === 'Current' && !x.move_in_is_in_next_14_days;
