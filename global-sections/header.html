@@ -2099,6 +2099,26 @@
         return W.track('waitlist_click', { unit_size: q ? decodeURIComponent(q[1]) : '' });
       }
 
+      /* Existing tenants, going off to pay or manage an account.
+         Enhanced measurement already records these as generic
+         outbound clicks, buried among every other external link.
+         Named separately because they answer a different question:
+         how much of the traffic is tenants doing admin rather than
+         people looking to rent. Without that split, a month of
+         heavy traffic and no requests reads as a broken funnel when
+         it may just be the first of the month. */
+      var pay = t.closest('a[href*="storageaffiliatepayments.com"]');
+      if (pay) return W.track('pay_bill_click', { page_section: pay.className || 'link' });
+
+      var account = t.closest('a[href*="uhaul.com/Auth"]');
+      if (account) {
+        return W.track('my_account_click', {
+          /* Signing in and creating a password are different
+             problems. The ID verification trouble shows up here. */
+          account_action: (account.getAttribute('href') || '').toLowerCase().indexOf('/account/create') >= 0
+            ? 'create' : 'sign in',
+        });
+      }
       /* Opening the details panel: interest short of a click on
          Rent Now, and the step most likely to be where people stop. */
       var guide = t.closest('[data-crss-unit]');
