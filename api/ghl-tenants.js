@@ -332,6 +332,18 @@ module.exports = async function handler(req, res) {
         return { id: fields[n], field_value: v };
       };
 
+      /* A date, or nothing at all.
+
+         An empty string is not an empty date. Sent to a DATE field it
+         is a value GHL has to interpret, and on 6 October a tenant
+         with no move-in date in the rentroll ended up passing a
+         condition reading "move-in date is in the next 14 days" and
+         received a welcome text he did not need.
+
+         A field with no value should not be written. Omitted here, so
+         the condition sees an empty field and answers no. */
+      const fDate = (n, iso) => (iso ? f(n, iso) : null);
+
       /* The rentroll pads rooms with zeros and joins combined units
          with a hyphen; the CRM dropdowns do neither. */
       const units = { primary: [], combined: [] };
@@ -402,8 +414,8 @@ module.exports = async function handler(req, res) {
             f('Unit Number', units.primary),
             f('Combined Unit Number', units.combined),
             /* A real DATE field, so ISO rather than 1/5/2026. */
-            f('Move In-Date', p.moved || ''),
-            f('Paid Through', earliestPaid || ''),
+            fDate('Move In-Date', p.moved),
+            fDate('Paid Through', earliestPaid),
             /* MONETORY wants the number, not a string with a $. */
             f('Balance Owed', Number(p.balance.toFixed(2))),
             f('Status', behind ? 'Delinquent' : 'Current'),
