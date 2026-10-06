@@ -1836,6 +1836,11 @@
             })
           }).then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
             .then(function () {
+              /* The one event worth more than all the others: a
+                 request that actually reached the office. */
+              var ev = self.unitParams(u);
+              ev.request_type = rent ? 'rent' : 'reserve';
+              self.track('request_submitted', ev);
               body.innerHTML =
                 '<div class="crss-udlg-inner">' +
                   '<h2 class="crss-udlg-title" id="crss-udlg-title">' + (rent ? 'Request received' : 'Reservation received') + '</h2>' +
@@ -1844,6 +1849,9 @@
                 '</div>';
             })
             .catch(function () {
+              /* Failures are worth counting too. A quiet week of
+                 these is a broken form nobody has reported. */
+              self.track('request_failed', { request_type: rent ? 'rent' : 'reserve' });
               btn.disabled = false;
               btn.textContent = rent ? 'Request this unit' : 'Reserve this unit';
               err.textContent = 'That did not go through. Please try again, or call (806) 589-1472.';
@@ -2014,6 +2022,46 @@
           (o && o.lock === false ? '' : this.priceLockBadge());
       },
 
+      /* ---- Telling Google Analytics what happened ----
+         Page views arrive on their own. These are the things a page
+         view cannot tell you: whether anyone pressed Rent Now, and
+         whether the form then went through. Without them the reports
+         say how many people arrived and nothing about whether the
+         site works.
+
+         NOTHING A CUSTOMER TYPED IS EVER SENT. Not the name, not the
+         phone number, not the email, not the message. Only which
+         unit and which button, which is what the funnel needs and
+         the most Google should ever have. Google's own setup screen
+         says the same thing: you must ensure no personally
+         identifiable information is sent.
+
+         Silent when analytics is absent, blocked or still loading. A
+         tracking call must never be the reason a button stops
+         working, so this cannot throw. */
+      track: function (name, params) {
+        try {
+          if (typeof window.gtag !== 'function') return;
+          window.gtag('event', name, params || {});
+        } catch (e) { /* analytics is never worth an error */ }
+      },
+
+      /* The unit, described the way a report wants to group it. */
+      unitParams: function (u) {
+        if (!u) return {};
+        var p = this.pricing(u);
+        return {
+          unit_size: Number(u.width) + 'x' + Number(u.length) + (u.height ? 'x' + Number(u.height) : ''),
+          unit_type: u.climate ? 'temperature controlled' : 'drive-up',
+          /* The figure the customer is looking at, so revenue
+             reporting matches what was advertised. */
+          value: p && p.now
+            ? Number(String(p.now).replace(/[^0-9.]/g, ''))
+            : Number(u.rate) || 0,
+          currency: 'USD',
+        };
+      },
+
       money: function (v) {
         var num = Number(v);
         if (!isFinite(num)) return null;
@@ -2028,7 +2076,49 @@
       var btn = e.target && e.target.closest ? e.target.closest('[data-crss-request]') : null;
       if (!btn) return;
       var u = window.CRSS_WSS.unitByKey(btn.getAttribute('data-crss-unit-key'));
-      if (u) window.CRSS_WSS.openRequest(u, btn.getAttribute('data-crss-request'));
+      if (!u) return;
+      var kind = btn.getAttribute('data-crss-request');
+      window.CRSS_WSS.track(kind === 'rent' ? 'rent_now_click' : 'reserve_click',
+        window.CRSS_WSS.unitParams(u));
+      window.CRSS_WSS.openRequest(u, kind);
+    });
+
+    /* ---- The rest of the clicks worth knowing about ----
+       One delegated listener rather than handlers scattered across
+       five pages: these elements are rendered at different times by
+       different code, and a listener on the document catches them
+       whenever they appear. */
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest ? e.target : null;
+      if (!t) return;
+      var W = window.CRSS_WSS;
+      if (!W) return;
+
+      /* Calling the office is a conversion. On a phone it is often
+         the only one, and nothing else on the page records it. */
+      var tel = t.closest('a[href^="tel:"]');
+      if (tel) {
+        return W.track('phone_click', {
+          /* Where on the site they were, not who they are. */
+          page_section: tel.className || 'link',
+        });
+      }
+
+      /* A size with nothing free, which is demand we cannot meet
+         and the most useful number in the whole report. */
+      var wait = t.closest('a[href*="' + W.WAITLIST_URL + '"]');
+      if (wait) {
+        var q = /[?&]unit=([^&]*)/.exec(wait.getAttribute('href') || '');
+        return W.track('waitlist_click', { unit_size: q ? decodeURIComponent(q[1]) : '' });
+      }
+
+      /* Opening the details panel: interest short of a click on
+         Rent Now, and the step most likely to be where people stop. */
+      var guide = t.closest('[data-crss-unit]');
+      if (guide) return W.track('unit_details_open', {});
+
+      var promos = t.closest('[data-crss-promos]');
+      if (promos) return W.track('promotions_open', {});
     });
 
     /* ---- Safety net: ensure a viewport meta tag exists ----

@@ -71,8 +71,14 @@ function liftHelper(src) {
   throw new Error('unbalanced braces reading CRSS_WSS');
 }
 
-/* The helper, evaluated, with no offers loaded yet. */
-function loadHelper() {
+/* The helper, evaluated, with no offers loaded yet.
+
+   `extra` is merged into the sandbox before the helper is built, so a
+   caller can supply the browser globals it wants to watch. The helper
+   reads `window` from inside this context, not from the Node process,
+   so setting global.window in a test achieves nothing: a stub has to
+   go in here. */
+function loadHelper(extra) {
   const src = fs.readFileSync(HEADER, 'utf8');
   const sandbox = {
     console,
@@ -81,6 +87,7 @@ function loadHelper() {
     fetch: () => Promise.resolve(null),
   };
   sandbox.window = sandbox;
+  if (extra) Object.keys(extra).forEach((k) => { sandbox[k] = extra[k]; });
   vm.createContext(sandbox);
   return vm.runInContext('(' + liftHelper(src) + ')', sandbox);
 }
