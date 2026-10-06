@@ -49,15 +49,45 @@ const LOC = () => process.env.GHL_LOCATION_ID;
 
 /* The contact custom fields this sync owns. Looked up by name and
    created if absent, so the office never has to make them by hand. */
+/* ---- Where a tenant's details go ----
+
+   Chris built fields and a workflow around them before this sync
+   existed. An earlier version of this file was about to create its
+   own Tenant Status next to his Status, and its own Move-In Date next
+   to his Move In-Date, which would have left his welcome email
+   reading two fields that nothing ever filled in. So these write to
+   what is already there.
+
+   ADOPTED: his, looked up by name and never created. If one of these
+   goes missing the sync stops and says which, because a renamed field
+   is a decision someone made in the CRM and not something to paper
+   over by quietly making a new one.
+
+   CREATED: genuinely new, and declared as the type they should have
+   been in the first place. Paid Through as a date rather than text,
+   so it can be compared. Balance Owed as money rather than text, so
+   it can be summed. */
+const ADOPTED = [
+  'Status',                 // SINGLE_OPTIONS: Current / Delinquent / Move Out
+  'Move In-Date',           // DATE, so it takes ISO and not 1/5/2026
+  'Unit Number',            // MULTIPLE_OPTIONS, 234 of them, unpadded
+  'Combined Unit Number',   // MULTIPLE_OPTIONS, the second half of a pair
+  'Gate Code (New)',        // TEXT. The older Gate Code is NUMERICAL and
+                            // would eat the leading zero on 0472.
+];
+
 const FIELDS = [
-  ['Unit Numbers',     'TEXT'],
-  ['Move-In Date',     'TEXT'],
-  ['Paid Through',     'TEXT'],
-  ['Balance Owed',     'TEXT'],
-  ['Tenant Status',    'TEXT'],
-  ['Gate Code',        'TEXT'],
+  ['Paid Through',     'DATE'],
+  ['Balance Owed',     'MONETORY'],
   ['WSS Contract IDs', 'TEXT'],
 ];
+
+/* When is somebody behind? Paid Through in the past, rather than a
+   balance above zero: a tenant who owes five dollars on the morning
+   it falls due is not delinquent, and marking them so would put them
+   in front of whatever Chris hangs off that status. One constant, so
+   the answer can change in one place. */
+const DELINQUENT_WHEN = 'paid_through_has_passed';
 
 /* "SURNAME, First" is how the rentroll writes names; the CRM wants
    them the other way round, in normal case. */
@@ -94,21 +124,33 @@ function usDate(iso) {
   return `${Number(m)}/${Number(d)}/${y}`;
 }
 
-const ensureFields = () => ghl.ensureContactFields(FIELDS);
+/* Create ours, find Chris's, and refuse to run if one of his has
+   gone. Returns a name to id map covering both sets. */
+async function ensureFields() {
+  const made = await ghl.ensureContactFields(FIELDS);
+  const have = await existingFields(ADOPTED);
+  const missing = ADOPTED.filter((n) => !have[n]);
+  if (missing.length) {
+    throw new Error('these contact fields are missing from GHL and this sync ' +
+      'will not create them: ' + missing.join(', '));
+  }
+  return Object.assign({}, made, have);
+}
 
 /* The same lookup without the creating half, for the dry run.
    ensureContactFields() makes any field that does not exist yet,
    which is a write, and a preview that changes the CRM is not a
    preview. A name missing from here is reported rather than made. */
-async function existingFields() {
+async function existingFields(names) {
+  const want = names || FIELDS.map((pair) => pair[0]);
   const data = await ghl.call('GET', '/locations/' + LOC() + '/customFields?model=contact');
   const have = new Map((data.customFields || []).map(function (f) {
     return [String(f.name).toLowerCase(), f.id];
   }));
   const ids = {};
-  FIELDS.forEach(function (pair) {
-    var id = have.get(pair[0].toLowerCase());
-    if (id) ids[pair[0]] = id;
+  want.forEach(function (name) {
+    var id = have.get(String(name).toLowerCase());
+    if (id) ids[name] = id;
   });
   return ids;
 }
@@ -219,12 +261,24 @@ module.exports = async function handler(req, res) {
      enough to be a leak if this ends up pasted into a chat window. */
   const dry = Boolean(req.query && req.query.dry);
 
+  /* ---- One tenant first ----
+     GHL_TENANTS_ONLY limits a real run to the phone numbers listed
+     in it, comma separated, last ten digits. Set it to one number,
+     watch that single contact and whatever workflow it wakes, then
+     clear it and let the rest through.
+
+     The same shape GATE_TEXT_ONLY had, and for the same reason:
+     the first unrehearsed run of a job like this sent thirty eight
+     texts nobody intended. */
+  const onlyRaw = String(process.env.GHL_TENANTS_ONLY || '').replace(/[^0-9,]/g, '');
+  const only = onlyRaw ? onlyRaw.split(',').map(function (x) { return x.slice(-10); }).filter(Boolean) : [];
+
   if (!dry && process.env.GHL_TENANTS_ENABLED !== 'on') {
     return res.status(200).json({ paused: true, reason: 'GHL_TENANTS_ENABLED is not on' });
   }
   if (!ghl.configured()) return res.status(503).json({ error: 'ghl_not_configured' });
 
-  const stats = { contracts: 0, people: 0, upserted: 0, no_phone: 0, moved_out: 0, errors: 0 };
+  const stats = { contracts: 0, people: 0, upserted: 0, no_phone: 0, moved_out: 0, errors: 0, skipped_fields: {} };
   const plan = { create: [], update: [], mark_former: [] };
   try {
     const [feed, fields, tagged, codes, everyone, inventory] = await Promise.all([
@@ -252,10 +306,46 @@ module.exports = async function handler(req, res) {
     }
     stats.people = people.size;
 
+    /* A rehearsal touches only the numbers it was given. */
+    if (only.length) {
+      for (const key of Array.from(people.keys())) {
+        if (only.indexOf(key) < 0) people.delete(key);
+      }
+      stats.limited_to = people.size;
+    }
+
     for (const p of people.values()) {
       const name = splitName(p.customer_name);
       const earliestPaid = p.paid.filter(Boolean).sort()[0] || '';
-      const f = (n, v) => ({ id: fields[n], field_value: v });
+      /* A field with no id is not a field. Sending { id: undefined }
+         to GHL writes nothing and reports nothing, so the value just
+         vanishes and the record looks half filled for reasons nobody
+         can see. Dropped here and counted instead. */
+      const f = (n, v) => {
+        if (!fields[n]) { stats.skipped_fields[n] = (stats.skipped_fields[n] || 0) + 1; return null; }
+        return { id: fields[n], field_value: v };
+      };
+
+      /* The rentroll pads rooms with zeros and joins combined units
+         with a hyphen; the CRM dropdowns do neither. */
+      const units = { primary: [], combined: [] };
+      p.rooms.forEach(function (room) {
+        const sp = splitRoom(room);
+        if (sp.unit && units.primary.indexOf(sp.unit) < 0) units.primary.push(sp.unit);
+        sp.combined.forEach(function (c2) {
+          if (units.combined.indexOf(c2) < 0) units.combined.push(c2);
+        });
+      });
+      units.primary.sort(function (a, b) { return Number(a) - Number(b); });
+      units.combined.sort(function (a, b) { return Number(a) - Number(b); });
+
+      /* Behind on rent, by the rule named at the top of the file.
+         Paid Through in the past rather than any balance at all. */
+      const today = new Date().toISOString().slice(0, 10);
+      const behind = DELINQUENT_WHEN === 'paid_through_has_passed'
+        ? Boolean(earliestPaid && earliestPaid < today)
+        : p.balance > 0;
+
       if (dry) {
         /* upsert matches on phone against every contact in the
            location, not just the ones we have tagged. Asking the
@@ -289,14 +379,23 @@ module.exports = async function handler(req, res) {
           source: 'webselfstorage',
           tags: ['tenant'],
           customFields: [
-            f('Unit Numbers', p.rooms.sort().join(', ')),
-            f('Move-In Date', usDate(p.moved)),
-            f('Paid Through', usDate(earliestPaid)),
-            f('Balance Owed', p.balance ? '$' + p.balance.toFixed(2) : '$0.00'),
-            f('Tenant Status', 'Active'),
-            f('Gate Code', codes.get(p.phone) || ''),
+            /* Rooms, split the way the CRM holds them: the first
+               number of each on Unit Number, the second half of a
+               combined pair on Combined Unit Number. Both are
+               multi-selects, so both take arrays. */
+            f('Unit Number', units.primary),
+            f('Combined Unit Number', units.combined),
+            /* A real DATE field, so ISO rather than 1/5/2026. */
+            f('Move In-Date', p.moved || ''),
+            f('Paid Through', earliestPaid || ''),
+            /* MONETORY wants the number, not a string with a $. */
+            f('Balance Owed', Number(p.balance.toFixed(2))),
+            f('Status', behind ? 'Delinquent' : 'Current'),
+            /* The TEXT one. The older Gate Code is NUMERICAL and
+               would turn 0472 into 472. */
+            f('Gate Code (New)', codes.get(p.phone) || ''),
             f('WSS Contract IDs', p.ids.join(', ')),
-          ],
+          ].filter(Boolean),
         });
         stats.upserted++;
       } catch (e) {
@@ -316,7 +415,15 @@ module.exports = async function handler(req, res) {
         await ghl.call('DELETE', `/contacts/${c.id}/tags`, { tags: ['tenant'] });
         await ghl.call('POST', `/contacts/${c.id}/tags`, { tags: ['former-tenant'] });
         await ghl.call('PUT', `/contacts/${c.id}`, {
-          customFields: [{ id: fields['Tenant Status'], field_value: 'Former' }, { id: fields['Unit Numbers'], field_value: '' }],
+          /* "Move Out" is the option Chris's Status field actually
+             offers. "Former" is not on the list and would be
+             rejected or stored as nothing. The units are released so
+             the room shows as theirs no longer. */
+          customFields: [
+            { id: fields['Status'], field_value: 'Move Out' },
+            { id: fields['Unit Number'], field_value: [] },
+            { id: fields['Combined Unit Number'], field_value: [] },
+          ],
         });
         stats.moved_out++;
       } catch (e) {
@@ -361,6 +468,7 @@ module.exports = async function handler(req, res) {
         dry_run: true,
         wrote_nothing: true,
         enabled: process.env.GHL_TENANTS_ENABLED === 'on',
+        limited_to_phones: only.length || null,
         rentroll: {
           contracts: stats.contracts,
           people_with_a_phone: stats.people,
@@ -400,6 +508,12 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, ...stats });
   } catch (err) {
     console.error('ghl-tenants failed:', err);
+    /* A field that is not there is somebody renaming something in
+       the CRM, not the server falling over. Say so plainly, with
+       the name, rather than returning a stack trace to a cron. */
+    if (String(err.message).indexOf('missing from GHL') >= 0) {
+      return res.status(503).json({ error: 'fields_missing', message: err.message, ...stats });
+    }
     return res.status(500).json({ error: 'sync_failed', message: String(err.message).slice(0, 300), ...stats });
   }
 };

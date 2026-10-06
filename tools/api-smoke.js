@@ -29,7 +29,20 @@ const fakeGhl = {
   on: () => true,
   async call(m, p, b) {
     calls.push([m, p]);
-    if (m === 'GET' && p.includes('customFields')) return { customFields: [] };
+    /* The fields Chris already has in CapRock's GHL. An empty list
+       here made the tenant sync fail its own guard, which was the
+       fixture being wrong rather than the code: the sync adopts
+       these rather than creating them, so a stub that pretends
+       they are absent is testing a CRM nobody has. */
+    if (m === 'GET' && p.includes('customFields')) {
+      return { customFields: [
+        { id: 'a1', name: 'Status', dataType: 'SINGLE_OPTIONS', picklistOptions: ['Current', 'Delinquent', 'Move Out'] },
+        { id: 'a2', name: 'Move In-Date', dataType: 'DATE' },
+        { id: 'a3', name: 'Unit Number', dataType: 'MULTIPLE_OPTIONS', picklistOptions: ['2', '25', '116', '117'] },
+        { id: 'a4', name: 'Combined Unit Number', dataType: 'MULTIPLE_OPTIONS', picklistOptions: ['23', '117'] },
+        { id: 'a5', name: 'Gate Code (New)', dataType: 'TEXT' },
+      ] };
+    }
     if (m === 'POST' && p.includes('customFields')) return { customField: { id: 'f1' } };
     if (m === 'GET' && p.includes('customValues')) return { customValues: [] };
     if (m === 'POST' && p === '/contacts/search') return { contacts: [] };
