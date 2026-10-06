@@ -359,6 +359,15 @@ module.exports = async function handler(req, res) {
           units: p.rooms.length,
           balance_owed: p.balance ? '$' + p.balance.toFixed(2) : '$0.00',
           has_gate_code: Boolean(codes.get(p.phone)),
+          /* The two fields that decide whether Chris's New Tenant
+             workflow does anything. It triggers on Status being
+             Current, and only reaches the email and the SMS if the
+             move-in date falls in the next fourteen days. An old
+             date means the branch fails and the run is quiet. */
+          status_would_be: behind ? 'Delinquent' : 'Current',
+          move_in_date: p.moved || null,
+          move_in_is_in_next_14_days: Boolean(p.moved && p.moved >= today &&
+            p.moved <= new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10)),
           /* For an update, where the contact came from originally.
              A website request means they are already in a workflow. */
           existing_source: (everyone.get(p.phone) || {}).source || null,
