@@ -147,6 +147,26 @@ async function allContactsByPhone() {
   return out;
 }
 
+/* Every contact custom field in the location: name, type, and the
+   options if it is a dropdown.
+
+   Only the dry run uses this. It exists because our sync was about
+   to create its own Tenant Status and Move-In Date alongside the
+   Status and Move In-Date that Chris already built a workflow
+   around. Two fields describing the same thing is how a CRM ends
+   up with one of them quietly wrong. This shows what is already
+   there so the sync can write to it instead. */
+async function fieldInventory() {
+  const data = await ghl.call('GET', '/locations/' + LOC() + '/customFields?model=contact');
+  return ((data && data.customFields) || []).map(function (f) {
+    return {
+      name: f.name,
+      type: f.dataType,
+      options: (f.picklistOptions || []).slice(0, 8),
+    };
+  }).sort(function (x, y) { return x.name < y.name ? -1 : 1; });
+}
+
 async function gateCodes() {
   if (!db.configured()) return new Map();
   try {
@@ -186,7 +206,7 @@ module.exports = async function handler(req, res) {
   const stats = { contracts: 0, people: 0, upserted: 0, no_phone: 0, moved_out: 0, errors: 0 };
   const plan = { create: [], update: [], mark_former: [] };
   try {
-    const [feed, fields, tagged, codes, everyone] = await Promise.all([
+    const [feed, fields, tagged, codes, everyone, inventory] = await Promise.all([
       fetchRentroll(),
       /* ensureFields() creates any custom field that does not exist
          yet, so a dry run must not call it. */
@@ -194,6 +214,7 @@ module.exports = async function handler(req, res) {
       currentTenantContacts(),
       gateCodes(),
       dry ? allContactsByPhone() : Promise.resolve(new Map()),
+      dry ? fieldInventory() : Promise.resolve([]),
     ]);
     stats.contracts = feed.length;
 
@@ -296,6 +317,7 @@ module.exports = async function handler(req, res) {
         },
         already_tagged_tenant_in_ghl: tagged.size,
         contacts_in_ghl_with_a_phone: everyone.size,
+        existing_custom_fields: inventory,
         would: {
           create: plan.create.length,
           update: plan.update.length,
