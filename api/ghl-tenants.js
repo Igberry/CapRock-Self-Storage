@@ -70,6 +70,24 @@ function splitName(customerName) {
   return { firstName: cap(parts[0] || ''), lastName: cap(parts.slice(1).join(' ')) };
 }
 
+/* ---- Room numbers, as two systems spell them ----
+   WebSelfStorage pads with zeros and joins combined units with a
+   hyphen: 025, 05, 116-117. The CRM dropdown does neither: its 234
+   options run 2 to 263, unpadded, one per unit, with a separate
+   Combined Unit Number field for the second half of a pair.
+
+   Twenty seven of sixty six rooms failed to match before this.
+   Both causes were spelling, not missing units.
+
+   Returns { unit, combined }: the first number, and the rest of a
+   range if there is one. */
+function splitRoom(room) {
+  const parts = String(room || '').trim().split('-')
+    .map(function (x) { return x.trim().replace(/^0+(?=[0-9])/, ''); })
+    .filter(Boolean);
+  return { unit: parts[0] || '', combined: parts.slice(1) };
+}
+
 function usDate(iso) {
   if (!iso) return '';
   const [y, m, d] = iso.split('-');
@@ -318,11 +336,26 @@ module.exports = async function handler(req, res) {
          and nothing has ever made them agree. */
       const unitField = inventory.filter(function (f) { return f.name === 'Unit Number'; })[0];
       const allowed = unitField ? unitField.options.map(String) : [];
+      const combinedField = inventory.filter(function (f) { return f.name === 'Combined Unit Number'; })[0];
+      const combinedAllowed = combinedField ? combinedField.options.map(String) : [];
       const rooms = [];
       feed.forEach(function (c) {
         if (c.room && rooms.indexOf(c.room) < 0) rooms.push(c.room);
       });
-      const unmatched = rooms.filter(function (r) { return allowed.indexOf(String(r)) < 0; });
+      /* Raw, as the rentroll spells it, and again after splitRoom
+         strips the padding and separates a combined pair. The gap
+         between the two numbers is the whole argument for
+         normalising rather than creating our own field. */
+      const rawUnmatched = rooms.filter(function (r) { return allowed.indexOf(String(r)) < 0; });
+      const unmatched = [];
+      const combinedUnmatched = [];
+      rooms.forEach(function (r) {
+        const sp = splitRoom(r);
+        if (allowed.indexOf(sp.unit) < 0) unmatched.push(r);
+        sp.combined.forEach(function (c2) {
+          if (combinedAllowed.indexOf(c2) < 0) combinedUnmatched.push(r);
+        });
+      });
 
       return res.status(200).json({
         dry_run: true,
@@ -341,9 +374,15 @@ module.exports = async function handler(req, res) {
         unit_numbers: {
           distinct_rooms_in_rentroll: rooms.length,
           options_on_the_dropdown: allowed.length,
-          rooms_not_on_the_dropdown: unmatched.length,
+          rooms_not_on_the_dropdown_raw: rawUnmatched.length,
+          rooms_not_on_the_dropdown_after_normalising: unmatched.length,
+          combined_halves_not_on_their_dropdown: combinedUnmatched.length,
           sample_rooms: rooms.slice(0, 12),
           sample_unmatched: unmatched.slice(0, 12),
+          sample_combined_unmatched: combinedUnmatched.slice(0, 12),
+          sample_normalised: rooms.slice(0, 10).map(function (r) {
+            const sp = splitRoom(r); return r + ' -> ' + sp.unit + (sp.combined.length ? ' + ' + sp.combined.join(',') : '');
+          }),
         },
         would: {
           create: plan.create.length,
