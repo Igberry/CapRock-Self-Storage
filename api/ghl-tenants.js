@@ -78,6 +78,23 @@ function usDate(iso) {
 
 const ensureFields = () => ghl.ensureContactFields(FIELDS);
 
+/* The same lookup without the creating half, for the dry run.
+   ensureContactFields() makes any field that does not exist yet,
+   which is a write, and a preview that changes the CRM is not a
+   preview. A name missing from here is reported rather than made. */
+async function existingFields() {
+  const data = await ghl.call('GET', '/locations/' + LOC() + '/customFields?model=contact');
+  const have = new Map((data.customFields || []).map(function (f) {
+    return [String(f.name).toLowerCase(), f.id];
+  }));
+  const ids = {};
+  FIELDS.forEach(function (pair) {
+    var id = have.get(pair[0].toLowerCase());
+    if (id) ids[pair[0]] = id;
+  });
+  return ids;
+}
+
 /* Every contact currently tagged as a tenant, by phone. This is how a
    move-out is noticed: tagged, but no longer in the rentroll. */
 async function currentTenantContacts() {
@@ -116,14 +133,36 @@ module.exports = async function handler(req, res) {
   if (!secret || (req.headers.authorization || '') !== `Bearer ${secret}`) {
     return res.status(401).json({ error: 'unauthorized' });
   }
-  if (process.env.GHL_TENANTS_ENABLED !== 'on') {
+  /* ---- Dry run ----
+     ?dry=1 runs the whole comparison and writes nothing. It is
+     allowed past the enabled gate on purpose, because the question it
+     answers is whether to open that gate at all.
+
+     It still needs the secret. It reads the rentroll, which is every
+     tenant's name, address and phone number, and that is not
+     something to leave on an open URL.
+
+     What comes back is counts and a de-identified sample. Initials
+     and the last four digits are enough to recognise a record and not
+     enough to be a leak if this ends up pasted into a chat window. */
+  const dry = Boolean(req.query && req.query.dry);
+
+  if (!dry && process.env.GHL_TENANTS_ENABLED !== 'on') {
     return res.status(200).json({ paused: true, reason: 'GHL_TENANTS_ENABLED is not on' });
   }
   if (!ghl.configured()) return res.status(503).json({ error: 'ghl_not_configured' });
 
   const stats = { contracts: 0, people: 0, upserted: 0, no_phone: 0, moved_out: 0, errors: 0 };
+  const plan = { create: [], update: [], mark_former: [] };
   try {
-    const [feed, fields, tagged, codes] = await Promise.all([fetchRentroll(), ensureFields(), currentTenantContacts(), gateCodes()]);
+    const [feed, fields, tagged, codes] = await Promise.all([
+      fetchRentroll(),
+      /* ensureFields() creates any custom field that does not exist
+         yet, so a dry run must not call it. */
+      dry ? existingFields() : ensureFields(),
+      currentTenantContacts(),
+      gateCodes(),
+    ]);
     stats.contracts = feed.length;
 
     const people = new Map();
@@ -143,6 +182,20 @@ module.exports = async function handler(req, res) {
       const name = splitName(p.customer_name);
       const earliestPaid = p.paid.filter(Boolean).sort()[0] || '';
       const f = (n, v) => ({ id: fields[n], field_value: v });
+      if (dry) {
+        /* Matching is by phone, the same way the upsert matches, so
+           this is the real create-or-update split rather than a
+           guess at it. */
+        const known = tagged.has(p.phone);
+        plan[known ? 'update' : 'create'].push({
+          initials: (name.firstName.charAt(0) + '.' + name.lastName.charAt(0) + '.').toUpperCase(),
+          phone_last4: p.phone.slice(-4),
+          units: p.rooms.length,
+          balance_owed: p.balance ? '$' + p.balance.toFixed(2) : '$0.00',
+          has_gate_code: Boolean(codes.get(p.phone)),
+        });
+        continue;
+      }
       try {
         await ghl.call('POST', '/contacts/upsert', {
           locationId: LOC(),
@@ -175,6 +228,10 @@ module.exports = async function handler(req, res) {
     /* Tagged as a tenant in the CRM, no longer in the rentroll. */
     for (const [phone, c] of tagged) {
       if (people.has(phone)) continue;
+      if (dry) {
+        plan.mark_former.push({ phone_last4: String(phone).slice(-4) });
+        continue;
+      }
       try {
         await ghl.call('DELETE', `/contacts/${c.id}/tags`, { tags: ['tenant'] });
         await ghl.call('POST', `/contacts/${c.id}/tags`, { tags: ['former-tenant'] });
@@ -186,6 +243,31 @@ module.exports = async function handler(req, res) {
         stats.errors++;
         console.error('move-out update failed:', e.message);
       }
+    }
+
+    if (dry) {
+      const missing = FIELDS.map((x) => x[0]).filter((n) => !fields[n]);
+      return res.status(200).json({
+        dry_run: true,
+        wrote_nothing: true,
+        enabled: process.env.GHL_TENANTS_ENABLED === 'on',
+        rentroll: {
+          contracts: stats.contracts,
+          people_with_a_phone: stats.people,
+          skipped_no_phone: stats.no_phone,
+        },
+        already_tagged_tenant_in_ghl: tagged.size,
+        would: {
+          create: plan.create.length,
+          update: plan.update.length,
+          mark_former: plan.mark_former.length,
+          custom_fields_to_create: missing,
+        },
+        /* Enough to recognise a record, not enough to be a leak. */
+        sample_create: plan.create.slice(0, 5),
+        sample_update: plan.update.slice(0, 5),
+        sample_former: plan.mark_former.slice(0, 5),
+      });
     }
 
     return res.status(200).json({ ok: true, ...stats });
