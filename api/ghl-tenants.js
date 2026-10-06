@@ -116,6 +116,37 @@ async function currentTenantContacts() {
   return out;
 }
 
+/* Everyone in the CRM, by phone.
+
+   Only the dry run needs this. currentTenantContacts() asks who we
+   have already synced; this asks who exists at all, which is what
+   /contacts/upsert really matches on. The difference decides whether
+   the first run creates a contact or edits one somebody else made,
+   and those fire different workflows.
+
+   Paged rather than filtered because there is no "any phone" filter,
+   and a storage facility's CRM is small enough to walk. */
+async function allContactsByPhone() {
+  const out = new Map();
+  let page = 1;
+  for (;;) {
+    const data = await ghl.call('POST', '/contacts/search', {
+      locationId: LOC(), page, pageLimit: 100,
+    });
+    const list = (data && data.contacts) || [];
+    for (const c of list) {
+      const phone = String(c.phone || '').replace(/\D/g, '').slice(-10);
+      if (phone && !out.has(phone)) out.set(phone, c);
+    }
+    if (list.length < 100) break;
+    page++;
+    /* A runaway page loop on someone else's API is not worth the
+       completeness. Fifty pages is five thousand contacts. */
+    if (page > 50) break;
+  }
+  return out;
+}
+
 async function gateCodes() {
   if (!db.configured()) return new Map();
   try {
@@ -155,13 +186,14 @@ module.exports = async function handler(req, res) {
   const stats = { contracts: 0, people: 0, upserted: 0, no_phone: 0, moved_out: 0, errors: 0 };
   const plan = { create: [], update: [], mark_former: [] };
   try {
-    const [feed, fields, tagged, codes] = await Promise.all([
+    const [feed, fields, tagged, codes, everyone] = await Promise.all([
       fetchRentroll(),
       /* ensureFields() creates any custom field that does not exist
          yet, so a dry run must not call it. */
       dry ? existingFields() : ensureFields(),
       currentTenantContacts(),
       gateCodes(),
+      dry ? allContactsByPhone() : Promise.resolve(new Map()),
     ]);
     stats.contracts = feed.length;
 
@@ -183,16 +215,22 @@ module.exports = async function handler(req, res) {
       const earliestPaid = p.paid.filter(Boolean).sort()[0] || '';
       const f = (n, v) => ({ id: fields[n], field_value: v });
       if (dry) {
-        /* Matching is by phone, the same way the upsert matches, so
-           this is the real create-or-update split rather than a
-           guess at it. */
-        const known = tagged.has(p.phone);
-        plan[known ? 'update' : 'create'].push({
+        /* upsert matches on phone against every contact in the
+           location, not just the ones we have tagged. Asking the
+           tagged list alone reported all fifty five as new, which
+           was wrong in the way that matters: an update fires Contact
+           Changed, and a create does not. */
+        const existing = everyone.get(p.phone);
+        plan[existing ? 'update' : 'create'].push({
           initials: (name.firstName.charAt(0) + '.' + name.lastName.charAt(0) + '.').toUpperCase(),
           phone_last4: p.phone.slice(-4),
           units: p.rooms.length,
           balance_owed: p.balance ? '$' + p.balance.toFixed(2) : '$0.00',
           has_gate_code: Boolean(codes.get(p.phone)),
+          /* For an update, where the contact came from originally.
+             A website request means they are already in a workflow. */
+          existing_source: (everyone.get(p.phone) || {}).source || null,
+          existing_tags: ((everyone.get(p.phone) || {}).tags || []).slice(0, 4),
         });
         continue;
       }
@@ -257,6 +295,7 @@ module.exports = async function handler(req, res) {
           skipped_no_phone: stats.no_phone,
         },
         already_tagged_tenant_in_ghl: tagged.size,
+        contacts_in_ghl_with_a_phone: everyone.size,
         would: {
           create: plan.create.length,
           update: plan.update.length,
