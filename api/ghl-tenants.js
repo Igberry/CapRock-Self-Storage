@@ -162,7 +162,10 @@ async function fieldInventory() {
     return {
       name: f.name,
       type: f.dataType,
-      options: (f.picklistOptions || []).slice(0, 8),
+      /* All of them. The caller truncates for display; the room
+         number comparison needs the whole list or it reports
+         every unit as unmatched. */
+      options: f.picklistOptions || [],
     };
   }).sort(function (x, y) { return x.name < y.name ? -1 : 1; });
 }
@@ -306,6 +309,21 @@ module.exports = async function handler(req, res) {
 
     if (dry) {
       const missing = FIELDS.map((x) => x[0]).filter((n) => !fields[n]);
+
+      /* Can the rentroll room numbers actually go into Chris's
+         Unit Number dropdown? It is a multi-select with a fixed
+         list of 234 options, so a room it does not contain cannot
+         be written. Asking rather than assuming, because the two
+         systems were built by different people at different times
+         and nothing has ever made them agree. */
+      const unitField = inventory.filter(function (f) { return f.name === 'Unit Number'; })[0];
+      const allowed = unitField ? unitField.options.map(String) : [];
+      const rooms = [];
+      feed.forEach(function (c) {
+        if (c.room && rooms.indexOf(c.room) < 0) rooms.push(c.room);
+      });
+      const unmatched = rooms.filter(function (r) { return allowed.indexOf(String(r)) < 0; });
+
       return res.status(200).json({
         dry_run: true,
         wrote_nothing: true,
@@ -317,7 +335,16 @@ module.exports = async function handler(req, res) {
         },
         already_tagged_tenant_in_ghl: tagged.size,
         contacts_in_ghl_with_a_phone: everyone.size,
-        existing_custom_fields: inventory,
+        existing_custom_fields: inventory.map(function (f) {
+          return { name: f.name, type: f.type, option_count: f.options.length, options: f.options.slice(0, 8) };
+        }),
+        unit_numbers: {
+          distinct_rooms_in_rentroll: rooms.length,
+          options_on_the_dropdown: allowed.length,
+          rooms_not_on_the_dropdown: unmatched.length,
+          sample_rooms: rooms.slice(0, 12),
+          sample_unmatched: unmatched.slice(0, 12),
+        },
         would: {
           create: plan.create.length,
           update: plan.update.length,
