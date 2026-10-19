@@ -110,6 +110,22 @@ const report = (label, fieldsSent) => {
   ]);
   report('a tenant with two units, one combined, behind on rent:', full[0].customFields);
 
+  /* ---- The gate code belongs to the office ----
+     On 19 October the sync was found clearing Gate Code (New) on
+     every tenant we held no code for, every fifteen minutes, and the
+     office uses that field to send tenants their code. We add to that
+     field and never clear it. */
+  const noCode = await run([
+    { phone: '8065559999', customer_name: 'NO, Code', room: '025', contract_unit_id: 'x9', paid_thru: '2026-12-31', balance: 0, moved_in: '2025-01-01' },
+  ]);
+  const gateWritten = noCode[0].customFields.some((f) => f.id === 'a5');
+  if (gateWritten) {
+    failed++;
+    console.log('\nFAIL  Gate Code (New) was written for a tenant we hold no code for');
+  } else {
+    console.log('\nok    Gate Code (New) left untouched when we hold no code');
+  }
+
   console.log('\n' + (failed ? failed + ' FAILED' : 'all passed'));
   process.exit(failed ? 1 : 0);
 })();

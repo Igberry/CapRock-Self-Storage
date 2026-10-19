@@ -344,6 +344,14 @@ module.exports = async function handler(req, res) {
          the condition sees an empty field and answers no. */
       const fDate = (n, iso) => (iso ? f(n, iso) : null);
 
+      /* A field we add to but never clear.
+
+         For anything the office maintains by hand, "I have no value"
+         and "the value is empty" are completely different statements,
+         and only one of them is ours to make. If we have nothing, we
+         say nothing and leave what is there alone. */
+      const fKeep = (n, v) => (v ? f(n, v) : null);
+
       /* The rentroll pads rooms with zeros and joins combined units
          with a hyphen; the CRM dropdowns do neither. */
       const units = { primary: [], combined: [] };
@@ -421,7 +429,27 @@ module.exports = async function handler(req, res) {
             f('Status', behind ? 'Delinquent' : 'Current'),
             /* The TEXT one. The older Gate Code is NUMERICAL and
                would turn 0472 into 472. */
-            f('Gate Code (New)', codes.get(p.phone) || ''),
+            /* NEVER BLANK THIS FIELD.
+
+               It used to write codes.get(phone) || '', so a tenant we
+               hold no code for had theirs cleared. Our Supabase table
+               only has codes for the handful generated in September
+               and the gate sync has been off since, so for most
+               tenants that was an empty string, written every fifteen
+               minutes, wiping what the office had entered by hand.
+               Chris uses that field to send tenants their code.
+
+               This field belongs to the office, not to us. We only
+               ever add to it, and only when we genuinely have
+               something. When the Alarm.com link lands and our codes
+               become the real ones, this can be revisited; until then
+               the office is the source of truth and we do not touch
+               what we did not write.
+
+               The same mistake as the empty dates, which I fixed on 6
+               October while explicitly reasoning that clearing a gate
+               code was harmless. It was not. */
+            fKeep('Gate Code (New)', codes.get(p.phone)),
             f('WSS Contract IDs', p.ids.join(', ')),
           ].filter(Boolean),
         });
