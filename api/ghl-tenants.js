@@ -605,6 +605,31 @@ module.exports = async function handler(req, res) {
             }),
           };
         })(),
+        /* ---- Which field holds the gate code ----
+           Chris says the codes live in WebSelfStorage. Our rentroll
+           reader picks a named handful of fields and drops the
+           rest, so if a code is in there we have been throwing it
+           away. This lists every key the raw response actually
+           carries, and anything whose name or value looks like a
+           code, so the right field can be adopted rather than
+           guessed at.
+
+           Names only, plus whether a value is present. No values,
+           because a gate code is the thing that opens the gate. */
+        rentroll_fields: (function () {
+          const raw = (feed.__raw && feed.__raw[0]) || null;
+          if (!raw) return { note: 'raw row not captured' };
+          const keys = Object.keys(raw);
+          return {
+            all_keys: keys,
+            looks_like_a_code: keys.filter(function (k) {
+              return /gate|code|pin|access|keypad/i.test(k);
+            }),
+            populated: keys.filter(function (k) {
+              return raw[k] !== null && raw[k] !== '' && raw[k] !== undefined;
+            }),
+          };
+        })(),
         rehearsal_suggestion: (function () {
           const safe = plan.update.filter(function (x) {
             return x.status_would_be === 'Current' && !x.move_in_is_in_next_14_days;

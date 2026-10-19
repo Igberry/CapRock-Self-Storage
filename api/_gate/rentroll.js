@@ -53,7 +53,14 @@ async function fetchRentroll() {
     const value = body && Object.prototype.hasOwnProperty.call(body, 'Value') ? body.Value : body;
     const list = value && (value.rentRoll || value.RentRoll);
     if (!Array.isArray(list)) throw new Error('rentroll: no rentRoll array in response');
-    return list.map(shape).filter((t) => t.contract_unit_id);
+    const shaped = list.map(shape).filter((t) => t.contract_unit_id);
+    /* One untouched row, so the dry run can report which fields the
+       API actually sends. shape() keeps a named handful and drops
+       everything else, which is how a gate code sitting in the
+       response could go unnoticed for a month. Not enumerable, so
+       it cannot end up in a JSON.stringify of the feed. */
+    Object.defineProperty(shaped, '__raw', { value: list.slice(0, 1), enumerable: false });
+    return shaped;
   } finally {
     clearTimeout(timer);
   }
