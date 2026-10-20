@@ -89,6 +89,28 @@ const FIELDS = [
    the answer can change in one place. */
 const DELINQUENT_WHEN = 'paid_through_has_passed';
 
+/* ---- Whose gate codes are the real ones ----
+
+   Not ours. The office enters codes into Alarm.com by hand and types
+   the same number into GHL, and that number is what opens the gate.
+
+   Our Supabase table holds codes generated in September that were
+   never pushed to any controller, because the Alarm.com link does not
+   exist yet. For a few tenants we therefore hold a four digit number
+   that looks exactly like a gate code and almost certainly is not
+   theirs.
+
+   Writing that over what the office typed would be the same mistake
+   as blanking the field, with a worse outcome: an empty field is
+   visibly broken, and a confidently wrong code is not. A tenant drives
+   up, types it, and the gate stays shut.
+
+   So the sync does not touch Gate Code (New) at all. Set this to true
+   on the day our codes are the ones actually in the controller, which
+   means after api/_gate/alarm.js is finished and the gate sync has
+   run for real. Not before. */
+const OUR_GATE_CODES_ARE_AUTHORITATIVE = false;
+
 /* "SURNAME, First" is how the rentroll writes names; the CRM wants
    them the other way round, in normal case. */
 function splitName(customerName) {
@@ -449,7 +471,7 @@ module.exports = async function handler(req, res) {
                The same mistake as the empty dates, which I fixed on 6
                October while explicitly reasoning that clearing a gate
                code was harmless. It was not. */
-            fKeep('Gate Code (New)', codes.get(p.phone)),
+            fKeep('Gate Code (New)', OUR_GATE_CODES_ARE_AUTHORITATIVE ? codes.get(p.phone) : null),
             f('WSS Contract IDs', p.ids.join(', ')),
           ].filter(Boolean),
         });

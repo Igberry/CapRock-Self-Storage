@@ -33,7 +33,7 @@ const TYPES = {
 /* Types where an empty value is a question rather than an answer. */
 const TYPED = ['DATE', 'MONETORY', 'SINGLE_OPTIONS', 'MULTIPLE_OPTIONS'];
 
-function stub(rentroll) {
+function stub(rentroll, opts) {
   const g = path.resolve(__dirname, '..', 'api', '_gate', 'ghl.js');
   const r = path.resolve(__dirname, '..', 'api', '_gate', 'rentroll.js');
   const d = path.resolve(__dirname, '..', 'api', '_gate', 'db.js');
@@ -60,13 +60,16 @@ function stub(rentroll) {
     sendSms: async () => {}, office: async () => {}, on: () => false, text: async () => {},
   };
   require.cache[r].exports = { fetchRentroll: async () => rentroll };
-  require.cache[d].exports = { select: async () => [], configured: () => false };
+  require.cache[d].exports = {
+    select: async () => ((opts && opts.codes) || []),
+    configured: () => Boolean(opts && opts.codes),
+  };
   delete require.cache[h];
   return { sent, handler: require(h) };
 }
 
-async function run(rentroll) {
-  const { sent, handler } = stub(rentroll);
+async function run(rentroll, opts) {
+  const { sent, handler } = stub(rentroll, opts);
   process.env.CRON_SECRET = 't';
   process.env.GHL_LOCATION_ID = 'loc';
   process.env.GHL_TENANTS_ENABLED = 'on';
@@ -124,6 +127,21 @@ const report = (label, fieldsSent) => {
     console.log('\nFAIL  Gate Code (New) was written for a tenant we hold no code for');
   } else {
     console.log('\nok    Gate Code (New) left untouched when we hold no code');
+  }
+
+  /* And not even when we DO hold one, while the office is the party
+     entering them. Ours were generated in September and never reached
+     a controller, so writing one over a hand-entered code swaps a
+     number that opens the gate for one that does not. */
+  const weHaveACode = await run([
+    { phone: '8065558888', customer_name: 'HAS, Ours', room: '025', contract_unit_id: 'x8', paid_thru: '2026-12-31', balance: 0, moved_in: '2025-01-01' },
+  ], { codes: [{ tenant_key: '8065558888', code: '4829', status: 'active' }] });
+  const wroteOurs = weHaveACode[0].customFields.some((f) => f.id === 'a5');
+  if (wroteOurs) {
+    failed++;
+    console.log('FAIL  wrote our own gate code over whatever the office had');
+  } else {
+    console.log('ok    did not write our own code either, the office owns that field');
   }
 
   console.log('\n' + (failed ? failed + ' FAILED' : 'all passed'));
