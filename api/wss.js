@@ -241,9 +241,25 @@ const SHAPE = {
       features: (pick(loc, 'locationFeatures') || [])
         .map((f) => pick(f, 'description'))
         .filter(Boolean),
+      /* ---- Which promotions the website may show ----
+         WebSelfStorage holds five discounts and only some are meant
+         for the public. The office marks those with Auto Add, which
+         is the flag the counter uses to apply a discount without
+         being asked, and Chris has asked for that to be the filter
+         for the site as well.
+
+         Field name unknown until this runs against the live
+         response, so several spellings are tried and the keys are
+         reported alongside. Nothing is filtered yet: a filter built
+         on a guess would hide every promotion the day the guess is
+         wrong, which is worse than showing one too many. */
       coupons: (pick(loc, 'coupons') || []).map((c) => ({
         description: pick(c, 'description'),
         conditions: pick(c, 'instructions') || null,
+        autoAdd: pick(c, 'autoAdd', 'isAutoAdd', 'automaticAdd', 'autoApply', 'addAutomatically'),
+        enabled: pick(c, 'enabled', 'isEnabled', 'active', 'isActive'),
+        offerAtMoveIn: pick(c, 'offerAtMoveIn', 'offerAtMovein', 'isOfferedAtMoveIn'),
+        _keys: Object.keys(c || {}),
       })),
       allowsReservations: Boolean(pick(loc, 'allowsReservations')),
     };
