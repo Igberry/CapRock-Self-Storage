@@ -74,6 +74,23 @@ const FACILITIES = {
   'lubbock-2213-n-quaker': '1030298',
 };
 
+/* ---- An escape hatch for a promotion that will not switch itself off ----
+   A comma separated list of text matched against a discount name,
+   case insensitive, set in Vercel. Empty is the normal state.
+
+   The right place to retire an offer is WebSelfStorage, Facility,
+   Discounts, Enabled: No, because that switches it off at the counter
+   as well as on the website. This exists only for the case where that
+   checkbox refuses to save and an offer we have stopped honouring is
+   still being advertised. Anything hidden here is still live at the
+   counter, so the two disagree, which is the failure this file is
+   otherwise careful to avoid. Clear it as soon as the real switch
+   works. */
+const HIDDEN_COUPONS = (process.env.WSS_HIDE_COUPONS || '')
+  .split(',')
+  .map((s) => s.trim().toLowerCase())
+  .filter(Boolean);
+
 /* Every upstream path this proxy will ever call. Adding a key here is
    a deliberate decision; see the PII note at the top of the file. */
 const RESOURCES = {
@@ -243,24 +260,28 @@ const SHAPE = {
         .filter(Boolean),
       /* ---- Which promotions the website shows ----
          Whatever WebSelfStorage sends, which is already filtered
-         upstream. On 28 October the facility held five discounts
-         and the feed returned the two marked Enabled; the three
-         disabled ones never arrived.
+         upstream, minus anything named in WSS_HIDE_COUPONS.
+
+         Upstream filters on the Enabled checkbox. On 28 October the
+         facility held five discounts and the feed returned the two
+         marked Enabled; the three disabled ones never arrived.
 
          There is no Auto Add flag to filter on here, and no
          Enabled flag either: a coupon object carries exactly two
          fields, description and instructions. Checked against the
          live response rather than assumed.
 
-         Which promotions are advertised online is set in
-         WebSelfStorage under Facility, Profile, Reservation Rules,
-         where up to two may be chosen. That is the right place for
-         it: the office decides once and the website and the
-         counter cannot disagree. Do not add a second list here. */
-      coupons: (pick(loc, 'coupons') || []).map((c) => ({
-        description: pick(c, 'description'),
-        conditions: pick(c, 'instructions') || null,
-      })),
+         So retiring an offer belongs in WebSelfStorage, under
+         Facility, Discounts. Do not grow HIDDEN_COUPONS into a
+         second promotions list; read the note on it first. */
+      coupons: (pick(loc, 'coupons') || [])
+        .map((c) => ({
+          description: pick(c, 'description'),
+          conditions: pick(c, 'instructions') || null,
+        }))
+        .filter((c) => !HIDDEN_COUPONS.some(
+          (h) => String(c.description || '').toLowerCase().includes(h),
+        )),
       allowsReservations: Boolean(pick(loc, 'allowsReservations')),
     };
   },
