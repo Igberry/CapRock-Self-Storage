@@ -241,25 +241,25 @@ const SHAPE = {
       features: (pick(loc, 'locationFeatures') || [])
         .map((f) => pick(f, 'description'))
         .filter(Boolean),
-      /* ---- Which promotions the website may show ----
-         WebSelfStorage holds five discounts and only some are meant
-         for the public. The office marks those with Auto Add, which
-         is the flag the counter uses to apply a discount without
-         being asked, and Chris has asked for that to be the filter
-         for the site as well.
+      /* ---- Which promotions the website shows ----
+         Whatever WebSelfStorage sends, which is already filtered
+         upstream. On 28 October the facility held five discounts
+         and the feed returned the two marked Enabled; the three
+         disabled ones never arrived.
 
-         Field name unknown until this runs against the live
-         response, so several spellings are tried and the keys are
-         reported alongside. Nothing is filtered yet: a filter built
-         on a guess would hide every promotion the day the guess is
-         wrong, which is worse than showing one too many. */
+         There is no Auto Add flag to filter on here, and no
+         Enabled flag either: a coupon object carries exactly two
+         fields, description and instructions. Checked against the
+         live response rather than assumed.
+
+         Which promotions are advertised online is set in
+         WebSelfStorage under Facility, Profile, Reservation Rules,
+         where up to two may be chosen. That is the right place for
+         it: the office decides once and the website and the
+         counter cannot disagree. Do not add a second list here. */
       coupons: (pick(loc, 'coupons') || []).map((c) => ({
         description: pick(c, 'description'),
         conditions: pick(c, 'instructions') || null,
-        autoAdd: pick(c, 'autoAdd', 'isAutoAdd', 'automaticAdd', 'autoApply', 'addAutomatically'),
-        enabled: pick(c, 'enabled', 'isEnabled', 'active', 'isActive'),
-        offerAtMoveIn: pick(c, 'offerAtMoveIn', 'offerAtMovein', 'isOfferedAtMoveIn'),
-        _keys: Object.keys(c || {}),
       })),
       allowsReservations: Boolean(pick(loc, 'allowsReservations')),
     };
